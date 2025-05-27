@@ -1,7 +1,10 @@
 import { Suspense } from "react"
-import type { Game } from "@/lib/types"
-import GameCard from "@/components/game-card"
-import { sampleGames } from "@/lib/sample-data"
+// import type { Game } from "@/lib/types"
+// import GameCard from "@/components/game-card"
+// import { sampleGames } from "@/lib/sample-data"
+import type { Game } from "../../lib/types"
+import GameCard from "../../components/game-card"
+import { sampleGames } from "../../lib/sample-data"
 
 // 샘플 데이터를 사용하는 함수 - 서버 컴포넌트에서만 호출
 function getGames(): Game[] {
