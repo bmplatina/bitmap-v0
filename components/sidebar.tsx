@@ -1,56 +1,9 @@
 "use client"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, GamepadIcon, PlusCircle, Clock, User, Settings } from "lucide-react"
 import { cn } from "../lib/utils"
 
-const sidebarItems = [
-  {
-    title: "Main",
-    items: [
-      {
-        title: "Home",
-        icon: <Home className="h-5 w-5" />,
-        href: "/",
-      },
-      {
-        title: "Games",
-        icon: <GamepadIcon className="h-5 w-5" />,
-        href: "/games",
-      },
-    ],
-  },
-  {
-    title: "Management",
-    items: [
-      {
-        title: "Register New Game",
-        icon: <PlusCircle className="h-5 w-5" />,
-        href: "/register-game",
-      },
-      {
-        title: "Pending Games",
-        icon: <Clock className="h-5 w-5" />,
-        href: "/pending-games",
-      },
-    ],
-  },
-  {
-    title: "User",
-    items: [
-      {
-        title: "Account",
-        icon: <User className="h-5 w-5" />,
-        href: "/account",
-      },
-      {
-        title: "Settings",
-        icon: <Settings className="h-5 w-5" />,
-        href: "/settings",
-      },
-    ],
-  },
-]
+import { sidebarItems } from "../lib/sidebar-items";
 
 export default function Sidebar() {
   const pathname = usePathname()

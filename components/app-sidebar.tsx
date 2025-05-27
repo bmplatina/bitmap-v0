@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, GamepadIcon, PlusCircle, Clock, User, Settings } from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -14,53 +13,7 @@ import {
     SidebarMenuItem,
 } from "./ui/sidebar"
 
-const sidebarItems = [
-    {
-        title: "Main",
-        items: [
-            {
-                title: "Home",
-                icon: Home,
-                href: "/",
-            },
-            {
-                title: "Games",
-                icon: GamepadIcon,
-                href: "/games",
-            },
-        ],
-    },
-    {
-        title: "Management",
-        items: [
-            {
-                title: "Register New Game",
-                icon: PlusCircle,
-                href: "/register-game",
-            },
-            {
-                title: "Pending Games",
-                icon: Clock,
-                href: "/pending-games",
-            },
-        ],
-    },
-    {
-        title: "User",
-        items: [
-            {
-                title: "Account",
-                icon: User,
-                href: "/account",
-            },
-            {
-                title: "Settings",
-                icon: Settings,
-                href: "/settings",
-            },
-        ],
-    },
-]
+import { sidebarItems } from "../lib/sidebar-items";
 
 export function AppSidebar() {
     const pathname = usePathname()
@@ -77,7 +30,7 @@ export function AppSidebar() {
                                     <SidebarMenuItem key={item.title}>
                                         <SidebarMenuButton asChild isActive={pathname === item.href}>
                                             <Link href={item.href}>
-                                                <item.icon />
+                                                <item.appIcon />
                                                 <span>{item.title}</span>
                                             </Link>
                                         </SidebarMenuButton>

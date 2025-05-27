@@ -20,19 +20,20 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ko" suppressHydrationWarning>
-        <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <body className={inter.className} suppressHydrationWarning>
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
             <div className="flex flex-col h-screen">
-                {/* 상단 바 */}
                 <TopBar />
-
-                {/* 메인 콘텐츠 영역 */}
                 <div className="flex flex-1 overflow-hidden">
-                    {/* 사이드바 - 데스크톱에서만 표시 */}
                     <Sidebar />
-
-                    {/* 라우터 뷰 */}
-                    <main className="flex-1 overflow-auto">{children}</main>
+                    <main className="flex-1 overflow-auto">
+                        {children}
+                    </main>
                 </div>
             </div>
         </ThemeProvider>
