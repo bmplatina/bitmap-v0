@@ -13,6 +13,16 @@ import { Label } from "../../components/ui/label"
 import { Checkbox } from "../../components/ui/checkbox"
 import { Button } from "../../components/ui/button"
 import { Separator } from "../../components/ui/separator"
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogDescription,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "@/components/ui/dialog"
+// import { Calendar } from "@/components/ui/calendar"
+// import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
   Dialog,
   DialogContent,
@@ -20,17 +30,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+} from "../../components/ui/dialog"
+import { Calendar } from "../../components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover"
 import { CalendarIcon, Edit } from "lucide-react"
 import { format } from "date-fns"
 import { ko } from "date-fns/locale"
-import { cn } from "@/lib/utils"
-import type { Game } from "@/lib/types"
-import { sampleGames } from "@/lib/sample-data"
-import GamePreview from "@/components/game-preview"
-import MarkdownEditor from "@/components/markdown-editor"
+// import { cn } from "@/lib/utils"
+// import type { Game } from "@/lib/types"
+// import { sampleGames } from "@/lib/sample-data"
+// import GamePreview from "@/components/game-preview"
+// import MarkdownEditor from "@/components/markdown-editor"
+import { cn } from "../../lib/utils"
+import type { Game } from "../../lib/types"
+import { sampleGames } from "../../lib/sample-data"
+import GamePreview from "../../components/game-preview"
+import MarkdownEditor from "../../components/markdown-editor"
 
 export default function RegisterGamePage() {
   // 게임 정보 상태
