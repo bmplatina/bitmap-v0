@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import axios from "axios"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
 import { Input } from "../../components/ui/input"
 import { Label } from "../../components/ui/label"
@@ -17,20 +19,22 @@ import {
 } from "../../components/ui/dialog"
 import { Calendar } from "../../components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover"
-import { CalendarIcon, Edit } from "lucide-react"
+import { CalendarIcon, Edit, Loader2 } from "lucide-react"
 import { format } from "date-fns"
 import { ko } from "date-fns/locale"
 import { cn } from "../../lib/utils"
 import type { Game } from "../../lib/types"
-import { sampleGames } from "../../lib/sample-data"
 import GamePreview from "../../components/game-preview"
 import MarkdownEditor from "../../components/markdown-editor"
+import { toast } from "../../hooks/use-toast"
 
 export default function RegisterGamePage() {
+  const router = useRouter()
+
   // 게임 정보 상태
   const [gameId, setGameId] = useState(0)
   const [gameTitle, setGameTitle] = useState("")
-  const [gameLatestRevision, setGameLatestRevision] = useState(0)
+  const [gameLatestRevision, setGameLatestRevision] = useState(1)
   const [gamePlatformWindows, setGamePlatformWindows] = useState(false)
   const [gamePlatformMac, setGamePlatformMac] = useState(false)
   const [gamePlatformMobile, setGamePlatformMobile] = useState(false)
@@ -50,18 +54,71 @@ export default function RegisterGamePage() {
   const [gameHeadline, setGameHeadline] = useState("")
   const [gameDescription, setGameDescription] = useState("")
 
+  // 로딩 상태
+  const [isLoadingGameId, setIsLoadingGameId] = useState(true)
+
   // 모달 상태
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false)
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false)
   const [tempDescription, setTempDescription] = useState("")
 
-  // 게임 ID 자동 생성
+  // 제출 상태
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // 게임 ID 자동 생성 - API에서 기존 게임 수를 가져와서 계산
   useEffect(() => {
-    // 샘플 데이터 기반으로 다음 ID 생성
-    setGameId(sampleGames.length + 1)
+    async function fetchGames() {
+      try {
+        setIsLoadingGameId(true)
+
+        const [responseGames, responseGamesPending] = await Promise.all([
+          axios.get<Game[]>("https://api.prodbybitmap.com/api/games", {
+            timeout: 10000,
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }),
+          axios.get<Game[]>("https://api.prodbybitmap.com/api/games-pending", {
+            timeout: 10000,
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }),
+        ])
+
+        const fetchedGames: Game[] = responseGames.data
+        const fetchedGamesPending: Game[] = responseGamesPending.data
+
+        // 기존 게임 수 + 대기 중인 게임 수 + 1 (새로운 게임)
+        const newGameId = fetchedGames.length + fetchedGamesPending.length
+        setGameId(newGameId)
+
+        console.log(
+            `게임 ID 생성: 기존 게임 ${fetchedGames.length}개 + 대기 중인 게임 ${fetchedGamesPending.length}개 = ${newGameId}`,
+        )
+      } catch (error) {
+        console.error("게임 데이터를 가져오는 중 오류가 발생했습니다:", error)
+
+        // API 오류 시 현재 시간을 기반으로 임시 ID 생성
+        const fallbackId = Date.now()
+        setGameId(fallbackId)
+
+        toast({
+          title: "경고",
+          description: "게임 ID 생성 중 오류가 발생했습니다. 임시 ID가 할당되었습니다.",
+          variant: "destructive",
+        })
+      } finally {
+        setIsLoadingGameId(false)
+      }
+    }
+
+    fetchGames()
   }, [])
 
-  // 날짜 포맷팅 함수
+  // 날짜 포맷팅 함수 (MySQL 형식)
   const formatDateToMySQL = (date: Date): string => {
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, "0")
@@ -97,12 +154,98 @@ export default function RegisterGamePage() {
   }
 
   // 게임 제출 함수
-  const handleSubmit = async () => {
-    const gameData = createPreviewGame()
-    console.log("게임 제출:", gameData)
-    // 여기에 실제 API 호출 로직 구현
-    alert("게임이 성공적으로 등록되었습니다!")
-    setIsPreviewModalOpen(false)
+  const handleSubmit = async (): Promise<void> => {
+    try {
+      setIsSubmitting(true)
+
+      // 필수 필드 검증
+      if (!gameTitle.trim()) {
+        toast({
+          title: "오류",
+          description: "게임 제목을 입력해주세요.",
+          variant: "destructive",
+        })
+        return
+      }
+
+      if (!gameDeveloper.trim()) {
+        toast({
+          title: "오류",
+          description: "개발자 이름을 입력해주세요.",
+          variant: "destructive",
+        })
+        return
+      }
+
+      if (!gameGenre.trim()) {
+        toast({
+          title: "오류",
+          description: "게임 장르를 입력해주세요.",
+          variant: "destructive",
+        })
+        return
+      }
+
+      // API 전송용 게임 데이터 생성
+      const postGame: Game = {
+        gameId,
+        gameTitle,
+        gameLatestRevision,
+        gamePlatformWindows: gamePlatformWindows ? 1 : 0,
+        gamePlatformMac: gamePlatformMac ? 1 : 0,
+        gamePlatformMobile: gamePlatformMobile ? 1 : 0,
+        gameEngine,
+        gameGenre,
+        gameDeveloper,
+        gamePublisher,
+        isEarlyAccess: isEarlyAccess ? 1 : 0,
+        isReleased: isReleased ? 1 : 0,
+        gameReleasedDate: gameReleasedDate ? formatDateToMySQL(gameReleasedDate) : "",
+        gameWebsite,
+        gameVideoURL,
+        gameDownloadMacURL: gameDownloadMacURL || null,
+        gameDownloadWinURL: gameDownloadWinURL || null,
+        gameImageURL,
+        gameBinaryName,
+        gameHeadline,
+        gameDescription,
+      }
+
+      console.log("Submitting game data:", postGame)
+
+      // API 호출
+      const response = await axios.post<Game>("https://api.prodbybitmap.com/api/games/push", postGame, {
+        timeout: 30000, // 30초 타임아웃
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      console.log("Submit succeed:", response.data)
+
+      // 성공 알림
+      toast({
+        title: "성공",
+        description: "게임이 성공적으로 등록되었습니다! 승인 대기 상태로 전환됩니다.",
+      })
+
+      // 미리보기 모달 닫기
+      setIsPreviewModalOpen(false)
+
+      // 대기 중인 게임 페이지로 이동
+      router.push("/pending-games")
+    } catch (error) {
+      console.error("Error submitting:", error)
+
+      // 에러 알림
+      toast({
+        title: "오류",
+        description: "게임 등록 중 오류가 발생했습니다. 다시 시도해주세요.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   // 마크다운 편집 모달 열기
@@ -151,7 +294,14 @@ export default function RegisterGamePage() {
               <CardDescription>자동으로 생성되는 고유 게임 식별자입니다.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Input value={gameId} disabled />
+              {isLoadingGameId ? (
+                  <div className="flex items-center space-x-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="text-muted-foreground">게임 ID 생성 중...</span>
+                  </div>
+              ) : (
+                  <Input value={gameId} disabled />
+              )}
             </CardContent>
           </Card>
 
@@ -160,11 +310,11 @@ export default function RegisterGamePage() {
           {/* 게임 제목 */}
           <Card>
             <CardHeader>
-              <CardTitle>게임 제목</CardTitle>
+              <CardTitle>게임 제목 *</CardTitle>
               <CardDescription>게임의 공식 제목을 입력하세요.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Input value={gameTitle} onChange={(e) => setGameTitle(e.target.value)} placeholder="게임 제목" />
+              <Input value={gameTitle} onChange={(e) => setGameTitle(e.target.value)} placeholder="게임 제목" required />
             </CardContent>
           </Card>
 
@@ -182,6 +332,7 @@ export default function RegisterGamePage() {
                   value={gameLatestRevision}
                   onChange={(e) => setGameLatestRevision(Number(e.target.value))}
                   placeholder="1"
+                  min="1"
               />
             </CardContent>
           </Card>
@@ -244,11 +395,16 @@ export default function RegisterGamePage() {
           {/* 장르 */}
           <Card>
             <CardHeader>
-              <CardTitle>장르</CardTitle>
+              <CardTitle>장르 *</CardTitle>
               <CardDescription>게임의 주요 장르를 입력하세요.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Input value={gameGenre} onChange={(e) => setGameGenre(e.target.value)} placeholder="액션, RPG, 퍼즐 등" />
+              <Input
+                  value={gameGenre}
+                  onChange={(e) => setGameGenre(e.target.value)}
+                  placeholder="액션, RPG, 퍼즐 등"
+                  required
+              />
             </CardContent>
           </Card>
 
@@ -257,11 +413,16 @@ export default function RegisterGamePage() {
           {/* 개발자 */}
           <Card>
             <CardHeader>
-              <CardTitle>개발자</CardTitle>
+              <CardTitle>개발자 *</CardTitle>
               <CardDescription>게임을 개발한 개발자 또는 스튜디오 이름을 입력하세요.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Input value={gameDeveloper} onChange={(e) => setGameDeveloper(e.target.value)} placeholder="개발자 이름" />
+              <Input
+                  value={gameDeveloper}
+                  onChange={(e) => setGameDeveloper(e.target.value)}
+                  placeholder="개발자 이름"
+                  required
+              />
             </CardContent>
           </Card>
 
@@ -528,10 +689,19 @@ export default function RegisterGamePage() {
                 </DialogHeader>
                 <GamePreview game={createPreviewGame()} />
                 <div className="flex justify-end space-x-2 pt-4">
-                  <Button variant="outline" onClick={() => setIsPreviewModalOpen(false)}>
+                  <Button variant="outline" onClick={() => setIsPreviewModalOpen(false)} disabled={isSubmitting}>
                     취소
                   </Button>
-                  <Button onClick={handleSubmit}>등록 신청</Button>
+                  <Button onClick={handleSubmit} disabled={isSubmitting}>
+                    {isSubmitting ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          등록 중...
+                        </>
+                    ) : (
+                        "등록 신청"
+                    )}
+                  </Button>
                 </div>
               </DialogContent>
             </Dialog>

@@ -9,9 +9,10 @@ import dayjs from "dayjs"
 
 interface GameCardProps {
   game: Game
+  linkPrefix?: string // 링크 프리픽스 (기본값: "/games")
 }
 
-export default function GameCard({ game }: GameCardProps) {
+export default function GameCard({ game, linkPrefix = "/games" }: GameCardProps) {
   // 출시일 포맷팅 - day.js 사용
   const formatDate = (dateString: string) => {
     if (!dateString) return "미정"
@@ -20,7 +21,7 @@ export default function GameCard({ game }: GameCardProps) {
 
   return (
       <Card className="overflow-hidden flex flex-col h-full transition-all hover:shadow-lg">
-        <Link href={`/games/${game.gameId}`} className="block">
+        <Link href={`${linkPrefix}/${game.gameId}`} className="block">
           <div className="relative aspect-[1/1.414] w-full cursor-pointer hover:opacity-90 transition-opacity">
             <Image
                 src={game.gameImageURL || "/placeholder.svg?height=400&width=283"}
@@ -30,6 +31,9 @@ export default function GameCard({ game }: GameCardProps) {
                 priority
             />
             {game.isEarlyAccess === 1 && <Badge className="absolute top-2 right-2 bg-amber-500">얼리 액세스</Badge>}
+            {linkPrefix === "/pending-games" && (
+                <Badge className="absolute top-2 left-2 bg-orange-500">승인 대기중</Badge>
+            )}
           </div>
         </Link>
 
