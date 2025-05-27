@@ -56,7 +56,7 @@ export default function Sidebar() {
   const pathname = usePathname()
 
   return (
-      <div className="w-64 h-full bg-background border-r flex flex-col">
+      <div className="w-64 h-full bg-background border-r flex-col hidden md:flex">
         {/* 사이드바 콘텐츠 */}
         <div className="flex-1 overflow-y-auto p-4">
           {sidebarItems.map((section) => (
