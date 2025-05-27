@@ -2,10 +2,10 @@ import { BookOpen, Code, Home, GamepadIcon, PlusCircle, Clock, User, Settings, T
 
 export const sidebarItems = [
     {
-        title: "Main",
+        title: "Bitmap",
         items: [
             {
-                title: "Home",
+                title: "Bitmap",
                 icon: <Home className="h-5 w-5" />,
                 appIcon: Home,
                 href: "/"
