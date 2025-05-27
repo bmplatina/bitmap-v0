@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { Input } from "./ui/input"
 
 export default function TopBar() {
   // Electron 및 MacOS 환경 감지 변수 (실제 감지 코드는 구현하지 않음)

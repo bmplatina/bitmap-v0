@@ -1,6 +1,6 @@
-import type { Game } from "@/lib/types"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import type { Game } from "../lib/types"
+import { Button } from "./ui/button"
+import { Badge } from "./ui/badge"
 import Image from "next/image"
 import { Calendar, User, Tag, Globe, Monitor, Apple } from "lucide-react"
 

@@ -1,10 +1,10 @@
 import { Suspense } from "react"
-import type { Game } from "@/lib/types"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import type { Game } from "../../../lib/types"
+import { Button } from "../../../components/ui/button"
+import { Badge } from "../../../components/ui/badge"
 import Image from "next/image"
 import { Calendar, User, Tag, Globe, Monitor, Apple } from "lucide-react"
-import { sampleGames } from "@/lib/sample-data"
+import { sampleGames } from "../../../lib/sample-data"
 
 // 샘플 데이터에서 게임 찾기 - 서버 컴포넌트에서만 호출
 function getGame(id: string): Game | null {
