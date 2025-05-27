@@ -14,7 +14,7 @@ export const sampleGames: Game[] = [
     gamePublisher: "베데스다 소프트웍스",
     isEarlyAccess: 0,
     isReleased: 1,
-    gameReleasedDate: "2023-09-06",
+    gameReleasedDate: "2023-09-06T00:00:00.000Z",
     gameWebsite: "https://bethesda.net/game/starfield",
     gameVideoURL: "https://www.youtube.com/embed/Ek3I6_9c58E",
     gameDownloadMacURL: null,
@@ -23,7 +23,7 @@ export const sampleGames: Game[] = [
     gameBinaryName: "Starfield.exe",
     gameHeadline: "우주를 탐험하는 대규모 SF 롤플레잉 게임",
     gameDescription:
-      "스타필드는 베데스다 게임 스튜디오가 25년 만에 개발한 첫 번째 새로운 우주를 배경으로 한 게임입니다. 이 차세대 롤플레잉 게임에서 플레이어는 자신만의 캐릭터를 만들고 전례 없는 자유로 광활한 우주를 탐험할 수 있습니다. 인류의 마지막 위대한 여정인 우주로 떠나 수많은 행성을 탐험하고, 신비로운 비밀을 발견하세요.",
+        "스타필드는 베데스다 게임 스튜디오가 25년 만에 개발한 첫 번째 새로운 우주를 배경으로 한 게임입니다. 이 차세대 롤플레잉 게임에서 플레이어는 자신만의 캐릭터를 만들고 전례 없는 자유로 광활한 우주를 탐험할 수 있습니다. 인류의 마지막 위대한 여정인 우주로 떠나 수많은 행성을 탐험하고, 신비로운 비밀을 발견하세요.",
   },
   {
     gameId: 2,
@@ -38,7 +38,7 @@ export const sampleGames: Game[] = [
     gamePublisher: "반다이 남코 엔터테인먼트",
     isEarlyAccess: 0,
     isReleased: 1,
-    gameReleasedDate: "2022-02-25",
+    gameReleasedDate: "2022-02-25T00:00:00.000Z",
     gameWebsite: "https://en.bandainamcoent.eu/elden-ring/elden-ring",
     gameVideoURL: "https://www.youtube.com/embed/E3Huy2cdih0",
     gameDownloadMacURL: null,
@@ -47,7 +47,7 @@ export const sampleGames: Game[] = [
     gameBinaryName: "EldenRing.exe",
     gameHeadline: "광활한 오픈 월드를 배경으로 한 다크 판타지 액션 RPG",
     gameDescription:
-      "조지 R.R. 마틴과 히데타카 미야자키가 함께 창조한 새로운 다크 판타지 세계를 탐험하세요. 엘든 링은 프롬소프트웨어의 가장 큰 게임으로, 끝없는 탐험과 깊은 던전을 제공합니다. 강력한 적들과 싸우고, 잊혀진 마법을 발견하고, 이 세계의 숨겨진 비밀을 밝혀내세요.",
+        "조지 R.R. 마틴과 히데타카 미야자키가 함께 창조한 새로운 다크 판타지 세계를 탐험하세요. 엘든 링은 프롬소프트웨어의 가장 큰 게임으로, 끝없는 탐험과 깊은 던전을 제공합니다. 강력한 적들과 싸우고, 잊혀진 마법을 발견하고, 이 세계의 숨겨진 비밀을 밝혀내세요.",
   },
   {
     gameId: 3,
@@ -62,7 +62,7 @@ export const sampleGames: Game[] = [
     gamePublisher: "CD 프로젝트",
     isEarlyAccess: 0,
     isReleased: 1,
-    gameReleasedDate: "2020-12-10",
+    gameReleasedDate: "2020-12-10T00:00:00.000Z",
     gameWebsite: "https://www.cyberpunk.net",
     gameVideoURL: "https://www.youtube.com/embed/qIcTM8WXFjk",
     gameDownloadMacURL: null,
@@ -71,7 +71,7 @@ export const sampleGames: Game[] = [
     gameBinaryName: "Cyberpunk2077.exe",
     gameHeadline: "미래 메가시티를 배경으로 한 오픈 월드 액션 어드벤처",
     gameDescription:
-      "사이버펑크 2077은 권력, 사치, 신체 개조에 집착하는 거대 도시 나이트 시티를 배경으로 합니다. 당신은 도시의 거리를 누비는 용병 V가 되어, 불멸의 비밀을 쥐고 있는 독특한 임플란트를 찾아 나섭니다. 당신의 장비, 사이버웨어, 플레이 스타일을 커스터마이징하고 다양한 임무를 수행하며 명성을 쌓아가세요.",
+        "사이버펑크 2077은 권력, 사치, 신체 개조에 집착하는 거대 도시 나이트 시티를 배경으로 합니다. 당신은 도시의 거리를 누비는 용병 V가 되어, 불멸의 비밀을 쥐고 있는 독특한 임플란트를 찾아 나섭니다. 당신의 장비, 사이버웨어, 플레이 스타일을 커스터마이징하고 다양한 임무를 수행하며 명성을 쌓아가세요.",
   },
   {
     gameId: 4,
@@ -86,7 +86,7 @@ export const sampleGames: Game[] = [
     gamePublisher: "라이엇 게임즈",
     isEarlyAccess: 0,
     isReleased: 1,
-    gameReleasedDate: "2020-06-02",
+    gameReleasedDate: "2020-06-02T00:00:00.000Z",
     gameWebsite: "https://playvalorant.com",
     gameVideoURL: "https://www.youtube.com/embed/e_E9W2vsRbQ",
     gameDownloadMacURL: null,
@@ -95,7 +95,7 @@ export const sampleGames: Game[] = [
     gameBinaryName: "VALORANT.exe",
     gameHeadline: "캐릭터 기반 5v5 전술 슈팅 게임",
     gameDescription:
-      "발로란트는 라이엇 게임즈의 5v5 캐릭터 기반 전술 FPS 게임입니다. 정밀한 사격, 전략적 능력 사용, 팀워크를 통해 승리를 쟁취하세요. 각각 독특한 능력을 가진 에이전트를 선택하고, 공격과 방어를 번갈아가며 13라운드를 먼저 승리하는 팀이 게임에서 승리합니다.",
+        "발로란트는 라이엇 게임즈의 5v5 캐릭터 기반 전술 FPS 게임입니다. 정밀한 사격, 전략적 능력 사용, 팀워크를 통해 승리를 쟁취하세요. 각각 독특한 능력을 가진 에이전트를 선택하고, 공격과 방어를 번갈아가며 13라운드를 먼저 승리하는 팀이 게임에서 승리합니다.",
   },
   {
     gameId: 5,
@@ -110,7 +110,7 @@ export const sampleGames: Game[] = [
     gamePublisher: "GSC 게임 월드",
     isEarlyAccess: 1,
     isReleased: 0,
-    gameReleasedDate: "2024-09-05",
+    gameReleasedDate: "2024-09-05T00:00:00.000Z",
     gameWebsite: "https://www.stalker2.com",
     gameVideoURL: "https://www.youtube.com/embed/SYZ0kxhJqaQ",
     gameDownloadMacURL: null,
@@ -119,7 +119,7 @@ export const sampleGames: Game[] = [
     gameBinaryName: "Stalker2.exe",
     gameHeadline: "체르노빌 원전 주변 금지구역을 배경으로 한 서바이벌 호러",
     gameDescription:
-      "스토커 2: 하트 오브 체르노빌은 체르노빌 원전 주변의 금지구역을 배경으로 한 유일무이한 블렌드의 FPS, 몰입형 시뮬레이션과 호러입니다. 광활한 오픈 월드에서 다양한 돌연변이와 적대적인 파벌, 위험한 변칙현상에 맞서 생존하세요. 당신의 선택이 이야기와 세계에 영향을 미치는 비선형 스토리를 경험하세요.",
+        "스토커 2: 하트 오브 체르노빌은 체르노빌 원전 주변의 금지구역을 배경으로 한 유일무이한 블렌드의 FPS, 몰입형 시뮬레이션과 호러입니다. 광활한 오픈 월드에서 다양한 돌연변이와 적대적인 파벌, 위험한 변칙현상에 맞서 생존하세요. 당신의 선택이 이야기와 세계에 영향을 미치는 비선형 스토리를 경험하세요.",
   },
   {
     gameId: 6,
@@ -134,7 +134,7 @@ export const sampleGames: Game[] = [
     gamePublisher: "마이크로소프트",
     isEarlyAccess: 0,
     isReleased: 1,
-    gameReleasedDate: "2011-11-18",
+    gameReleasedDate: "2011-11-18T00:00:00.000Z",
     gameWebsite: "https://www.minecraft.net",
     gameVideoURL: "https://www.youtube.com/embed/MmB9b5njVbA",
     gameDownloadMacURL: "https://example.com/download/minecraft/mac",
@@ -143,6 +143,6 @@ export const sampleGames: Game[] = [
     gameBinaryName: "Minecraft.exe",
     gameHeadline: "블록으로 이루어진 세계에서 건설하고 탐험하는 샌드박스 게임",
     gameDescription:
-      "마인크래프트는 블록으로 이루어진 3D 세계에서 플레이어가 자유롭게 건설하고 탐험할 수 있는 게임입니다. 생존 모드에서는 자원을 수집하고 몬스터와 싸우며 생존해야 하고, 크리에이티브 모드에서는 무한한 자원으로 상상력을 마음껏 펼칠 수 있습니다. 혼자서 플레이하거나 친구들과 함께 멀티플레이어로 즐길 수 있습니다.",
+        "마인크래프트는 블록으로 이루어진 3D 세계에서 플레이어가 자유롭게 건설하고 탐험할 수 있는 게임입니다. 생존 모드에서는 자원을 수집하고 몬스터와 싸우며 생존해야 하고, 크리에이티브 모드에서는 무한한 자원으로 상상력을 마음껏 펼칠 수 있습니다. 혼자서 플레이하거나 친구들과 함께 멀티플레이어로 즐길 수 있습니다.",
   },
 ]

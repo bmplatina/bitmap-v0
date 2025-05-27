@@ -21,3 +21,8 @@ export interface Game {
   gameHeadline: string
   gameDescription: string
 }
+
+export interface Metadata {
+  title?: string
+  description?: string
+}
