@@ -21,7 +21,7 @@ export default function RootLayout({
     return (
         <html lang="ko" suppressHydrationWarning>
         <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <div className="flex flex-col h-screen">
                 {/* 상단 바 */}
                 <TopBar />
