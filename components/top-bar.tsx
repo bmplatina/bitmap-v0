@@ -40,9 +40,6 @@ export default function TopBar() {
         <>
             <div
                 className="h-12 bg-background border-b flex items-center px-4 w-full relative z-50"
-                style={{
-                    WebkitAppRegion: bIsElectron ? "drag" : "none",
-                }}
             >
                 {/* 모바일 메뉴 버튼 */}
                 <div className="md:hidden mr-3">
@@ -51,9 +48,6 @@ export default function TopBar() {
                         size="icon"
                         className="h-8 w-8"
                         onClick={toggleMobileSidebar}
-                        style={{
-                            WebkitAppRegion: bIsElectron ? "no-drag" : "none",
-                        }}
                     >
                         <Menu className="h-5 w-5" />
                         <span className="sr-only">메뉴 열기</span>
@@ -64,10 +58,6 @@ export default function TopBar() {
                 <Link
                     href="/"
                     className="flex items-center"
-                    style={{
-                        marginLeft: bIsElectron && bIsMacOS ? "75px" : "0",
-                        WebkitAppRegion: bIsElectron ? "no-drag" : "none",
-                    }}
                 >
                     <Image
                         src="/bitmap_bmp.png"
@@ -76,12 +66,15 @@ export default function TopBar() {
                         height={32}
                         className="h-8 w-auto cursor-pointer hover:opacity-80 transition-opacity"
                         priority
+                        style={{
+                            mixBlendMode: "difference",
+                        }}
                     />
                 </Link>
 
                 {/* 검색 폼 */}
                 <form onSubmit={handleSearch} className="flex-1 max-w-md mx-auto">
-                    <div className="relative" style={{ WebkitAppRegion: bIsElectron ? "no-drag" : "none" }}>
+                    <div className="relative">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
                             type="search"
