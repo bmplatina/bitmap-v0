@@ -90,19 +90,26 @@ export default async function GameDetailPage({ params }: { params: { id: string 
                   </Button>
               )}
 
-              {game.gameDownloadWinURL && (
+              <Button className="w-full" variant="default" asChild>
+                <a href={`/about/${game.gameId}`} rel="noopener noreferrer">
+                  <Monitor className="mr-2 h-4 w-4" />
+                  Bitmap App에서 보기
+                </a>
+              </Button>
+
+              {/*game.gameDownloadWinURL && (
                   <Button className="w-full">
                     <Monitor className="mr-2 h-4 w-4" />
                     Windows 다운로드
                   </Button>
-              )}
+              )*/}
 
-              {game.gameDownloadMacURL && (
+              {/*game.gameDownloadMacURL && (
                   <Button className="w-full" variant="secondary">
                     <Apple className="mr-2 h-4 w-4" />
                     Mac 다운로드
                   </Button>
-              )}
+              )*/}
             </div>
           </div>
 

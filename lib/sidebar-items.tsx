@@ -1,4 +1,4 @@
-import { BookOpen, Code, Home, GamepadIcon, PlusCircle, Clock, User, Settings, TvMinimalPlay } from "lucide-react";
+import { BookOpen, Code, Download, Home, GamepadIcon, PlusCircle, Clock, User, Settings, TvMinimalPlay } from "lucide-react";
 
 export const sidebarItems = [
     {
@@ -9,6 +9,12 @@ export const sidebarItems = [
                 icon: <Home className="h-5 w-5" />,
                 appIcon: Home,
                 href: "/"
+            },
+            {
+                title: "Bitmap App",
+                icon: <Download className="h-5 w-5" />,
+                appIcon: Download,
+                href: "/about"
             },
             {
                 title: "Bitmap Developer",
