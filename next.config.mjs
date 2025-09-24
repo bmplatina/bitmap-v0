@@ -9,6 +9,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+
+  // Uncomment below if using code-server development environment
+  // basePath: "/absproxy/3000",
 }
 
-export default nextConfig
+export default nextConfig;
