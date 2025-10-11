@@ -54,13 +54,13 @@ export const sidebarItems = [
                 title: "Register New Game",
                 icon: <PlusCircle className="h-5 w-5" />,
                 appIcon: PlusCircle,
-                href: "/register-game"
+                href: "/games/submit"
             },
             {
                 title: "Pending Games",
                 icon: <Clock className="h-5 w-5" />,
                 appIcon: Clock,
-                href: "/pending-games"
+                href: "/games/pending"
             },
         ],
     },
