@@ -14,10 +14,12 @@ import Link from "next/link";
 import axios from "axios";
 import type { AuthResponse, ErrorResponse } from "../../lib/types";
 
-export default function Home() {
+export default function AccountPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [bRequestAutoLogin, setAutoLogin] = useState(false);
+  let loginFailMessage: string = "";
+  let bIsLoggedIn = false;
 
   const handleLogin = async (): Promise<void> => {
     try {
@@ -56,6 +58,11 @@ export default function Home() {
       }
     }
   };
+
+  useEffect(() => {
+    bIsLoggedIn = localStorage.getItem("token") !== "";
+  });
+
   return (
     <div className="flex flex-col items-center justify-center h-full p-6 text-center">
       <h1 className="text-4xl font-bold mb-6">Bitmap ID</h1>
@@ -63,49 +70,58 @@ export default function Home() {
         인디 개발자부터 대형 퍼블리셔까지, 최신 게임을 발견하고 다운로드하여
         플레이하세요.
       </p>
-      <Flex direction="column" gap="4">
-        <Card>
-          <CardHeader>
-            <CardTitle>계정이 있으십니까?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Flex direction="column" gap="2">
-              <Input
-                placeholder="이메일 주소"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <Input
-                placeholder="비밀번호"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <Text as="label" size="2">
-                <Flex as="span" gap="2">
-                  <Checkbox
-                    size="1"
-                    checked={bRequestAutoLogin}
-                    onCheckedChange={(checked) =>
-                      setAutoLogin(checked as boolean)
-                    }
-                  />{" "}
-                  로그인 유지
-                </Flex>
-              </Text>
-              <Button size="3" onClick={handleLogin}>
-                로그인
-              </Button>
-              <Button variant="ghost">
-                <Link href="/account/signup">계정 생성</Link>
-              </Button>
-              <Button variant="ghost">
-                <Link href="/account/troubleshoot">로그인 문제 해결</Link>
-              </Button>
-            </Flex>
-          </CardContent>
-        </Card>
-      </Flex>
+      {bIsLoggedIn ? (
+        <Flex direction="column" gap="4">
+          <Card>
+            <CardHeader>
+              <CardTitle>계정이 있으십니까?</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Flex direction="column" gap="2">
+                <Input
+                  placeholder="이메일 주소"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <Input
+                  placeholder="비밀번호"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <Text as="label" size="2">
+                  <Flex as="span" gap="2">
+                    <Checkbox
+                      size="1"
+                      checked={bRequestAutoLogin}
+                      onCheckedChange={(checked) =>
+                        setAutoLogin(checked as boolean)
+                      }
+                    />{" "}
+                    로그인 유지
+                  </Flex>
+                </Text>
+                {loginFailMessage !== "" && (
+                  <Text color="red" size="3">
+                    {loginFailMessage}
+                  </Text>
+                )}
+                <Button size="3" onClick={handleLogin}>
+                  로그인
+                </Button>
+                <Button variant="ghost">
+                  <Link href="/account/signup">계정 생성</Link>
+                </Button>
+                <Button variant="ghost">
+                  <Link href="/account/troubleshoot">로그인 문제 해결</Link>
+                </Button>
+              </Flex>
+            </CardContent>
+          </Card>
+        </Flex>
+      ) : (
+        <Text>dddd</Text>
+      )}
     </div>
   );
 }
