@@ -4,12 +4,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../components/ui/card";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
-import { Checkbox } from "../../components/ui/checkbox";
-import { Button } from "../../components/ui/button";
-import { Separator } from "../../components/ui/separator";
+} from "../../../components/ui/card";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { Button, Checkbox, Flex, Separator, Text } from "@radix-ui/themes";
 
 export default function AccountPage() {
   return (
@@ -34,10 +32,16 @@ export default function AccountPage() {
                 Agree to Terms and Conditions
               </Flex>
             </Text> */}
-            <Checkbox />
-            로그인 상태 유지
+            <Flex direction="column" gap="3">
+              <Text as="label" size="2">
+                <Flex as="span" gap="2">
+                  <Checkbox size="1" defaultChecked /> Agree to Terms and
+                  Conditions
+                </Flex>
+              </Text>
+            </Flex>
             <Button>로그인</Button>
-            <Button variant="secondary">계정이 없으십니까?</Button>
+            <Button variant="ghost">계정이 없으십니까?</Button>
           </CardContent>
         </Card>
       </div>
