@@ -18,7 +18,7 @@ export default function AccountPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [bRequestAutoLogin, setAutoLogin] = useState<boolean>(false);
-  const [loginFailMessage, setLoginGailMsg] = useState<string>("");
+  const [loginFailMessage, setLoginFailMsg] = useState<string>("");
   const [bIsLoggedIn, bSetLoggedInState] = useState<boolean>(false);
 
   const handleLogin = async (): Promise<void> => {
@@ -41,6 +41,7 @@ export default function AccountPage() {
         localStorage.setItem("token", response.data.token);
         console.log(response.data.token);
       }
+      bSetLoggedInState(true);
     } catch (error) {
       if (axios.isAxiosError<ErrorResponse>(error)) {
         // error가 AxiosError<ErrorResponse> 타입임이 확인됨
@@ -49,6 +50,7 @@ export default function AccountPage() {
         const errorMessage =
           error.response?.data?.message || "알 수 없는 에러가 발생했습니다.";
         console.error("로그인 실패:", errorMessage);
+        setLoginFailMsg(errorMessage);
 
         // 서버에서 보낸 구체적인 에러 메시지를 alert 등으로 사용자에게 보여줄 수 있습니다.
         // alert(errorMessage);
@@ -56,6 +58,7 @@ export default function AccountPage() {
         // Axios 에러가 아닌 다른 종류의 에러 처리 (예: 네트워크 연결 실패 전 요청 설정 오류)
         console.error("예상치 못한 에러가 발생했습니다:", error);
       }
+      bSetLoggedInState(false);
     }
   };
 
