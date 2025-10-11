@@ -15,11 +15,11 @@ import axios from "axios";
 import type { AuthResponse, ErrorResponse } from "../../lib/types";
 
 export default function AccountPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [bRequestAutoLogin, setAutoLogin] = useState(false);
-  let loginFailMessage: string = "";
-  let bIsLoggedIn = false;
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [bRequestAutoLogin, setAutoLogin] = useState<boolean>(false);
+  const [loginFailMessage, setLoginGailMsg] = useState<string>("");
+  const [bIsLoggedIn, bSetLoggedInState] = useState<boolean>(false);
 
   const handleLogin = async (): Promise<void> => {
     try {
@@ -60,7 +60,7 @@ export default function AccountPage() {
   };
 
   useEffect(() => {
-    bIsLoggedIn = localStorage.getItem("token") !== "";
+    bSetLoggedInState(localStorage.getItem("token") !== "");
   });
 
   return (
