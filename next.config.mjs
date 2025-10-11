@@ -11,7 +11,7 @@ const nextConfig = {
   },
 
   // Uncomment below if using code-server development environment
-  // basePath: "/absproxy/3000",
+  basePath: "/absproxy/3000",
 }
 
 export default nextConfig;
