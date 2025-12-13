@@ -21,10 +21,19 @@ export default function AccountPage() {
   const [loginFailMessage, setLoginFailMsg] = useState<string>("");
   const [bIsLoggedIn, bSetLoggedInState] = useState<boolean>(false);
 
+  /**
+   * API 링크 생성
+   * @param substring 도메인 뒤 링크
+   */
+  function getApiLinkByPurpose(substring: string): string {
+    const API_DOMAIN: string = "https://api.prodbybitmap.com/";
+    return `${API_DOMAIN}${substring}`;
+  }
+
   const handleLogin = async (): Promise<void> => {
     try {
       const response = await axios.post<AuthResponse>(
-        "https://api.prodbybitmap.com/auth/login",
+        getApiLinkByPurpose("auth/login"),
         {
           username: email,
           password: password,
@@ -118,6 +127,19 @@ export default function AccountPage() {
                 <Button variant="ghost">
                   <Link href="/account/troubleshoot">로그인 문제 해결</Link>
                 </Button>
+              </Flex>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>다른 로그인 방법</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Flex direction="column" gap="2">
+                <Link href={getApiLinkByPurpose("auth/google")}>
+                  <Button size="3">Google 계정으로 로그인</Button>
+                </Link>
               </Flex>
             </CardContent>
           </Card>
