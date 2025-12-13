@@ -9,6 +9,7 @@ import {
   CardContent,
 } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
+import { useAuth } from "../../lib/AuthContext";
 import Link from "next/link";
 
 import axios from "axios";
@@ -19,7 +20,7 @@ export default function AccountPage() {
   const [password, setPassword] = useState<string>("");
   const [bRequestAutoLogin, setAutoLogin] = useState<boolean>(false);
   const [loginFailMessage, setLoginFailMsg] = useState<string>("");
-  const [bIsLoggedIn, bSetLoggedInState] = useState<boolean>(false);
+  const { bIsLoggedIn, logout, username } = useAuth();
 
   /**
    * API 링크 생성
@@ -50,7 +51,7 @@ export default function AccountPage() {
         localStorage.setItem("token", response.data.token);
         console.log(response.data.token);
       }
-      bSetLoggedInState(true);
+      // bSetLoggedInState(true);
     } catch (error) {
       if (axios.isAxiosError<ErrorResponse>(error)) {
         // error가 AxiosError<ErrorResponse> 타입임이 확인됨
@@ -67,12 +68,12 @@ export default function AccountPage() {
         // Axios 에러가 아닌 다른 종류의 에러 처리 (예: 네트워크 연결 실패 전 요청 설정 오류)
         console.error("예상치 못한 에러가 발생했습니다:", error);
       }
-      bSetLoggedInState(false);
+      // bSetLoggedInState(false);
     }
   };
 
   useEffect(() => {
-    bSetLoggedInState(localStorage.getItem("token") !== "");
+    // bSetLoggedInState(localStorage.getItem("token") !== "");
   });
 
   return (
@@ -145,7 +146,18 @@ export default function AccountPage() {
           </Card>
         </Flex>
       ) : (
-        <Text>dddd</Text>
+        <Card>
+          <CardHeader>
+            <CardTitle>{username}으로 로그인됨</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Flex direction="column" gap="2">
+              <Button size="3" onClick={logout}>
+                로그아웃
+              </Button>
+            </Flex>
+          </CardContent>
+        </Card>
       )}
     </div>
   );

@@ -1,45 +1,12 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import { cn } from "../lib/utils";
+
 import { sidebarItems } from "../lib/sidebar-items";
-import axios from "axios";
 
 export default function Sidebar() {
   const pathname = usePathname();
-
-  const [username, setUsername] = useState("");
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem("accessToken");
-      if (!token) return;
-
-      /**
-       * API 링크 생성
-       * @param substring 도메인 뒤 링크
-       */
-      function getApiLinkByPurpose(substring: string): string {
-        const API_DOMAIN: string = "https://api.prodbybitmap.com/";
-        return `${API_DOMAIN}${substring}`;
-      }
-
-      try {
-        const res = await axios.get(getApiLinkByPurpose("profile"), {
-          headers: {
-            Authorization: `Bearer ${token}`, // 헤더에 토큰 실어 보내기
-          },
-        });
-        setUsername(res.data.username); // 백엔드에서 받은 이름 저장
-      } catch (error) {
-        console.error("유저 정보 불러오기 실패", error);
-        // 토큰이 만료되었으면 로그아웃 처리 등을 여기서 함
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   return (
     <div className="w-64 h-full bg-background border-r flex-col hidden md:flex">
