@@ -268,6 +268,30 @@ export default function RegisterGamePage() {
     }
   };
 
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleUpload = async () => {
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file); // Express의 upload.single('image')와 일치해야 함
+
+    try {
+      const response = await fetch(
+        "https://api.prodbybitmap.com/upload/game/image",
+        {
+          method: "POST",
+          body: formData, // 별도의 Header 설정 없이 body에 바로 전달
+        }
+      );
+
+      const data = await response.json();
+      alert("업로드 성공: " + data.filePath);
+    } catch (error) {
+      console.error("업로드 실패:", error);
+    }
+  };
+
   // 마크다운 편집 모달 열기
   const openDescriptionModal = () => {
     setTempDescription(gameDescription);
@@ -665,9 +689,12 @@ export default function RegisterGamePage() {
         {/* 이미지 URL */}
         <Card>
           <CardHeader>
-            <CardTitle>게임 이미지 URL</CardTitle>
+            <CardTitle>게임 이미지</CardTitle>
             <CardDescription>
-              게임의 대표 이미지 URL을 입력하세요. (1:1.414 비율 권장)
+              게임의 대표 이미지 URL를 업로드하세요. 소비자에게 가장 먼저
+              나타나는 포스터 사진입니다.
+              <br />
+              (1:1.414 비율 권장, 최대 10MiB 업로드 가능)
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -677,6 +704,13 @@ export default function RegisterGamePage() {
               placeholder="https://example.com/image.jpg"
               type="url"
             />
+            <div>
+              <input
+                type="file"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+              />
+              <button onClick={handleUpload}>업로드 하기</button>
+            </div>
           </CardContent>
         </Card>
 
