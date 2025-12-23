@@ -278,13 +278,10 @@ export default function RegisterGamePage() {
     formData.append("image", file); // Express의 upload.single('image')와 일치해야 함
 
     try {
-      const response = await fetch(
-        "https://api.prodbybitmap.com/upload/game/image",
-        {
-          method: "POST",
-          body: formData, // 별도의 Header 설정 없이 body에 바로 전달
-        }
-      );
+      const response = await fetch(getApiLinkByPurpose("game/image"), {
+        method: "POST",
+        body: formData, // 별도의 Header 설정 없이 body에 바로 전달
+      });
 
       const data = await response.json();
       alert("업로드 성공: " + data.filePath);
