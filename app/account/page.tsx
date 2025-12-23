@@ -9,7 +9,8 @@ import {
   CardContent,
 } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
-import { useAuth, getApiLinkByPurpose } from "../../lib/AuthContext";
+import { useAuth } from "../../lib/AuthContext";
+import { getApiLinkByPurpose } from "../../lib/utils";
 import Link from "next/link";
 
 import axios from "axios";
@@ -65,7 +66,6 @@ export default function AccountPage() {
 
   useEffect(() => {
     // bSetLoggedInState(localStorage.getItem("token") !== "");
-    console.log(bIsLoggedIn);
   });
 
   return (

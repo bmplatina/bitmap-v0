@@ -4,7 +4,7 @@ import { Button } from "../../../components/ui/button";
 import { Badge } from "../../../components/ui/badge";
 import Image from "next/image";
 import { Calendar, User, Tag, Globe, Monitor, Apple } from "lucide-react";
-import { sampleGames } from "../../../lib/sample-data";
+import { getApiLinkByPurpose } from "../../../lib/utils";
 import dayjs from "dayjs";
 import axios from "axios";
 
@@ -12,7 +12,7 @@ import axios from "axios";
 async function getGame(id: string): Promise<Game | null> {
   try {
     const response = await axios.get<Game[]>(
-      "https://api.prodbybitmap.com/games/released",
+      getApiLinkByPurpose("games/released"),
       {
         timeout: 10000,
         headers: {

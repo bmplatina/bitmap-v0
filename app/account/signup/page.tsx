@@ -10,19 +10,24 @@ import {
 } from "../../../components/ui/card";
 import { Input } from "../../../components/ui/input";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import axios from "axios";
 import type { AuthResponse, ErrorResponse } from "../../../lib/types";
+import { useAuth } from "../../../lib/AuthContext";
+import { getApiLinkByPurpose } from "../../../lib/utils";
 
 export default function Home() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [bRequestAutoLogin, setAutoLogin] = useState(false);
+  const { bIsLoggedIn } = useAuth();
 
   const handleLogin = async (): Promise<void> => {
     try {
       const response = await axios.post<AuthResponse>(
-        "https://api.prodbybitmap.com/auth/login",
+        getApiLinkByPurpose("auth/login"),
         {
           username: email,
           password: password,
@@ -56,6 +61,13 @@ export default function Home() {
       }
     }
   };
+
+  useEffect(() => {
+    if (bIsLoggedIn) {
+      router.push("/account");
+    }
+  });
+
   return (
     <div className="flex flex-col items-center justify-center h-full p-6 text-center">
       <h1 className="text-4xl font-bold mb-6">Bitmap ID 생성</h1>
@@ -81,18 +93,6 @@ export default function Home() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <Text as="label" size="2">
-                <Flex as="span" gap="2">
-                  <Checkbox
-                    size="1"
-                    checked={bRequestAutoLogin}
-                    onCheckedChange={(checked) =>
-                      setAutoLogin(checked as boolean)
-                    }
-                  />{" "}
-                  로그인 유지
-                </Flex>
-              </Text>
               <Button size="3" onClick={handleLogin}>
                 로그인
               </Button>

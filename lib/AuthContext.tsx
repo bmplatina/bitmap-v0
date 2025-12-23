@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { checkIsLoggedIn } from "./auth"; // 위에서 만든 함수
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { getApiLinkByPurpose } from "./utils";
 
 interface AuthContextType {
   bIsLoggedIn: boolean;
@@ -19,15 +20,6 @@ export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) throw new Error("useAuth must be used within an AuthProvider");
   return context;
-}
-
-/**
- * API 링크 생성
- * @param substring 도메인 뒤 링크
- */
-export function getApiLinkByPurpose(substring: string): string {
-  const API_DOMAIN: string = "https://api.prodbybitmap.com/";
-  return `${API_DOMAIN}${substring}`;
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {

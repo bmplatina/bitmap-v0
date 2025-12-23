@@ -37,6 +37,7 @@ import type { Game } from "../../../lib/types";
 import GamePreview from "../../../components/game-preview";
 import MarkdownEditor from "../../../components/markdown-editor";
 import { toast } from "../../../hooks/use-toast";
+import { getApiLinkByPurpose } from "../../../lib/utils";
 
 export default function RegisterGamePage() {
   const router = useRouter();
@@ -82,14 +83,14 @@ export default function RegisterGamePage() {
         setIsLoadingGameId(true);
 
         const [responseGames, responseGamesPending] = await Promise.all([
-          axios.get<Game[]>("https://api.prodbybitmap.com/games/released", {
+          axios.get<Game[]>(getApiLinkByPurpose("games/released"), {
             timeout: 10000,
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
             },
           }),
-          axios.get<Game[]>("https://api.prodbybitmap.com/games/pending", {
+          axios.get<Game[]>(getApiLinkByPurpose("games/pending"), {
             timeout: 10000,
             headers: {
               Accept: "application/json",
@@ -230,7 +231,7 @@ export default function RegisterGamePage() {
 
       // API 호출
       const response = await axios.post<Game>(
-        "https://api.prodbybitmap.com/games/submit",
+        getApiLinkByPurpose("games/submit"),
         postGame,
         {
           timeout: 30000, // 30초 타임아웃
@@ -253,7 +254,7 @@ export default function RegisterGamePage() {
       setIsPreviewModalOpen(false);
 
       // 대기 중인 게임 페이지로 이동
-      router.push("/pending-games");
+      router.push("/games/pending");
     } catch (error) {
       console.error("Error submitting:", error);
 
