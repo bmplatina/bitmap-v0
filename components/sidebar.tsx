@@ -18,21 +18,24 @@ export default function Sidebar() {
               {section.title}
             </h3>
             <div className="space-y-1">
-              {section.items.map((item) => (
-                <Link
-                  key={item.title}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
-                    pathname === item.href
-                      ? "bg-accent text-accent-foreground"
-                      : "text-muted-foreground"
-                  )}
-                >
-                  {item.icon}
-                  {item.title}
-                </Link>
-              ))}
+              {section.items.map(
+                (item) =>
+                  !item.bRequireLogin && (
+                    <Link
+                      key={item.title}
+                      href={item.href}
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
+                        pathname === item.href
+                          ? "bg-accent text-accent-foreground"
+                          : "text-muted-foreground"
+                      )}
+                    >
+                      {item.icon}
+                      {item.title}
+                    </Link>
+                  )
+              )}
             </div>
           </div>
         ))}
