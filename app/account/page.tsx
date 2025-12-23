@@ -9,7 +9,7 @@ import {
   CardContent,
 } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
-import { useAuth } from "../../lib/AuthContext";
+import { useAuth, getApiLinkByPurpose } from "../../lib/AuthContext";
 import Link from "next/link";
 
 import axios from "axios";
@@ -21,15 +21,6 @@ export default function AccountPage() {
   const [bRequestAutoLogin, setAutoLogin] = useState<boolean>(false);
   const [loginFailMessage, setLoginFailMsg] = useState<string>("");
   const { bIsLoggedIn, logout, username } = useAuth();
-
-  /**
-   * API 링크 생성
-   * @param substring 도메인 뒤 링크
-   */
-  function getApiLinkByPurpose(substring: string): string {
-    const API_DOMAIN: string = "https://api.prodbybitmap.com/";
-    return `${API_DOMAIN}${substring}`;
-  }
 
   const handleLogin = async (): Promise<void> => {
     try {
@@ -74,6 +65,7 @@ export default function AccountPage() {
 
   useEffect(() => {
     // bSetLoggedInState(localStorage.getItem("token") !== "");
+    console.log(bIsLoggedIn);
   });
 
   return (
@@ -84,6 +76,19 @@ export default function AccountPage() {
         플레이하세요.
       </p>
       {bIsLoggedIn ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>{username}으로 로그인됨</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Flex direction="column" gap="2">
+              <Button size="3" onClick={logout}>
+                로그아웃
+              </Button>
+            </Flex>
+          </CardContent>
+        </Card>
+      ) : (
         <Flex direction="column" gap="4">
           <Card>
             <CardHeader>
@@ -145,19 +150,6 @@ export default function AccountPage() {
             </CardContent>
           </Card>
         </Flex>
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{username}으로 로그인됨</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Flex direction="column" gap="2">
-              <Button size="3" onClick={logout}>
-                로그아웃
-              </Button>
-            </Flex>
-          </CardContent>
-        </Card>
       )}
     </div>
   );
