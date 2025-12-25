@@ -11,6 +11,7 @@ interface AuthContextType {
   login: (token: string) => void;
   logout: () => void;
   username: string;
+  email: string;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -25,6 +26,7 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [bIsLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const router = useRouter();
 
   const fetchUser = async () => {
@@ -37,7 +39,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           Authorization: `Bearer ${token}`, // 헤더에 토큰 실어 보내기
         },
       });
-      setUsername(res.data.email); // 백엔드에서 받은 이름 저장
+      setUsername(res.data.username); // 백엔드에서 받은 이름 저장
+      setEmail(res.data.email);
     } catch (error) {
       console.error("유저 정보 불러오기 실패", error);
       // 토큰이 만료되었으면 로그아웃 처리 등을 여기서 함
@@ -66,7 +69,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ bIsLoggedIn, login, logout, username }}>
+    <AuthContext.Provider
+      value={{ bIsLoggedIn, login, logout, username, email }}
+    >
       {children}
     </AuthContext.Provider>
   );

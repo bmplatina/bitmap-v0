@@ -1,5 +1,6 @@
 export interface Game {
   gameId: number;
+  uid: string;
   gameTitle: string;
   gameLatestRevision: number;
   gamePlatformWindows: number;

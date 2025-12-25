@@ -8,6 +8,11 @@ import { getApiLinkByPurpose } from "../../../lib/utils";
 import dayjs from "dayjs";
 import axios from "axios";
 
+interface AuthorInfo {
+  username: string;
+  email: string;
+}
+
 // API에서 특정 게임 데이터를 가져오는 함수
 async function getGame(id: string): Promise<Game | null> {
   try {
@@ -68,6 +73,49 @@ export default async function GameDetailPage({
       </div>
     );
   }
+
+  const checkAuthor = async (): Promise<AuthorInfo | null> => {
+    // 1. 초기값을 null로 설정하여 에러 발생 시에도 안전하게 리턴
+    let author: AuthorInfo | null = null;
+
+    try {
+      const response = await axios.post(
+        getApiLinkByPurpose("auth/profile/query/uid"), // 백엔드 라우트 주소와 일치 확인
+        {
+          uid: game.uid,
+        },
+        {
+          timeout: 30000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // 2. 백엔드에서 보낸 JSON 구조에 맞춰 할당
+      // 백엔드 응답: { username: "...", email: "..." }
+      if (response.data && response.data.username) {
+        author = {
+          username: response.data.username,
+          email: response.data.email,
+        };
+      }
+    } catch (error: any) {
+      // 3. 에러 핸들링 구체화
+      if (error.code === "ECONNABORTED") {
+        console.error("요청 시간이 초과되었습니다.");
+      } else {
+        console.error(
+          "데이터를 불러오는 중 에러 발생:",
+          error.response?.data || error.message
+        );
+      }
+    }
+
+    return author; // 실패 시 null, 성공 시 객체 리턴
+  };
+
+  const author: AuthorInfo | null = await checkAuthor();
 
   // 출시일 포맷팅 - day.js 사용
   const formatDate = (dateString: string) => {
@@ -160,6 +208,8 @@ export default async function GameDetailPage({
               <User className="h-5 w-5 text-muted-foreground" />
               <span>
                 퍼블리셔: <strong>{game.gamePublisher}</strong>
+                <br />
+                {author && `게시자: ${author.username}`}
               </span>
             </div>
 
