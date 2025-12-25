@@ -4,11 +4,13 @@ import { Button } from "@radix-ui/themes";
 import Link from "next/link";
 import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from "../lib/AuthContext";
 
 // 1. 토큰 처리를 담당하는 별도의 컴포넌트 분리
 function TokenHandler() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { login } = useAuth();
 
   useEffect(() => {
     // URL에서 ?token=... 값 가져오기
@@ -16,7 +18,8 @@ function TokenHandler() {
 
     if (token) {
       // A. 로컬 스토리지에 저장
-      localStorage.setItem("accessToken", token);
+      // localStorage.setItem("accessToken", token);
+      login(token);
 
       // B. URL에서 토큰 제거 (깔끔하게 만들기)
       // replace를 쓰면 뒤로가기 눌렀을 때 로그인 토큰이 있는 URL로 안 돌아감
