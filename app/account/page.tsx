@@ -21,7 +21,7 @@ export default function AccountPage() {
   const [password, setPassword] = useState<string>("");
   const [bRequestAutoLogin, setAutoLogin] = useState<boolean>(false);
   const [loginFailMessage, setLoginFailMsg] = useState<string>("");
-  const { bIsLoggedIn, logout, username } = useAuth();
+  const { bIsLoggedIn, login, logout, username } = useAuth();
 
   const handleLogin = async (): Promise<void> => {
     try {
@@ -40,7 +40,8 @@ export default function AccountPage() {
       );
 
       if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+        login(response.data.token);
+        // localStorage.setItem("token", response.data.token);
         console.log(response.data.token);
       }
       // bSetLoggedInState(true);
