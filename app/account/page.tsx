@@ -49,10 +49,13 @@ export default function AccountPage() {
         // error가 AxiosError<ErrorResponse> 타입임이 확인됨
         // 이제 error.response?.data?.message 와 같이 안전하게 접근 가능
 
+        const payload = error.response?.data;
         const errorMessage =
-          error.response?.data?.message || "알 수 없는 에러가 발생했습니다.";
-        console.error("로그인 실패:", errorMessage);
+          typeof payload === "string"
+            ? payload
+            : payload?.message ?? "알 수 없는 에러가 발생했습니다.";
         setLoginFailMsg(errorMessage);
+        console.error("로그인 실패:", errorMessage);
 
         // 서버에서 보낸 구체적인 에러 메시지를 alert 등으로 사용자에게 보여줄 수 있습니다.
         // alert(errorMessage);

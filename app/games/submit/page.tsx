@@ -38,9 +38,11 @@ import GamePreview from "../../../components/game-preview";
 import MarkdownEditor from "../../../components/markdown-editor";
 import { toast } from "../../../hooks/use-toast";
 import { getApiLinkByPurpose } from "../../../lib/utils";
+import { useAuth } from "../../../lib/AuthContext";
 
 export default function RegisterGamePage() {
   const router = useRouter();
+  const { bIsLoggedIn } = useAuth();
 
   // 게임 정보 상태
   const [gameId, setGameId] = useState(0);
@@ -127,7 +129,11 @@ export default function RegisterGamePage() {
       }
     }
 
-    fetchGames();
+    if (!bIsLoggedIn) {
+      router.push("/account");
+    } else {
+      fetchGames();
+    }
   }, []);
 
   // 날짜 포맷팅 함수 (MySQL 형식)
