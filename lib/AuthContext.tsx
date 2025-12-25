@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           Authorization: `Bearer ${token}`, // 헤더에 토큰 실어 보내기
         },
       });
-      setUsername(res.data.username); // 백엔드에서 받은 이름 저장
+      setUsername(res.data.email); // 백엔드에서 받은 이름 저장
     } catch (error) {
       console.error("유저 정보 불러오기 실패", error);
       // 토큰이 만료되었으면 로그아웃 처리 등을 여기서 함
