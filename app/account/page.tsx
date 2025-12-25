@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type KeyboardEvent } from "react";
 import { Checkbox, Button, Flex, Spinner, Text } from "@radix-ui/themes";
 import {
   Card,
@@ -22,6 +22,13 @@ export default function AccountPage() {
   const [bRequestAutoLogin, setAutoLogin] = useState<boolean>(false);
   const [loginFailMessage, setLoginFailMsg] = useState<string>("");
   const { bIsLoggedIn, login, logout, username } = useAuth();
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleLogin();
+    }
+  };
 
   const handleLogin = async (): Promise<void> => {
     try {
@@ -104,12 +111,14 @@ export default function AccountPage() {
                   placeholder="메일 주소"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={handleKeyDown}
                 />
                 <Input
                   placeholder="비밀번호"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={handleKeyDown}
                 />
                 <Text as="label" size="2">
                   <Flex as="span" gap="2">
