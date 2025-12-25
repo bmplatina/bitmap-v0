@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!token) return;
 
       try {
-        const res = await axios.get(getApiLinkByPurpose("profile"), {
+        const res = await axios.get(getApiLinkByPurpose("auth/profile"), {
           headers: {
             Authorization: `Bearer ${token}`, // 헤더에 토큰 실어 보내기
           },
