@@ -28,7 +28,7 @@ export default function AccountPage() {
       const response = await axios.post<AuthResponse>(
         getApiLinkByPurpose("auth/login"),
         {
-          username: email,
+          email: email,
           password: password,
         },
         {
@@ -101,7 +101,7 @@ export default function AccountPage() {
             <CardContent>
               <Flex direction="column" gap="2">
                 <Input
-                  placeholder="이메일 주소"
+                  placeholder="메일 주소"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
