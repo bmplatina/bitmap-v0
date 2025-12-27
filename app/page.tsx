@@ -1,10 +1,12 @@
 import { Button } from "@radix-ui/themes";
 import Link from "next/link";
+import Image from "next/image";
 import { Suspense } from "react";
 import { getApiLinkByPurpose } from "../lib/utils";
-import type { YouTubeQuery } from "../lib/types";
+import type { Game, YouTubeQuery } from "../lib/types";
 import axios from "axios";
 import { TokenHandler } from "../components/token-handler";
+import GameCard from "../components/game-card";
 
 // 서버 사이드에서 데이터를 가져오는 함수
 async function getYouTubeVideos(channelId: string): Promise<string[]> {
@@ -30,9 +32,33 @@ async function getYouTubeVideos(channelId: string): Promise<string[]> {
   }
 }
 
+// API에서 게임 데이터를 가져오는 함수 - 서버 컴포넌트에서만 호출
+async function getGames(): Promise<Game[]> {
+  try {
+    const response = await axios.get<Game[]>(
+      getApiLinkByPurpose("games/released"),
+      {
+        timeout: 10000, // 10초 타임아웃
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("게임 데이터를 가져오는 중 오류 발생:", error);
+
+    // API 오류 시 빈 배열 반환 (또는 fallback 데이터 사용 가능)
+    return [];
+  }
+}
+
 export default async function Home() {
   // 서버에서 직접 데이터 페칭
   const youtubeVideos = await getYouTubeVideos("UCL137ZWChauNFsma6ifhNdA");
+  const games = await getGames();
 
   return (
     <div className="flex flex-col items-center justify-center min-h-full p-6 text-center space-y-12">
@@ -72,6 +98,44 @@ export default async function Home() {
           ) : (
             <p className="text-gray-500 w-full text-center py-10">
               영상을 불러올 수 없거나 목록이 비어 있습니다.
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* 게임 목록 가로 스크롤 섹션 */}
+      <div className="w-full max-w-6xl">
+        <h2 className="text-2xl font-bold mb-4 text-left">Games</h2>
+        <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
+          {games.length > 0 ? (
+            games.map((game) => (
+              <Link
+                key={game.gameId}
+                href={`/games/${game.gameId}`}
+                className="flex-none w-[300px] aspect-video relative rounded-lg overflow-hidden snap-center shadow-md group"
+              >
+                <Image
+                  src={
+                    game.gameImageURL || "/placeholder.svg?height=400&width=283"
+                  }
+                  alt={game.gameTitle}
+                  fill
+                  className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
+                />
+                {/* 하단 텍스트 오버레이 */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-4 text-left">
+                  <h3 className="text-white text-2xl font-bold leading-tight">
+                    {game.gameTitle}
+                  </h3>
+                  <p className="text-white/80 text-sm font-medium">
+                    {game.gameDeveloper}
+                  </p>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p className="text-gray-500 w-full text-center py-10">
+              등록된 게임이 없습니다.
             </p>
           )}
         </div>
