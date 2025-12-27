@@ -12,6 +12,11 @@ function cn(...inputs: ClassValue[]) {
  * @param substring 도메인 뒤 링크
  */
 function getApiLinkByPurpose(substring: string): string {
+  // 클라이언트 환경(브라우저)에서는 CORS 방지를 위해 Next.js Rewrite 프록시 사용
+  if (typeof window !== "undefined") {
+    return `/api-proxy/${substring}`;
+  }
+
   const API_DOMAIN: string = "https://api.prodbybitmap.com/";
   return `${API_DOMAIN}${substring}`;
 }
