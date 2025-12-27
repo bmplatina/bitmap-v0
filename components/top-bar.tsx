@@ -22,6 +22,7 @@ export default function TopBar() {
   // 검색 대상 게임 캐시
   const [games, setGames] = useState<Game[]>([]);
   const [searchResults, setSearchResults] = useState<Game[]>([]);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   // 모바일 사이드바 상태 관리
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
@@ -70,12 +71,27 @@ export default function TopBar() {
     });
 
     setSearchResults(filtered);
+    setIsSearchOpen(true);
   }, [searchQuery, games]);
 
   const searchSummary = useMemo(() => {
     if (!searchQuery.trim()) return "";
     return `${searchResults.length}건의 결과`;
   }, [searchQuery, searchResults]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".max-w-md")) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // 검색 핸들러
   const handleSearch = (e: React.FormEvent) => {
@@ -131,18 +147,66 @@ export default function TopBar() {
         </Link>
 
         {/* 검색 폼 */}
-        <form onSubmit={handleSearch} className="flex-1 max-w-md mx-auto">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="게임 검색..."
-              className="pl-9 h-9 w-full bg-muted"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-        </form>
+        <div className="flex-1 max-w-md mx-auto relative">
+          <form onSubmit={handleSearch}>
+            <div className="relative">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="게임 검색..."
+                className="pl-9 h-9 w-full bg-muted"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => searchQuery.trim() && setIsSearchOpen(true)}
+              />
+            </div>
+          </form>
+
+          {/* 검색 결과 드롭다운 */}
+          {isSearchOpen && searchQuery.trim() && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-background border rounded-md shadow-lg max-h-96 overflow-y-auto z-50">
+              {searchResults.length > 0 ? (
+                <div className="py-2">
+                  {searchResults.map((game) => (
+                    <Link
+                      key={game.gameId}
+                      href={`/games/${game.gameId}`}
+                      className="flex items-center gap-3 px-4 py-2 hover:bg-muted transition-colors"
+                      onClick={() => {
+                        setIsSearchOpen(false);
+                        setSearchQuery("");
+                      }}
+                    >
+                      <div className="relative w-10 h-10 flex-shrink-0 rounded overflow-hidden bg-muted">
+                        <Image
+                          src={
+                            game.gameImageURL ||
+                            "/placeholder.svg?height=40&width=40"
+                          }
+                          alt={game.gameTitle}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">
+                          {game.gameTitle}
+                        </p>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {game.gameDeveloper}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-4 text-center text-sm text-muted-foreground">
+                  검색 결과가 없습니다.
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* 검색 결과 건수 */}
         <div className="hidden md:flex w-[160px] justify-end text-xs text-muted-foreground">
