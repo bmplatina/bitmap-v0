@@ -54,7 +54,7 @@ export default async function Home() {
         <h2 className="text-2xl font-bold mb-4 text-left">Our Works</h2>
         <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
           {youtubeVideos.length > 0 ? (
-            youtubeVideos.map((video) => (
+            youtubeVideos.slice(0, 10).map((video) => (
               <div
                 key={video}
                 className="flex-none w-[300px] aspect-video bg-black rounded-lg overflow-hidden snap-center shadow-md"
