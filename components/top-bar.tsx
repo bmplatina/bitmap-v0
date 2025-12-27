@@ -6,6 +6,7 @@ import { Search, Menu, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { MobileSidebar } from "./mobile-sidebar";
 import type { Game } from "../lib/types";
@@ -13,6 +14,7 @@ import { getGames } from "../lib/utils";
 import { convertQwertyToHangul, getChoseong } from "es-hangul";
 
 export default function TopBar() {
+  const router = useRouter();
   // Electron 및 MacOS 환경 감지 변수 (실제 감지 코드는 구현하지 않음)
   const bIsElectron: boolean = false; // 예시 값, 실제로는 Electron 감지 로직 필요
   const bIsMacOS: boolean = false; // 예시 값, 실제로는 MacOS 감지 로직 필요
@@ -96,13 +98,12 @@ export default function TopBar() {
   // 검색 핸들러
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.table(
-      searchResults.map((game) => ({
-        Title: game.gameTitle,
-        Developer: game.gameDeveloper,
-        Publisher: game.gamePublisher,
-      }))
-    );
+    if (searchResults.length > 0) {
+      const firstResult = searchResults[0];
+      router.push(`/games/${firstResult.gameId}`);
+      setIsSearchOpen(false);
+      setSearchQuery("");
+    }
   };
 
   // 모바일 사이드바 토글

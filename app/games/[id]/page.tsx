@@ -101,6 +101,43 @@ export default async function GameDetailPage({
     return dayjs(dateString).format("YYYY/MM/DD");
   };
 
+  // 간단한 마크다운 렌더링 함수
+  const renderMarkdown = (text: string) => {
+    if (!text) return "";
+
+    // 1. 리터럴 \n이 들어오는 경우 처리 (API 응답 등에서 발생 가능)
+    let html = text.replace(/\\n/g, "\n");
+
+    // 2. 헤더 처리
+    html = html
+      .replace(
+        /^### (.*$)/gim,
+        '<h3 class="text-lg font-semibold mt-4 mb-2">$1</h3>'
+      )
+      .replace(
+        /^## (.*$)/gim,
+        '<h2 class="text-xl font-semibold mt-6 mb-3">$1</h2>'
+      )
+      .replace(
+        /^# (.*$)/gim,
+        '<h1 class="text-2xl font-bold mt-8 mb-4">$1</h1>'
+      );
+
+    // 3. 인라인 스타일 처리
+    html = html
+      .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-bold">$1</strong>')
+      .replace(/\*(.*?)\*/gim, '<em class="italic">$1</em>')
+      .replace(
+        /`([^`]+)`/gim,
+        '<code class="bg-muted px-1 py-0.5 rounded text-sm">$1</code>'
+      );
+
+    // 4. 줄바꿈 처리
+    html = html.replace(/\n/g, "<br />");
+
+    return html;
+  };
+
   return (
     <div className="container mx-auto p-6 w-full">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -174,7 +211,7 @@ export default async function GameDetailPage({
             {game.gameHeadline}
           </h2>
 
-          <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div className="flex items-center gap-2">
               <User className="h-5 w-5 text-muted-foreground" />
               <span>
@@ -208,9 +245,15 @@ export default async function GameDetailPage({
 
           <div className="mb-8">
             <h3 className="text-xl font-semibold mb-4">게임 소개</h3>
-            <div className="prose prose-invert max-w-none">
+            {/* <div className="prose prose-invert max-w-none">
               <p>{game.gameDescription}</p>
-            </div>
+            </div> */}
+            <div
+              className="prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: renderMarkdown(game.gameDescription),
+              }}
+            />
           </div>
 
           {game.gameVideoURL && (
