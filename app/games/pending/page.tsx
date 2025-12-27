@@ -1,35 +1,11 @@
 import { Suspense } from "react";
-import axios from "axios";
 import type { Game } from "../../../lib/types";
 import GameCard from "../../../components/game-card";
-import { getApiLinkByPurpose } from "../../../lib/utils";
-
-// API에서 대기 중인 게임 데이터를 가져오는 함수 - 서버 컴포넌트에서만 호출
-async function getPendingGames(): Promise<Game[]> {
-  try {
-    const response = await axios.get<Game[]>(
-      getApiLinkByPurpose("games/pending"),
-      {
-        timeout: 10000, // 10초 타임아웃
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return response.data;
-  } catch (error) {
-    console.error("대기 중인 게임 데이터를 가져오는 중 오류 발생:", error);
-
-    // API 오류 시 빈 배열 반환
-    return [];
-  }
-}
+import { getPendingGames } from "../../../lib/utils";
 
 export default async function PendingGamesPage() {
   // 서버 컴포넌트에서 직접 데이터 가져오기
-  const games = await getPendingGames();
+  const games: Game[] = await getPendingGames();
 
   return (
     <div className="p-6 w-full">

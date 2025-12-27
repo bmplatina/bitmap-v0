@@ -2,63 +2,14 @@ import { Button } from "@radix-ui/themes";
 import Link from "next/link";
 import Image from "next/image";
 import { Suspense } from "react";
-import { getApiLinkByPurpose } from "../lib/utils";
-import type { Game, YouTubeQuery } from "../lib/types";
-import axios from "axios";
+import { getYouTubeVideos, getGames } from "../lib/utils";
+import type { Game } from "../lib/types";
 import { TokenHandler } from "../components/token-handler";
-import GameCard from "../components/game-card";
-
-// 서버 사이드에서 데이터를 가져오는 함수
-async function getYouTubeVideos(channelId: string): Promise<string[]> {
-  try {
-    const response = await axios.get<YouTubeQuery>(
-      getApiLinkByPurpose(`youtube/get-videos/${channelId}`),
-      {
-        timeout: 10000,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (response.data?.success) {
-      return response.data.videoIds;
-    }
-    return [];
-  } catch (error) {
-    console.error("비디오 ID 가져오는 중 오류 발생:", error);
-    return [];
-  }
-}
-
-// API에서 게임 데이터를 가져오는 함수 - 서버 컴포넌트에서만 호출
-async function getGames(): Promise<Game[]> {
-  try {
-    const response = await axios.get<Game[]>(
-      getApiLinkByPurpose("games/released"),
-      {
-        timeout: 10000, // 10초 타임아웃
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return response.data;
-  } catch (error) {
-    console.error("게임 데이터를 가져오는 중 오류 발생:", error);
-
-    // API 오류 시 빈 배열 반환 (또는 fallback 데이터 사용 가능)
-    return [];
-  }
-}
 
 export default async function Home() {
   // 서버에서 직접 데이터 페칭
   const youtubeVideos = await getYouTubeVideos("UCL137ZWChauNFsma6ifhNdA");
-  const games = await getGames();
+  const games: Game[] = await getGames();
 
   return (
     <div className="flex flex-col items-center justify-center min-h-full p-6 text-center space-y-12">

@@ -7,32 +7,10 @@ import { Calendar, User, Tag, Globe, Monitor, Apple } from "lucide-react";
 import { getApiLinkByPurpose } from "../../../lib/utils";
 import dayjs from "dayjs";
 import axios from "axios";
-
+import { getGameById } from "../../../lib/utils";
 interface AuthorInfo {
   username: string;
   email: string;
-}
-
-// API에서 특정 게임 데이터를 가져오는 함수
-async function getGame(id: string): Promise<Game | null> {
-  try {
-    const response = await axios.get<Game[]>(
-      getApiLinkByPurpose("games/released"),
-      {
-        timeout: 10000,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    const game = response.data.find((g) => g.gameId.toString() === id);
-    return game || null;
-  } catch (error) {
-    console.error("게임 데이터를 가져오는 중 오류 발생:", error);
-    return null;
-  }
 }
 
 export async function generateMetadata({
@@ -40,7 +18,7 @@ export async function generateMetadata({
 }: {
   params: { id: string };
 }): Promise<Metadata> {
-  const game = await getGame(params.id);
+  const game = await getGameById(params.id);
 
   if (!game) {
     return {
@@ -58,7 +36,7 @@ export default async function GameDetailPage({
 }: {
   params: { id: string };
 }) {
-  const game = await getGame(params.id);
+  const game = await getGameById(params.id);
 
   if (!game) {
     return (
