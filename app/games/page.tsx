@@ -1,13 +1,14 @@
 import { Suspense } from "react";
 import type { Game } from "../../lib/types";
 import GameCard from "../../components/game-card";
+import { getApiLinkByPurpose } from "../../lib/utils";
 import axios from "axios";
 
 // API에서 게임 데이터를 가져오는 함수 - 서버 컴포넌트에서만 호출
 async function getGames(): Promise<Game[]> {
   try {
     const response = await axios.get<Game[]>(
-      "https://api.prodbybitmap.com/games/released",
+      getApiLinkByPurpose("games/released"),
       {
         timeout: 10000, // 10초 타임아웃
         headers: {

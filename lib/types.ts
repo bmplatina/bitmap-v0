@@ -42,3 +42,9 @@ export interface AuthResponse {
 export interface ErrorResponse {
   message: string;
 }
+
+export interface YouTubeQuery {
+  success: boolean;
+  totalCount: number;
+  videoIds: string[];
+}
