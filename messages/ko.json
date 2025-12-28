@@ -90,6 +90,7 @@
   },
 
   "GameSubmit": {
+    "waiting-approval": "승인 대기 중",
     "gameId": "게임 ID",
     "gameIdDesc": "게임 ID는 자동으로 생성됩니다.",
     "gameIdAutoGen": "게임 ID 생성 중⋯",
