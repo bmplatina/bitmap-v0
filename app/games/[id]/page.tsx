@@ -18,10 +18,11 @@ interface AuthorInfo {
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
+  const { id } = await params;
   const t = await getTranslations("GamesView");
-  const game = await getGameById(params.id);
+  const game = await getGameById(id);
 
   if (!game) {
     return {
@@ -37,10 +38,11 @@ export async function generateMetadata({
 export default async function GameDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
   const t = await getTranslations("GamesView");
-  const game = await getGameById(params.id);
+  const game = await getGameById(id);
 
   if (!game) {
     return (
