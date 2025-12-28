@@ -27,6 +27,8 @@ export default function TopBar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   // 모바일 사이드바 상태 관리
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  // 모바일 검색창 상태 관리
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -103,6 +105,7 @@ export default function TopBar() {
       router.push(`/games/${firstResult.gameId}`);
       setIsSearchOpen(false);
       setSearchQuery("");
+      setIsMobileSearchOpen(false);
     }
   };
 
@@ -120,7 +123,7 @@ export default function TopBar() {
     <>
       <div className="h-12 bg-background border-b flex items-center px-4 w-full relative z-50">
         {/* 모바일 메뉴 버튼 */}
-        <div className="md:hidden mr-3">
+        <div className={`md:hidden mr-3 ${isMobileSearchOpen ? "hidden" : ""}`}>
           <Button
             variant="ghost"
             size="icon"
@@ -133,7 +136,12 @@ export default function TopBar() {
         </div>
 
         {/* 로고 이미지 */}
-        <Link href="/" className="flex items-center">
+        <Link
+          href="/"
+          className={`flex items-center ${
+            isMobileSearchOpen ? "hidden md:flex" : ""
+          }`}
+        >
           <Image
             src="/bitmap_bmp.png"
             alt="Bitmap"
@@ -148,7 +156,11 @@ export default function TopBar() {
         </Link>
 
         {/* 검색 폼 */}
-        <div className="flex-1 max-w-md mx-auto relative">
+        <div
+          className={`flex-1 max-w-md mx-auto relative ${
+            isMobileSearchOpen ? "block" : "hidden md:block"
+          }`}
+        >
           <form onSubmit={handleSearch}>
             <div className="relative">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -166,6 +178,10 @@ export default function TopBar() {
           {/* 검색 결과 드롭다운 */}
           {isSearchOpen && searchQuery.trim() && (
             <div className="absolute top-full left-0 right-0 mt-2 bg-background border rounded-md shadow-lg max-h-96 overflow-y-auto z-50">
+              {/* 검색 결과 건수 */}
+              <div className="hidden md:flex w-[160px] justify-end text-xs text-muted-foreground">
+                {searchSummary}
+              </div>
               {searchResults.length > 0 ? (
                 <div className="py-2">
                   {searchResults.map((game) => (
@@ -176,6 +192,7 @@ export default function TopBar() {
                       onClick={() => {
                         setIsSearchOpen(false);
                         setSearchQuery("");
+                        setIsMobileSearchOpen(false);
                       }}
                     >
                       <div className="relative w-10 h-10 flex-shrink-0 rounded overflow-hidden bg-muted">
@@ -209,9 +226,27 @@ export default function TopBar() {
           )}
         </div>
 
-        {/* 검색 결과 건수 */}
-        <div className="hidden md:flex w-[160px] justify-end text-xs text-muted-foreground">
-          {searchSummary}
+        {/* 모바일 검색 토글 버튼 */}
+        <div className="md:hidden ml-auto pl-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => {
+              if (isMobileSearchOpen) {
+                setSearchQuery("");
+                setIsSearchOpen(false);
+              }
+              setIsMobileSearchOpen(!isMobileSearchOpen);
+            }}
+          >
+            {isMobileSearchOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Search className="h-5 w-5" />
+            )}
+            <span className="sr-only">검색 토글</span>
+          </Button>
         </div>
       </div>
 
