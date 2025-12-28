@@ -37,15 +37,23 @@ import type { Game } from "../../../lib/types";
 import GamePreview from "../../../components/game-preview";
 import MarkdownEditor from "../../../components/markdown-editor";
 import { toast } from "../../../hooks/use-toast";
-import { getGames, getPendingGames } from "../../../lib/utils";
+import {
+  getGames,
+  getPendingGames,
+  submitGame,
+  uploadGameImage,
+} from "../../../lib/utils";
 import { useAuth } from "../../../lib/AuthContext";
+import { useTranslations } from "next-intl";
 
 export default function RegisterGamePage() {
   const router = useRouter();
   const { bIsLoggedIn } = useAuth();
+  const t = useTranslations("GameSubmit");
 
   // 게임 정보 상태
   const [gameId, setGameId] = useState(0);
+  const [uid, setUid] = useState("");
   const [gameTitle, setGameTitle] = useState("");
   const [gameLatestRevision, setGameLatestRevision] = useState(1);
   const [gamePlatformWindows, setGamePlatformWindows] = useState(false);
@@ -220,32 +228,20 @@ export default function RegisterGamePage() {
 
       console.log("Submitting game data:", postGame);
 
-      // API 호출
-      const response = await axios.post<Game>(
-        getApiLinkByPurpose("games/submit"),
-        postGame,
-        {
-          timeout: 30000, // 30초 타임아웃
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      if (await submitGame(postGame)) {
+        // 성공 알림
+        toast({
+          title: "성공",
+          description:
+            "게임이 성공적으로 등록되었습니다! 승인 대기 상태로 전환됩니다.",
+        });
 
-      console.log("Submit succeed:", response.data);
+        // 미리보기 모달 닫기
+        setIsPreviewModalOpen(false);
 
-      // 성공 알림
-      toast({
-        title: "성공",
-        description:
-          "게임이 성공적으로 등록되었습니다! 승인 대기 상태로 전환됩니다.",
-      });
-
-      // 미리보기 모달 닫기
-      setIsPreviewModalOpen(false);
-
-      // 대기 중인 게임 페이지로 이동
-      router.push("/games/pending");
+        // 대기 중인 게임 페이지로 이동
+        router.push("/games/pending");
+      }
     } catch (error) {
       console.error("Error submitting:", error);
 
@@ -262,24 +258,11 @@ export default function RegisterGamePage() {
 
   const [file, setFile] = useState<File | null>(null);
 
-  const handleUpload = async () => {
+  async function handleUpload() {
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append("image", file); // Express의 upload.single('image')와 일치해야 함
-
-    try {
-      const response = await fetch(getApiLinkByPurpose("game/image"), {
-        method: "POST",
-        body: formData, // 별도의 Header 설정 없이 body에 바로 전달
-      });
-
-      const data = await response.json();
-      alert("업로드 성공: " + data.filePath);
-    } catch (error) {
-      console.error("업로드 실패:", error);
-    }
-  };
+    await uploadGameImage(file);
+  }
 
   // 마크다운 편집 모달 열기
   const openDescriptionModal = () => {
@@ -335,10 +318,8 @@ export default function RegisterGamePage() {
         {/* 게임 ID */}
         <Card>
           <CardHeader>
-            <CardTitle>게임 ID</CardTitle>
-            <CardDescription>
-              자동으로 생성되는 고유 게임 식별자입니다.
-            </CardDescription>
+            <CardTitle>{t("gameId")}</CardTitle>
+            <CardDescription>{t("gameIdDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             {isLoadingGameId ? (
@@ -359,14 +340,14 @@ export default function RegisterGamePage() {
         {/* 게임 제목 */}
         <Card>
           <CardHeader>
-            <CardTitle>게임 제목 *</CardTitle>
-            <CardDescription>게임의 공식 제목을 입력하세요.</CardDescription>
+            <CardTitle>{t("gameTitle")} *</CardTitle>
+            <CardDescription>{t("gameTitleDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Input
               value={gameTitle}
               onChange={(e) => setGameTitle(e.target.value)}
-              placeholder="게임 제목"
+              placeholder={t("gameTitle")}
               required
             />
           </CardContent>
@@ -377,10 +358,8 @@ export default function RegisterGamePage() {
         {/* 최신 리비전 */}
         <Card>
           <CardHeader>
-            <CardTitle>최신 리비전</CardTitle>
-            <CardDescription>
-              게임의 현재 버전 번호를 입력하세요.
-            </CardDescription>
+            <CardTitle>{t("gameLatestRevision")}</CardTitle>
+            <CardDescription>{t("gameLatestRevisionDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Input
@@ -398,10 +377,8 @@ export default function RegisterGamePage() {
         {/* 플랫폼 지원 */}
         <Card>
           <CardHeader>
-            <CardTitle>지원 플랫폼</CardTitle>
-            <CardDescription>
-              게임이 지원하는 플랫폼을 선택하세요.
-            </CardDescription>
+            <CardTitle>{t("gamePlatform")}</CardTitle>
+            <CardDescription>{t("gamePlatformDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center space-x-2">
@@ -412,7 +389,7 @@ export default function RegisterGamePage() {
                   setGamePlatformWindows(checked as boolean)
                 }
               />
-              <Label htmlFor="windows">Windows</Label>
+              <Label htmlFor="windows">{t("gamePlatformWindows")}</Label>
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -422,7 +399,7 @@ export default function RegisterGamePage() {
                   setGamePlatformMac(checked as boolean)
                 }
               />
-              <Label htmlFor="mac">macOS</Label>
+              <Label htmlFor="mac">{t("gamePlatformMac")}</Label>
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -432,7 +409,7 @@ export default function RegisterGamePage() {
                   setGamePlatformMobile(checked as boolean)
                 }
               />
-              <Label htmlFor="mobile">모바일</Label>
+              <Label htmlFor="mobile">{t("gamePlatformMobile")}</Label>
             </div>
           </CardContent>
         </Card>
@@ -442,10 +419,8 @@ export default function RegisterGamePage() {
         {/* 게임 엔진 */}
         <Card>
           <CardHeader>
-            <CardTitle>게임 엔진</CardTitle>
-            <CardDescription>
-              게임 개발에 사용된 엔진을 입력하세요.
-            </CardDescription>
+            <CardTitle>{t("gameEngine")}</CardTitle>
+            <CardDescription>{t("gameEngineDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Input
@@ -461,8 +436,8 @@ export default function RegisterGamePage() {
         {/* 장르 */}
         <Card>
           <CardHeader>
-            <CardTitle>장르 *</CardTitle>
-            <CardDescription>게임의 주요 장르를 입력하세요.</CardDescription>
+            <CardTitle>{t("gameGenre")} *</CardTitle>
+            <CardDescription>{t("gameGenreDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Input
@@ -479,16 +454,14 @@ export default function RegisterGamePage() {
         {/* 개발자 */}
         <Card>
           <CardHeader>
-            <CardTitle>개발자 *</CardTitle>
-            <CardDescription>
-              게임을 개발한 개발자 또는 스튜디오 이름을 입력하세요.
-            </CardDescription>
+            <CardTitle>{t("gameDeveloper")} *</CardTitle>
+            <CardDescription>{t("gameDeveloperDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Input
               value={gameDeveloper}
               onChange={(e) => setGameDeveloper(e.target.value)}
-              placeholder="개발자 이름"
+              placeholder={t("gameDeveloper")}
               required
             />
           </CardContent>
@@ -499,16 +472,14 @@ export default function RegisterGamePage() {
         {/* 퍼블리셔 */}
         <Card>
           <CardHeader>
-            <CardTitle>퍼블리셔</CardTitle>
-            <CardDescription>
-              게임을 배급하는 퍼블리셔 이름을 입력하세요.
-            </CardDescription>
+            <CardTitle>{t("gamePublisher")}</CardTitle>
+            <CardDescription>{t("gamePublisherDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Input
               value={gamePublisher}
               onChange={(e) => setGamePublisher(e.target.value)}
-              placeholder="퍼블리셔 이름"
+              placeholder={t("gamePublisher")}
             />
           </CardContent>
         </Card>
@@ -518,10 +489,8 @@ export default function RegisterGamePage() {
         {/* 얼리 액세스 */}
         <Card>
           <CardHeader>
-            <CardTitle>얼리 액세스</CardTitle>
-            <CardDescription>
-              이 게임이 얼리 액세스 상태인지 선택하세요.
-            </CardDescription>
+            <CardTitle>{t("isEarlyAccess")}</CardTitle>
+            <CardDescription>{t("isEarlyAccessDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-2">
@@ -532,7 +501,7 @@ export default function RegisterGamePage() {
                   setIsEarlyAccess(checked as boolean)
                 }
               />
-              <Label htmlFor="earlyAccess">얼리 액세스</Label>
+              <Label htmlFor="earlyAccess">{t("isEarlyAccess")}</Label>
             </div>
           </CardContent>
         </Card>
@@ -542,10 +511,8 @@ export default function RegisterGamePage() {
         {/* 출시 여부 */}
         <Card>
           <CardHeader>
-            <CardTitle>출시 여부</CardTitle>
-            <CardDescription>
-              게임이 정식 출시되었는지 선택하세요.
-            </CardDescription>
+            <CardTitle>{t("isReleased")}</CardTitle>
+            <CardDescription>{t("isReleasedDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-2">
@@ -564,8 +531,8 @@ export default function RegisterGamePage() {
         {/* 출시일 */}
         <Card>
           <CardHeader>
-            <CardTitle>출시일</CardTitle>
-            <CardDescription>게임의 출시일을 선택하세요.</CardDescription>
+            <CardTitle>{t("gameReleasedDate")}</CardTitle>
+            <CardDescription>{t("gameReleasedDateDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Popover>
@@ -600,10 +567,8 @@ export default function RegisterGamePage() {
         {/* 웹사이트 */}
         <Card>
           <CardHeader>
-            <CardTitle>웹사이트</CardTitle>
-            <CardDescription>
-              게임의 공식 웹사이트 URL을 입력하세요.
-            </CardDescription>
+            <CardTitle>{t("gameWebsite")}</CardTitle>
+            <CardDescription>{t("gameWebsiteDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Input
@@ -620,10 +585,8 @@ export default function RegisterGamePage() {
         {/* 비디오 URL */}
         <Card>
           <CardHeader>
-            <CardTitle>트레일러 비디오 URL</CardTitle>
-            <CardDescription>
-              게임 트레일러 비디오의 URL을 입력하세요. (YouTube 임베드 URL 권장)
-            </CardDescription>
+            <CardTitle>{t("gameVideoURL")}</CardTitle>
+            <CardDescription>{t("gameVideoURLDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Input
@@ -640,15 +603,13 @@ export default function RegisterGamePage() {
         {/* 다운로드 URL */}
         <Card>
           <CardHeader>
-            <CardTitle>다운로드 URL</CardTitle>
-            <CardDescription>
-              선택한 플랫폼에 따라 다운로드 링크를 입력하세요.
-            </CardDescription>
+            <CardTitle>{t("gameDownloadURL")}</CardTitle>
+            <CardDescription>{t("gameDownloadURLDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {gamePlatformMac && (
               <div>
-                <Label htmlFor="macDownload">Mac 다운로드 URL</Label>
+                <Label htmlFor="macDownload">{t("gameDownloadMacURL")}</Label>
                 <Input
                   id="macDownload"
                   value={gameDownloadMacURL}
@@ -660,7 +621,7 @@ export default function RegisterGamePage() {
             )}
             {gamePlatformWindows && (
               <div>
-                <Label htmlFor="winDownload">Windows 다운로드 URL</Label>
+                <Label htmlFor="winDownload">{t("gameDownloadWinURL")}</Label>
                 <Input
                   id="winDownload"
                   value={gameDownloadWinURL}
@@ -678,10 +639,9 @@ export default function RegisterGamePage() {
         {/* 이미지 URL */}
         <Card>
           <CardHeader>
-            <CardTitle>게임 이미지</CardTitle>
+            <CardTitle>{t("gameImageURL")}</CardTitle>
             <CardDescription>
-              게임의 대표 이미지 URL를 업로드하세요. 소비자에게 가장 먼저
-              나타나는 포스터 사진입니다.
+              {t("gameImageURLDesc")}
               <br />
               (1:1.414 비율 권장, 최대 10MiB 업로드 가능)
             </CardDescription>
@@ -708,10 +668,8 @@ export default function RegisterGamePage() {
         {/* 바이너리 이름 */}
         <Card>
           <CardHeader>
-            <CardTitle>실행 파일 이름</CardTitle>
-            <CardDescription>
-              게임의 실행 파일 이름을 입력하세요.
-            </CardDescription>
+            <CardTitle>{t("gameBinaryName")}</CardTitle>
+            <CardDescription>{t("gameBinaryNameDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Input
@@ -727,16 +685,14 @@ export default function RegisterGamePage() {
         {/* 게임 헤드라인 */}
         <Card>
           <CardHeader>
-            <CardTitle>게임 헤드라인</CardTitle>
-            <CardDescription>
-              게임을 한 줄로 설명하는 짧은 헤드라인을 입력하세요.
-            </CardDescription>
+            <CardTitle>{t("gameHeadline")}</CardTitle>
+            <CardDescription>{t("gameHeadlineDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Input
               value={gameHeadline}
               onChange={(e) => setGameHeadline(e.target.value)}
-              placeholder="게임의 핵심을 한 줄로 표현하세요"
+              placeholder={t("gameHeadlineDesc")}
             />
           </CardContent>
         </Card>
@@ -746,10 +702,8 @@ export default function RegisterGamePage() {
         {/* 게임 설명 */}
         <Card>
           <CardHeader>
-            <CardTitle>게임 설명</CardTitle>
-            <CardDescription>
-              게임에 대한 자세한 설명을 마크다운 문법으로 작성하세요.
-            </CardDescription>
+            <CardTitle>{t("gameDescription")}</CardTitle>
+            <CardDescription>{t("gameDescriptionDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="min-h-[100px] p-3 border rounded-md bg-muted">
@@ -772,7 +726,7 @@ export default function RegisterGamePage() {
               </DialogTrigger>
               <DialogContent className="max-w-6xl max-h-[80vh]">
                 <DialogHeader>
-                  <DialogTitle>게임 설명 편집</DialogTitle>
+                  <DialogTitle>{t("edit-md")}</DialogTitle>
                   <DialogDescription>
                     마크다운 문법을 사용하여 게임에 대한 자세한 설명을
                     작성하세요.
@@ -799,16 +753,13 @@ export default function RegisterGamePage() {
           >
             <DialogTrigger asChild>
               <Button size="lg" className="px-8">
-                게임 등록 신청
+                {t("submit")}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-6xl max-h-[80vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>게임 등록 미리보기</DialogTitle>
-                <DialogDescription>
-                  등록하기 전에 게임 정보를 확인하세요. 등록 후에는 수정이
-                  어려울 수 있습니다.
-                </DialogDescription>
+                <DialogTitle>{t("submitting")}</DialogTitle>
+                <DialogDescription>{t("submit-warning")}</DialogDescription>
               </DialogHeader>
               <GamePreview game={createPreviewGame()} />
               <div className="flex justify-end space-x-2 pt-4">

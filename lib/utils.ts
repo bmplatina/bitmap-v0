@@ -135,6 +135,50 @@ async function getPendingGameById(id: string): Promise<Game | null> {
   }
 }
 
+// API에서 특정 대기 중인 게임 데이터를 가져오는 함수
+async function submitGame(gameInfo: Game): Promise<boolean> {
+  try {
+    // API 호출
+    const response = await axios.post<Game>(
+      getApiLinkByPurpose("games/submit"),
+      gameInfo,
+      {
+        timeout: 30000, // 30초 타임아웃
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("Submit succeed:", response.data);
+
+    // 성공 알림
+    return true;
+  } catch (error) {
+    console.error("대기 중인 게임 데이터를 가져오는 중 오류 발생:", error);
+    return false;
+  }
+}
+
+async function uploadGameImage(file: File | null) {
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("image", file); // Express의 upload.single('image')와 일치해야 함
+
+  try {
+    const response = await fetch(getApiLinkByPurpose("game/image"), {
+      method: "POST",
+      body: formData, // 별도의 Header 설정 없이 body에 바로 전달
+    });
+
+    const data = await response.json();
+    alert("업로드 성공: " + data.filePath);
+  } catch (error) {
+    console.error("업로드 실패:", error);
+  }
+}
+
 export {
   cn,
   getApiLinkByPurpose,
@@ -143,4 +187,6 @@ export {
   getGameById,
   getPendingGames,
   getPendingGameById,
+  submitGame,
+  uploadGameImage
 };
