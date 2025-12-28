@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
+import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "../components/theme-provider";
 import Sidebar from "../components/sidebar";
 import TopBar from "../components/top-bar";
@@ -24,24 +25,26 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <AuthProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Theme>
-              <div className="flex flex-col h-screen">
-                <TopBar />
-                <div className="flex flex-1 overflow-hidden">
-                  <Sidebar />
-                  <main className="flex-1 overflow-auto">{children}</main>
+        <NextIntlClientProvider>
+          <AuthProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Theme>
+                <div className="flex flex-col h-screen">
+                  <TopBar />
+                  <div className="flex flex-1 overflow-hidden">
+                    <Sidebar />
+                    <main className="flex-1 overflow-auto">{children}</main>
+                  </div>
                 </div>
-              </div>
-            </Theme>
-          </ThemeProvider>
-        </AuthProvider>
+              </Theme>
+            </ThemeProvider>
+          </AuthProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

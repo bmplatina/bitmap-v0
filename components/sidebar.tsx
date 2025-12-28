@@ -3,12 +3,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "../lib/utils";
 import { useAuth } from "../lib/AuthContext";
-
 import { sidebarItems } from "../lib/sidebar-items";
+import { useTranslations } from "next-intl";
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { bIsLoggedIn } = useAuth();
+  const t = useTranslations("Sidebar");
 
   return (
     <div className="w-64 h-full bg-background border-r flex-col hidden md:flex">
@@ -22,7 +23,7 @@ export default function Sidebar() {
           return (
             <div key={section.title} className="mb-6">
               <h3 className="text-sm font-medium text-muted-foreground mb-3 px-2">
-                {section.title}
+                {t(section.title)}
               </h3>
               <div className="space-y-1">
                 {section.items.map((item) => (
@@ -37,7 +38,7 @@ export default function Sidebar() {
                     )}
                   >
                     {item.icon}
-                    {item.title}
+                    {t(item.title)}
                   </Link>
                 ))}
               </div>

@@ -13,35 +13,35 @@ import {
 
 export const sidebarItems = [
   {
-    title: "Bitmap",
+    title: "bitmap",
     bRequireLogin: false,
     items: [
       {
-        title: "Bitmap",
+        title: "bitmap",
         icon: <Home className="h-5 w-5" />,
         appIcon: Home,
         href: "/",
       },
       {
-        title: "Bitmap App",
+        title: "bitmap-app",
         icon: <Download className="h-5 w-5" />,
         appIcon: Download,
         href: "/about",
       },
       {
-        title: "Bitmap Developer",
+        title: "bitmap-developer",
         icon: <Code className="h-5 w-5" />,
         appIcon: Code,
         href: "//developer.prodbybitmap.com",
       },
       {
-        title: "Bitmap YouTube",
+        title: "bitmap-youtube",
         icon: <TvMinimalPlay className="h-5 w-5" />,
         appIcon: TvMinimalPlay,
         href: "//youtube.com/@prodbybitmap",
       },
       {
-        title: "Bitmap Wiki",
+        title: "bitmap-wiki",
         icon: <BookOpen className="h-5 w-5" />,
         appIcon: BookOpen,
         href: "//wiki.prodbybitmap.com",
@@ -49,11 +49,11 @@ export const sidebarItems = [
     ],
   },
   {
-    title: "Bitmap Store",
+    title: "bitmap-store",
     bRequireLogin: false,
     items: [
       {
-        title: "Games",
+        title: "games",
         icon: <GamepadIcon className="h-5 w-5" />,
         appIcon: GamepadIcon,
         href: "/games",
@@ -61,17 +61,17 @@ export const sidebarItems = [
     ],
   },
   {
-    title: "Management",
+    title: "publish",
     bRequireLogin: true,
     items: [
       {
-        title: "Register New Game",
+        title: "game-submit",
         icon: <PlusCircle className="h-5 w-5" />,
         appIcon: PlusCircle,
         href: "/games/submit",
       },
       {
-        title: "Pending Games",
+        title: "games-pending",
         icon: <Clock className="h-5 w-5" />,
         appIcon: Clock,
         href: "/games/pending",
@@ -79,16 +79,16 @@ export const sidebarItems = [
     ],
   },
   {
-    title: "User",
+    title: "accounts",
     items: [
       {
-        title: "Account",
+        title: "accounts",
         icon: <User className="h-5 w-5" />,
         appIcon: User,
         href: "/account",
       },
       {
-        title: "Settings",
+        title: "settings",
         icon: <Settings className="h-5 w-5" />,
         appIcon: Settings,
         href: "/settings",

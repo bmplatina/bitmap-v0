@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "../lib/utils";
 import { useAuth } from "../lib/AuthContext";
 import { sidebarItems } from "../lib/sidebar-items";
+import { useTranslations } from "next-intl";
 
 interface MobileSidebarProps {
   onItemClick?: () => void;
@@ -13,6 +14,7 @@ interface MobileSidebarProps {
 export function MobileSidebar({ onItemClick }: MobileSidebarProps) {
   const pathname = usePathname();
   const { bIsLoggedIn } = useAuth();
+  const t = useTranslations("Sidebar");
 
   const handleItemClick = () => {
     if (onItemClick) {
@@ -30,7 +32,7 @@ export function MobileSidebar({ onItemClick }: MobileSidebarProps) {
         return (
           <div key={section.title} className="mb-6">
             <h3 className="text-sm font-medium text-muted-foreground mb-3 px-2">
-              {section.title}
+              {t(section.title)}
             </h3>
             <div className="space-y-1">
               {section.items.map((item) => (
@@ -46,7 +48,7 @@ export function MobileSidebar({ onItemClick }: MobileSidebarProps) {
                   )}
                 >
                   {item.icon}
-                  {item.title}
+                  {t(item.title)}
                 </Link>
               ))}
             </div>

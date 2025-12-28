@@ -2,14 +2,16 @@ import { Suspense } from "react";
 import type { Game } from "../../lib/types";
 import GameCard from "../../components/game-card";
 import { getGames } from "../../lib/utils";
+import { getTranslations } from "next-intl/server";
 
 export default async function GamesPage() {
   // 서버 컴포넌트에서 직접 데이터 가져오기
   const games: Game[] = await getGames();
+  const t = await getTranslations("GamesView");
 
   return (
     <div className="p-6 w-full">
-      <h1 className="text-3xl font-bold mb-6">게임 라이브러리</h1>
+      <h1 className="text-3xl font-bold mb-6">{t("explore")}</h1>
 
       {games.length === 0 ? (
         <div className="text-center py-12">

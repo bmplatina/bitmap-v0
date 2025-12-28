@@ -5,9 +5,11 @@ import { Badge } from "../../../components/ui/badge";
 import Image from "next/image";
 import { Calendar, User, Tag, Globe, Monitor, Apple } from "lucide-react";
 import { getApiLinkByPurpose } from "../../../lib/utils";
+import { getTranslations } from "next-intl/server";
 import dayjs from "dayjs";
 import axios from "axios";
 import { getGameById } from "../../../lib/utils";
+
 interface AuthorInfo {
   username: string;
   email: string;
@@ -18,11 +20,12 @@ export async function generateMetadata({
 }: {
   params: { id: string };
 }): Promise<Metadata> {
+  const t = await getTranslations("GamesView");
   const game = await getGameById(params.id);
 
   if (!game) {
     return {
-      title: "Bitmap Store: 게임을 찾을 수 없습니다",
+      title: `Bitmap Store: ${t("unknown-game")}`,
     };
   }
 
@@ -36,17 +39,15 @@ export default async function GameDetailPage({
 }: {
   params: { id: string };
 }) {
+  const t = await getTranslations("GamesView");
   const game = await getGameById(params.id);
 
   if (!game) {
     return (
       <div className="flex items-center justify-center h-full w-full">
         <div className="text-center">
-          <p className="text-xl mb-2">게임을 찾을 수 없습니다</p>
-          <p className="text-sm text-muted-foreground">
-            요청하신 게임이 존재하지 않거나 데이터를 불러오는 중 문제가
-            발생했습니다.
-          </p>
+          <p className="text-xl mb-2">{t("unknown-game")}</p>
+          <p className="text-sm text-muted-foreground">{t("unknown-game")}</p>
         </div>
       </div>
     );
@@ -170,7 +171,7 @@ export default async function GameDetailPage({
                   rel="noopener noreferrer"
                 >
                   <Globe className="mr-2 h-4 w-4" />
-                  웹사이트 방문
+                  {t("official-website")}
                 </a>
               </Button>
             )}
@@ -178,7 +179,7 @@ export default async function GameDetailPage({
             <Button className="w-full" variant="default" asChild>
               <a href={`/about/${game.gameId}`} rel="noopener noreferrer">
                 <Monitor className="mr-2 h-4 w-4" />
-                Bitmap App에서 보기
+                {t("view-in-bitmap-app")}
               </a>
             </Button>
 
@@ -203,7 +204,7 @@ export default async function GameDetailPage({
           <div className="flex items-center gap-3 mb-4">
             <h1 className="text-3xl font-bold">{game.gameTitle}</h1>
             {game.isEarlyAccess === 1 && (
-              <Badge className="bg-amber-500">얼리 액세스</Badge>
+              <Badge className="bg-amber-500">{t("early-access")}</Badge>
             )}
           </div>
 
@@ -215,50 +216,38 @@ export default async function GameDetailPage({
             <div className="flex items-center gap-2">
               <User className="h-5 w-5 text-muted-foreground" />
               <span>
-                개발사: <strong>{game.gameDeveloper}</strong>
+                {t("developer")}: <strong>{game.gameDeveloper}</strong>
               </span>
             </div>
 
             <div className="flex items-center gap-2">
               <User className="h-5 w-5 text-muted-foreground" />
               <span>
-                퍼블리셔: <strong>{game.gamePublisher}</strong>
+                {t("publisher")}: <strong>{game.gamePublisher}</strong>
                 <br />
-                {author && `게시자: ${author.username}`}
+                {author && `${t("author")}: ${author.username}`}
               </span>
             </div>
 
             <div className="flex items-center gap-2">
               <Tag className="h-5 w-5 text-muted-foreground" />
               <span>
-                장르: <strong>{game.gameGenre}</strong>
+                {t("genre")}: <strong>{game.gameGenre}</strong>
               </span>
             </div>
 
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-muted-foreground" />
               <span>
-                출시일: <strong>{formatDate(game.gameReleasedDate)}</strong>
+                {t("released-date")}:{" "}
+                <strong>{formatDate(game.gameReleasedDate)}</strong>
               </span>
             </div>
           </div>
 
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4">게임 소개</h3>
-            {/* <div className="prose prose-invert max-w-none">
-              <p>{game.gameDescription}</p>
-            </div> */}
-            <div
-              className="prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{
-                __html: renderMarkdown(game.gameDescription),
-              }}
-            />
-          </div>
-
           {game.gameVideoURL && (
             <div>
-              <h3 className="text-xl font-semibold mb-4">트레일러</h3>
+              <h3 className="text-xl font-semibold mb-4">{t("preview")}</h3>
               <Suspense
                 fallback={
                   <div className="aspect-video w-full rounded-lg bg-muted"></div>
@@ -274,6 +263,21 @@ export default async function GameDetailPage({
               </Suspense>
             </div>
           )}
+
+          <div className="mb-8">
+            <h3 className="text-xl font-semibold mb-4">{`${t(
+              "information-of"
+            )} ${game.gameTitle}`}</h3>
+            {/* <div className="prose prose-invert max-w-none">
+              <p>{game.gameDescription}</p>
+            </div> */}
+            <div
+              className="prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: renderMarkdown(game.gameDescription),
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

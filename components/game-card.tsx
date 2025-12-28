@@ -4,6 +4,7 @@ import { Badge } from "./ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, User, Tag } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import dayjs from "dayjs";
 
 interface GameCardProps {
@@ -11,7 +12,7 @@ interface GameCardProps {
   linkPrefix?: string; // 링크 프리픽스 (기본값: "/games")
 }
 
-export default function GameCard({
+export default async function GameCard({
   game,
   linkPrefix = "/games",
 }: GameCardProps) {
@@ -20,6 +21,8 @@ export default function GameCard({
     if (!dateString) return "미정";
     return dayjs(dateString).format("YYYY/MM/DD");
   };
+
+  const t = await getTranslations("GamesView");
 
   return (
     <Card className="overflow-hidden flex flex-col h-full transition-all hover:shadow-lg">
@@ -34,12 +37,12 @@ export default function GameCard({
           />
           {game.isEarlyAccess === 1 && (
             <Badge className="absolute top-2 right-2 bg-amber-500">
-              얼리 액세스
+              {t("early-access")}
             </Badge>
           )}
-          {linkPrefix === "/pending-games" && (
+          {linkPrefix === "/games/pending" && (
             <Badge className="absolute top-2 left-2 bg-orange-500">
-              승인 대기중
+              {t("pending")}
             </Badge>
           )}
         </div>

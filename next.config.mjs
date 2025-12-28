@@ -1,3 +1,7 @@
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin();
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -23,6 +27,12 @@ const nextConfig = {
       },
     ];
   },
+  webpack: (config) => {
+    config.infrastructureLogging = {
+      level: "error",
+    };
+    return config;
+  },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

@@ -37,7 +37,7 @@ import type { Game } from "../../../lib/types";
 import GamePreview from "../../../components/game-preview";
 import MarkdownEditor from "../../../components/markdown-editor";
 import { toast } from "../../../hooks/use-toast";
-import { getApiLinkByPurpose } from "../../../lib/utils";
+import { getGames, getPendingGames } from "../../../lib/utils";
 import { useAuth } from "../../../lib/AuthContext";
 
 export default function RegisterGamePage() {
@@ -84,25 +84,8 @@ export default function RegisterGamePage() {
       try {
         setIsLoadingGameId(true);
 
-        const [responseGames, responseGamesPending] = await Promise.all([
-          axios.get<Game[]>(getApiLinkByPurpose("games/released"), {
-            timeout: 10000,
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }),
-          axios.get<Game[]>(getApiLinkByPurpose("games/pending"), {
-            timeout: 10000,
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }),
-        ]);
-
-        const fetchedGames: Game[] = responseGames.data;
-        const fetchedGamesPending: Game[] = responseGamesPending.data;
+        const fetchedGames: Game[] = await getGames();
+        const fetchedGamesPending: Game[] = await getPendingGames();
 
         // 기존 게임 수 + 대기 중인 게임 수 + 1 (새로운 게임)
         const newGameId = fetchedGames.length + fetchedGamesPending.length;
@@ -148,6 +131,7 @@ export default function RegisterGamePage() {
   const createPreviewGame = (): Game => {
     return {
       gameId,
+      uid,
       gameTitle,
       gameLatestRevision,
       gamePlatformWindows: gamePlatformWindows ? 1 : 0,
@@ -209,6 +193,7 @@ export default function RegisterGamePage() {
       // API 전송용 게임 데이터 생성
       const postGame: Game = {
         gameId,
+        uid,
         gameTitle,
         gameLatestRevision,
         gamePlatformWindows: gamePlatformWindows ? 1 : 0,
