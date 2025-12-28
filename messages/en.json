@@ -20,13 +20,16 @@
 
   "Authentication": {
     "login": "Sign in",
+    "login-google": "Login with Google",
+    "keep-login": "Keep me logged in",
+    "other-login-methods": "Other Login Methods",
     "logout": "Sign out",
     "register": "Sign up",
     "id": "Username",
     "email": "Email",
     "password": "Password",
     "again": "(Type again)",
-    "forgot-password": "Forgot login password?",
+    "troubleshoot-auth": "Troubleshoot Login Problem",
     "password-rules": "At least 8 characters",
     "agree-terms": "I have agreed to Bitmap Production's Terms and Conditions of Use.",
     "agree-terms-link": "See Bitmap Production's Terms and Conditions of Use and Privacy Policy here.",
@@ -89,6 +92,7 @@
   "GameSubmit": {
     "gameId": "Game ID",
     "gameIdDesc": "The Game ID will be generated automatically.",
+    "gameIdAutoGen": "Generating Game ID…",
     "gameTitle": "Game Title",
     "gameTitleDesc": "This is the title that will be displayed on the store's main page.",
     "gameLatestRevision": "Latest Game Version",
@@ -134,18 +138,27 @@
     "submit-warning": "After submitting your game, redacting is not allowed. So please watch preview and submit carefully."
   },
 
-  "filter": "Filter",
-  "delete": "Delete",
-  "open": "Open",
-  "apply": "Apply",
+  "Common": {
+    "filter": "Filter",
+    "delete": "Delete",
+    "open": "Open",
+    "apply": "Apply",
 
-  "bitmap-server-inaccessible": "Bitmap Store couldn't reach to server. Please check your internet connection.",
-  "data-not-processable": "Bitmap Store couldn't process the data.",
-  "decode-failed": "Bitmap Store couldn't interpret the data from server.",
+    "bitmap-server-inaccessible": "Bitmap Store couldn't reach to server. Please check your internet connection.",
+    "data-not-processable": "Bitmap Store couldn't process the data.",
+    "decode-failed": "Bitmap Store couldn't interpret the data from server."
+  },
 
-  "settings-general": "General Settings",
-  "screen-mode": "Screen Mode",
-  "screen-mode-dark": "Dark Mode",
-  "screen-mode-light": "Light Mode",
-  "screen-mode-system-default": "Auto"
+  "Settings": {
+    "settings-general": "General Settings",
+    "theme": "Theme",
+    "current-theme": "Current Theme",
+    "screen-mode": "Screen Mode",
+    "screen-mode-dark": "Dark Mode",
+    "screen-mode-dark-desc": "Use dark mode",
+    "screen-mode-light": "Light Mode",
+    "screen-mode-light-desc": "Use light mode",
+    "screen-mode-system-default": "Auto",
+    "screen-mode-system-default-desc": "Follow the system theme settings"
+  }
 }

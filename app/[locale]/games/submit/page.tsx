@@ -318,16 +318,14 @@ export default function RegisterGamePage() {
         {/* 게임 ID */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("gameId")}</CardTitle>
+            <CardTitle>{t("gameIdAutoGen")}</CardTitle>
             <CardDescription>{t("gameIdDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             {isLoadingGameId ? (
               <div className="flex items-center space-x-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span className="text-muted-foreground">
-                  게임 ID 생성 중...
-                </span>
+                <span className="text-muted-foreground">{t("gameId")}</span>
               </div>
             ) : (
               <Input value={gameId} disabled />

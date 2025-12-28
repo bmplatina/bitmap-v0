@@ -1,9 +1,9 @@
 {
   "Sidebar": {
-    "bitmap": "비트맵",
-    "bitmap-store": "비트맵 스토어",
+    "bitmap": "Bitmap",
+    "bitmap-store": "Bitmap 스토어",
     "store": "스토어",
-    "about": "비트맵 스토어에 관하여",
+    "about": "Bitmap 스토어에 관하여",
     "home": "홈",
     "bitmap-wiki": "Bitmap 위키",
     "bitmap-app": "Bitmap 앱 받기",
@@ -21,13 +21,15 @@
   "Authentication": {
     "login": "로그인",
     "login-google": "Google 계정으로 로그인",
+    "keep-login": "로그인 상태 유지",
+    "other-login-methods": "다른 로그인 방법",
     "logout": "로그아웃",
     "register": "가입하기",
     "id": "유저 이름",
     "email": "이메일",
     "password": "비밀번호",
     "again": "(다시 입력)",
-    "forgot-password": "비밀번호를 잊으셨습니까?",
+    "troubleshoot-auth": "로그인 문제 해결",
     "password-rules": "최소 8글자 이상이어야 합니다.",
     "agree-terms": "비트맵 프로덕션의 이용 약관에 동의합니다.",
     "agree-terms-link": "비트맵 프로덕션의 이용 약관과 개인정보 보호 정책을 열람합니다.",
@@ -61,7 +63,7 @@
     "current-version": "현재 버전: ",
     "early-access": "얼리 액세스",
     "official-website": "공식 홈페이지 보기⋯",
-    "information-of": " 정보",
+    "information-of": "게임 정보: ",
     "installation-path": "설치 경로",
     "installation-path-hint": "클릭하여 설치할 경로를 지정하십시오.",
     "download": "다운로드",
@@ -90,6 +92,7 @@
   "GameSubmit": {
     "gameId": "게임 ID",
     "gameIdDesc": "게임 ID는 자동으로 생성됩니다.",
+    "gameIdAutoGen": "게임 ID 생성 중⋯",
     "gameTitle": "게임 제목",
     "gameTitleDesc": "스토어의 메인에 표시될 게임 제목입니다.",
     "gameLatestRevision": "게임의 최신 버전",
@@ -132,18 +135,30 @@
     "edit-md": "마크다운 편집하기",
     "submit": "제출",
     "submitting": "다음 게임 제출하는 중: ",
-    "submit-warning": "게임을 제출하면 수정할 수 없으니 미리 보기를 보고 신중히 결정하십시오.",
+    "submit-warning": "게임을 제출하면 수정할 수 없으니 미리 보기를 보고 신중히 결정하십시오."
+  },
+
+  "Common": {
     "filter": "필터",
     "delete": "삭제",
     "open": "열기",
     "apply": "적용",
+
     "bitmap-server-inaccessible": "서버에 접근할 수 없습니다. 인터넷 연결을 확인하십시오.",
     "data-not-processable": "데이터를 처리하지 못했습니다.",
-    "decode-failed": "서버의 값을 처리하지 못했습니다.",
+    "decode-failed": "서버의 값을 처리하지 못했습니다."
+  },
+
+  "Settings": {
     "settings-general": "일반 설정",
+    "theme": "테마",
+    "current-theme": "현재 테마",
     "screen-mode": "화면 모드",
     "screen-mode-dark": "다크 모드",
+    "screen-mode-dark-desc": "어두운 테마를 사용합니다.",
     "screen-mode-light": "라이트 모드",
-    "screen-mode-system-default": "자동"
+    "screen-mode-light-desc": "밝은 테마를 사용합니다.",
+    "screen-mode-system-default": "자동",
+    "screen-mode-system-default-desc": "시스템의 테마 설정을 따릅니다."
   }
 }

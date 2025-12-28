@@ -12,11 +12,14 @@ import { Input } from "../../../components/ui/input";
 import { useAuth } from "../../../lib/AuthContext";
 import { getApiLinkByPurpose } from "../../../lib/utils";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import axios from "axios";
 import type { AuthResponse, ErrorResponse } from "../../../lib/types";
 
 export default function AccountPage() {
+  const t = useTranslations("Authentication");
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [bRequestAutoLogin, setAutoLogin] = useState<boolean>(false);
@@ -62,7 +65,7 @@ export default function AccountPage() {
           typeof payload === "string"
             ? payload
             : payload?.message ?? "알 수 없는 에러가 발생했습니다.";
-        setLoginFailMsg(errorMessage);
+        setLoginFailMsg(t(errorMessage));
         console.error("로그인 실패:", errorMessage);
 
         // 서버에서 보낸 구체적인 에러 메시지를 alert 등으로 사용자에게 보여줄 수 있습니다.
@@ -94,7 +97,7 @@ export default function AccountPage() {
           <CardContent>
             <Flex direction="column" gap="2">
               <Button size="3" onClick={logout}>
-                로그아웃
+                {t("logout")}
               </Button>
             </Flex>
           </CardContent>
@@ -103,18 +106,18 @@ export default function AccountPage() {
         <Flex direction="column" gap="4">
           <Card>
             <CardHeader>
-              <CardTitle>계정이 있으십니까?</CardTitle>
+              <CardTitle>{t("login")}</CardTitle>
             </CardHeader>
             <CardContent>
               <Flex direction="column" gap="2">
                 <Input
-                  placeholder="메일 주소"
+                  placeholder={t("email")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={handleKeyDown}
                 />
                 <Input
-                  placeholder="비밀번호"
+                  placeholder={t("password")}
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -129,7 +132,7 @@ export default function AccountPage() {
                         setAutoLogin(checked as boolean)
                       }
                     />{" "}
-                    로그인 유지
+                    {t("keep-login")}
                   </Flex>
                 </Text>
                 {loginFailMessage !== "" && (
@@ -138,13 +141,15 @@ export default function AccountPage() {
                   </Text>
                 )}
                 <Button size="3" onClick={handleLogin}>
-                  로그인
+                  {t("login")}
                 </Button>
                 <Button variant="ghost">
-                  <Link href="/account/signup">계정 생성</Link>
+                  <Link href="/account/signup">{t("register")}</Link>
                 </Button>
                 <Button variant="ghost">
-                  <Link href="/account/troubleshoot">로그인 문제 해결</Link>
+                  <Link href="/account/troubleshoot">
+                    {t("troubleshoot-auth")}
+                  </Link>
                 </Button>
               </Flex>
             </CardContent>
@@ -152,12 +157,12 @@ export default function AccountPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>다른 로그인 방법</CardTitle>
+              <CardTitle>{t("other-login-methods")}</CardTitle>
             </CardHeader>
             <CardContent>
               <Flex direction="column" gap="2">
                 <Link href={getApiLinkByPurpose("auth/google")}>
-                  <Button size="3">Google 계정으로 로그인</Button>
+                  <Button size="3">{t("login-google")}</Button>
                 </Link>
               </Flex>
             </CardContent>
