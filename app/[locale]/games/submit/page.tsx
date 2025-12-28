@@ -34,7 +34,7 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { cn } from "../../../../lib/utils";
 import type { Game } from "../../../../lib/types";
-import GamePreview from "../../../../components/game-preview";
+import GameDetails from "../../../../components/game-details";
 import MarkdownEditor from "../../../../components/markdown-editor";
 import { toast } from "../../../../hooks/use-toast";
 import {
@@ -46,6 +46,7 @@ import {
 } from "../../../../lib/utils";
 import { useAuth } from "../../../../lib/AuthContext";
 import { useTranslations } from "next-intl";
+import GameDetail from "../../../../components/game-details";
 
 export default function RegisterGamePage() {
   const router = useRouter();
@@ -734,7 +735,7 @@ export default function RegisterGamePage() {
                 <DialogTitle>{t("submitting")}</DialogTitle>
                 <DialogDescription>{t("submit-warning")}</DialogDescription>
               </DialogHeader>
-              <GamePreview game={createPreviewGame()} />
+              <GameDetail game={createPreviewGame()} bIsPending={true} />
               <div className="flex justify-end space-x-2 pt-4">
                 <Button
                   variant="outline"
