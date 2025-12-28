@@ -7,6 +7,40 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// 간단한 마크다운 렌더링 함수
+const renderMarkdown = (text: string) => {
+  if (!text) return "";
+
+  // 1. 리터럴 \n이 들어오는 경우 처리 (API 응답 등에서 발생 가능)
+  let html = text.replace(/\\n/g, "\n");
+
+  // 2. 헤더 처리
+  html = html
+    .replace(
+      /^### (.*$)/gim,
+      '<h3 class="text-lg font-semibold mt-4 mb-2">$1</h3>'
+    )
+    .replace(
+      /^## (.*$)/gim,
+      '<h2 class="text-xl font-semibold mt-6 mb-3">$1</h2>'
+    )
+    .replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mt-8 mb-4">$1</h1>');
+
+  // 3. 인라인 스타일 처리
+  html = html
+    .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-bold">$1</strong>')
+    .replace(/\*(.*?)\*/gim, '<em class="italic">$1</em>')
+    .replace(
+      /`([^`]+)`/gim,
+      '<code class="bg-muted px-1 py-0.5 rounded text-sm">$1</code>'
+    );
+
+  // 4. 줄바꿈 처리
+  html = html.replace(/\n/g, "<br />");
+
+  return html;
+};
+
 /**
  * API 링크 생성
  * @param substring 도메인 뒤 링크
@@ -181,6 +215,7 @@ async function uploadGameImage(file: File | null) {
 
 export {
   cn,
+  renderMarkdown,
   getApiLinkByPurpose,
   getYouTubeVideos,
   getGames,
@@ -188,5 +223,5 @@ export {
   getPendingGames,
   getPendingGameById,
   submitGame,
-  uploadGameImage
+  uploadGameImage,
 };

@@ -38,6 +38,7 @@ import GamePreview from "../../../../components/game-preview";
 import MarkdownEditor from "../../../../components/markdown-editor";
 import { toast } from "../../../../hooks/use-toast";
 import {
+  renderMarkdown,
   getGames,
   getPendingGames,
   submitGame,
@@ -280,34 +281,6 @@ export default function RegisterGamePage() {
   const cancelDescription = () => {
     setTempDescription(gameDescription);
     setIsDescriptionModalOpen(false);
-  };
-
-  // 간단한 마크다운 렌더링 함수
-  const renderMarkdown = (text: string) => {
-    if (!text) return "게임 설명이 여기에 표시됩니다...";
-
-    return text
-      .replace(
-        /^### (.*$)/gim,
-        '<h3 class="text-lg font-semibold mt-4 mb-2">$1</h3>'
-      )
-      .replace(
-        /^## (.*$)/gim,
-        '<h2 class="text-xl font-semibold mt-6 mb-3">$1</h2>'
-      )
-      .replace(
-        /^# (.*$)/gim,
-        '<h1 class="text-2xl font-bold mt-8 mb-4">$1</h1>'
-      )
-      .replace(/\*\*(.*)\*\*/gim, '<strong class="font-bold">$1</strong>')
-      .replace(/\*(.*)\*/gim, '<em class="italic">$1</em>')
-      .replace(
-        /`([^`]+)`/gim,
-        '<code class="bg-muted px-1 py-0.5 rounded text-sm">$1</code>'
-      )
-      .replace(/\n\n/gim, '</p><p class="mb-4">')
-      .replace(/\n/gim, "<br>")
-      .replace(/^(.*)$/gim, '<p class="mb-4">$1</p>');
   };
 
   return (
