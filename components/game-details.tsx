@@ -33,6 +33,7 @@ export default async function GameDetail({
   bIsPending,
 }: GameDetailProps) {
   const t = await getTranslations("GamesView");
+  const t_gameSubmit = await getTranslations("GameSubmit");
 
   if (!game) {
     return (
@@ -171,7 +172,9 @@ export default async function GameDetail({
         <div className="lg:col-span-2">
           <div className="flex items-center gap-3 mb-4">
             <h1 className="text-3xl font-bold">{game.gameTitle}</h1>
-            {bIsPending && <Badge className="bg-amber-500">승인 대기중</Badge>}
+            {bIsPending && (
+              <Badge className="bg-amber-500">{t("waiting-approval")}</Badge>
+            )}
             {game.isEarlyAccess === 1 && (
               <Badge className="bg-amber-500">{t("early-access")}</Badge>
             )}

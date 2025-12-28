@@ -90,6 +90,7 @@
   },
 
   "GameSubmit": {
+    "game-submit": "Submit Your Game",
     "waiting-approval": "Waiting for Approval",
     "gameId": "Game ID",
     "gameIdDesc": "The Game ID will be generated automatically.",

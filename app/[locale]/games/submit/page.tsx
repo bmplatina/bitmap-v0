@@ -285,20 +285,22 @@ export default function RegisterGamePage() {
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6">새 게임 등록</h1>
+      <h1 className="text-3xl font-bold mb-6">{t("game-submit")}</h1>
 
       <div className="space-y-6">
         {/* 게임 ID */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("gameIdAutoGen")}</CardTitle>
+            <CardTitle>{t("gameId")}</CardTitle>
             <CardDescription>{t("gameIdDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             {isLoadingGameId ? (
               <div className="flex items-center space-x-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span className="text-muted-foreground">{t("gameId")}</span>
+                <span className="text-muted-foreground">
+                  {t("gameIdAutoGen")}
+                </span>
               </div>
             ) : (
               <Input value={gameId} disabled />
