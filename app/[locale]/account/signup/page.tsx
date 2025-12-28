@@ -7,15 +7,15 @@ import {
   CardTitle,
   CardHeader,
   CardContent,
-} from "../../../components/ui/card";
-import { Input } from "../../../components/ui/input";
+} from "../../../../components/ui/card";
+import { Input } from "../../../../components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import axios from "axios";
-import type { AuthResponse, ErrorResponse } from "../../../lib/types";
-import { useAuth } from "../../../lib/AuthContext";
-import { getApiLinkByPurpose } from "../../../lib/utils";
+import type { AuthResponse, ErrorResponse } from "../../../../lib/types";
+import { useAuth } from "../../../../lib/AuthContext";
+import { getApiLinkByPurpose } from "../../../../lib/utils";
 
 export default function Home() {
   const router = useRouter();

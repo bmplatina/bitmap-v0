@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-import type { Game, Metadata } from "../../../../lib/types";
-import { getPendingGameById } from "../../../../lib/utils";
-import { Button } from "../../../../components/ui/button";
-import { Badge } from "../../../../components/ui/badge";
+import type { Game, Metadata } from "../../../../../lib/types";
+import { getPendingGameById } from "../../../../../lib/utils";
+import { Button } from "../../../../../components/ui/button";
+import { Badge } from "../../../../../components/ui/badge";
 import Image from "next/image";
 import {
   Calendar,

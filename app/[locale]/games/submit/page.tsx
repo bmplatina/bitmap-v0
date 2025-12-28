@@ -9,12 +9,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../../components/ui/card";
-import { Input } from "../../../components/ui/input";
-import { Label } from "../../../components/ui/label";
-import { Checkbox } from "../../../components/ui/checkbox";
-import { Button } from "../../../components/ui/button";
-import { Separator } from "../../../components/ui/separator";
+} from "../../../../components/ui/card";
+import { Input } from "../../../../components/ui/input";
+import { Label } from "../../../../components/ui/label";
+import { Checkbox } from "../../../../components/ui/checkbox";
+import { Button } from "../../../../components/ui/button";
+import { Separator } from "../../../../components/ui/separator";
 import {
   Dialog,
   DialogContent,
@@ -22,28 +22,28 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../../components/ui/dialog";
-import { Calendar } from "../../../components/ui/calendar";
+} from "../../../../components/ui/dialog";
+import { Calendar } from "../../../../components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "../../../components/ui/popover";
+} from "../../../../components/ui/popover";
 import { CalendarIcon, Edit, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { cn } from "../../../lib/utils";
-import type { Game } from "../../../lib/types";
-import GamePreview from "../../../components/game-preview";
-import MarkdownEditor from "../../../components/markdown-editor";
-import { toast } from "../../../hooks/use-toast";
+import { cn } from "../../../../lib/utils";
+import type { Game } from "../../../../lib/types";
+import GamePreview from "../../../../components/game-preview";
+import MarkdownEditor from "../../../../components/markdown-editor";
+import { toast } from "../../../../hooks/use-toast";
 import {
   getGames,
   getPendingGames,
   submitGame,
   uploadGameImage,
-} from "../../../lib/utils";
-import { useAuth } from "../../../lib/AuthContext";
+} from "../../../../lib/utils";
+import { useAuth } from "../../../../lib/AuthContext";
 import { useTranslations } from "next-intl";
 
 export default function RegisterGamePage() {

@@ -2,10 +2,10 @@
 
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
-import { Label } from "../../components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
-import { Separator } from "../../components/ui/separator"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card"
+import { Label } from "../../../components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components/ui/select"
+import { Separator } from "../../../components/ui/separator"
 import { Monitor, Moon, Sun } from "lucide-react"
 
 export default function SettingsPage() {

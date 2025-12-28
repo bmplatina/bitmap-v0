@@ -1,14 +1,14 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { AuthProvider } from "../lib/AuthContext";
+import { AuthProvider } from "../../lib/AuthContext";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import { NextIntlClientProvider } from "next-intl";
-import { ThemeProvider } from "../components/theme-provider";
-import Sidebar from "../components/sidebar";
-import TopBar from "../components/top-bar";
+import { ThemeProvider } from "../../components/theme-provider";
+import Sidebar from "../../components/sidebar";
+import TopBar from "../../components/top-bar";
 
 const inter = Inter({ subsets: ["latin"] });
 

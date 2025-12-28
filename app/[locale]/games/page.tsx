@@ -1,7 +1,7 @@
 import { Suspense } from "react";
-import type { Game } from "../../lib/types";
-import GameCard from "../../components/game-card";
-import { getGames } from "../../lib/utils";
+import type { Game } from "../../../lib/types";
+import GameCard from "../../../components/game-card";
+import { getGames } from "../../../lib/utils";
 import { getTranslations } from "next-intl/server";
 
 export default async function GamesPage() {

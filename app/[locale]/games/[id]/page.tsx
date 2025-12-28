@@ -1,14 +1,14 @@
 import { Suspense } from "react";
-import type { Game, Metadata } from "../../../lib/types";
-import { Button } from "../../../components/ui/button";
-import { Badge } from "../../../components/ui/badge";
+import type { Game, Metadata } from "../../../../lib/types";
+import { Button } from "../../../../components/ui/button";
+import { Badge } from "../../../../components/ui/badge";
 import Image from "next/image";
 import { Calendar, User, Tag, Globe, Monitor, Apple } from "lucide-react";
-import { getApiLinkByPurpose } from "../../../lib/utils";
+import { getApiLinkByPurpose } from "../../../../lib/utils";
 import { getTranslations } from "next-intl/server";
 import dayjs from "dayjs";
 import axios from "axios";
-import { getGameById } from "../../../lib/utils";
+import { getGameById } from "../../../../lib/utils";
 
 interface AuthorInfo {
   username: string;

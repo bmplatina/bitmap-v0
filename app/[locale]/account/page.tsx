@@ -7,14 +7,14 @@ import {
   CardTitle,
   CardHeader,
   CardContent,
-} from "../../components/ui/card";
-import { Input } from "../../components/ui/input";
-import { useAuth } from "../../lib/AuthContext";
-import { getApiLinkByPurpose } from "../../lib/utils";
+} from "../../../components/ui/card";
+import { Input } from "../../../components/ui/input";
+import { useAuth } from "../../../lib/AuthContext";
+import { getApiLinkByPurpose } from "../../../lib/utils";
 import Link from "next/link";
 
 import axios from "axios";
-import type { AuthResponse, ErrorResponse } from "../../lib/types";
+import type { AuthResponse, ErrorResponse } from "../../../lib/types";
 
 export default function AccountPage() {
   const [email, setEmail] = useState<string>("");
