@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import defaultTheme from "tailwindcss/defaultTheme"; // 이걸 꼭 import 해야 합니다.
 
 const config: Config = {
   darkMode: ["class"],
@@ -10,6 +11,10 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+      fontFamily: {
+        // 기본 sans 폰트를 Pretendard로 교체하고, 나머지는 Tailwind 기본값을 유지
+        sans: ["Pretendard", ...defaultTheme.fontFamily.sans],
+      },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -93,4 +98,5 @@ const config: Config = {
   },
   plugins: [require("tailwindcss-animate")],
 };
+
 export default config;
