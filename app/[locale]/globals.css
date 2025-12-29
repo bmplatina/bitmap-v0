@@ -4,10 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: "Pretendard", Arial, Helvetica, sans-serif;
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -92,5 +88,6 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    @apply font-sans; /* 위 config에서 설정한 Pretendard가 적용된 font-sans를 입힙니다 */
   }
 }
