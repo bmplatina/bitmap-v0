@@ -12,43 +12,31 @@ function cn(...inputs: ClassValue[]) {
 const renderMarkdown = (text: string) => {
   if (!text) return "";
 
+  // 1. 리터럴 \n이 들어오는 경우 처리 (API 응답 등에서 발생 가능)
   let html = text.replace(/\\n/g, "\n");
 
-  // --- 인용문 처리 ---
-  html = html.replace(
-    /^> (.*$)/gim,
-    '<blockquote class="mt-4 mb-2 pl-4 border-l-4 border-muted-foreground italic text-muted-foreground">$1</blockquote>'
-  );
-
-  // --- 헤더 처리 (크기 Up!) ---
+  // 2. 헤더 처리
   html = html
-    // H3: text-lg -> text-xl (조금 더 크게)
     .replace(
       /^### (.*$)/gim,
-      '<h3 class="text-xl font-bold mt-6 mb-2 text-foreground">$1</h3>'
+      '<h3 class="text-lg font-semibold mt-4 mb-2">$1</h3>'
     )
-    // H2: text-xl -> text-3xl (확실히 크게)
     .replace(
       /^## (.*$)/gim,
-      '<h2 class="text-3xl font-extrabold mt-10 mb-3 tracking-tight text-foreground">$1</h2>'
+      '<h2 class="text-xl font-semibold mt-6 mb-3">$1</h2>'
     )
-    // H1: text-2xl -> text-4xl (가장 크게)
-    .replace(
-      /^# (.*$)/gim, 
-      '<h1 class="text-4xl font-black mt-12 mb-4 tracking-tight text-foreground">$1</h1>'
-    );
+    .replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mt-8 mb-4">$1</h1>');
 
-  // --- 인라인 스타일 ---
+  // 3. 인라인 스타일 처리
   html = html
-    .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-bold text-foreground">$1</strong>')
+    .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-bold">$1</strong>')
     .replace(/\*(.*?)\*/gim, '<em class="italic">$1</em>')
     .replace(
       /`([^`]+)`/gim,
-      '<code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-foreground">$1</code>'
+      '<code class="bg-muted px-1 py-0.5 rounded text-sm">$1</code>'
     );
 
-  // --- 줄바꿈 정리 ---
-  html = html.replace(/(<\/h[1-3]>|<\/blockquote>)\n/g, "$1");
+  // 4. 줄바꿈 처리
   html = html.replace(/\n/g, "<br />");
 
   return sanitizeHtml(html);
