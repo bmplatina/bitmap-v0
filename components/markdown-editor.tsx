@@ -5,6 +5,19 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Eye, Edit } from "lucide-react";
+import { renderMarkdown } from "../lib/utils";
+
+import Editor, { loader } from "@monaco-editor/react";
+
+// Monaco 에디터 로딩 시 옵션 (선택 사항)
+loader.config({
+  paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs" },
+});
+
+interface Props {
+  value: string;
+  onChange: (value: string | undefined) => void;
+}
 
 interface MarkdownEditorProps {
   value: string;
@@ -21,41 +34,9 @@ export default function MarkdownEditor({
 }: MarkdownEditorProps) {
   const [activeTab, setActiveTab] = useState("edit");
 
-  // 간단한 마크다운 렌더링 함수
-  const renderMarkdown = (text: string) => {
-    if (!text) return "";
-
-    // 1. 리터럴 \n이 들어오는 경우 처리 (API 응답 등에서 발생 가능)
-    let html = text.replace(/\\n/g, "\n");
-
-    // 2. 헤더 처리
-    html = html
-      .replace(
-        /^### (.*$)/gim,
-        '<h3 class="text-lg font-semibold mt-4 mb-2">$1</h3>'
-      )
-      .replace(
-        /^## (.*$)/gim,
-        '<h2 class="text-xl font-semibold mt-6 mb-3">$1</h2>'
-      )
-      .replace(
-        /^# (.*$)/gim,
-        '<h1 class="text-2xl font-bold mt-8 mb-4">$1</h1>'
-      );
-
-    // 3. 인라인 스타일 처리
-    html = html
-      .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-bold">$1</strong>')
-      .replace(/\*(.*?)\*/gim, '<em class="italic">$1</em>')
-      .replace(
-        /`([^`]+)`/gim,
-        '<code class="bg-muted px-1 py-0.5 rounded text-sm">$1</code>'
-      );
-
-    // 4. 줄바꿈 처리
-    html = html.replace(/\n/g, "<br />");
-
-    return html;
+  // Monaco의 onChange는 (value: string | undefined)를 인자로 줍니다.
+  const handleEditorChange = (val: string | undefined) => {
+    onChange(val ?? ""); // undefined일 경우 빈 문자열로 처리
   };
 
   return (
@@ -77,7 +58,7 @@ export default function MarkdownEditor({
         </TabsList>
 
         <TabsContent value="edit" className="flex-1 mt-4">
-          <Textarea
+          {/* <Textarea
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder="마크다운 문법을 사용하여 게임 설명을 작성하세요...
@@ -92,6 +73,23 @@ export default function MarkdownEditor({
 
 일반 텍스트..."
             className="h-full resize-none font-mono text-sm"
+          /> */}
+          <Editor
+            height="100%"
+            defaultLanguage="markdown" // 언어 마크다운 고정
+            value={value}
+            onChange={handleEditorChange}
+            theme="vs-dark" // 또는 "light"
+            options={{
+              minimap: { enabled: false }, // 미니맵 끄기
+              fontSize: 16, // 글꼴 크기
+              fontFamily: '"JetBrainsMono", Monaco, "Courier New", monospace',
+              wordWrap: "on", // 자동 줄바꿈
+              lineNumbers: "on", // 줄 번호 표시
+              padding: { top: 16, bottom: 16 },
+              scrollBeyondLastLine: false, // 마지막 줄 아래 여백 제거
+              automaticLayout: true, // 컨테이너 크기 변경 시 자동 리사이즈
+            }}
           />
         </TabsContent>
 

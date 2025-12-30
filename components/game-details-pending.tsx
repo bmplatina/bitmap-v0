@@ -1,4 +1,6 @@
-import { Suspense } from "react";
+"use client";
+
+import { useState, useEffect, Suspense } from "react";
 import type { Game } from "../lib/types";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
@@ -13,10 +15,11 @@ import {
   Apple,
 } from "lucide-react";
 import { getApiLinkByPurpose } from "../lib/utils";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import dayjs from "dayjs";
 import axios from "axios";
 import { renderMarkdown } from "../lib/utils";
+import { Quote } from "@radix-ui/themes";
 
 interface AuthorInfo {
   username: string;
@@ -25,15 +28,12 @@ interface AuthorInfo {
 
 type GameDetailProps = {
   game: Game;
-  bIsPending: boolean;
 };
 
-export default async function GameDetail({
-  game,
-  bIsPending,
-}: GameDetailProps) {
-  const t = await getTranslations("GamesView");
-  const t_gameSubmit = await getTranslations("GameSubmit");
+export default function GameDetail({ game }: GameDetailProps) {
+  const t = useTranslations("GamesView");
+  const t_gameSubmit = useTranslations("GameSubmit");
+  const [author, setAuthor] = useState<AuthorInfo | null>(null);
 
   if (!game) {
     return (
@@ -87,29 +87,31 @@ export default async function GameDetail({
     return author; // 실패 시 null, 성공 시 객체 리턴
   };
 
-  const author: AuthorInfo | null = await checkAuthor();
-
   // 출시일 포맷팅 - day.js 사용
   const formatDate = (dateString: string) => {
     if (!dateString) return "미정";
     return dayjs(dateString).format("YYYY/MM/DD");
   };
 
+  useEffect(() => {
+    checkAuthor().then((payload: AuthorInfo | null) => {
+      setAuthor(payload);
+    });
+  }, [author]);
+
   return (
     <div className="container mx-auto p-6 w-full">
-      {bIsPending && (
-        <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-          <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
-            <Clock className="h-5 w-5" />
-            <span className="font-medium">
-              이 게임은 현재 승인 대기 중입니다.
-            </span>
-          </div>
-          <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-            관리자 검토 후 정식 게임 라이브러리에 추가됩니다.
-          </p>
+      <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+        <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+          <Clock className="h-5 w-5" />
+          <span className="font-medium">
+            이 게임은 현재 승인 대기 중입니다.
+          </span>
         </div>
-      )}
+        <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+          관리자 검토 후 정식 게임 라이브러리에 추가됩니다.
+        </p>
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* 왼쪽 컬럼 - 이미지 */}
         <div className="lg:col-span-1">
@@ -172,9 +174,9 @@ export default async function GameDetail({
         <div className="lg:col-span-2">
           <div className="flex items-center gap-3 mb-4">
             <h1 className="text-3xl font-bold">{game.gameTitle}</h1>
-            {bIsPending && (
-              <Badge className="bg-amber-500">{t("waiting-approval")}</Badge>
-            )}
+            <Badge className="bg-amber-500">
+              {t_gameSubmit("waiting-approval")}
+            </Badge>
             {game.isEarlyAccess === 1 && (
               <Badge className="bg-amber-500">{t("early-access")}</Badge>
             )}

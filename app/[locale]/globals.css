@@ -82,14 +82,18 @@
   }
 }
 
-:root,
-.radix-themes {
-  /* Radix가 내부적으로 사용하는 모든 폰트 변수를 덮어버림 */
-  --default-font-family: "Pretendard", var(--apple-system), sans-serif !important;
-  --font-family: "Pretendard", var(--apple-system), sans-serif !important;
+@layer components {
+  .font-pretendard {
+    /* Radix가 내부적으로 사용하는 모든 폰트 변수를 덮어버림 */
+    --default-font-family: "Pretendard", var(--apple-system), sans-serif !important;
+    --font-family: "Pretendard", var(--apple-system), sans-serif !important;
+  }
 }
 
-/* 모든 요소에 강제 적용 */
-* {
-  font-family: "Pretendard", sans-serif !important;
+@font-face {
+  font-family: "JetBrainsMono"; /* 에디터에서 부를 이름 */
+  src: url("./fonts/JetBrainsMono/JetBrainsMono-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }

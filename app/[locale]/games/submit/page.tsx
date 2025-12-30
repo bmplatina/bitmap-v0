@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import {
   Card,
   CardContent,
@@ -34,7 +34,6 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { cn } from "../../../../lib/utils";
 import type { Game } from "../../../../lib/types";
-import GameDetails from "../../../../components/game-details";
 import MarkdownEditor from "../../../../components/markdown-editor";
 import { toast } from "../../../../hooks/use-toast";
 import {
@@ -46,8 +45,8 @@ import {
 } from "../../../../lib/utils";
 import { useAuth } from "../../../../lib/AuthContext";
 import { useTranslations } from "next-intl";
-import GameDetail from "../../../../components/game-details";
 import { Quote } from "@radix-ui/themes";
+import GameDetail from "../../../../components/game-details-pending";
 
 export default function RegisterGamePage() {
   const router = useRouter();
@@ -123,11 +122,11 @@ export default function RegisterGamePage() {
       }
     }
 
-    if (!bIsLoggedIn) {
-      router.push("/account");
-    } else {
-      fetchGames();
-    }
+    // if (!bIsLoggedIn) {
+    //   router.push("/account");
+    // } else {
+    //   fetchGames();
+    // }
   }, []);
 
   // 날짜 포맷팅 함수 (MySQL 형식)
@@ -736,7 +735,7 @@ export default function RegisterGamePage() {
                 <DialogTitle>{t("submitting")}</DialogTitle>
                 <DialogDescription>{t("submit-warning")}</DialogDescription>
               </DialogHeader>
-              <GameDetail game={createPreviewGame()} bIsPending={true} />
+              <GameDetail game={createPreviewGame()} />
               <div className="flex justify-end space-x-2 pt-4">
                 <Button
                   variant="outline"
