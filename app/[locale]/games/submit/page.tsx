@@ -122,11 +122,11 @@ export default function RegisterGamePage() {
       }
     }
 
-    // if (!bIsLoggedIn) {
-    //   router.push("/account");
-    // } else {
-    //   fetchGames();
-    // }
+    if (!bIsLoggedIn) {
+      router.push("/account");
+    } else {
+      fetchGames();
+    }
   }, []);
 
   // 날짜 포맷팅 함수 (MySQL 형식)
