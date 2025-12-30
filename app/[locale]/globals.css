@@ -82,12 +82,14 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    @apply font-sans; /* 위 config에서 설정한 Pretendard가 적용된 font-sans를 입힙니다 */
-  }
+:root,
+.radix-themes {
+  /* Radix가 내부적으로 사용하는 모든 폰트 변수를 덮어버림 */
+  --default-font-family: "Pretendard", var(--apple-system), sans-serif !important;
+  --font-family: "Pretendard", var(--apple-system), sans-serif !important;
+}
+
+/* 모든 요소에 강제 적용 */
+* {
+  font-family: "Pretendard", sans-serif !important;
 }
