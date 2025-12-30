@@ -142,6 +142,7 @@
 
   "Common": {
     "filter": "필터",
+    "store-filter": "Bitmap 스토어 검색⋯",
     "delete": "삭제",
     "open": "열기",
     "apply": "적용",

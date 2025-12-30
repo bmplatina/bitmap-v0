@@ -17,6 +17,7 @@ import { getTranslations } from "next-intl/server";
 import dayjs from "dayjs";
 import axios from "axios";
 import { renderMarkdown } from "../lib/utils";
+import { Quote } from "@radix-ui/themes";
 
 interface AuthorInfo {
   username: string;

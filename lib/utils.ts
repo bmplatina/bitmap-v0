@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type { Game, YouTubeQuery } from "./types";
 import axios from "axios";
-import sanitizeHtml from 'sanitize-html'; // (선택사항) 보안을 위해 추천
+import sanitizeHtml from "sanitize-html"; // (선택사항) 보안을 위해 추천
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -17,7 +17,7 @@ const renderMarkdown = (text: string) => {
   // --- 인용문 처리 ---
   html = html.replace(
     /^> (.*$)/gim,
-    '<blockquote class="mt-4 mb-2 pl-4 border-l-4 border-muted-foreground italic text-muted-foreground">$1</blockquote>'
+    '<Quote class="mt-4 mb-2 pl-4 border-l-4 border-muted-foreground italic text-muted-foreground">$1</Quote>'
   );
 
   // --- 헤더 처리 (크기 Up!) ---
@@ -34,13 +34,16 @@ const renderMarkdown = (text: string) => {
     )
     // H1: text-2xl -> text-4xl (가장 크게)
     .replace(
-      /^# (.*$)/gim, 
+      /^# (.*$)/gim,
       '<h1 class="text-4xl font-black mt-12 mb-4 tracking-tight text-foreground">$1</h1>'
     );
 
   // --- 인라인 스타일 ---
   html = html
-    .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-bold text-foreground">$1</strong>')
+    .replace(
+      /\*\*(.*?)\*\*/gim,
+      '<strong class="font-bold text-foreground">$1</strong>'
+    )
     .replace(/\*(.*?)\*/gim, '<em class="italic">$1</em>')
     .replace(
       /`([^`]+)`/gim,
@@ -48,7 +51,7 @@ const renderMarkdown = (text: string) => {
     );
 
   // --- 줄바꿈 정리 ---
-  html = html.replace(/(<\/h[1-3]>|<\/blockquote>)\n/g, "$1");
+  html = html.replace(/(<\/h[1-3]>|<\/Quote>)\n/g, "$1");
   html = html.replace(/\n/g, "<br />");
 
   return html;

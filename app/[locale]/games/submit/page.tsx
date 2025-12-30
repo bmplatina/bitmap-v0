@@ -47,6 +47,7 @@ import {
 import { useAuth } from "../../../../lib/AuthContext";
 import { useTranslations } from "next-intl";
 import GameDetail from "../../../../components/game-details";
+import { Quote } from "@radix-ui/themes";
 
 export default function RegisterGamePage() {
   const router = useRouter();

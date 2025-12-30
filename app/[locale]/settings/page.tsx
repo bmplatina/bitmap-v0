@@ -10,16 +10,10 @@ import {
   CardTitle,
 } from "../../../components/ui/card";
 import { Label } from "../../../components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../components/ui/select";
 import { Separator } from "../../../components/ui/separator";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Flex, RadioCards, Text } from "@radix-ui/themes";
 
 export default function SettingsPage() {
   const t = useTranslations("Settings");
@@ -40,16 +34,16 @@ export default function SettingsPage() {
       icon: <Sun className="h-4 w-4" />,
     },
     {
-      value: "dark",
-      label: "screen-mode-dark",
-      description: "screen-mode-dark-desc",
-      icon: <Moon className="h-4 w-4" />,
-    },
-    {
       value: "system",
       label: "screen-mode-system-default",
       description: "screen-mode-system-default-desc",
       icon: <Monitor className="h-4 w-4" />,
+    },
+    {
+      value: "dark",
+      label: "screen-mode-dark",
+      description: "screen-mode-dark-desc",
+      icon: <Moon className="h-4 w-4" />,
     },
   ];
 
@@ -86,44 +80,36 @@ export default function SettingsPage() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">설정</h1>
+      <h1 className="text-3xl font-bold mb-6">{t("settings-general")}</h1>
 
       <div className="space-y-6">
         {/* 테마 설정 */}
         <Card>
           <CardHeader>
-            <CardTitle>테마 설정</CardTitle>
-            <CardDescription>애플리케이션의 외관을 설정합니다.</CardDescription>
+            <CardTitle>{t("theme")}</CardTitle>
+            {/* <CardDescription>애플리케이션의 외관을 설정합니다.</CardDescription> */}
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="theme-select">테마 선택</Label>
-                <Select value={theme} onValueChange={setTheme}>
-                  <SelectTrigger id="theme-select" className="w-full">
-                    <SelectValue placeholder="테마를 선택하세요">
+                <RadioCards.Root
+                  value={theme}
+                  onValueChange={setTheme}
+                  columns={{ initial: "1", sm: "3" }}
+                >
+                  {themeOptions.map((option) => (
+                    <RadioCards.Item key={option.value} value={option.value}>
                       <div className="flex items-center gap-2">
-                        {getCurrentThemeInfo().icon}
-                        <span>{t(getCurrentThemeInfo().label)}</span>
+                        {option.icon}
                       </div>
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {themeOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        <div className="flex items-center gap-2">
-                          {option.icon}
-                          <div className="flex flex-col">
-                            <span>{t(option.label)}</span>
-                            <span className="text-xs text-muted-foreground">
-                              {t(option.description)}
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                      <Flex direction="column" width="100%">
+                        <Text weight="bold">{t(option.label)}</Text>
+                        <Text>{t(option.description)}</Text>
+                      </Flex>
+                    </RadioCards.Item>
+                  ))}
+                </RadioCards.Root>
               </div>
             </div>
           </CardContent>

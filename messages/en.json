@@ -142,6 +142,7 @@
 
   "Common": {
     "filter": "Filter",
+    "store-filter": "Search Bitmap Store…",
     "delete": "Delete",
     "open": "Open",
     "apply": "Apply",

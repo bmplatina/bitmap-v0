@@ -11,10 +11,13 @@ import Image from "next/image";
 import { MobileSidebar } from "./mobile-sidebar";
 import type { Game } from "../lib/types";
 import { getGames } from "../lib/utils";
+import { useTranslations } from "next-intl";
 import { convertQwertyToHangul, getChoseong } from "es-hangul";
+import { Quote } from "@radix-ui/themes";
 
 export default function TopBar() {
   const router = useRouter();
+  const t = useTranslations("Common");
   // Electron 및 MacOS 환경 감지 변수 (실제 감지 코드는 구현하지 않음)
   const bIsElectron: boolean = false; // 예시 값, 실제로는 Electron 감지 로직 필요
   const bIsMacOS: boolean = false; // 예시 값, 실제로는 MacOS 감지 로직 필요
@@ -166,7 +169,7 @@ export default function TopBar() {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="게임 검색..."
+                placeholder={t("store-filter")}
                 className="pl-9 h-9 w-full bg-muted"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
