@@ -9,8 +9,17 @@ import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "../../components/theme-provider";
 import Sidebar from "../../components/sidebar";
 import TopBar from "../../components/top-bar";
+import localFont from "next/font/local";
 
 const inter = Inter({ subsets: ["latin"] });
+
+// 폰트 설정
+const pretendard = localFont({
+  src: "./fonts/PretendardVariable.woff2", // 경로 확인 필요
+  display: "swap",
+  variable: "--font-pretendard", // CSS 변수 선언
+  weight: "45 920",
+});
 
 export const metadata: Metadata = {
   title: "Bitmap",
@@ -24,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className="font-sans antialiased" suppressHydrationWarning>
+      <body className={`${pretendard.variable} font-sans antialiased`} suppressHydrationWarning>
         <NextIntlClientProvider>
           <AuthProvider>
             <ThemeProvider

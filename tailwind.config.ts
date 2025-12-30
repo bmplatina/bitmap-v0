@@ -13,7 +13,7 @@ const config: Config = {
   	extend: {
       fontFamily: {
         // 기본 sans 폰트를 Pretendard로 교체하고, 나머지는 Tailwind 기본값을 유지
-        sans: ["Pretendard", ...defaultTheme.fontFamily.sans],
+        sans: ["var(--font-pretendard)", ...defaultTheme.fontFamily.sans],
       },
   		colors: {
   			background: 'hsl(var(--background))',
