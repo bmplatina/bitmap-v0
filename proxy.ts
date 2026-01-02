@@ -8,6 +8,8 @@ export const config = {
 
   defaultLocale: "en",
 
+  localeDetection: true,
+
   // matcher에서 api-proxy를 제외해야 SSR 통신 시 경로 변조를 막을 수 있습니다.
   matcher: [
     "/",
