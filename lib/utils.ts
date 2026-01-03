@@ -1,12 +1,23 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import type { Game, YouTubeQuery } from "./types";
+import type { AuthorInfo, Game, YouTubeQuery, stringLocalized } from "./types";
 import axios from "axios";
+import dayjs from "dayjs";
 import sanitizeHtml from "sanitize-html"; // (선택사항) 보안을 위해 추천
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+function getLocalizedString(locale: string, t: stringLocalized) {
+  return locale === "ko" ? t.ko : t.en;
+}
+
+const formatDate = (locale: string, dateString: string) => {
+  if (!dateString) return "미정";
+  const format: string = locale === "ko" ? "YYYY/MM/DD" : "MM/DD/YYYY";
+  return dayjs(dateString).format(format);
+};
 
 // 간단한 마크다운 렌더링 함수
 const renderMarkdown = (text: string) => {
@@ -140,6 +151,47 @@ async function getGameById(id: string): Promise<Game | null> {
   }
 }
 
+const checkAuthor = async (uid: string): Promise<AuthorInfo | null> => {
+  // 1. 초기값을 null로 설정하여 에러 발생 시에도 안전하게 리턴
+  let author: AuthorInfo | null = null;
+
+  try {
+    const response = await axios.post(
+      getApiLinkByPurpose("auth/profile/query/uid"), // 백엔드 라우트 주소와 일치 확인
+      {
+        uid: uid,
+      },
+      {
+        timeout: 30000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // 2. 백엔드에서 보낸 JSON 구조에 맞춰 할당
+    // 백엔드 응답: { username: "...", email: "..." }
+    if (response.data && response.data.username) {
+      author = {
+        username: response.data.username,
+        email: response.data.email,
+      };
+    }
+  } catch (error: any) {
+    // 3. 에러 핸들링 구체화
+    if (error.code === "ECONNABORTED") {
+      console.error("요청 시간이 초과되었습니다.");
+    } else {
+      console.error(
+        "데이터를 불러오는 중 에러 발생:",
+        error.response?.data || error.message
+      );
+    }
+  }
+
+  return author; // 실패 시 null, 성공 시 객체 리턴
+};
+
 // API에서 대기 중인 게임 데이터를 가져오는 함수 - 서버 컴포넌트에서만 호출
 async function getPendingGames(): Promise<Game[]> {
   try {
@@ -231,8 +283,11 @@ async function uploadGameImage(file: File | null) {
 
 export {
   cn,
+  checkAuthor,
+  formatDate,
   renderMarkdown,
   getApiLinkByPurpose,
+  getLocalizedString,
   getYouTubeVideos,
   getGames,
   getGameById,

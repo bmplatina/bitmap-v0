@@ -1,3 +1,8 @@
+export interface stringLocalized {
+  en: string;
+  ko: string;
+}
+
 export interface Game {
   gameId: number;
   uid: string;
@@ -7,7 +12,7 @@ export interface Game {
   gamePlatformMac: number;
   gamePlatformMobile: number;
   gameEngine: string;
-  gameGenre: string;
+  gameGenre: stringLocalized;
   gameDeveloper: string;
   gamePublisher: string;
   isEarlyAccess: number;
@@ -19,8 +24,13 @@ export interface Game {
   gameDownloadWinURL: string | null;
   gameImageURL: string;
   gameBinaryName: string;
-  gameHeadline: string;
-  gameDescription: string;
+  gameHeadline: stringLocalized;
+  gameDescription: stringLocalized;
+}
+
+export interface AuthorInfo {
+  username: string;
+  email: string;
 }
 
 export interface Metadata {

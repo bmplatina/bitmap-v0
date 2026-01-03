@@ -1,11 +1,11 @@
 import type { Game } from "../lib/types";
+import { getLocalizedString, formatDate } from "../lib/utils";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
 import Link from "next/link";
-import { Calendar, User, Tag } from "lucide-react";
-import { getTranslations } from "next-intl/server";
-import dayjs from "dayjs";
+import { Calendar, Code, Tag } from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
 
 interface GameCardProps {
   game: Game;
@@ -16,12 +16,7 @@ export default async function GameCard({
   game,
   linkPrefix = "/games",
 }: GameCardProps) {
-  // 출시일 포맷팅 - day.js 사용
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "미정";
-    return dayjs(dateString).format("YYYY/MM/DD");
-  };
-
+  const locale = await getLocale();
   const t = await getTranslations("GamesView");
 
   return (
@@ -55,18 +50,18 @@ export default async function GameCard({
 
         <div className="space-y-2 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
-            <User className="h-4 w-4" />
+            <Code className="h-4 w-4" />
             <span>{game.gameDeveloper}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <Tag className="h-4 w-4" />
-            <span>{game.gameGenre}</span>
+            <span>{getLocalizedString(locale, game.gameGenre)}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4" />
-            <span>{formatDate(game.gameReleasedDate)}</span>
+            <span>{formatDate(locale, game.gameReleasedDate)}</span>
           </div>
         </div>
       </CardContent>

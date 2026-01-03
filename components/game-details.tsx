@@ -3,25 +3,10 @@ import type { Game } from "../lib/types";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
-import {
-  Clock,
-  Calendar,
-  User,
-  Tag,
-  Globe,
-  Monitor,
-  Apple,
-} from "lucide-react";
-import { getApiLinkByPurpose } from "../lib/utils";
-import { getTranslations } from "next-intl/server";
-import dayjs from "dayjs";
-import axios from "axios";
-import { renderMarkdown } from "../lib/utils";
-
-interface AuthorInfo {
-  username: string;
-  email: string;
-}
+import { Clock, Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
+import { checkAuthor, formatDate } from "../lib/utils";
+import { getTranslations, getLocale } from "next-intl/server";
+import { getLocalizedString, renderMarkdown } from "../lib/utils";
 
 type GameDetailProps = {
   game: Game;
@@ -34,66 +19,22 @@ export default async function GameDetail({
 }: GameDetailProps) {
   const t = await getTranslations("GamesView");
   const t_gameSubmit = await getTranslations("GameSubmit");
+  const locale = await getLocale();
 
   if (!game) {
     return (
       <div className="flex items-center justify-center h-full w-full">
         <div className="text-center">
-          <p className="text-xl mb-2">{t("unknown-game")}</p>
-          <p className="text-sm text-muted-foreground">{t("unknown-game")}</p>
+          <p className="text-xl mb-2">{t_gameSubmit("unknown-game")}</p>
+          <p className="text-sm text-muted-foreground">
+            {t_gameSubmit("unknown-game")}
+          </p>
         </div>
       </div>
     );
   }
 
-  const checkAuthor = async (): Promise<AuthorInfo | null> => {
-    // 1. 초기값을 null로 설정하여 에러 발생 시에도 안전하게 리턴
-    let author: AuthorInfo | null = null;
-
-    try {
-      const response = await axios.post(
-        getApiLinkByPurpose("auth/profile/query/uid"), // 백엔드 라우트 주소와 일치 확인
-        {
-          uid: game.uid,
-        },
-        {
-          timeout: 30000,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // 2. 백엔드에서 보낸 JSON 구조에 맞춰 할당
-      // 백엔드 응답: { username: "...", email: "..." }
-      if (response.data && response.data.username) {
-        author = {
-          username: response.data.username,
-          email: response.data.email,
-        };
-      }
-    } catch (error: any) {
-      // 3. 에러 핸들링 구체화
-      if (error.code === "ECONNABORTED") {
-        console.error("요청 시간이 초과되었습니다.");
-      } else {
-        console.error(
-          "데이터를 불러오는 중 에러 발생:",
-          error.response?.data || error.message
-        );
-      }
-    }
-
-    return author; // 실패 시 null, 성공 시 객체 리턴
-  };
-
-  const author: AuthorInfo | null = await checkAuthor();
-
-  // 출시일 포맷팅 - day.js 사용
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "미정";
-    return dayjs(dateString).format("YYYY/MM/DD");
-  };
+  const author = await checkAuthor(game.uid);
 
   return (
     <div className="container mx-auto p-6 w-full">
@@ -181,12 +122,12 @@ export default async function GameDetail({
           </div>
 
           <h2 className="text-xl text-muted-foreground mb-6">
-            {game.gameHeadline}
+            {getLocalizedString(locale, game.gameHeadline)}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div className="flex items-center gap-2">
-              <User className="h-5 w-5 text-muted-foreground" />
+              <Code className="h-5 w-5 text-muted-foreground" />
               <span>
                 {t("developer")}: <strong>{game.gameDeveloper}</strong>
               </span>
@@ -197,14 +138,16 @@ export default async function GameDetail({
               <span>
                 {t("publisher")}: <strong>{game.gamePublisher}</strong>
                 <br />
-                {author && `${t("author")}: ${author.username}`}
+                {author && `${t("author")}`}:{" "}
+                <strong>{author?.username}</strong>
               </span>
             </div>
 
             <div className="flex items-center gap-2">
               <Tag className="h-5 w-5 text-muted-foreground" />
               <span>
-                {t("genre")}: <strong>{game.gameGenre}</strong>
+                {t("genre")}:{" "}
+                <strong>{getLocalizedString(locale, game.gameGenre)}</strong>
               </span>
             </div>
 
@@ -212,7 +155,7 @@ export default async function GameDetail({
               <Calendar className="h-5 w-5 text-muted-foreground" />
               <span>
                 {t("released-date")}:{" "}
-                <strong>{formatDate(game.gameReleasedDate)}</strong>
+                <strong>{formatDate(locale, game.gameReleasedDate)}</strong>
               </span>
             </div>
           </div>
@@ -246,7 +189,9 @@ export default async function GameDetail({
             <div
               className="prose prose-sm max-w-none"
               dangerouslySetInnerHTML={{
-                __html: renderMarkdown(game.gameDescription),
+                __html: renderMarkdown(
+                  getLocalizedString(locale, game.gameDescription)
+                ),
               }}
             />
           </div>
