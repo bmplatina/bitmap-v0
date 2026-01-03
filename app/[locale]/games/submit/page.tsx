@@ -318,11 +318,11 @@ export default function RegisterGamePage() {
       }
     }
 
-    // if (!bIsLoggedIn) {
-    //   router.push("/account");
-    // } else {
-    //   fetchGames();
-    // }
+    if (!bIsLoggedIn) {
+      router.push("/account");
+    } else {
+      fetchGames();
+    }
   }, []);
 
   return (
