@@ -46,7 +46,7 @@ import { useAuth } from "../../../../lib/AuthContext";
 import { useTranslations, useLocale } from "next-intl";
 import { Flex, Quote } from "@radix-ui/themes";
 import GameDetail from "../../../../components/game-details-pending";
-import SmartMarkdown from "../../../../components/markdown-renderer";
+import ClientMarkdown from "../../../../components/client-markdown";
 
 export default function RegisterGamePage() {
   const router = useRouter();
@@ -754,7 +754,7 @@ export default function RegisterGamePage() {
                   __html: renderMarkdown(gameDescription.ko),
                 }}
               /> */}
-              <SmartMarkdown content={gameDescription.ko} />
+              <ClientMarkdown content={gameDescription.ko} />
             </div>
             <Dialog
               open={isDescriptionKoModalOpen}
@@ -796,7 +796,7 @@ export default function RegisterGamePage() {
                   __html: renderMarkdown(gameDescription.en),
                 }}
               /> */}
-              <SmartMarkdown content={gameDescription.en} />
+              <ClientMarkdown content={gameDescription.en} />
             </div>
             <Dialog
               open={isDescriptionEnModalOpen}

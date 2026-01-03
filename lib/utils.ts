@@ -9,8 +9,31 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-function getLocalizedString(locale: string, t: stringLocalized) {
+function getLocalizedString(locale: string, t: stringLocalized): string {
   return locale === "ko" ? t.ko : t.en;
+}
+
+async function getEula(eula: string): Promise<stringLocalized> {
+  try {
+    const response = await axios.get<stringLocalized>(
+      getApiLinkByPurpose(`eula/${eula}`),
+      {
+        timeout: 10000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.data?.ko) {
+      return response.data;
+    }
+    return { ko: "", en: "" };
+  } catch (error) {
+    console.error("EULA 가져오는 중 오류 발생:", error);
+    return { ko: "", en: "" };
+  }
 }
 
 const formatDate = (locale: string, dateString: string) => {
@@ -75,6 +98,10 @@ const renderMarkdown = (text: string) => {
 function getApiLinkByPurpose(substring: string): string {
   // 클라이언트 환경(브라우저)에서는 CORS 방지를 위해 Next.js Rewrite 프록시 사용
   if (typeof window !== "undefined") {
+    const basePath = "/absproxy/3000";
+    if (window.location.pathname.startsWith(basePath)) {
+      return `${basePath}/api-proxy/${substring}`;
+    }
     return `/api-proxy/${substring}`;
   }
 
@@ -287,6 +314,7 @@ export {
   formatDate,
   renderMarkdown,
   getApiLinkByPurpose,
+  getEula,
   getLocalizedString,
   getYouTubeVideos,
   getGames,

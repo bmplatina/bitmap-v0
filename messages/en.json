@@ -19,6 +19,8 @@
   },
 
   "Authentication": {
+    "bitmap-id": "Bitmap ID",
+    "bitmap-id-desc": "To use all Bitmap services, please sign in or sign up.",
     "login": "Sign in",
     "login-google": "Login with Google",
     "keep-login": "Keep me logged in",
@@ -31,8 +33,8 @@
     "again": "(Type again)",
     "troubleshoot-auth": "Troubleshoot Login Problem",
     "password-rules": "At least 8 characters",
-    "agree-terms": "I have agreed to Bitmap Production's Terms and Conditions of Use.",
-    "agree-terms-link": "See Bitmap Production's Terms and Conditions of Use and Privacy Policy here.",
+    "agree-terms": "Agree to Terms and Conditions",
+    "eula": "End-User License Agreement",
     "login-required": "Bitmap services requires Bitmap account. Please click the Sign In button in the sidebar to sign in first.",
     "before-continuing": "Before Continuing",
     "login-notification": "By continuing, you agree to our User Agreement and acknowledge that you understand the Privacy Policy.",
@@ -143,6 +145,8 @@
   },
 
   "Common": {
+    "accept": "Accept",
+    "back": "Back",
     "filter": "Filter",
     "store-filter": "Search Bitmap Store…",
     "delete": "Delete",

@@ -19,6 +19,8 @@
   },
 
   "Authentication": {
+    "bitmap-id": "Bitmap ID",
+    "bitmap-id-desc": "Bitmap의 모든 서비스를 사용하려면 로그인하거나 가입하십시오.",
     "login": "로그인",
     "login-google": "Google 계정으로 로그인",
     "keep-login": "로그인 상태 유지",
@@ -32,7 +34,7 @@
     "troubleshoot-auth": "로그인 문제 해결",
     "password-rules": "최소 8글자 이상이어야 합니다.",
     "agree-terms": "비트맵 프로덕션의 이용 약관에 동의합니다.",
-    "agree-terms-link": "비트맵 프로덕션의 이용 약관과 개인정보 보호 정책을 열람합니다.",
+    "eula": "이용 약관",
     "login-required": "비트맵 서비스는 어카운트 로그인이 필요합니다. 사이드바의 로그인 버튼을 클릭하여 로그인을 먼저 진행하십시오.",
     "before-continuing": "시작하기 전에",
     "login-notification": "계속하면 비트맵 프로덕션의 이용 약관에 동의하며 개인정보 보호 정책을 이해한 것으로 간주합니다.",
@@ -143,6 +145,8 @@
   },
 
   "Common": {
+    "accept": "승인",
+    "back": "뒤로",
     "filter": "필터",
     "store-filter": "Bitmap 스토어 검색⋯",
     "delete": "삭제",
