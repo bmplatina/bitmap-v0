@@ -13,7 +13,7 @@ import {
   getLocalizedString,
 } from "../lib/utils";
 import { useTranslations, useLocale } from "next-intl";
-import { Quote } from "@radix-ui/themes";
+import SmartMarkdown from "./markdown-renderer";
 
 interface AuthorInfo {
   username: string;
@@ -195,14 +195,17 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
             {/* <div className="prose prose-invert max-w-none">
               <p>{game.gameDescription}</p>
             </div> */}
-            <div
+            <SmartMarkdown
+              content={getLocalizedString(locale, game.gameDescription)}
+            />
+            {/*<div
               className="prose prose-sm max-w-none"
               dangerouslySetInnerHTML={{
                 __html: renderMarkdown(
                   getLocalizedString(locale, game.gameDescription)
                 ),
               }}
-            />
+            />*/}
           </div>
         </div>
       </div>

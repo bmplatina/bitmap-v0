@@ -46,6 +46,7 @@ import { useAuth } from "../../../../lib/AuthContext";
 import { useTranslations, useLocale } from "next-intl";
 import { Flex, Quote } from "@radix-ui/themes";
 import GameDetail from "../../../../components/game-details-pending";
+import SmartMarkdown from "../../../../components/markdown-renderer";
 
 export default function RegisterGamePage() {
   const router = useRouter();
@@ -747,12 +748,13 @@ export default function RegisterGamePage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="min-h-[100px] p-3 border rounded-md bg-muted">
-              <div
+              {/* <div
                 className="text-sm prose prose-sm max-w-none"
                 dangerouslySetInnerHTML={{
                   __html: renderMarkdown(gameDescription.ko),
                 }}
-              />
+              /> */}
+              <SmartMarkdown content={gameDescription.ko} />
             </div>
             <Dialog
               open={isDescriptionKoModalOpen}
@@ -788,12 +790,13 @@ export default function RegisterGamePage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="min-h-[100px] p-3 border rounded-md bg-muted">
-              <div
+              {/* <div
                 className="text-sm prose prose-sm max-w-none"
                 dangerouslySetInnerHTML={{
                   __html: renderMarkdown(gameDescription.en),
                 }}
-              />
+              /> */}
+              <SmartMarkdown content={gameDescription.en} />
             </div>
             <Dialog
               open={isDescriptionEnModalOpen}

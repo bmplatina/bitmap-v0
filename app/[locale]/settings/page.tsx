@@ -25,6 +25,11 @@ export default function SettingsPage() {
     setMounted(true);
   }, []);
 
+  const setScreenMode = (newTheme: string) => {
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
   // 테마 옵션 정의
   const themeOptions = [
     {
@@ -95,7 +100,7 @@ export default function SettingsPage() {
                 <Label htmlFor="theme-select">테마 선택</Label>
                 <RadioCards.Root
                   value={theme}
-                  onValueChange={setTheme}
+                  onValueChange={setScreenMode}
                   columns={{ initial: "1", sm: "3" }}
                 >
                   {themeOptions.map((option) => (

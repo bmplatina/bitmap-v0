@@ -7,6 +7,7 @@ import { Clock, Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
 import { checkAuthor, formatDate } from "../lib/utils";
 import { getTranslations, getLocale } from "next-intl/server";
 import { getLocalizedString, renderMarkdown } from "../lib/utils";
+import SmartMarkdown from "./markdown-renderer";
 
 type GameDetailProps = {
   game: Game;
@@ -186,14 +187,17 @@ export default async function GameDetail({
             {/* <div className="prose prose-invert max-w-none">
               <p>{game.gameDescription}</p>
             </div> */}
-            <div
+            <SmartMarkdown
+              content={getLocalizedString(locale, game.gameDescription)}
+            />
+            {/*<div
               className="prose prose-sm max-w-none"
               dangerouslySetInnerHTML={{
                 __html: renderMarkdown(
                   getLocalizedString(locale, game.gameDescription)
                 ),
               }}
-            />
+            />*/}
           </div>
         </div>
       </div>
