@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
+import { useState, useEffect, useTransition } from "react";
+import { useRouter, usePathname } from "../../../../i18n/routing";
 import {
   Card,
   CardContent,
@@ -32,8 +31,8 @@ import {
 import { CalendarIcon, Edit, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { cn } from "../../../../lib/utils";
-import type { Game } from "../../../../lib/types";
+import { cn, getLocalizedString } from "../../../../lib/utils";
+import type { Game, stringLocalized } from "../../../../lib/types";
 import MarkdownEditor from "../../../../components/markdown-editor";
 import { toast } from "../../../../hooks/use-toast";
 import {
@@ -44,14 +43,18 @@ import {
   uploadGameImage,
 } from "../../../../lib/utils";
 import { useAuth } from "../../../../lib/AuthContext";
-import { useTranslations } from "next-intl";
-import { Quote } from "@radix-ui/themes";
+import { useTranslations, useLocale } from "next-intl";
+import { Flex, Quote } from "@radix-ui/themes";
 import GameDetail from "../../../../components/game-details-pending";
 
 export default function RegisterGamePage() {
   const router = useRouter();
-  const { bIsLoggedIn } = useAuth();
+  const pathname = usePathname();
+  const locale = useLocale();
+  const [isPending, startTransition] = useTransition();
   const t = useTranslations("GameSubmit");
+
+  const { bIsLoggedIn } = useAuth();
 
   // 게임 정보 상태
   const [gameId, setGameId] = useState(0);
@@ -62,7 +65,10 @@ export default function RegisterGamePage() {
   const [gamePlatformMac, setGamePlatformMac] = useState(false);
   const [gamePlatformMobile, setGamePlatformMobile] = useState(false);
   const [gameEngine, setGameEngine] = useState("");
-  const [gameGenre, setGameGenre] = useState("");
+  const [gameGenre, setGameGenre] = useState<stringLocalized>({
+    ko: "",
+    en: "",
+  });
   const [gameDeveloper, setGameDeveloper] = useState("");
   const [gamePublisher, setGamePublisher] = useState("");
   const [isEarlyAccess, setIsEarlyAccess] = useState(false);
@@ -74,60 +80,38 @@ export default function RegisterGamePage() {
   const [gameDownloadWinURL, setGameDownloadWinURL] = useState("");
   const [gameImageURL, setGameImageURL] = useState("");
   const [gameBinaryName, setGameBinaryName] = useState("");
-  const [gameHeadline, setGameHeadline] = useState("");
-  const [gameDescription, setGameDescription] = useState("");
+  const [gameHeadline, setGameHeadline] = useState<stringLocalized>({
+    ko: "",
+    en: "",
+  });
+  const [gameDescription, setGameDescription] = useState<stringLocalized>({
+    ko: "",
+    en: "",
+  });
 
   // 로딩 상태
   const [isLoadingGameId, setIsLoadingGameId] = useState(true);
 
   // 모달 상태
-  const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
-  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  const [tempDescription, setTempDescription] = useState("");
+  const [isDescriptionKoModalOpen, setIsDescriptionKoModalOpen] =
+    useState(false);
+  const [isDescriptionEnModalOpen, setIsDescriptionEnModalOpen] =
+    useState(false);
+  const [isPreviewModalOpenKo, setIsPreviewModalOpenKo] = useState(false);
+  const [isPreviewModalOpenEn, setIsPreviewModalOpenEn] = useState(false);
+  const [tempDescriptionKo, setTempDescriptionKo] = useState<string>("");
+  const [tempDescriptionEn, setTempDescriptionEn] = useState<string>("");
 
   // 제출 상태
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 게임 ID 자동 생성 - API에서 기존 게임 수를 가져와서 계산
-  useEffect(() => {
-    async function fetchGames() {
-      try {
-        setIsLoadingGameId(true);
-
-        const fetchedGames: Game[] = await getGames();
-        const fetchedGamesPending: Game[] = await getPendingGames();
-
-        // 기존 게임 수 + 대기 중인 게임 수 + 1 (새로운 게임)
-        const newGameId = fetchedGames.length + fetchedGamesPending.length;
-        setGameId(newGameId);
-
-        console.log(
-          `게임 ID 생성: 기존 게임 ${fetchedGames.length}개 + 대기 중인 게임 ${fetchedGamesPending.length}개 = ${newGameId}`
-        );
-      } catch (error) {
-        console.error("게임 데이터를 가져오는 중 오류가 발생했습니다:", error);
-
-        // API 오류 시 현재 시간을 기반으로 임시 ID 생성
-        const fallbackId = Date.now();
-        setGameId(fallbackId);
-
-        toast({
-          title: "경고",
-          description:
-            "게임 ID 생성 중 오류가 발생했습니다. 임시 ID가 할당되었습니다.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoadingGameId(false);
-      }
-    }
-
-    if (!bIsLoggedIn) {
-      router.push("/account");
-    } else {
-      fetchGames();
-    }
-  }, []);
+  const changeLocale = (nextLocale: string) => {
+    startTransition(() => {
+      // replace를 사용하면 히스토리에 남지 않고 현재 위치에서 언어만 교체됩니다.
+      // 페이지 전체 새로고침이 아니라 '소프트 네비게이션'이 일어납니다.
+      router.replace(pathname, { locale: nextLocale });
+    });
+  };
 
   // 날짜 포맷팅 함수 (MySQL 형식)
   const formatDateToMySQL = (date: Date): string => {
@@ -191,7 +175,7 @@ export default function RegisterGamePage() {
         return;
       }
 
-      if (!gameGenre.trim()) {
+      if (!gameGenre.ko.trim() && !gameGenre.en.trim()) {
         toast({
           title: "오류",
           description: "게임 장르를 입력해주세요.",
@@ -239,7 +223,8 @@ export default function RegisterGamePage() {
         });
 
         // 미리보기 모달 닫기
-        setIsPreviewModalOpen(false);
+        setIsPreviewModalOpenKo(false);
+        /** @todo English*/
 
         // 대기 중인 게임 페이지로 이동
         router.push("/games/pending");
@@ -267,22 +252,78 @@ export default function RegisterGamePage() {
   }
 
   // 마크다운 편집 모달 열기
-  const openDescriptionModal = () => {
-    setTempDescription(gameDescription);
-    setIsDescriptionModalOpen(true);
+  const openDescriptionModalKo = () => {
+    setTempDescriptionKo(gameDescription.ko);
+    setIsDescriptionKoModalOpen(true);
+  };
+
+  const openDescriptionModalEn = () => {
+    setTempDescriptionEn(gameDescription.en);
+    setIsDescriptionEnModalOpen(true);
   };
 
   // 마크다운 편집 저장
-  const saveDescription = () => {
-    setGameDescription(tempDescription);
-    setIsDescriptionModalOpen(false);
+  const saveDescriptionKo = () => {
+    setGameDescription({ ...gameDescription, ko: tempDescriptionKo });
+    setIsDescriptionKoModalOpen(false);
+  };
+
+  const saveDescriptionEn = () => {
+    setGameDescription({ ...gameDescription, en: tempDescriptionEn });
+    setIsDescriptionEnModalOpen(false);
   };
 
   // 마크다운 편집 취소
-  const cancelDescription = () => {
-    setTempDescription(gameDescription);
-    setIsDescriptionModalOpen(false);
+  const cancelDescriptionKo = () => {
+    setTempDescriptionKo(gameDescription.ko);
+    setIsDescriptionKoModalOpen(false);
   };
+
+  const cancelDescriptionEn = () => {
+    setTempDescriptionEn(gameDescription.en);
+    setIsDescriptionEnModalOpen(false);
+  };
+
+  // 게임 ID 자동 생성 - API에서 기존 게임 수를 가져와서 계산
+  useEffect(() => {
+    async function fetchGames() {
+      try {
+        setIsLoadingGameId(true);
+
+        const fetchedGames: Game[] = await getGames();
+        const fetchedGamesPending: Game[] = await getPendingGames();
+
+        // 기존 게임 수 + 대기 중인 게임 수 + 1 (새로운 게임)
+        const newGameId = fetchedGames.length + fetchedGamesPending.length;
+        setGameId(newGameId);
+
+        console.log(
+          `게임 ID 생성: 기존 게임 ${fetchedGames.length}개 + 대기 중인 게임 ${fetchedGamesPending.length}개 = ${newGameId}`
+        );
+      } catch (error) {
+        console.error("게임 데이터를 가져오는 중 오류가 발생했습니다:", error);
+
+        // API 오류 시 현재 시간을 기반으로 임시 ID 생성
+        const fallbackId = Date.now();
+        setGameId(fallbackId);
+
+        toast({
+          title: "경고",
+          description:
+            "게임 ID 생성 중 오류가 발생했습니다. 임시 ID가 할당되었습니다.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoadingGameId(false);
+      }
+    }
+
+    // if (!bIsLoggedIn) {
+    //   router.push("/account");
+    // } else {
+    //   fetchGames();
+    // }
+  }, []);
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
@@ -414,12 +455,25 @@ export default function RegisterGamePage() {
             <CardDescription>{t("gameGenreDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Input
-              value={gameGenre}
-              onChange={(e) => setGameGenre(e.target.value)}
-              placeholder="액션, RPG, 퍼즐 등"
-              required
-            />
+            <Flex>
+              <Input
+                className="mr-2"
+                value={gameGenre.ko}
+                onChange={(e) =>
+                  setGameGenre({ ...gameGenre, ko: e.target.value })
+                }
+                placeholder="KO: 액션, RPG, 퍼즐 등"
+                required
+              />
+              <Input
+                value={gameGenre.en}
+                onChange={(e) =>
+                  setGameGenre({ ...gameGenre, en: e.target.value })
+                }
+                placeholder="EN: Action, RPG, Puzzle, etc."
+                required
+              />
+            </Flex>
           </CardContent>
         </Card>
 
@@ -649,7 +703,7 @@ export default function RegisterGamePage() {
             <Input
               value={gameBinaryName}
               onChange={(e) => setGameBinaryName(e.target.value)}
-              placeholder="Game.exe"
+              placeholder="Game.exe, Game.app, Game"
             />
           </CardContent>
         </Card>
@@ -663,20 +717,32 @@ export default function RegisterGamePage() {
             <CardDescription>{t("gameHeadlineDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Input
-              value={gameHeadline}
-              onChange={(e) => setGameHeadline(e.target.value)}
-              placeholder={t("gameHeadlineDesc")}
-            />
+            <Flex>
+              <Input
+                className="mr-2"
+                value={gameHeadline.ko}
+                onChange={(e) =>
+                  setGameHeadline({ ...gameHeadline, ko: e.target.value })
+                }
+                placeholder="KO: 게임을 나타내는 한 문장을 입력하십시오."
+              />
+              <Input
+                value={gameHeadline.en}
+                onChange={(e) =>
+                  setGameHeadline({ ...gameHeadline, en: e.target.value })
+                }
+                placeholder="EN: Please enter a one-liner that represents the game."
+              />
+            </Flex>
           </CardContent>
         </Card>
 
         <Separator />
 
-        {/* 게임 설명 */}
+        {/* 게임 설명 한글 */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("gameDescription")}</CardTitle>
+            <CardTitle>{`KO: ${t("gameDescription")}`}</CardTitle>
             <CardDescription>{t("gameDescriptionDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -684,33 +750,71 @@ export default function RegisterGamePage() {
               <div
                 className="text-sm prose prose-sm max-w-none"
                 dangerouslySetInnerHTML={{
-                  __html: renderMarkdown(gameDescription),
+                  __html: renderMarkdown(gameDescription.ko),
                 }}
               />
             </div>
             <Dialog
-              open={isDescriptionModalOpen}
-              onOpenChange={setIsDescriptionModalOpen}
+              open={isDescriptionKoModalOpen}
+              onOpenChange={setIsDescriptionKoModalOpen}
             >
               <DialogTrigger asChild>
-                <Button variant="outline" onClick={openDescriptionModal}>
+                <Button variant="outline" onClick={openDescriptionModalKo}>
                   <Edit className="mr-2 h-4 w-4" />
-                  설명 편집
+                  {t("edit-md")}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-6xl max-h-[80vh]">
                 <DialogHeader>
                   <DialogTitle>{t("edit-md")}</DialogTitle>
-                  <DialogDescription>
-                    마크다운 문법을 사용하여 게임에 대한 자세한 설명을
-                    작성하세요.
-                  </DialogDescription>
+                  <DialogDescription>{t("edit-md-desc")}</DialogDescription>
                 </DialogHeader>
                 <MarkdownEditor
-                  value={tempDescription}
-                  onChange={setTempDescription}
-                  onSave={saveDescription}
-                  onCancel={cancelDescription}
+                  value={tempDescriptionKo}
+                  onChange={setTempDescriptionKo}
+                  onSave={saveDescriptionKo}
+                  onCancel={cancelDescriptionKo}
+                />
+              </DialogContent>
+            </Dialog>
+          </CardContent>
+        </Card>
+
+        {/* 게임 설명 영어 */}
+        <Card>
+          <CardHeader>
+            <CardTitle>{`EN: ${t("gameDescription")}`}</CardTitle>
+            <CardDescription>{t("gameDescriptionDesc")}</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="min-h-[100px] p-3 border rounded-md bg-muted">
+              <div
+                className="text-sm prose prose-sm max-w-none"
+                dangerouslySetInnerHTML={{
+                  __html: renderMarkdown(gameDescription.en),
+                }}
+              />
+            </div>
+            <Dialog
+              open={isDescriptionEnModalOpen}
+              onOpenChange={setIsDescriptionEnModalOpen}
+            >
+              <DialogTrigger asChild>
+                <Button variant="outline" onClick={openDescriptionModalEn}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  {t("edit-md")}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-6xl max-h-[80vh]">
+                <DialogHeader>
+                  <DialogTitle>{t("edit-md")}</DialogTitle>
+                  <DialogDescription>{t("edit-md-desc")}</DialogDescription>
+                </DialogHeader>
+                <MarkdownEditor
+                  value={tempDescriptionEn}
+                  onChange={setTempDescriptionEn}
+                  onSave={saveDescriptionEn}
+                  onCancel={cancelDescriptionEn}
                 />
               </DialogContent>
             </Dialog>
@@ -722,8 +826,8 @@ export default function RegisterGamePage() {
         {/* 제출 버튼 */}
         <div className="flex justify-center pt-6">
           <Dialog
-            open={isPreviewModalOpen}
-            onOpenChange={setIsPreviewModalOpen}
+            open={isPreviewModalOpenKo}
+            onOpenChange={setIsPreviewModalOpenKo}
           >
             <DialogTrigger asChild>
               <Button size="lg" className="px-8">
@@ -735,14 +839,20 @@ export default function RegisterGamePage() {
                 <DialogTitle>{t("submitting")}</DialogTitle>
                 <DialogDescription>{t("submit-warning")}</DialogDescription>
               </DialogHeader>
-              <GameDetail game={createPreviewGame()} />
+              <GameDetail game={createPreviewGame()} uid={uid} />
               <div className="flex justify-end space-x-2 pt-4">
                 <Button
                   variant="outline"
-                  onClick={() => setIsPreviewModalOpen(false)}
+                  onClick={() => setIsPreviewModalOpenKo(false)}
                   disabled={isSubmitting}
                 >
                   취소
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => changeLocale(locale === "ko" ? "en" : "ko")}
+                >
+                  언어 변경
                 </Button>
                 <Button onClick={handleSubmit} disabled={isSubmitting}>
                   {isSubmitting ? (

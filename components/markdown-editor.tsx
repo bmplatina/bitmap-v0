@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Eye, Edit } from "lucide-react";
 import { renderMarkdown } from "../lib/utils";
-
+import { useTranslations } from "next-intl";
 import Editor, { loader } from "@monaco-editor/react";
 
 // Monaco 에디터 로딩 시 옵션 (선택 사항)
@@ -33,6 +33,7 @@ export default function MarkdownEditor({
   onCancel,
 }: MarkdownEditorProps) {
   const [activeTab, setActiveTab] = useState("edit");
+  const t = useTranslations("Common");
 
   // Monaco의 onChange는 (value: string | undefined)를 인자로 줍니다.
   const handleEditorChange = (val: string | undefined) => {
@@ -49,11 +50,11 @@ export default function MarkdownEditor({
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="edit" className="flex items-center gap-2">
             <Edit className="h-4 w-4" />
-            편집
+            {t("edit")}
           </TabsTrigger>
           <TabsTrigger value="preview" className="flex items-center gap-2">
             <Eye className="h-4 w-4" />
-            미리보기
+            {t("preview")}
           </TabsTrigger>
         </TabsList>
 
@@ -101,9 +102,7 @@ export default function MarkdownEditor({
                 dangerouslySetInnerHTML={{ __html: renderMarkdown(value) }}
               />
             ) : (
-              <p className="text-muted-foreground">
-                미리보기할 내용이 없습니다.
-              </p>
+              <p className="text-muted-foreground">{t("preview-blank")}</p>
             )}
           </div>
         </TabsContent>

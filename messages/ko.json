@@ -108,6 +108,7 @@
     "gameEngineDesc": "스토어의 상세 페이지에 표시될 이 게임이 사용한 게임 엔진입니다.",
     "gameGenre": "장르",
     "gameGenreDesc": "스토어에 표시될 게임 장르입니다. 콤마(,)로 장르를 구분합니다.",
+    "gameGenrePlaceholder": "KO: 액션, RPG, 퍼즐 등",
     "gameDeveloper": "개발자",
     "gameDeveloperDesc": "이 게임을 개발한 사람, 단체, 팀 혹은 회사를 입력하십시오.",
     "gamePublisher": "퍼블리셔 (유통 및 배급자)",
@@ -135,6 +136,7 @@
     "gameDescription": "게임 상세 설명",
     "gameDescriptionDesc": "게임에 대해 자세히 설명하십시오.",
     "edit-md": "마크다운 편집하기",
+    "edit-md-desc": "마크다운 문법을 사용하여 게임에 대한 자세한 설명을 작성하세요.",
     "submit": "제출",
     "submitting": "다음 게임 제출하는 중: ",
     "submit-warning": "게임을 제출하면 수정할 수 없으니 미리 보기를 보고 신중히 결정하십시오."
@@ -146,6 +148,9 @@
     "delete": "삭제",
     "open": "열기",
     "apply": "적용",
+    "edit": "편집",
+    "preview": "미리보기",
+    "preview-blank": "미리보기할 내용이 없습니다.",
 
     "bitmap-server-inaccessible": "서버에 접근할 수 없습니다. 인터넷 연결을 확인하십시오.",
     "data-not-processable": "데이터를 처리하지 못했습니다.",

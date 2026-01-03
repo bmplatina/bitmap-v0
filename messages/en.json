@@ -108,6 +108,7 @@
     "gameEngineDesc": "This is the game engine used for this game, which will be displayed on the store's detail page.",
     "gameGenre": "Genre",
     "gameGenreDesc": "This is the game genre that will be displayed on the store. Separate genres with commas.",
+    "gameGenrePlaceholder": "EN: Action, RPG, Puzzle, etc.",
     "gameDeveloper": "Developer",
     "gameDeveloperDesc": "Please enter the person, group, team, or company that developed this game.",
     "gamePublisher": "Publisher",
@@ -135,6 +136,7 @@
     "gameDescription": "Game Detailed Description",
     "gameDescriptionDesc": "Please provide a detailed description of the game.",
     "edit-md": "Edit as Markdown",
+    "edit-md-desc": "Use Markdown syntax to write a detailed description of the game.",
     "submit": "Submit",
     "submitting": "Submitting ",
     "submit-warning": "After submitting your game, redacting is not allowed. So please watch preview and submit carefully."
@@ -146,6 +148,9 @@
     "delete": "Delete",
     "open": "Open",
     "apply": "Apply",
+    "edit": "Edit",
+    "preview": "Preview",
+    "preview-blank": "No content to preview.",
 
     "bitmap-server-inaccessible": "Bitmap Store couldn't reach to server. Please check your internet connection.",
     "data-not-processable": "Bitmap Store couldn't process the data.",

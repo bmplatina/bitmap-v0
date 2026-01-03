@@ -5,20 +5,14 @@ import type { Game } from "../lib/types";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
+import { Clock, Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
 import {
-  Clock,
-  Calendar,
-  User,
-  Tag,
-  Globe,
-  Monitor,
-  Apple,
-} from "lucide-react";
-import { getApiLinkByPurpose } from "../lib/utils";
-import { useTranslations } from "next-intl";
-import dayjs from "dayjs";
-import axios from "axios";
-import { renderMarkdown } from "../lib/utils";
+  checkAuthor,
+  formatDate,
+  renderMarkdown,
+  getLocalizedString,
+} from "../lib/utils";
+import { useTranslations, useLocale } from "next-intl";
 import { Quote } from "@radix-ui/themes";
 
 interface AuthorInfo {
@@ -28,9 +22,11 @@ interface AuthorInfo {
 
 type GameDetailProps = {
   game: Game;
+  uid: string;
 };
 
-export default function GameDetail({ game }: GameDetailProps) {
+export default function GameDetail({ game, uid }: GameDetailProps) {
+  const locale = useLocale();
   const t = useTranslations("GamesView");
   const t_gameSubmit = useTranslations("GameSubmit");
   const [author, setAuthor] = useState<AuthorInfo | null>(null);
@@ -46,55 +42,8 @@ export default function GameDetail({ game }: GameDetailProps) {
     );
   }
 
-  const checkAuthor = async (): Promise<AuthorInfo | null> => {
-    // 1. 초기값을 null로 설정하여 에러 발생 시에도 안전하게 리턴
-    let author: AuthorInfo | null = null;
-
-    try {
-      const response = await axios.post(
-        getApiLinkByPurpose("auth/profile/query/uid"), // 백엔드 라우트 주소와 일치 확인
-        {
-          uid: game.uid,
-        },
-        {
-          timeout: 30000,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // 2. 백엔드에서 보낸 JSON 구조에 맞춰 할당
-      // 백엔드 응답: { username: "...", email: "..." }
-      if (response.data && response.data.username) {
-        author = {
-          username: response.data.username,
-          email: response.data.email,
-        };
-      }
-    } catch (error: any) {
-      // 3. 에러 핸들링 구체화
-      if (error.code === "ECONNABORTED") {
-        console.error("요청 시간이 초과되었습니다.");
-      } else {
-        console.error(
-          "데이터를 불러오는 중 에러 발생:",
-          error.response?.data || error.message
-        );
-      }
-    }
-
-    return author; // 실패 시 null, 성공 시 객체 리턴
-  };
-
-  // 출시일 포맷팅 - day.js 사용
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "미정";
-    return dayjs(dateString).format("YYYY/MM/DD");
-  };
-
   useEffect(() => {
-    checkAuthor().then((payload: AuthorInfo | null) => {
+    checkAuthor(uid).then((payload: AuthorInfo | null) => {
       setAuthor(payload);
     });
   }, [author]);
@@ -183,12 +132,12 @@ export default function GameDetail({ game }: GameDetailProps) {
           </div>
 
           <h2 className="text-xl text-muted-foreground mb-6">
-            {game.gameHeadline}
+            {getLocalizedString(locale, game.gameHeadline)}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div className="flex items-center gap-2">
-              <User className="h-5 w-5 text-muted-foreground" />
+              <Code className="h-5 w-5 text-muted-foreground" />
               <span>
                 {t("developer")}: <strong>{game.gameDeveloper}</strong>
               </span>
@@ -206,7 +155,8 @@ export default function GameDetail({ game }: GameDetailProps) {
             <div className="flex items-center gap-2">
               <Tag className="h-5 w-5 text-muted-foreground" />
               <span>
-                {t("genre")}: <strong>{game.gameGenre}</strong>
+                {t("genre")}:{" "}
+                <strong>{getLocalizedString(locale, game.gameGenre)}</strong>
               </span>
             </div>
 
@@ -214,7 +164,7 @@ export default function GameDetail({ game }: GameDetailProps) {
               <Calendar className="h-5 w-5 text-muted-foreground" />
               <span>
                 {t("released-date")}:{" "}
-                <strong>{formatDate(game.gameReleasedDate)}</strong>
+                <strong>{formatDate(locale, game.gameReleasedDate)}</strong>
               </span>
             </div>
           </div>
@@ -248,7 +198,9 @@ export default function GameDetail({ game }: GameDetailProps) {
             <div
               className="prose prose-sm max-w-none"
               dangerouslySetInnerHTML={{
-                __html: renderMarkdown(game.gameDescription),
+                __html: renderMarkdown(
+                  getLocalizedString(locale, game.gameDescription)
+                ),
               }}
             />
           </div>
