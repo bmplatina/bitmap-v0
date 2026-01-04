@@ -53,6 +53,8 @@
     "login-required": "Bitmap services requires Bitmap account. Please click the Sign In button in the sidebar to sign in first.",
     "before-continuing": "Before Continuing",
     "login-notification": "By continuing, you agree to our User Agreement and acknowledge that you understand the Privacy Policy.",
+    "registering-bitmap-id": "Registering Bitmap ID",
+    "email-verification": "Almost done. We have sent a verification code to your email. Please enter it within 10 minutes.",
     "invalid-token": "Invalid token.",
     "token-required": "Authentication token is required.",
     "username-exists": "Username already exists.",
@@ -60,7 +62,12 @@
     "incorrect-id-pw": "Invalid username or password.",
     "require-id-pw": "Please enter both username and password.",
     "require-uid": "UID is required.",
-    "failed-query-by-uid": "Unable to find user by UID."
+    "failed-query-by-uid": "Unable to find user by UID.",
+    "verify": "Verify",
+    "verification-code": "Verification Code",
+    "user-not-found": "Invalid Email Address. Type Again.",
+    "invalid-code": "Invalid verification code.",
+    "code-expired": "Verification code has expired."
   },
 
   "GamesView": {
@@ -161,6 +168,7 @@
 
   "Common": {
     "accept": "Accept",
+    "cancel": "Cancel",
     "back": "Back",
     "next": "Next",
     "filter": "Filter",

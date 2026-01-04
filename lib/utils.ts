@@ -392,6 +392,24 @@ const signup = async (
   }
 };
 
+const verifySignup = async (email: string, code: string): Promise<string> => {
+  try {
+    const response = await axios.post<string>(
+      getApiLinkByPurpose("auth/verify-code"),
+      { email, code }
+    );
+
+    return response.data;
+  } catch (error: any) {
+    // [수정됨] 네트워크 에러 등 response가 없는 경우에 대한 방어 코드 추가
+    if (error.response && error.response.data) {
+      return error.response.data;
+    }
+    // 서버 응답이 없거나 다른 에러인 경우
+    return "server-error";
+  }
+};
+
 export {
   cn,
   checkAuthor,
@@ -409,4 +427,5 @@ export {
   renderMarkdown,
   submitGame,
   uploadGameImage,
+  verifySignup,
 };

@@ -20,10 +20,10 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { TextField } from "@radix-ui/themes";
+import { TextField, AlertDialog } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
-import { getEula, signup, login as loginPost } from "@/lib/utils";
+import { getEula, signup, login as loginPost, verifySignup } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
 import ClientMarkdown from "@/components/client-markdown";
 import { Separator } from "@radix-ui/themes";
@@ -48,6 +48,9 @@ export default function Home() {
   const [signupFailMessage, setSignupFailMsg] = useState<string>("");
   const { bIsLoggedIn, login } = useAuth();
   const [eula, setEula] = useState<string>("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [verificationFailMessage, setVerificationFailMsg] =
+    useState<string>("");
 
   function validateEmail(): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -90,17 +93,42 @@ export default function Home() {
       );
       console.log("회원가입 성공:", signupResult.username);
 
+      // const loginResult = await loginPost(email, password);
+
+      // if (loginResult.success) {
+      //   await login(loginResult.token);
+      // } else {
+      //   setSignupFailMsg(t(loginResult.token));
+      // }
+
+      // router.push("/");
+    } catch (error: any) {
+      setSignupFailMsg(t(error.message));
+      alert(t(error.message)); // "username-exists" 등의 메시지 출력
+    }
+  }
+
+  async function handleVerification() {
+    try {
+      const verifyResult = await verifySignup(email, verificationCode);
+      if (verifyResult !== "verified") {
+        throw Error(verifyResult);
+      }
+
+      console.log("인증 성공:", verifyResult);
+
       const loginResult = await loginPost(email, password);
 
       if (loginResult.success) {
         await login(loginResult.token);
+        router.push("/");
       } else {
-        setSignupFailMsg(t(loginResult.token));
+        setVerificationFailMsg(t(loginResult.token));
       }
 
-      router.push("/");
+      // router.push("/");
     } catch (error: any) {
-      setSignupFailMsg(t(error.message));
+      setVerificationFailMsg(t(error.message));
       alert(t(error.message)); // "username-exists" 등의 메시지 출력
     }
   }
@@ -359,7 +387,42 @@ export default function Home() {
                 <Button onClick={() => setCurrentView(2)} variant="surface">
                   {t_common("back")}
                 </Button>
-                <Button onClick={handleSignup}>{t("register")}</Button>
+                <AlertDialog.Root>
+                  <AlertDialog.Trigger>
+                    <Button onClick={handleSignup}>{t("register")}</Button>
+                    {/* <Button onClick={handleSignup}>{t("register")}</Button> */}
+                  </AlertDialog.Trigger>
+                  <AlertDialog.Content maxWidth="450px">
+                    <AlertDialog.Title>
+                      {t("registering-bitmap-id")}
+                    </AlertDialog.Title>
+                    <AlertDialog.Description size="2">
+                      {t("email-verification")}
+                      <TextField.Root
+                        placeholder={t("verification-code")}
+                        value={verificationCode}
+                        onChange={(e) => setVerificationCode(e.target.value)}
+                      />
+                      {verificationFailMessage && (
+                        <Text color="red" size="2" className="mt-2">
+                          {verificationFailMessage}
+                        </Text>
+                      )}
+                    </AlertDialog.Description>
+                    <Flex gap="3" mt="4" justify="end">
+                      <AlertDialog.Cancel>
+                        <Button variant="surface" color="gray">
+                          {t_common("cancel")}
+                        </Button>
+                      </AlertDialog.Cancel>
+                      <AlertDialog.Action>
+                        <Button variant="solid" onClick={handleVerification}>
+                          {t("verify")}
+                        </Button>
+                      </AlertDialog.Action>
+                    </Flex>
+                  </AlertDialog.Content>
+                </AlertDialog.Root>
               </div>
             )}
             {signupFailMessage && (
