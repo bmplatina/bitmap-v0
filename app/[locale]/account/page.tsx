@@ -64,7 +64,7 @@ export default function AccountPage() {
       {bIsLoggedIn ? (
         <Card>
           <CardHeader>
-            <CardTitle>{username}으로 로그인됨</CardTitle>
+            <CardTitle>Bitmap ID: {username}</CardTitle>
           </CardHeader>
           <CardContent>
             <DataList.Root>
