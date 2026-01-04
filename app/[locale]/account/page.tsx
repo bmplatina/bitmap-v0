@@ -26,14 +26,13 @@ export default function AccountPage() {
     }
   };
 
-  function handleLogin() {
-    loginPost(email, password).then((payload) => {
-      if (payload.success) {
-        login(payload.token);
-      } else {
-        setLoginFailMsg(t(payload.token));
-      }
-    });
+  async function handleLogin() {
+    const loginResult = await loginPost(email, password);
+    if (loginResult.success) {
+      login(loginResult.token);
+    } else {
+      setLoginFailMsg(t(loginResult.token));
+    }
   }
 
   useEffect(() => {

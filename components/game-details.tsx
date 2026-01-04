@@ -55,7 +55,7 @@ export default async function GameDetail({
       )}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* 왼쪽 컬럼 - 이미지 */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 lg:sticky lg:top-6 self-start">
           <Suspense
             fallback={
               <div className="aspect-[1/1.414] w-full rounded-lg bg-muted"></div>

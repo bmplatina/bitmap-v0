@@ -50,6 +50,11 @@ export interface AuthResponseInternal {
   token: string;
 }
 
+export interface SignupResponse {
+  uid: string;
+  username: string;
+}
+
 /**
  * API 요청 실패 시 서버로부터 받는 에러 응답 타입
  * (서버 구현에 따라 달라질 수 있습니다)

@@ -21,10 +21,9 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { TextField } from "@radix-ui/themes";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
-import { getEula } from "@/lib/utils";
+import { getEula, signup, login as loginPost } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
 import ClientMarkdown from "@/components/client-markdown";
 import { Separator } from "@radix-ui/themes";
@@ -46,7 +45,8 @@ export default function Home() {
   const [bIsDeveloper, setIsDeveloper] = useState(false);
   const [bIsTeammate, setIsTeammate] = useState(false);
 
-  const { bIsLoggedIn } = useAuth();
+  const [signupFailMessage, setSignupFailMsg] = useState<string>("");
+  const { bIsLoggedIn, login } = useAuth();
   const [eula, setEula] = useState<string>("");
 
   function validateEmail(): boolean {
@@ -77,6 +77,32 @@ export default function Home() {
       return true;
     }
     return false;
+  }
+
+  async function handleSignup() {
+    try {
+      const signupResult = await signup(
+        username,
+        email,
+        password,
+        bIsDeveloper,
+        bIsTeammate
+      );
+      console.log("회원가입 성공:", signupResult.username);
+
+      const loginResult = await loginPost(email, password);
+
+      if (loginResult.success) {
+        login(loginResult.token);
+      } else {
+        setSignupFailMsg(t(loginResult.token));
+      }
+
+      router.push("/");
+    } catch (error: any) {
+      setSignupFailMsg(t(error.message));
+      alert(t(error.message)); // "username-exists" 등의 메시지 출력
+    }
   }
 
   useEffect(() => {
@@ -319,9 +345,7 @@ export default function Home() {
                 <Button onClick={() => setCurrentView(2)} variant="surface">
                   {t_common("back")}
                 </Button>
-                <Button onClick={() => setCurrentView(3)}>
-                  {t("register")}
-                </Button>
+                <Button onClick={handleSignup}>{t("register")}</Button>
               </div>
             )}
           </CardFooter>

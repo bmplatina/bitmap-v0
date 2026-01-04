@@ -8,7 +8,7 @@ import {
   Clock,
   User,
   Settings,
-  TvMinimalPlay,
+  Youtube,
 } from "lucide-react";
 
 export const sidebarItems = [
@@ -36,8 +36,8 @@ export const sidebarItems = [
       },
       {
         title: "bitmap-youtube",
-        icon: <TvMinimalPlay className="h-5 w-5" />,
-        appIcon: TvMinimalPlay,
+        icon: <Youtube className="h-5 w-5" />,
+        appIcon: Youtube,
         href: "//youtube.com/@prodbybitmap",
       },
       {

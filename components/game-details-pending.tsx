@@ -14,6 +14,7 @@ import {
 } from "@/lib/utils";
 import { useTranslations, useLocale } from "next-intl";
 import SmartMarkdown from "./markdown-renderer";
+import { ScrollArea } from "@radix-ui/themes";
 
 interface AuthorInfo {
   username: string;
@@ -63,7 +64,7 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* 왼쪽 컬럼 - 이미지 */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 lg:sticky lg:top-6 self-start">
           <Suspense
             fallback={
               <div className="aspect-[1/1.414] w-full rounded-lg bg-muted"></div>
@@ -170,22 +171,35 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
             </div>
           </div>
 
-          {game.gameVideoURL && (
-            <div>
+          {(game.gameVideoURL || game.gameImageURL.length > 1) && (
+            <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4">{t("preview")}</h3>
-              <Suspense
-                fallback={
-                  <div className="aspect-video w-full rounded-lg bg-muted"></div>
-                }
-              >
-                <div className="relative aspect-video w-full rounded-lg overflow-hidden">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${game.gameVideoURL}`}
-                    className="absolute inset-0 w-full h-full"
-                    allowFullScreen
-                  ></iframe>
+              <ScrollArea type="always" scrollbars="horizontal">
+                <div className="flex gap-4 pb-4">
+                  {game.gameVideoURL && (
+                    <div className="shrink-0 w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${game.gameVideoURL}`}
+                        className="absolute inset-0 w-full h-full"
+                        allowFullScreen
+                      />
+                    </div>
+                  )}
+                  {game.gameImageURL.slice(1).map((url, index) => (
+                    <div
+                      key={index}
+                      className="shrink-0 w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
+                    >
+                      <Image
+                        src={url}
+                        alt={`${game.gameTitle} screenshot ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
                 </div>
-              </Suspense>
+              </ScrollArea>
             </div>
           )}
 
