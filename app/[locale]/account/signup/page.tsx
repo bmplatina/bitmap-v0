@@ -121,26 +121,40 @@ export default function Home() {
         <h1 className="text-4xl font-bold mb-6">Bitmap ID</h1>
         <p className="text-xl mb-8 max-w-2xl">{t("bitmap-id-desc")}</p>
       </div>
-      <Box p="2" pr="8">
+      <Box px="4" py="2">
         <Card className="w-full max-w-3xl mx-auto">
           <CardHeader>
             <CardTitle>
               <Flex gap="3" align="center">
-                <Text weight={currentView == 0 ? "bold" : "light"}>
-                  {t("eula")}
-                </Text>
-                <Separator orientation="vertical" />
-                <Text weight={currentView == 1 ? "bold" : "light"}>
-                  {t("general-info")}
-                </Text>
-                <Separator orientation="vertical" />
-                <Text weight={currentView == 2 ? "bold" : "light"}>
-                  {t("other-info")}
-                </Text>
-                <Separator orientation="vertical" />
-                <Text weight={currentView == 3 ? "bold" : "light"}>
-                  {t("register")}
-                </Text>
+                {currentView == 0 && (
+                  <Text weight={currentView == 0 ? "bold" : "light"}>
+                    {t("eula")}
+                  </Text>
+                )}
+                {currentView >= 0 && currentView <= 1 && (
+                  <Flex align="center" gap="2">
+                    {currentView != 1 && <Separator orientation="vertical" />}
+                    <Text weight={currentView == 1 ? "bold" : "light"}>
+                      {t("general-info")}
+                    </Text>
+                  </Flex>
+                )}
+                {currentView >= 1 && currentView <= 2 && (
+                  <Flex align="center" gap="2">
+                    {currentView != 2 && <Separator orientation="vertical" />}
+                    <Text weight={currentView == 2 ? "bold" : "light"}>
+                      {t("other-info")}
+                    </Text>
+                  </Flex>
+                )}
+                {currentView >= 2 && (
+                  <Flex align="center" gap="2">
+                    {currentView != 3 && <Separator orientation="vertical" />}
+                    <Text weight={currentView == 3 ? "bold" : "light"}>
+                      {t("register")}
+                    </Text>
+                  </Flex>
+                )}
               </Flex>
             </CardTitle>
           </CardHeader>
