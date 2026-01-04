@@ -145,10 +145,7 @@ export default function AccountPage() {
                   {t("login")}
                 </Button>
                 <Button variant="ghost">
-                  <Flex as="span" gap="2">
-                    <Image src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" />
-                    <Link href="/account/signup">{t("register")}</Link>
-                  </Flex>
+                  <Link href="/account/signup">{t("register")}</Link>
                 </Button>
                 <Button variant="ghost">
                   <Link href="/account/troubleshoot">
@@ -166,7 +163,10 @@ export default function AccountPage() {
             <CardContent>
               <Flex direction="column" gap="2">
                 <Link href={getApiLinkByPurpose("auth/google")}>
-                  <Button size="3">{t("login-google")}</Button>
+                  <Button size="3">
+                    <Image src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" />
+                    {t("login-google")}
+                   </Button>
                 </Link>
               </Flex>
             </CardContent>
