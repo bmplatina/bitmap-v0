@@ -167,8 +167,8 @@ export default function AccountPage() {
                      <Image
                         src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg"
                         alt="Google"
-                        width={15} height={15}
-                        style={{ marginRight: '8px' }}
+                        width={20} height={20}
+                        style={{ marginRight: '4px' }}
                      />
                     {t("login-google")}
                    </Button>
