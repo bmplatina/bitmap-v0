@@ -8,10 +8,12 @@ import { getApiLinkByPurpose } from "./utils";
 
 interface AuthContextType {
   bIsLoggedIn: boolean;
-  login: (token: string) => void;
+  login: (token: string) => Promise<void>; // 반환 타입을 Promise<void>로 변경
   logout: () => void;
   username: string;
   email: string;
+  bIsDeveloper: boolean;
+  bIsTeammate: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -27,37 +29,44 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [bIsLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [bIsDeveloper, setIsDeveloper] = useState(false);
+  const [bIsTeammate, setIsTeammate] = useState(false);
   const router = useRouter();
 
-  const fetchUser = async () => {
-    const token = localStorage.getItem("accessToken");
+  const fetchUser = async (token: string) => {
     if (!token) return;
 
     try {
       const res = await axios.get(getApiLinkByPurpose("auth/profile"), {
         headers: {
-          Authorization: `Bearer ${token}`, // 헤더에 토큰 실어 보내기
+          Authorization: `Bearer ${token}`,
         },
       });
-      setUsername(res.data.username); // 백엔드에서 받은 이름 저장
+      // console.log("User fetched:", res.data); // 데이터 확인용 로그
+      setUsername(res.data.username);
       setEmail(res.data.email);
+      setIsDeveloper(res.data.isDeveloper);
+      setIsTeammate(res.data.isTeammate);
     } catch (error) {
       console.error("유저 정보 불러오기 실패", error);
-      // 토큰이 만료되었으면 로그아웃 처리 등을 여기서 함
     }
   };
 
   // 1. 앱이 켜지자마자 로그인 상태 체크
   useEffect(() => {
-    fetchUser();
+    if (localStorage.getItem("accessToken")) {
+      fetchUser(localStorage.getItem("accessToken") as string);
+    }
+
     setIsLoggedIn(checkIsLoggedIn());
   }, []);
 
   // 2. 로그인 함수 (로그인 성공 시 실행)
-  const login = (token: string) => {
+  const login = async (token: string) => {
+    // async 키워드 추가
     localStorage.setItem("accessToken", token);
     setIsLoggedIn(true);
-    fetchUser();
+    await fetchUser(token); // 유저 정보를 다 가져올 때까지 기다림
   };
 
   // 3. 로그아웃 함수
@@ -70,7 +79,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ bIsLoggedIn, login, logout, username, email }}
+      value={{
+        bIsLoggedIn,
+        login,
+        logout,
+        username,
+        email,
+        bIsDeveloper,
+        bIsTeammate,
+      }}
     >
       {children}
     </AuthContext.Provider>

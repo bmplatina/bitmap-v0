@@ -93,7 +93,7 @@ export default function Home() {
       const loginResult = await loginPost(email, password);
 
       if (loginResult.success) {
-        login(loginResult.token);
+        await login(loginResult.token);
       } else {
         setSignupFailMsg(t(loginResult.token));
       }
@@ -347,6 +347,11 @@ export default function Home() {
                 </Button>
                 <Button onClick={handleSignup}>{t("register")}</Button>
               </div>
+            )}
+            {signupFailMessage && (
+              <Text color="red" size="2" className="mt-2">
+                {signupFailMessage}
+              </Text>
             )}
           </CardFooter>
         </Card>

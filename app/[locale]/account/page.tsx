@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect, type KeyboardEvent } from "react";
-import { Checkbox, Button, Flex, Spinner, Text } from "@radix-ui/themes";
+import {
+  Checkbox,
+  Button,
+  Flex,
+  Spinner,
+  Text,
+  DataList,
+  Code,
+} from "@radix-ui/themes";
 import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { TextField } from "@radix-ui/themes";
@@ -17,7 +25,15 @@ export default function AccountPage() {
   const [password, setPassword] = useState<string>("");
   const [bRequestAutoLogin, setAutoLogin] = useState<boolean>(false);
   const [loginFailMessage, setLoginFailMsg] = useState<string>("");
-  const { bIsLoggedIn, login, logout, username } = useAuth();
+  const {
+    bIsLoggedIn,
+    login,
+    logout,
+    username,
+    bIsDeveloper,
+    bIsTeammate,
+    email: emailResponse,
+  } = useAuth();
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -29,7 +45,7 @@ export default function AccountPage() {
   async function handleLogin() {
     const loginResult = await loginPost(email, password);
     if (loginResult.success) {
-      login(loginResult.token);
+      await login(loginResult.token);
     } else {
       setLoginFailMsg(t(loginResult.token));
     }
@@ -42,16 +58,45 @@ export default function AccountPage() {
   return (
     <div className="flex flex-col items-center justify-center h-full p-6 text-center">
       <h1 className="text-4xl font-bold mb-6">Bitmap ID</h1>
-      <p className="text-xl mb-8 max-w-2xl">
-        인디 개발자부터 대형 퍼블리셔까지, 최신 게임을 발견하고 다운로드하여
-        플레이하세요.
-      </p>
+      <Text as="p" size="5" className="mb-8 max-w-2xl">
+        {t("bitmap-id-desc")}
+      </Text>
       {bIsLoggedIn ? (
         <Card>
           <CardHeader>
             <CardTitle>{username}으로 로그인됨</CardTitle>
           </CardHeader>
           <CardContent>
+            <DataList.Root>
+              <DataList.Item>
+                <DataList.Label minWidth="88px">{t("id")}</DataList.Label>
+                <DataList.Value>{username}</DataList.Value>
+              </DataList.Item>
+              <DataList.Item>
+                <DataList.Label minWidth="88px">{t("email")}</DataList.Label>
+                <DataList.Value>
+                  <Flex align="center" gap="2">
+                    <Code variant="ghost">{emailResponse}</Code>
+                  </Flex>
+                </DataList.Value>
+              </DataList.Item>
+              <DataList.Item>
+                <DataList.Label minWidth="88px">
+                  {t("teammate-account")}
+                </DataList.Label>
+                <DataList.Value>
+                  <Text>{bIsTeammate ? t("teammate-account") : "N/A"}</Text>
+                </DataList.Value>
+              </DataList.Item>
+              <DataList.Item>
+                <DataList.Label minWidth="88px">
+                  {t("developer-account")}
+                </DataList.Label>
+                <DataList.Value>
+                  <Text>{bIsDeveloper ? t("developer-account") : "N/A"}</Text>
+                </DataList.Value>
+              </DataList.Item>
+            </DataList.Root>
             <Flex direction="column" gap="2">
               <Button size="3" onClick={logout}>
                 {t("logout")}
@@ -118,8 +163,8 @@ export default function AccountPage() {
             </CardHeader>
             <CardContent>
               <Flex direction="column" gap="2">
-                <Link href={getApiLinkByPurpose("auth/google")}>
-                  <Button size="3">
+                <Button size="3" asChild>
+                  <a href={getApiLinkByPurpose("auth/google")}>
                     <Image
                       src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg"
                       alt="Google"
@@ -128,8 +173,8 @@ export default function AccountPage() {
                       style={{ marginRight: "4px" }}
                     />
                     {t("login-google")}
-                  </Button>
-                </Link>
+                  </a>
+                </Button>
               </Flex>
             </CardContent>
           </Card>
