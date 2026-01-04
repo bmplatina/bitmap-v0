@@ -109,7 +109,7 @@ export default function AccountPage() {
                 </DataList.Value>
               </DataList.Item>
             </DataList.Root>
-            <Flex direction="column" gap="2">
+            <Flex direction="column" gap="2" className="mt-3">
               <Button size="3" onClick={handleLogout}>
                 {t("logout")}
               </Button>
