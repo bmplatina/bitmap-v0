@@ -3,6 +3,10 @@
 # dependencies
 /node_modules
 
+# vscode
+/.vscode/
+/.continue/
+
 # next.js
 /.next/
 /out/
