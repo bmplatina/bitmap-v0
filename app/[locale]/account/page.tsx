@@ -51,20 +51,32 @@ export default function AccountPage() {
     }
   }
 
+  function handleLogout() {
+    setEmail("");
+    setPassword("");
+    setLoginFailMsg("");
+    logout();
+  }
+
   useEffect(() => {
     // bSetLoggedInState(localStorage.getItem("token") !== "");
   });
 
   return (
     <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-      <h1 className="text-4xl font-bold mb-6">Bitmap ID</h1>
-      <Text as="p" size="5" className="mb-8 max-w-2xl">
-        {t("bitmap-id-desc")}
-      </Text>
+      {!bIsLoggedIn && (
+        <div>
+          <h1 className="text-4xl font-bold mb-6">Bitmap ID</h1>
+          <Text as="p" size="5" className="mb-8 max-w-2xl">
+            {t("bitmap-id-desc")}
+          </Text>
+        </div>
+      )}
+
       {bIsLoggedIn ? (
         <Card>
           <CardHeader>
-            <CardTitle>Bitmap ID: {username}</CardTitle>
+            <CardTitle>Bitmap ID</CardTitle>
           </CardHeader>
           <CardContent>
             <DataList.Root>
@@ -98,7 +110,7 @@ export default function AccountPage() {
               </DataList.Item>
             </DataList.Root>
             <Flex direction="column" gap="2">
-              <Button size="3" onClick={logout}>
+              <Button size="3" onClick={handleLogout}>
                 {t("logout")}
               </Button>
             </Flex>
