@@ -14,35 +14,40 @@ import {
 export const sidebarItems = [
   {
     title: "bitmap",
-    bRequireLogin: false,
+    bRequire: "",
     items: [
       {
         title: "bitmap",
         icon: <Home className="h-5 w-5" />,
+        bRequire: "",
         appIcon: Home,
         href: "/",
       },
       {
         title: "bitmap-app",
         icon: <Download className="h-5 w-5" />,
+        bRequire: "",
         appIcon: Download,
         href: "/about",
       },
       {
         title: "bitmap-developer",
         icon: <Code className="h-5 w-5" />,
+        bRequire: "",
         appIcon: Code,
         href: "//developer.prodbybitmap.com",
       },
       {
         title: "bitmap-youtube",
         icon: <Youtube className="h-5 w-5" />,
+        bRequire: "",
         appIcon: Youtube,
         href: "//youtube.com/@prodbybitmap",
       },
       {
         title: "bitmap-wiki",
         icon: <BookOpen className="h-5 w-5" />,
+        bRequire: "",
         appIcon: BookOpen,
         href: "//wiki.prodbybitmap.com",
       },
@@ -50,11 +55,12 @@ export const sidebarItems = [
   },
   {
     title: "bitmap-store",
-    bRequireLogin: false,
+    bRequire: "",
     items: [
       {
         title: "games",
         icon: <GamepadIcon className="h-5 w-5" />,
+        bRequire: "",
         appIcon: GamepadIcon,
         href: "/games",
       },
@@ -62,17 +68,19 @@ export const sidebarItems = [
   },
   {
     title: "publish",
-    bRequireLogin: true,
+    bRequire: "login",
     items: [
       {
         title: "game-submit",
         icon: <PlusCircle className="h-5 w-5" />,
+        bRequire: "developer",
         appIcon: PlusCircle,
         href: "/games/submit",
       },
       {
         title: "games-pending",
         icon: <Clock className="h-5 w-5" />,
+        bRequire: "login",
         appIcon: Clock,
         href: "/games/pending",
       },
@@ -80,16 +88,19 @@ export const sidebarItems = [
   },
   {
     title: "accounts",
+    bRequire: "",
     items: [
       {
         title: "accounts",
         icon: <User className="h-5 w-5" />,
+        bRequire: "",
         appIcon: User,
         href: "/account",
       },
       {
         title: "settings",
         icon: <Settings className="h-5 w-5" />,
+        bRequire: "",
         appIcon: Settings,
         href: "/settings",
       },

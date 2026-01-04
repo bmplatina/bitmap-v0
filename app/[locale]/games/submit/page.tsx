@@ -55,7 +55,7 @@ export default function RegisterGamePage() {
   const [isPending, startTransition] = useTransition();
   const t = useTranslations("GameSubmit");
 
-  const { bIsLoggedIn } = useAuth();
+  const { bIsLoggedIn, bIsDeveloper } = useAuth();
 
   // 게임 정보 상태
   const [gameId, setGameId] = useState(0);
@@ -319,12 +319,12 @@ export default function RegisterGamePage() {
       }
     }
 
-    if (!bIsLoggedIn) {
+    if (!bIsLoggedIn || !bIsDeveloper) {
       router.push("/account");
     } else {
       fetchGames();
     }
-  }, []);
+  }, [bIsLoggedIn, bIsDeveloper]);
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">

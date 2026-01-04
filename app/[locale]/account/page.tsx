@@ -63,7 +63,7 @@ export default function AccountPage() {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+    <div className="flex flex-col items-center justify-center h-full p-4 md:p-6 text-center">
       {!bIsLoggedIn && (
         <div>
           <h1 className="text-4xl font-bold mb-6">Bitmap ID</h1>
@@ -74,50 +74,52 @@ export default function AccountPage() {
       )}
 
       {bIsLoggedIn ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Bitmap ID</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <DataList.Root>
-              <DataList.Item>
-                <DataList.Label minWidth="88px">{t("id")}</DataList.Label>
-                <DataList.Value>{username}</DataList.Value>
-              </DataList.Item>
-              <DataList.Item>
-                <DataList.Label minWidth="88px">{t("email")}</DataList.Label>
-                <DataList.Value>
-                  <Flex align="center" gap="2">
-                    <Code variant="ghost">{emailResponse}</Code>
-                  </Flex>
-                </DataList.Value>
-              </DataList.Item>
-              <DataList.Item>
-                <DataList.Label minWidth="88px">
-                  {t("teammate-account")}
-                </DataList.Label>
-                <DataList.Value>
-                  <Text>{bIsTeammate ? t("teammate-account") : "N/A"}</Text>
-                </DataList.Value>
-              </DataList.Item>
-              <DataList.Item>
-                <DataList.Label minWidth="88px">
-                  {t("developer-account")}
-                </DataList.Label>
-                <DataList.Value>
-                  <Text>{bIsDeveloper ? t("developer-account") : "N/A"}</Text>
-                </DataList.Value>
-              </DataList.Item>
-            </DataList.Root>
-            <Flex direction="column" gap="2" className="mt-3">
-              <Button size="3" onClick={handleLogout}>
-                {t("logout")}
-              </Button>
-            </Flex>
-          </CardContent>
-        </Card>
+        <Flex direction="column" gap="4" className="w-full max-w-md">
+          <Card>
+            <CardHeader>
+              <CardTitle>Bitmap ID</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <DataList.Root>
+                <DataList.Item>
+                  <DataList.Label minWidth="88px">{t("id")}</DataList.Label>
+                  <DataList.Value>{username}</DataList.Value>
+                </DataList.Item>
+                <DataList.Item>
+                  <DataList.Label minWidth="88px">{t("email")}</DataList.Label>
+                  <DataList.Value>
+                    <Flex align="center" gap="2">
+                      <Code variant="ghost">{emailResponse}</Code>
+                    </Flex>
+                  </DataList.Value>
+                </DataList.Item>
+                <DataList.Item>
+                  <DataList.Label minWidth="88px">
+                    {t("teammate-account")}
+                  </DataList.Label>
+                  <DataList.Value>
+                    <Text>{bIsTeammate ? t("teammate-account") : "N/A"}</Text>
+                  </DataList.Value>
+                </DataList.Item>
+                <DataList.Item>
+                  <DataList.Label minWidth="88px">
+                    {t("developer-account")}
+                  </DataList.Label>
+                  <DataList.Value>
+                    <Text>{bIsDeveloper ? t("developer-account") : "N/A"}</Text>
+                  </DataList.Value>
+                </DataList.Item>
+              </DataList.Root>
+              <Flex direction="column" gap="2" className="mt-3">
+                <Button size="3" onClick={handleLogout}>
+                  {t("logout")}
+                </Button>
+              </Flex>
+            </CardContent>
+          </Card>
+        </Flex>
       ) : (
-        <Flex direction="column" gap="4">
+        <Flex direction="column" gap="4" className="w-full max-w-md">
           <Card>
             <CardHeader>
               <CardTitle>{t("login")}</CardTitle>
