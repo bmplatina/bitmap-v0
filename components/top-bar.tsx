@@ -201,7 +201,7 @@ export default function TopBar() {
                       <div className="relative w-10 h-10 flex-shrink-0 rounded overflow-hidden bg-muted">
                         <Image
                           src={
-                            game.gameImageURL ||
+                            game.gameImageURL[0] ||
                             "/placeholder.svg?height=40&width=40"
                           }
                           alt={game.gameTitle}

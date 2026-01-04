@@ -79,7 +79,7 @@ export default function RegisterGamePage() {
   const [gameVideoURL, setGameVideoURL] = useState("");
   const [gameDownloadMacURL, setGameDownloadMacURL] = useState("");
   const [gameDownloadWinURL, setGameDownloadWinURL] = useState("");
-  const [gameImageURL, setGameImageURL] = useState("");
+  const [gameImageURL, setGameImageURL] = useState<string[]>([]);
   const [gameBinaryName, setGameBinaryName] = useState("");
   const [gameHeadline, setGameHeadline] = useState<stringLocalized>({
     ko: "",
@@ -676,12 +676,12 @@ export default function RegisterGamePage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Input
+            {/* <Input
               value={gameImageURL}
               onChange={(e) => setGameImageURL(e.target.value)}
               placeholder="https://example.com/image.jpg"
               type="url"
-            />
+            /> */}
             <div>
               <input
                 type="file"

@@ -72,7 +72,8 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
             <div className="relative aspect-[1/1.414] w-full rounded-lg overflow-hidden">
               <Image
                 src={
-                  game.gameImageURL || "/placeholder.svg?height=600&width=424"
+                  game.gameImageURL[0] ||
+                  "/placeholder.svg?height=600&width=424"
                 }
                 alt={game.gameTitle}
                 fill

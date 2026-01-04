@@ -24,7 +24,9 @@ export default async function GameCard({
       <Link href={`${linkPrefix}/${game.gameId}`} className="block">
         <div className="relative aspect-[1/1.414] w-full cursor-pointer hover:opacity-90 transition-opacity">
           <Image
-            src={game.gameImageURL || "/placeholder.svg?height=400&width=283"}
+            src={
+              game.gameImageURL[0] || "/placeholder.svg?height=400&width=283"
+            }
             alt={game.gameTitle}
             fill
             className="object-cover"
