@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardContent,
 } from "../../../components/ui/card";
+import Image from "next/image";
 import { Input } from "../../../components/ui/input";
 import { useAuth } from "../../../lib/AuthContext";
 import { getApiLinkByPurpose } from "../../../lib/utils";
@@ -144,7 +145,10 @@ export default function AccountPage() {
                   {t("login")}
                 </Button>
                 <Button variant="ghost">
-                  <Link href="/account/signup">{t("register")}</Link>
+                  <Flex as="span" gap="2">
+                    <Image src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" />
+                    <Link href="/account/signup">{t("register")}</Link>
+                  </Flex>
                 </Button>
                 <Button variant="ghost">
                   <Link href="/account/troubleshoot">
