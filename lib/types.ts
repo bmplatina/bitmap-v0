@@ -22,7 +22,7 @@ export interface Game {
   gameVideoURL: string;
   gameDownloadMacURL: string | null;
   gameDownloadWinURL: string | null;
-  gameImageURL: string;
+  gameImageURL: string[];
   gameBinaryName: string;
   gameHeadline: stringLocalized;
   gameDescription: stringLocalized;
@@ -42,6 +42,11 @@ export interface Metadata {
  * 로그인 성공 시 서버로부터 받는 응답 데이터 타입
  */
 export interface AuthResponse {
+  token: string;
+}
+
+export interface AuthResponseInternal {
+  success: boolean;
   token: string;
 }
 

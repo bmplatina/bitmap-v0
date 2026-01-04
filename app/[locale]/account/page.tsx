@@ -2,21 +2,13 @@
 
 import { useState, useEffect, type KeyboardEvent } from "react";
 import { Checkbox, Button, Flex, Spinner, Text } from "@radix-ui/themes";
-import {
-  Card,
-  CardTitle,
-  CardHeader,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
+import { TextField } from "@radix-ui/themes";
 import { useAuth } from "@/lib/AuthContext";
-import { getApiLinkByPurpose } from "@/lib/utils";
+import { getApiLinkByPurpose, login as loginPost } from "@/lib/utils";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-
-import axios from "axios";
-import type { AuthResponse, ErrorResponse } from "@/lib/types";
 
 export default function AccountPage() {
   const t = useTranslations("Authentication");
@@ -34,50 +26,15 @@ export default function AccountPage() {
     }
   };
 
-  const handleLogin = async (): Promise<void> => {
-    try {
-      const response = await axios.post<AuthResponse>(
-        getApiLinkByPurpose("auth/login"),
-        {
-          email: email,
-          password: password,
-        },
-        {
-          timeout: 30000, // 30초 타임아웃
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.data.token) {
-        login(response.data.token);
-        // localStorage.setItem("token", response.data.token);
-        console.log(response.data.token);
-      }
-      // bSetLoggedInState(true);
-    } catch (error) {
-      if (axios.isAxiosError<ErrorResponse>(error)) {
-        // error가 AxiosError<ErrorResponse> 타입임이 확인됨
-        // 이제 error.response?.data?.message 와 같이 안전하게 접근 가능
-
-        const payload = error.response?.data;
-        const errorMessage =
-          typeof payload === "string"
-            ? payload
-            : payload?.message ?? "알 수 없는 에러가 발생했습니다.";
-        setLoginFailMsg(t(errorMessage));
-        console.error("로그인 실패:", errorMessage);
-
-        // 서버에서 보낸 구체적인 에러 메시지를 alert 등으로 사용자에게 보여줄 수 있습니다.
-        // alert(errorMessage);
+  function handleLogin() {
+    loginPost(email, password).then((payload) => {
+      if (payload.success) {
+        login(payload.token);
       } else {
-        // Axios 에러가 아닌 다른 종류의 에러 처리 (예: 네트워크 연결 실패 전 요청 설정 오류)
-        console.error("예상치 못한 에러가 발생했습니다:", error);
+        setLoginFailMsg(t(payload.token));
       }
-      // bSetLoggedInState(false);
-    }
-  };
+    });
+  }
 
   useEffect(() => {
     // bSetLoggedInState(localStorage.getItem("token") !== "");
@@ -111,13 +68,13 @@ export default function AccountPage() {
             </CardHeader>
             <CardContent>
               <Flex direction="column" gap="2">
-                <Input
+                <TextField.Root
                   placeholder={t("email")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={handleKeyDown}
                 />
-                <Input
+                <TextField.Root
                   placeholder={t("password")}
                   type="password"
                   value={password}
@@ -144,14 +101,14 @@ export default function AccountPage() {
                 <Button size="3" onClick={handleLogin}>
                   {t("login")}
                 </Button>
-                <Button variant="ghost">
-                  <Link href="/account/signup">{t("register")}</Link>
-                </Button>
-                <Button variant="ghost">
-                  <Link href="/account/troubleshoot">
-                    {t("troubleshoot-auth")}
-                  </Link>
-                </Button>
+
+                <Link href="/account/signup">
+                  <Button variant="ghost">{t("register")}</Button>
+                </Link>
+
+                <Link href="/account/troubleshoot">
+                  <Button variant="ghost">{t("troubleshoot-auth")}</Button>
+                </Link>
               </Flex>
             </CardContent>
           </Card>
@@ -164,14 +121,15 @@ export default function AccountPage() {
               <Flex direction="column" gap="2">
                 <Link href={getApiLinkByPurpose("auth/google")}>
                   <Button size="3">
-                     <Image
-                        src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg"
-                        alt="Google"
-                        width={20} height={20}
-                        style={{ marginRight: '4px' }}
-                     />
+                    <Image
+                      src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg"
+                      alt="Google"
+                      width={20}
+                      height={20}
+                      style={{ marginRight: "4px" }}
+                    />
                     {t("login-google")}
-                   </Button>
+                  </Button>
                 </Link>
               </Flex>
             </CardContent>
