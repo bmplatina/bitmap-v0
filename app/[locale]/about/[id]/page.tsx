@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { Button } from "../../../../components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Monitor } from "lucide-react";
-import BitmapAbout from "../../../../components/bitmap-about";
+import BitmapAbout from "@/components/bitmap-about";
 
 export default function RedirectAppPage({
   params,

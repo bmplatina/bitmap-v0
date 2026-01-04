@@ -8,15 +8,15 @@ import {
   CardHeader,
   CardContent,
   CardFooter,
-} from "../../../../components/ui/card";
-import { ScrollArea, ScrollBar } from "../../../../components/ui/scroll-area";
-import { Input } from "../../../../components/ui/input";
+} from "@/components/ui/card";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
-import { getEula } from "../../../../lib/utils";
-import { useAuth } from "../../../../lib/AuthContext";
-import ClientMarkdown from "../../../../components/client-markdown";
+import { getEula } from "@/lib/utils";
+import { useAuth } from "@/lib/AuthContext";
+import ClientMarkdown from "@/components/client-markdown";
 
 export default function Home() {
   const router = useRouter();
@@ -98,7 +98,9 @@ export default function Home() {
                 <Flex as="span" gap="2">
                   <Checkbox
                     checked={agreeTerms}
-                    onCheckedChange={(checked) => setAgreeTerms(checked === true)}
+                    onCheckedChange={(checked) =>
+                      setAgreeTerms(checked === true)
+                    }
                   />
                   {t("agree-terms")}
                 </Flex>

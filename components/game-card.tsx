@@ -1,5 +1,5 @@
-import type { Game } from "../lib/types";
-import { getLocalizedString, formatDate } from "../lib/utils";
+import type { Game } from "@/lib/types";
+import { getLocalizedString, formatDate } from "@/lib/utils";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import Image from "next/image";

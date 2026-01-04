@@ -1,19 +1,19 @@
 "use client";
 
 import { useState, useEffect, useTransition } from "react";
-import { useRouter, usePathname } from "../../../../i18n/routing";
+import { useRouter, usePathname } from "@/i18n/routing";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../../../components/ui/card";
-import { Input } from "../../../../components/ui/input";
-import { Label } from "../../../../components/ui/label";
-import { Checkbox } from "../../../../components/ui/checkbox";
-import { Button } from "../../../../components/ui/button";
-import { Separator } from "../../../../components/ui/separator";
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Dialog,
   DialogContent,
@@ -21,32 +21,32 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../../../components/ui/dialog";
-import { Calendar } from "../../../../components/ui/calendar";
+} from "@/components/ui/dialog";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "../../../../components/ui/popover";
+} from "@/components/ui/popover";
 import { CalendarIcon, Edit, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { cn, getLocalizedString } from "../../../../lib/utils";
-import type { Game, stringLocalized } from "../../../../lib/types";
-import MarkdownEditor from "../../../../components/markdown-editor";
-import { toast } from "../../../../hooks/use-toast";
+import { cn, getLocalizedString } from "@/lib/utils";
+import type { Game, stringLocalized } from "@/lib/types";
+import MarkdownEditor from "@/components/markdown-editor";
+import { toast } from "@/hooks/use-toast";
 import {
   renderMarkdown,
   getGames,
   getPendingGames,
   submitGame,
   uploadGameImage,
-} from "../../../../lib/utils";
-import { useAuth } from "../../../../lib/AuthContext";
+} from "@/lib/utils";
+import { useAuth } from "@/lib/AuthContext";
 import { useTranslations, useLocale } from "next-intl";
 import { Flex, Quote } from "@radix-ui/themes";
-import GameDetail from "../../../../components/game-details-pending";
-import ClientMarkdown from "../../../../components/client-markdown";
+import GameDetail from "@/components/game-details-pending";
+import ClientMarkdown from "@/components/client-markdown";
 
 export default function RegisterGamePage() {
   const router = useRouter();

@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "../lib/utils";
-import { useAuth } from "../lib/AuthContext";
-import { sidebarItems } from "../lib/sidebar-items";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/AuthContext";
+import { sidebarItems } from "@/lib/sidebar-items";
 import { useTranslations } from "next-intl";
 
 export default function Sidebar() {

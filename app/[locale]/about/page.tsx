@@ -1,4 +1,4 @@
-import BitmapAbout from "../../../components/bitmap-about";
+import BitmapAbout from "@/components/bitmap-about";
 
 export default function AboutPage() {
   return (

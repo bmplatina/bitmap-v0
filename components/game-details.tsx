@@ -1,12 +1,12 @@
 import { Suspense } from "react";
-import type { Game } from "../lib/types";
+import type { Game } from "@/lib/types";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
 import { Clock, Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
-import { checkAuthor, formatDate } from "../lib/utils";
+import { checkAuthor, formatDate } from "@/lib/utils";
 import { getTranslations, getLocale } from "next-intl/server";
-import { getLocalizedString, renderMarkdown } from "../lib/utils";
+import { getLocalizedString, renderMarkdown } from "@/lib/utils";
 import SmartMarkdown from "./markdown-renderer";
 
 type GameDetailProps = {

@@ -11,7 +11,7 @@ import {
   formatDate,
   renderMarkdown,
   getLocalizedString,
-} from "../lib/utils";
+} from "@/lib/utils";
 import { useTranslations, useLocale } from "next-intl";
 import SmartMarkdown from "./markdown-renderer";
 

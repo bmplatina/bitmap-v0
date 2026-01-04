@@ -2,9 +2,9 @@ import { Button } from "@radix-ui/themes";
 import Link from "next/link";
 import Image from "next/image";
 import { Suspense } from "react";
-import { getYouTubeVideos, getGames } from "../../lib/utils";
-import type { Game } from "../../lib/types";
-import { TokenHandler } from "../../components/token-handler";
+import { getYouTubeVideos, getGames } from "@/lib/utils";
+import type { Game } from "@/lib/types";
+import { TokenHandler } from "@/components/token-handler";
 
 export default async function Home() {
   // 서버에서 직접 데이터 페칭
