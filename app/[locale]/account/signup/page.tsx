@@ -94,13 +94,15 @@ export default function Home() {
         <CardFooter>
           {currentView === "terms" ? (
             <div>
-              <Flex as="span" gap="2">
-                <Checkbox
-                  checked={agreeTerms}
-                  onCheckedChange={(checked) => setAgreeTerms(checked === true)}
-                />
-                <Text>{t("agree-terms")}</Text>
-              </Flex>
+              <Text as="label" size="3">
+                <Flex as="span" gap="2">
+                  <Checkbox
+                    checked={agreeTerms}
+                    onCheckedChange={(checked) => setAgreeTerms(checked === true)}
+                  />
+                  {t("agree-terms")}
+                </Flex>
+              </Text>
               <Button
                 disabled={!agreeTerms}
                 onClick={() => setCurrentView("idpw")}
