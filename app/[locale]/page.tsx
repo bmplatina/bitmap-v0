@@ -29,17 +29,13 @@ export default async function Home() {
       {/* 유튜브 영상 가로 스크롤 섹션 */}
       <div className="w-full max-w-6xl">
         <h2 className="text-2xl font-bold mb-4 text-left">Our Works</h2>
-        <ScrollArea
-          type="always"
-          scrollbars="horizontal"
-          style={{ height: 210 }}
-        >
+        <ScrollArea type="always" scrollbars="horizontal">
           <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
             {youtubeVideos.length > 0 ? (
               youtubeVideos.slice(0, 10).map((video) => (
                 <div
                   key={video}
-                  className="flex-none w-[300px] aspect-video bg-black rounded-lg overflow-hidden snap-center shadow-md"
+                  className="flex-none w-[85vw] md:w-[300px] aspect-video bg-black rounded-lg overflow-hidden snap-center shadow-md"
                 >
                   <iframe
                     width="100%"
@@ -62,21 +58,18 @@ export default async function Home() {
 
       <div className="w-full max-w-6xl">
         <h2 className="text-2xl font-bold mb-4 text-left">Games</h2>
-        <ScrollArea
-          type="always"
-          scrollbars="horizontal"
-          style={{ height: 210 }}
-        >
+        <ScrollArea type="always" scrollbars="horizontal">
           <div className="flex gap-4 pb-4">
             {games.length > 0 ? (
               games.map((game) => (
                 <Link
                   key={game.gameId}
                   href={`/games/${game.gameId}`}
-                  className="flex-none w-[300px] aspect-video relative rounded-lg overflow-hidden shadow-md group"
+                  className="flex-none w-[85vw] md:w-[300px] aspect-video relative rounded-lg overflow-hidden shadow-md group"
                 >
                   <Image
                     src={
+                      game.gameImageURL[1] ||
                       game.gameImageURL[0] ||
                       "/placeholder.svg?height=400&width=283"
                     }

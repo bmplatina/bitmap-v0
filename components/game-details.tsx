@@ -169,7 +169,7 @@ export default async function GameDetail({
               <ScrollArea type="always" scrollbars="horizontal">
                 <div className="flex gap-4 pb-4">
                   {game.gameVideoURL && (
-                    <div className="shrink-0 w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted">
+                    <div className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted">
                       <iframe
                         src={`https://www.youtube.com/embed/${game.gameVideoURL}`}
                         className="absolute inset-0 w-full h-full"
@@ -180,7 +180,7 @@ export default async function GameDetail({
                   {game.gameImageURL.slice(1).map((url, index) => (
                     <div
                       key={index}
-                      className="shrink-0 w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
+                      className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
                     >
                       <Image
                         src={url}
