@@ -164,7 +164,12 @@ export default function AccountPage() {
               <Flex direction="column" gap="2">
                 <Link href={getApiLinkByPurpose("auth/google")}>
                   <Button size="3">
-                    <Image src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" />
+                     <Image
+                        src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg"
+                        alt="Google"
+                        width={15} height={15}
+                        style={{ marginRight: '8px' }}
+                     />
                     {t("login-google")}
                    </Button>
                 </Link>
