@@ -5,30 +5,24 @@ import { Suspense } from "react";
 import { getYouTubeVideos, getGames } from "@/lib/utils";
 import type { Game } from "@/lib/types";
 import { TokenHandler } from "@/components/token-handler";
+import { getTranslations } from "next-intl/server";
 
 export default async function Home() {
   // 서버에서 직접 데이터 페칭
   const youtubeVideos = await getYouTubeVideos("UCL137ZWChauNFsma6ifhNdA");
   const games: Game[] = await getGames();
+  const t = await getTranslations("MainPage");
 
   return (
     <div className="flex flex-col items-center justify-center min-h-full p-6 text-center space-y-12">
       <div className="flex flex-col items-center">
-        <h1 className="text-4xl font-bold mb-6">
-          Bitmap에 오신 것을 환영합니다
-        </h1>
-        <p className="text-xl mb-8 max-w-2xl">
-          인디 개발자부터 대형 퍼블리셔까지, 최신 게임을 발견하고 다운로드하여
-          플레이하세요.
-        </p>
-        <Button asChild size="4">
-          <Link href="/games">게임 둘러보기</Link>
-        </Button>
+        <h1 className="text-4xl font-bold mb-6">{t("welcome-bitmap")}</h1>
+        <p className="text-xl mb-8 max-w-2xl">{t("welcome-bitmap-desc")}</p>
       </div>
 
       {/* 유튜브 영상 가로 스크롤 섹션 */}
       <div className="w-full max-w-6xl">
-        <h2 className="text-2xl font-bold mb-4 text-left">Our Works</h2>
+        <h2 className="text-2xl font-bold mb-4 text-left">{t("works")}</h2>
         <ScrollArea type="always" scrollbars="horizontal">
           <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
             {youtubeVideos.length > 0 ? (
@@ -49,7 +43,7 @@ export default async function Home() {
               ))
             ) : (
               <p className="text-gray-500 w-full text-center py-10">
-                영상을 불러올 수 없거나 목록이 비어 있습니다.
+                {t("api-error")}
               </p>
             )}
           </div>
@@ -57,7 +51,7 @@ export default async function Home() {
       </div>
 
       <div className="w-full max-w-6xl">
-        <h2 className="text-2xl font-bold mb-4 text-left">Games</h2>
+        <h2 className="text-2xl font-bold mb-4 text-left">{t("games")}</h2>
         <ScrollArea type="always" scrollbars="horizontal">
           <div className="flex gap-4 pb-4">
             {games.length > 0 ? (
@@ -90,7 +84,7 @@ export default async function Home() {
               ))
             ) : (
               <p className="text-gray-500 w-full text-center py-10">
-                등록된 게임이 없습니다.
+                {t("api-error")}
               </p>
             )}
           </div>

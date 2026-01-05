@@ -180,7 +180,7 @@ export default function AccountPage() {
                 <Button size="3" asChild>
                   <a href={getApiLinkByPurpose("auth/google")}>
                     <Image
-                      src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg"
+                      src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
                       alt="Google"
                       width={20}
                       height={20}

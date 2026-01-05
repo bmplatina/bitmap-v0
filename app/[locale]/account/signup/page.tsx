@@ -23,7 +23,13 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { TextField, AlertDialog } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
-import { getEula, signup, login as loginPost, verifySignup } from "@/lib/utils";
+import {
+  getEula,
+  signup,
+  login as loginPost,
+  verifyEmail,
+  checkIsEmailDuplicated,
+} from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
 import ClientMarkdown from "@/components/client-markdown";
 import { Separator } from "@radix-ui/themes";
@@ -48,6 +54,7 @@ export default function Home() {
   const [signupFailMessage, setSignupFailMsg] = useState<string>("");
   const { bIsLoggedIn, login } = useAuth();
   const [eula, setEula] = useState<string>("");
+  const [bIsEmailDuplicated, setIsEmailDuplicated] = useState<boolean>(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [verificationFailMessage, setVerificationFailMsg] =
     useState<string>("");
@@ -74,7 +81,8 @@ export default function Home() {
       validateEmail() &&
       validateUsername() &&
       validatePassword() &&
-      validatePasswordConfirm()
+      validatePasswordConfirm() &&
+      !bIsEmailDuplicated
     ) {
       if (setView) setCurrentView(2);
       return true;
@@ -110,7 +118,7 @@ export default function Home() {
 
   async function handleVerification() {
     try {
-      const verifyResult = await verifySignup(email, verificationCode);
+      const verifyResult = await verifyEmail(email, verificationCode);
       if (verifyResult !== "verified") {
         throw Error(verifyResult);
       }
@@ -130,6 +138,16 @@ export default function Home() {
     } catch (error: any) {
       setVerificationFailMsg(t(error.message));
       alert(t(error.message)); // "username-exists" 등의 메시지 출력
+    }
+  }
+
+  async function handleEmailDuplication(): Promise<boolean> {
+    try {
+      const result: boolean = await checkIsEmailDuplicated(email);
+      return result;
+    } catch (error: any) {
+      console.log(t(error.message));
+      return false;
     }
   }
 
@@ -204,10 +222,22 @@ export default function Home() {
                   placeholder={t("email")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onBlur={async () => {
+                    if (validateEmail()) {
+                      const isAvailable = await handleEmailDuplication();
+                      // 서버에서 사용 가능(true)을 반환하면 중복이 아님(!isAvailable)
+                      setIsEmailDuplicated(isAvailable);
+                    }
+                  }}
                 />
                 {!validateEmail() && (
                   <Text as="span" color="red">
                     {t("email-rules")}
+                  </Text>
+                )}
+                {bIsEmailDuplicated && (
+                  <Text as="span" color="red">
+                    {t("email-duplicate")}
                   </Text>
                 )}
                 <Text>{t("id")} *</Text>
@@ -354,6 +384,7 @@ export default function Home() {
                 <Button
                   disabled={!agreeTerms}
                   onClick={() => setCurrentView(1)}
+                  className="mt-2"
                 >
                   {t_common("next")}
                 </Button>

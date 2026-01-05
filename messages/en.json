@@ -1,4 +1,12 @@
 {
+  "MainPage": {
+    "welcome-bitmap": "Welcome to Bitmap",
+    "welcome-bitmap-desc": "Discover and download the latest games from indie developers to major publishers and play them.",
+    "works": "Our Works",
+    "games": "Games",
+    "api-error": "Unable to fetch data from the API."
+  },
+
   "Sidebar": {
     "bitmap": "Bitmap",
     "bitmap-store": "Bitmap Store",
@@ -54,7 +62,13 @@
     "before-continuing": "Before Continuing",
     "login-notification": "By continuing, you agree to our User Agreement and acknowledge that you understand the Privacy Policy.",
     "registering-bitmap-id": "Registering Bitmap ID",
+    "email-duplicate": "Email address already exists.",
+    "email-duplicate-pass": "Email address is available.",
     "email-verification": "Almost done. We have sent a verification code to your email. Please enter it within 10 minutes.",
+    "email-verification-incomplete": "Email verification is incomplete.",
+    "email-verification-incomplete-desc": "Email verification is incomplete. Please click the Send Verification Email button below to proceed with email verification.",
+    "require-email": "Email address is required.",
+    "send-verification-email": "Send Passcode",
     "invalid-token": "Invalid token.",
     "token-required": "Authentication token is required.",
     "username-exists": "Username already exists.",
@@ -75,7 +89,7 @@
     "details": "Details",
     "pending": "Waiting for Approval",
     "unknown-game": "Unable to find game",
-    "view-in-bitmap-app": "View in Bitmap App",
+    "view-in-bitmap-app": "View in Bitmap App…",
     "dev": "Dev",
     "developer": "Developer",
     "publisher": "Publisher",

@@ -14,6 +14,7 @@ interface AuthContextType {
   email: string;
   bIsDeveloper: boolean;
   bIsTeammate: boolean;
+  bIsEmailVerified: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -31,6 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [email, setEmail] = useState("");
   const [bIsDeveloper, setIsDeveloper] = useState(false);
   const [bIsTeammate, setIsTeammate] = useState(false);
+  const [bIsEmailVerified, setIsEmailVerified] = useState(false);
   const router = useRouter();
 
   const fetchUser = async (token: string) => {
@@ -47,6 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setEmail(res.data.email);
       setIsDeveloper(res.data.isDeveloper);
       setIsTeammate(res.data.isTeammate);
+      setIsEmailVerified(res.data.isEmailVerified);
     } catch (error) {
       console.error("유저 정보 불러오기 실패", error);
     }
@@ -87,6 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         email,
         bIsDeveloper,
         bIsTeammate,
+        bIsEmailVerified,
       }}
     >
       {children}

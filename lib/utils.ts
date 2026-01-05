@@ -12,7 +12,6 @@ import type {
 } from "@/lib/types";
 import axios from "axios";
 import dayjs from "dayjs";
-import sanitizeHtml from "sanitize-html"; // (선택사항) 보안을 위해 추천
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -392,10 +391,10 @@ const signup = async (
   }
 };
 
-const verifySignup = async (email: string, code: string): Promise<string> => {
+const verifyEmail = async (email: string, code: string): Promise<string> => {
   try {
     const response = await axios.post<string>(
-      getApiLinkByPurpose("auth/verify-code"),
+      getApiLinkByPurpose("auth/email/verify"),
       { email, code }
     );
 
@@ -407,6 +406,40 @@ const verifySignup = async (email: string, code: string): Promise<string> => {
     }
     // 서버 응답이 없거나 다른 에러인 경우
     return "server-error";
+  }
+};
+
+const sendVerifyEmail = async (email: string): Promise<string> => {
+  try {
+    const response = await axios.post<string>(
+      getApiLinkByPurpose("auth/email/send"),
+      { email }
+    );
+
+    return response.data;
+  } catch (error: any) {
+    // [수정됨] 네트워크 에러 등 response가 없는 경우에 대한 방어 코드 추가
+    if (error.response && error.response.data) {
+      return error.response.data;
+    }
+    // 서버 응답이 없거나 다른 에러인 경우
+    return "server-error";
+  }
+};
+
+const checkIsEmailDuplicated = async (email: string): Promise<boolean> => {
+  try {
+    const response = await axios.post<boolean>(
+      getApiLinkByPurpose("auth/signup/check-duplicate"),
+      { email }
+    );
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      return error.response.data;
+    }
+    return false;
   }
 };
 
@@ -427,5 +460,7 @@ export {
   renderMarkdown,
   submitGame,
   uploadGameImage,
-  verifySignup,
+  checkIsEmailDuplicated,
+  verifyEmail,
+  sendVerifyEmail,
 };
