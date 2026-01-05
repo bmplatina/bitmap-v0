@@ -1,4 +1,5 @@
 import type React from "react";
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { AuthProvider } from "@/lib/AuthContext";
 import { Inter } from "next/font/google";
@@ -7,6 +8,7 @@ import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "@/components/theme-provider";
+import { TokenHandler } from "@/components/token-handler";
 import Sidebar from "@/components/sidebar";
 import TopBar from "@/components/top-bar";
 import localFont from "next/font/local";
@@ -55,6 +57,10 @@ export default function RootLayout({
                     </div>
                   </div>
                 </div>
+                {/* 클라이언트 사이드 로직(토큰 처리)은 별도 컴포넌트로 유지 */}
+                <Suspense fallback={null}>
+                  <TokenHandler />
+                </Suspense>
               </Theme>
             </ThemeProvider>
           </AuthProvider>

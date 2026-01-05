@@ -1,10 +1,8 @@
 import { Box, Button, ScrollArea } from "@radix-ui/themes";
 import Link from "next/link";
 import Image from "next/image";
-import { Suspense } from "react";
 import { getYouTubeVideos, getGames } from "@/lib/utils";
 import type { Game } from "@/lib/types";
-import { TokenHandler } from "@/components/token-handler";
 import { getTranslations } from "next-intl/server";
 
 export default async function Home() {
@@ -90,11 +88,6 @@ export default async function Home() {
           </div>
         </ScrollArea>
       </div>
-
-      {/* 클라이언트 사이드 로직(토큰 처리)은 별도 컴포넌트로 유지 */}
-      <Suspense fallback={null}>
-        <TokenHandler />
-      </Suspense>
     </div>
   );
 }

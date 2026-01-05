@@ -70,6 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("accessToken", token);
     setIsLoggedIn(true);
     await fetchUser(token); // 유저 정보를 다 가져올 때까지 기다림
+    router.refresh();
   };
 
   // 3. 로그아웃 함수
