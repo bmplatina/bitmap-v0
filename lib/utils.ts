@@ -434,11 +434,11 @@ const checkIsEmailDuplicated = async (email: string): Promise<boolean> => {
       { email }
     );
 
-    return response.data;
+    // 백엔드 반환값: isAvailable (true: 사용 가능, false: 중복)
+    // 함수 반환값: isDuplicated (true: 중복, false: 사용 가능)
+    return !response.data;
   } catch (error: any) {
-    if (error.response && error.response.data) {
-      return error.response.data;
-    }
+    console.error("이메일 중복 확인 실패:", error);
     return false;
   }
 };
