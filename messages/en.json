@@ -67,6 +67,7 @@
     "email-verification": "Almost done. We have sent a verification code to your email. Please enter it within 10 minutes.",
     "email-verification-incomplete": "Email verification is incomplete.",
     "email-verification-incomplete-desc": "Email verification is incomplete. Please click the Send Verification Email button below to proceed with email verification.",
+    "email-sent": "Verification mail sent.",
     "require-email": "Email address is required.",
     "send-verification-email": "Send Passcode",
     "invalid-token": "Invalid token.",
