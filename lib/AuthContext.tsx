@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [email, setEmail] = useState("");
   const [bIsDeveloper, setIsDeveloper] = useState(false);
   const [bIsTeammate, setIsTeammate] = useState(false);
-  const [bIsEmailVerified, setIsEmailVerified] = useState(false);
+  const [bIsEmailVerified, setIsEmailVerified] = useState(true);
   const router = useRouter();
 
   const fetchUser = async (token: string) => {
