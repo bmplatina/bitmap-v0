@@ -5,6 +5,7 @@ import { checkIsLoggedIn } from "./auth"; // 위에서 만든 함수
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { getApiLinkByPurpose } from "./utils";
+import { jwtDecode } from "jwt-decode";
 
 interface AuthContextType {
   bIsLoggedIn: boolean;
@@ -49,7 +50,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setEmail(res.data.email);
       setIsDeveloper(res.data.isDeveloper);
       setIsTeammate(res.data.isTeammate);
-      setIsEmailVerified(res.data.isEmailVerified);
+      // 백엔드 응답 필드명이 isEmailVerified 또는 is_verified일 수 있으므로 둘 다 확인
+      // API 응답에 없으면 토큰에서 직접 디코딩하여 확인 (강력한 대비책)
+      let verified = res.data.isEmailVerified ?? res.data.is_verified;
+      if (verified === undefined) {
+        try {
+          const decoded: any = jwtDecode(token);
+          verified = decoded.isEmailVerified;
+        } catch (e) {
+          console.error("토큰 디코딩 실패:", e);
+        }
+      }
+      setIsEmailVerified(!!verified);
     } catch (error) {
       console.error("유저 정보 불러오기 실패", error);
     }

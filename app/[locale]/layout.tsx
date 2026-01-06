@@ -56,11 +56,11 @@ export default function RootLayout({
                       <main className="flex-1 overflow-auto">{children}</main>
                     </div>
                   </div>
+                  <Suspense fallback={null}>
+                    <TokenHandler />
+                  </Suspense>
                 </div>
                 {/* 클라이언트 사이드 로직(토큰 처리)은 별도 컴포넌트로 유지 */}
-                <Suspense fallback={null}>
-                  <TokenHandler />
-                </Suspense>
               </Theme>
             </ThemeProvider>
           </AuthProvider>

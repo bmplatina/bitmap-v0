@@ -13,6 +13,7 @@ export function TokenHandler() {
   const { login, logout, bIsEmailVerified, bIsLoggedIn, email } = useAuth();
   const [verificationCode, setVerificationCode] = useState("");
   const [password, setPassword] = useState("");
+  const [bIsVerificationMailSent, setIsVerificationMailSent] = useState(false);
   const [verificationFailMessage, setVerificationFailMessage] = useState("");
   const t = useTranslations("Authentication");
 
@@ -24,8 +25,10 @@ export function TokenHandler() {
       }
       console.log("로그인 이메일 인증 번호 발송 성공");
       setVerificationFailMessage(t(response));
+      setIsVerificationMailSent(true);
     } catch (error: any) {
       setVerificationFailMessage(t(error.message));
+      setIsVerificationMailSent(false);
     }
   }
 
@@ -66,15 +69,18 @@ export function TokenHandler() {
   return (
     <div>
       <AlertDialog.Root open={!bIsEmailVerified && bIsLoggedIn}>
-        {/* ||를 &&로 교체하셈 */}
         <AlertDialog.Content maxWidth="450px">
           <AlertDialog.Title>
             {t("email-verification-incomplete")}
           </AlertDialog.Title>
           <AlertDialog.Description size="2">
-            <Text>{t("email-verification-incomplete-desc")}</Text>
+            {t("email-verification-incomplete-desc")}
+          </AlertDialog.Description>
+
+          <Flex direction="column" gap="3" mt="3">
             <Flex gap="3" width="100%">
               <TextField.Root
+                disabled={!bIsVerificationMailSent}
                 style={{ flex: 6 }}
                 placeholder={t("verification-code")}
                 value={verificationCode}
@@ -85,18 +91,17 @@ export function TokenHandler() {
               </Button>
             </Flex>
             <TextField.Root
-              className="mt-2"
               placeholder={t("password")}
               value={password}
               type="password"
               onChange={(e) => setPassword(e.target.value)}
             />
             {verificationFailMessage && (
-              <Text color="red" size="2" className="mt-2">
+              <Text color="red" size="2">
                 {verificationFailMessage}
               </Text>
             )}
-          </AlertDialog.Description>
+          </Flex>
           <Flex gap="3" mt="4" justify="end">
             <AlertDialog.Action>
               <Button variant="surface" color="gray" onClick={logout}>

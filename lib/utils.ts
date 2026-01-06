@@ -342,8 +342,6 @@ const login = async (
     );
 
     if (response.data.token) {
-      // login(response.data.token);
-      console.log(response.data.token);
       return { success: true, token: response.data.token };
     }
     // bSetLoggedInState(true);
