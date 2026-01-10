@@ -187,7 +187,7 @@ async function getGameById(id: string): Promise<Game | null> {
 }
 
 const checkAuthor = async (
-  token: string,
+  token: string = process.env.NEXT_PUBLIC_MASTER_TOKEN || "",
   uid: string
 ): Promise<AuthorInfo | null> => {
   // 1. 초기값을 null로 설정하여 에러 발생 시에도 안전하게 리턴

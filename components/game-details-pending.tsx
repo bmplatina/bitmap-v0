@@ -44,7 +44,7 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
   }
 
   useEffect(() => {
-    checkAuthor(uid).then((payload: AuthorInfo | null) => {
+    checkAuthor(undefined, uid).then((payload: AuthorInfo | null) => {
       setAuthor(payload);
     });
   }, [author]);

@@ -36,7 +36,7 @@ export default async function GameDetail({
     );
   }
 
-  const author = await checkAuthor(game.uid);
+  const author = await checkAuthor(undefined, game.uid);
 
   return (
     <div className="container mx-auto p-6 w-full">

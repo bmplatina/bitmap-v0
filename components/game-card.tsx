@@ -4,7 +4,7 @@ import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
 import Link from "next/link";
-import { Calendar, Code, Tag } from "lucide-react";
+import { Calendar, Code, Tag, User } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 interface GameCardProps {
@@ -54,6 +54,11 @@ export default async function GameCard({
           <div className="flex items-center gap-2">
             <Code className="h-4 w-4" />
             <span>{game.gameDeveloper}</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <User className="h-4 w-4" />
+            <span>{game.gamePublisher}</span>
           </div>
 
           <div className="flex items-center gap-2">
