@@ -37,14 +37,17 @@ export function TokenHandler() {
 
   async function handleVerification() {
     try {
-      const verifyResult = await verifyEmail(email, verificationCode);
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) throw new Error("token-required");
+      const verifyResult = await verifyEmail(token, verificationCode);
       if (verifyResult !== "verified") {
         throw Error(verifyResult);
       }
 
       console.log("인증 성공:", verifyResult);
 
-      const loginResult = await loginPost(email, password);
+      const loginResult = await loginPost(email, password, false);
 
       if (loginResult.success) {
         await login(loginResult.token);
