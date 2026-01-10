@@ -43,7 +43,7 @@ export default function AccountPage() {
   };
 
   async function handleLogin() {
-    const loginResult = await loginPost(email, password);
+    const loginResult = await loginPost(email, password, bRequestAutoLogin);
     if (loginResult.success) {
       await login(loginResult.token);
     } else {

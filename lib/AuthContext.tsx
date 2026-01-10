@@ -53,10 +53,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // 백엔드 응답 필드명이 isEmailVerified 또는 is_verified일 수 있으므로 둘 다 확인
       // API 응답에 없으면 토큰에서 직접 디코딩하여 확인 (강력한 대비책)
       let verified = res.data.isEmailVerified ?? res.data.is_verified;
+      console.log("Email verified status from API:", verified);
       if (verified === undefined) {
         try {
           const decoded: any = jwtDecode(token);
           verified = decoded.isEmailVerified;
+          console.log("JWT 수동 디코딩: ", verified);
         } catch (e) {
           console.error("토큰 디코딩 실패:", e);
         }

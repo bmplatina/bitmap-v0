@@ -215,7 +215,10 @@ export default function RegisterGamePage() {
 
       console.log("Submitting game data:", postGame);
 
-      if (await submitGame(postGame)) {
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) throw new Error("token-required");
+      if (await submitGame(token, postGame)) {
         // 성공 알림
         toast({
           title: "성공",

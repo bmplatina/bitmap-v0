@@ -118,7 +118,11 @@ export default function Home() {
 
   async function handleVerification() {
     try {
-      const verifyResult = await verifyEmail(email, verificationCode);
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) throw new Error("token-required");
+      const verifyResult = await verifyEmail(token, verificationCode);
+
       if (verifyResult !== "verified") {
         throw Error(verifyResult);
       }

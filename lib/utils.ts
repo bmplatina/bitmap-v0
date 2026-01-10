@@ -186,7 +186,10 @@ async function getGameById(id: string): Promise<Game | null> {
   }
 }
 
-const checkAuthor = async (uid: string): Promise<AuthorInfo | null> => {
+const checkAuthor = async (
+  token: string,
+  uid: string
+): Promise<AuthorInfo | null> => {
   // 1. 초기값을 null로 설정하여 에러 발생 시에도 안전하게 리턴
   let author: AuthorInfo | null = null;
 
@@ -200,6 +203,7 @@ const checkAuthor = async (uid: string): Promise<AuthorInfo | null> => {
         timeout: 30000,
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -273,7 +277,7 @@ async function getPendingGameById(id: string): Promise<Game | null> {
 }
 
 // API에서 특정 대기 중인 게임 데이터를 가져오는 함수
-async function submitGame(gameInfo: Game): Promise<boolean> {
+async function submitGame(token: string, gameInfo: Game): Promise<boolean> {
   try {
     // API 호출
     const response = await axios.post<Game>(
@@ -283,6 +287,7 @@ async function submitGame(gameInfo: Game): Promise<boolean> {
         timeout: 30000, // 30초 타임아웃
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -324,7 +329,8 @@ async function uploadGameImage(file: File | null) {
  */
 const login = async (
   email: string,
-  password: string
+  password: string,
+  bKeepLoggedIn: boolean
 ): Promise<AuthResponseInternal> => {
   try {
     const response = await axios.post<AuthResponse>(
@@ -332,6 +338,7 @@ const login = async (
       {
         email: email,
         password: password,
+        bKeepLoggedIn: bKeepLoggedIn
       },
       {
         timeout: 30000, // 30초 타임아웃
@@ -389,11 +396,16 @@ const signup = async (
   }
 };
 
-const verifyEmail = async (email: string, code: string): Promise<string> => {
+const verifyEmail = async (token: string, code: string): Promise<string> => {
   try {
     const response = await axios.post<string>(
       getApiLinkByPurpose("auth/email/verify"),
-      { email, code }
+      { code },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
 
     return response.data;
@@ -407,11 +419,18 @@ const verifyEmail = async (email: string, code: string): Promise<string> => {
   }
 };
 
-const sendVerifyEmail = async (email: string): Promise<string> => {
+const sendVerifyEmail = async (
+  token: string,
+  email: string
+): Promise<string> => {
   try {
-    const response = await axios.post<string>(
+    const response = await axios.get<string>(
       getApiLinkByPurpose("auth/email/send"),
-      { email }
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
 
     return response.data;

@@ -19,7 +19,10 @@ export function TokenHandler() {
 
   async function handleSendVerificationEmail() {
     try {
-      const response = await sendVerifyEmail(email);
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) throw new Error("token-required");
+      const response = await sendVerifyEmail(token, email);
       if (response !== "email-sent") {
         throw Error(response);
       }
