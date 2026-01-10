@@ -93,6 +93,7 @@ export default function Home() {
   async function handleSignup() {
     try {
       const signupResult = await signup(
+        locale,
         username,
         email,
         password,
@@ -129,7 +130,7 @@ export default function Home() {
 
       console.log("인증 성공:", verifyResult);
 
-      const loginResult = await loginPost(email, password);
+      const loginResult = await loginPost(email, password, false);
 
       if (loginResult.success) {
         await login(loginResult.token);

@@ -5,11 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/AuthContext";
 import { sendVerifyEmail, verifyEmail, login as loginPost } from "@/lib/utils";
 import { AlertDialog, Button, Flex, Text, TextField } from "@radix-ui/themes";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export function TokenHandler() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const locale = useLocale();
   const { login, logout, bIsEmailVerified, bIsLoggedIn, email } = useAuth();
   const [verificationCode, setVerificationCode] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +23,7 @@ export function TokenHandler() {
       const token = localStorage.getItem("accessToken");
 
       if (!token) throw new Error("token-required");
-      const response = await sendVerifyEmail(token, email);
+      const response = await sendVerifyEmail(locale, token);
       if (response !== "email-sent") {
         throw Error(response);
       }

@@ -338,7 +338,7 @@ const login = async (
       {
         email: email,
         password: password,
-        bKeepLoggedIn: bKeepLoggedIn
+        bKeepLoggedIn: bKeepLoggedIn,
       },
       {
         timeout: 30000, // 30초 타임아웃
@@ -377,6 +377,7 @@ const login = async (
 };
 
 const signup = async (
+  locale: string,
   username: string,
   email: string,
   password: string,
@@ -386,7 +387,7 @@ const signup = async (
   try {
     const response = await axios.post<SignupResponse>(
       getApiLinkByPurpose("auth/signup"),
-      { username, email, password, bIsDeveloper, bIsTeammate }
+      { locale, username, email, password, bIsDeveloper, bIsTeammate }
     );
     return response.data;
   } catch (error: any) {
@@ -420,12 +421,13 @@ const verifyEmail = async (token: string, code: string): Promise<string> => {
 };
 
 const sendVerifyEmail = async (
-  token: string,
-  email: string
+  locale: string,
+  token: string
 ): Promise<string> => {
   try {
-    const response = await axios.get<string>(
+    const response = await axios.post<string>(
       getApiLinkByPurpose("auth/email/send"),
+      { locale },
       {
         headers: {
           Authorization: `Bearer ${token}`,
