@@ -2,20 +2,11 @@
 
 import { useTranslations, useLocale } from "next-intl";
 import GameStoreViewEditor from "@/components/publish/games/game-storeview-editor";
-import { Box, Tabs, Text } from "@radix-ui/themes";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Box, AlertDialog, Tabs, Text, Flex } from "@radix-ui/themes";
 import { useAuth } from "@/lib/AuthContext";
 import { GamePublishProvider } from "@/lib/GamePublishContext";
 import GameDetailEditor from "@/components/publish/games/game-detail-editor";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
@@ -25,6 +16,8 @@ export default function SubmitGames() {
   const router = useRouter();
   const { bIsLoggedIn, bIsDeveloper } = useAuth();
   const isMobile = useIsMobile();
+  const [ignoreMobileWarning, setIgnoreMobileWarning] =
+    useState<boolean>(false);
 
   useEffect(
     function () {
@@ -37,24 +30,30 @@ export default function SubmitGames() {
 
   return (
     <GamePublishProvider>
-      {/* <Dialog>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t("mobile-publish-warning")}</DialogTitle>
-            <DialogDescription>
-              {t("mobile-publish-warning=desc")}
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-        <DialogFooter>
-          <Button variant="secondary" onClick={() => router.back()}>
-            {t("go-back")}
-          </Button>
-          <DialogTrigger asChild>
-            <Button>{t("ignore-continue")}</Button>
-          </DialogTrigger>
-        </DialogFooter>
-      </Dialog> */}
+      <AlertDialog.Root open={isMobile && !ignoreMobileWarning}>
+        <AlertDialog.Content>
+          <AlertDialog.Title>{t("mobile-publish-warning")}</AlertDialog.Title>
+          <AlertDialog.Description size="2">
+            {t("mobile-publish-warning=desc")}
+          </AlertDialog.Description>
+          <Flex gap="3" mt="4" justify="end">
+            <AlertDialog.Action>
+              <Button variant="secondary" onClick={() => router.back()}>
+                {t("go-back")}
+              </Button>
+            </AlertDialog.Action>
+            <AlertDialog.Cancel>
+              <Button
+                variant="destructive"
+                onClick={() => setIgnoreMobileWarning(true)}
+              >
+                {t("ignore-continue")}
+              </Button>
+            </AlertDialog.Cancel>
+          </Flex>
+        </AlertDialog.Content>
+      </AlertDialog.Root>
+
       <Tabs.Root defaultValue="store-viewed-info">
         <Tabs.List>
           <Tabs.Trigger value="store-viewed-info">

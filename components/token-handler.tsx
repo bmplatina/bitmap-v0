@@ -65,6 +65,10 @@ export function TokenHandler() {
     }
   }
 
+  function enableVerifyButton(): boolean {
+    return verificationCode.length === 6 && password.length >= 6;
+  }
+
   useEffect(() => {
     const token = searchParams.get("token");
 
@@ -119,7 +123,7 @@ export function TokenHandler() {
             <AlertDialog.Action>
               <Button
                 variant="solid"
-                disabled={verificationCode.length !== 6}
+                disabled={!enableVerifyButton}
                 onClick={handleVerification}
               >
                 {t("verify")}
