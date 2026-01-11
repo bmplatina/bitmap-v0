@@ -61,10 +61,6 @@ export default function GameDetailEditor() {
   const [gameDownloadWinURL, setGameDownloadWinURL] = useState("");
   const [gameImageURL, setGameImageURL] = useState<string[]>([]);
   const [gameBinaryName, setGameBinaryName] = useState("");
-  const [gameHeadline, setGameHeadline] = useState<stringLocalized>({
-    ko: "",
-    en: "",
-  });
 
   // 로딩 상태
   const [isLoadingGameId, setIsLoadingGameId] = useState(true);
@@ -386,35 +382,6 @@ export default function GameDetailEditor() {
               onChange={(e) => setGameBinaryName(e.target.value)}
               placeholder="Game.exe, Game.app, Game"
             />
-          </CardContent>
-        </Card>
-
-        <Separator />
-
-        {/* 게임 헤드라인 */}
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("gameHeadline")}</CardTitle>
-            <CardDescription>{t("gameHeadlineDesc")}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Flex>
-              <Input
-                className="mr-2"
-                value={gameHeadline.ko}
-                onChange={(e) =>
-                  setGameHeadline({ ...gameHeadline, ko: e.target.value })
-                }
-                placeholder="KO: 게임을 나타내는 한 문장을 입력하십시오."
-              />
-              <Input
-                value={gameHeadline.en}
-                onChange={(e) =>
-                  setGameHeadline({ ...gameHeadline, en: e.target.value })
-                }
-                placeholder="EN: Please enter a one-liner that represents the game."
-              />
-            </Flex>
           </CardContent>
         </Card>
       </div>
