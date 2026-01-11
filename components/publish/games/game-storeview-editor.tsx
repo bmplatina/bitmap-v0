@@ -34,7 +34,7 @@ import { Link } from "@/i18n/routing";
 import { useState, useEffect, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/AuthContext";
-import ClientMarkdown from "./client-markdown";
+import ClientMarkdown from "../../client-markdown";
 import Image from "next/image";
 import {
   Card,
@@ -42,11 +42,15 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { Input } from "./ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Calendar } from "./ui/calendar";
-import MarkdownEditor from "./markdown-editor";
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import MarkdownEditor from "@/components/markdown-editor";
 import {
   Dialog,
   DialogContent,
@@ -54,9 +58,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
+} from "@/components/ui/dialog";
 
-function GamePublishEditor() {
+export default function GameStoreViewEditor() {
   const locale = useLocale();
   const t = useTranslations("GamesView");
   const t_gameSubmit = useTranslations("GameSubmit");
@@ -85,6 +89,16 @@ function GamePublishEditor() {
   }
   function getIsTitleWritten(): boolean {
     return game.gameTitle.length > 0;
+  }
+
+  // 게임 헤드라인 핸들링
+  function setGameHeadline(locale: "ko" | "en", value: string) {
+    updateLocalizedField("gameHeadline", locale, value);
+  }
+  function getIsGameHeadlineWritten(locale: "ko" | "en"): boolean {
+    const localeLocal: string =
+      locale === "ko" ? game.gameHeadline.ko : game.gameHeadline.en;
+    return localeLocal.length > 0;
   }
 
   // 게임 개발자 핸들링
@@ -264,7 +278,69 @@ function GamePublishEditor() {
           </div>
 
           <h2 className="text-xl text-muted-foreground mb-6">
-            {getLocalizedString(locale, game.gameHeadline)}
+            <HoverCard.Root>
+              <HoverCard.Trigger>
+                <Link href="#">
+                  <Text as="span">{`${t_gameSubmit(
+                    "gameHeadline"
+                  )} (한국어): `}</Text>
+                  <Text
+                    as="span"
+                    color={getIsGameHeadlineWritten("ko") ? undefined : "indigo"}
+                    weight="bold"
+                  >
+                    {getIsGameHeadlineWritten("ko")
+                      ? game.gameHeadline.ko
+                      : t_gameSubmit("gameHeadline")}
+                  </Text>
+                  <Text as="span" color="red" weight="bold">
+                    *
+                  </Text>
+                  <br />
+                  <Text as="span">{`${t_gameSubmit(
+                    "gameHeadline"
+                  )} (English): `}</Text>
+                  <Text
+                    as="span"
+                    color={
+                      getIsGameHeadlineWritten("en") ? undefined : "indigo"
+                    }
+                    weight="bold"
+                  >
+                    {getIsGameHeadlineWritten("en")
+                      ? game.gameHeadline.en
+                      : t_gameSubmit("gameHeadline")}
+                  </Text>
+                  <Text as="span" color="red" weight="bold">
+                    *
+                  </Text>
+                </Link>
+              </HoverCard.Trigger>
+              <HoverCard.Content maxWidth="450px">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{t_gameSubmit("gameHeadline")}</CardTitle>
+                    <CardDescription>
+                      {t_gameSubmit("gameHeadlineDesc")}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Input
+                      className="mr-2"
+                      value={game.gameHeadline.ko}
+                      onChange={(e) => setGameHeadline("ko", e.target.value)}
+                      placeholder="KO: 게임을 나타내는 한 문장을 입력하십시오."
+                    />
+                    <Input
+                      className="mt-2"
+                      value={game.gameHeadline.en}
+                      onChange={(e) => setGameHeadline("en", e.target.value)}
+                      placeholder="EN: Please enter a one-liner that represents the game."
+                    />
+                  </CardContent>
+                </Card>
+              </HoverCard.Content>
+            </HoverCard.Root>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
@@ -600,5 +676,3 @@ function GamePublishEditor() {
     </div>
   );
 }
-
-export { GamePublishEditor };
