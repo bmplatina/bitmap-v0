@@ -1,6 +1,6 @@
 "use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "@/i18n/routing";
+import { usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
 import { sidebarItems } from "@/lib/sidebar-items";

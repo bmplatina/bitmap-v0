@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import type { Game } from "../lib/types";
+import type { Game } from "@/lib/types";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
@@ -13,7 +13,7 @@ import {
   getLocalizedString,
 } from "@/lib/utils";
 import { useTranslations, useLocale } from "next-intl";
-import SmartMarkdown from "./markdown-renderer";
+import ClientMarkdown from "./client-markdown";
 import { ScrollArea } from "@radix-ui/themes";
 
 interface AuthorInfo {
@@ -128,7 +128,7 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
             <Badge className="bg-amber-500">
               {t_gameSubmit("waiting-approval")}
             </Badge>
-            {game.isEarlyAccess === 1 && (
+            {game.isEarlyAccess && (
               <Badge className="bg-amber-500">{t("early-access")}</Badge>
             )}
           </div>
@@ -210,7 +210,7 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
             {/* <div className="prose prose-invert max-w-none">
               <p>{game.gameDescription}</p>
             </div> */}
-            <SmartMarkdown
+            <ClientMarkdown
               content={getLocalizedString(locale, game.gameDescription)}
             />
             {/*<div

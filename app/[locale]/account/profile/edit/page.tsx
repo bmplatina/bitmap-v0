@@ -10,7 +10,7 @@ import { getApiLinkByPurpose, login as loginPost } from "@/lib/utils";
 import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 
-export default function AccountPage() {
+export default function AccountEdit() {
   const t = useTranslations("Authentication");
   const router = useRouter();
 

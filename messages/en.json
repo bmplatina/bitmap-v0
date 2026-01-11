@@ -35,6 +35,7 @@
     "other-login-methods": "Other Login Methods",
     "logout": "Sign out",
     "register": "Sign up",
+    "edit": "Edit",
     "general-info": "General Information",
     "other-info": "Other Information",
     "id": "Username",
@@ -129,6 +130,10 @@
   },
 
   "GameSubmit": {
+    "store-viewed-info": "Store viewed information",
+    "detailed-info": "Detailed information",
+    "preview": "Preview",
+    "stored-view-required-context-alert": "Blue background indicates required fields. Please fill them all out.",
     "game-submit": "Submit Your Game",
     "waiting-approval": "Waiting for Approval",
     "gameId": "Game ID",

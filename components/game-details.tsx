@@ -119,7 +119,7 @@ export default async function GameDetail({
             {bIsPending && (
               <Badge className="bg-amber-500">{t("waiting-approval")}</Badge>
             )}
-            {game.isEarlyAccess === 1 && (
+            {game.isEarlyAccess && (
               <Badge className="bg-amber-500">{t("early-access")}</Badge>
             )}
           </div>
@@ -141,7 +141,7 @@ export default async function GameDetail({
               <span>
                 {t("publisher")}: <strong>{game.gamePublisher}</strong>
                 <br />
-                {author && `${t("author")}`}:{" "}
+                {author && `${t("author")}: `}
                 <strong>{author?.username}</strong>
               </span>
             </div>

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { checkIsLoggedIn } from "./auth"; // 위에서 만든 함수
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import axios from "axios";
 import { getApiLinkByPurpose } from "./utils";
 import { jwtDecode } from "jwt-decode";

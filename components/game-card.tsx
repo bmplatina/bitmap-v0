@@ -3,7 +3,7 @@ import { getLocalizedString, formatDate } from "@/lib/utils";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { Calendar, Code, Tag, User } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 

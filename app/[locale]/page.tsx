@@ -1,5 +1,5 @@
 import { Box, Button, ScrollArea } from "@radix-ui/themes";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import { getYouTubeVideos, getGames } from "@/lib/utils";
 import type { Game } from "@/lib/types";

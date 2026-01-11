@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { TextField, AlertDialog } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useTranslations, useLocale } from "next-intl";
 import {
   getEula,
