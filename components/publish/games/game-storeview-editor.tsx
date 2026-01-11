@@ -7,7 +7,6 @@ import { cn, formatDate, getLocalizedString } from "@/lib/utils";
 import {
   Globe,
   Monitor,
-  Badge,
   Code,
   User,
   Tag,
@@ -17,6 +16,7 @@ import {
   Clock,
   Edit,
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { useLocale, useTranslations } from "next-intl";
 import {
   Box,
@@ -135,6 +135,7 @@ export default function GameStoreViewEditor() {
     return `${year}-${month}-${day}`;
   };
 
+  // 게임 출시일 핸들링
   function setReleasedDate(value: Date | undefined) {
     if (value) {
       updateField("gameReleasedDate", formatDateToMySQL(value));
@@ -142,6 +143,22 @@ export default function GameStoreViewEditor() {
   }
   function getIsReleasedDateSelected(): boolean {
     return game.gameReleasedDate.length > 0;
+  }
+
+  // 모든 입력이 작성되었는지 확인
+  function isAllRequiredFieldsFilled(): boolean {
+    return (
+      getIsTitleWritten() &&
+      getIsGameHeadlineWritten("ko") &&
+      getIsGameHeadlineWritten("en") &&
+      getIsDeveloperWritten() &&
+      getIsPublisherWritten() &&
+      getIsGenreWritten("ko") &&
+      getIsGenreWritten("en") &&
+      getIsReleasedDateSelected() &&
+      game.gameDescription.ko.length > 0 &&
+      game.gameDescription.en.length > 0
+    );
   }
 
   // 마크다운 편집 모달 열기
@@ -179,14 +196,16 @@ export default function GameStoreViewEditor() {
 
   return (
     <div className="container mx-auto p-6 w-full">
-      <Callout.Root className="mb-4">
-        <Callout.Icon>
-          <Clock />
-        </Callout.Icon>
-        <Callout.Text>
-          {t_gameSubmit("stored-view-required-context-alert")}
-        </Callout.Text>
-      </Callout.Root>
+      {!isAllRequiredFieldsFilled() && (
+        <Callout.Root className="mb-4">
+          <Callout.Icon>
+            <Clock />
+          </Callout.Icon>
+          <Callout.Text>
+            {t_gameSubmit("stored-view-required-context-alert")}
+          </Callout.Text>
+        </Callout.Root>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* 왼쪽 컬럼 - 이미지 */}
@@ -286,7 +305,9 @@ export default function GameStoreViewEditor() {
                   )} (한국어): `}</Text>
                   <Text
                     as="span"
-                    color={getIsGameHeadlineWritten("ko") ? undefined : "indigo"}
+                    color={
+                      getIsGameHeadlineWritten("ko") ? undefined : "indigo"
+                    }
                     weight="bold"
                   >
                     {getIsGameHeadlineWritten("ko")

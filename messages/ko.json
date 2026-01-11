@@ -89,7 +89,7 @@
   "GamesView": {
     "explore": "탐색",
     "details": "자세히",
-    "pending": "승인 대기중",
+    "pending": "승인 대기 중",
     "unknown-game": "게임을 찾을 수 없음",
     "view-in-bitmap-app": "Bitmap 앱에서 보기⋯",
     "dev": "개발",
@@ -130,7 +130,7 @@
   },
 
   "GameSubmit": {
-    "store-viewed-info": "스토어에 표시되는 정보",
+    "store-viewed-info": "스토어 표시 정보 및 미리 보기",
     "detailed-info": "세부 정보",
     "preview": "미리 보기",
     "stored-view-required-context-alert": "파란색 배경은 필수 입력 항목을 나타냅니다. 모두 입력해주십시오.",
@@ -184,7 +184,11 @@
     "edit-md-desc": "마크다운 문법을 사용하여 게임에 대한 자세한 설명을 작성하세요.",
     "submit": "제출",
     "submitting": "다음 게임 제출하는 중: ",
-    "submit-warning": "게임을 제출하면 수정할 수 없으니 미리 보기를 보고 신중히 결정하십시오."
+    "submit-warning": "게임을 제출하면 수정할 수 없으니 미리 보기를 보고 신중히 결정하십시오.",
+    "mobile-publish-warning": "모바일에서 게시를 시도하고 있습니다.",
+    "mobile-publish-warning=desc": "모바일 기기에서는 게임을 게시할 때 일부 기능이 지원되지 않을 수 있습니다. PC나 Mac에서 다시 시도해주십시오.",
+    "ignore-continue": "무시하고 계속하기",
+    "go-back": "돌아가기"
   },
 
   "Common": {

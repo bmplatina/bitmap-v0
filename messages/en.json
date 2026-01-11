@@ -130,7 +130,7 @@
   },
 
   "GameSubmit": {
-    "store-viewed-info": "Store viewed information",
+    "store-viewed-info": "Store Displayed Information and Preview",
     "detailed-info": "Detailed information",
     "preview": "Preview",
     "stored-view-required-context-alert": "Blue background indicates required fields. Please fill them all out.",
@@ -184,7 +184,11 @@
     "edit-md-desc": "Use Markdown syntax to write a detailed description of the game.",
     "submit": "Submit",
     "submitting": "Submitting ",
-    "submit-warning": "After submitting your game, redacting is not allowed. So please watch preview and submit carefully."
+    "submit-warning": "After submitting your game, redacting is not allowed. So please watch preview and submit carefully.",
+    "mobile-publish-warning": "You are attempting to publish from a mobile device.",
+    "mobile-publish-warning=desc": "Some features may not be supported when publishing games from a mobile device. Please try again on a PC or Mac.",
+    "ignore-continue": "Ignore and Continue",
+    "go-back": "Go Back"
   },
 
   "Common": {

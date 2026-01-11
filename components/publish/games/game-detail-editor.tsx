@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
-import { useRouter, usePathname } from "@/i18n/routing";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -12,66 +11,26 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
-import type { Game, stringLocalized } from "@/lib/types";
+import type { Game } from "@/lib/types";
 import { toast } from "@/hooks/use-toast";
-import {
-  getGames,
-  getPendingGames,
-  submitGame,
-  uploadGameImage,
-} from "@/lib/utils";
-import { useAuth } from "@/lib/AuthContext";
-import { useTranslations, useLocale } from "next-intl";
-import { Flex } from "@radix-ui/themes";
-import GameDetail from "@/components/game-details-pending";
+import { getGames, getPendingGames, uploadGameImage } from "@/lib/utils";
+import { useTranslations } from "next-intl";
+import { useGameForm } from "@/lib/GamePublishContext";
 
 export default function GameDetailEditor() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const locale = useLocale();
-  const [isPending, startTransition] = useTransition();
   const t = useTranslations("GameSubmit");
-
-  const { bIsLoggedIn, bIsDeveloper } = useAuth();
-
-  // 게임 정보 상태
-  const [gameId, setGameId] = useState(0);
-  const [uid, setUid] = useState("");
-  const [gameLatestRevision, setGameLatestRevision] = useState(1);
-  const [gamePlatformWindows, setGamePlatformWindows] = useState(false);
-  const [gamePlatformMac, setGamePlatformMac] = useState(false);
-  const [gamePlatformMobile, setGamePlatformMobile] = useState(false);
-  const [gameEngine, setGameEngine] = useState("");
-  const [isEarlyAccess, setIsEarlyAccess] = useState(false);
-  const [isReleased, setIsReleased] = useState(false);
-  const [gameWebsite, setGameWebsite] = useState("");
-  const [gameVideoURL, setGameVideoURL] = useState("");
-  const [gameDownloadMacURL, setGameDownloadMacURL] = useState("");
-  const [gameDownloadWinURL, setGameDownloadWinURL] = useState("");
-  const [gameImageURL, setGameImageURL] = useState<string[]>([]);
-  const [gameBinaryName, setGameBinaryName] = useState("");
+  const {
+    gameData: game,
+    updateField,
+    updateLocalizedField,
+    updateImages,
+    resetForm,
+  } = useGameForm();
 
   // 로딩 상태
   const [isLoadingGameId, setIsLoadingGameId] = useState(true);
-
-  const changeLocale = (nextLocale: string) => {
-    startTransition(() => {
-      // replace를 사용하면 히스토리에 남지 않고 현재 위치에서 언어만 교체됩니다.
-      // 페이지 전체 새로고침이 아니라 '소프트 네비게이션'이 일어납니다.
-      router.replace(pathname, { locale: nextLocale });
-    });
-  };
 
   const [file, setFile] = useState<File | null>(null);
 
@@ -79,6 +38,58 @@ export default function GameDetailEditor() {
     if (!file) return;
 
     await uploadGameImage(file);
+  }
+
+  function setGameId(value: number) {
+    updateField("gameId", value);
+  }
+
+  function setGameLatestVersion(value: number) {
+    updateField("gameLatestRevision", value);
+  }
+
+  function setGameEngine(value: string) {
+    updateField("gameEngine", value);
+  }
+
+  function setGameWebsite(value: string) {
+    updateField("gameWebsite", value);
+  }
+
+  function setGameVideoURL(value: string) {
+    updateField("gameVideoURL", value);
+  }
+
+  function setGameDownloadMacURL(value: string) {
+    updateField("gameDownloadMacURL", value);
+  }
+
+  function setGameDownloadWinURL(value: string) {
+    updateField("gameDownloadWinURL", value);
+  }
+
+  function setGameBinaryName(value: string) {
+    updateField("gameBinaryName", value);
+  }
+
+  function setGamePlatformWindows(value: boolean) {
+    updateField("gamePlatformWindows", value);
+  }
+
+  function setGamePlatformMac(value: boolean) {
+    updateField("gamePlatformMac", value);
+  }
+
+  function setGamePlatformMobile(value: boolean) {
+    updateField("gamePlatformMobile", value);
+  }
+
+  function setIsEarlyAccess(value: boolean) {
+    updateField("isEarlyAccess", value);
+  }
+
+  function setIsReleased(value: boolean) {
+    updateField("isReleased", value);
   }
 
   // 게임 ID 자동 생성 - API에서 기존 게임 수를 가져와서 계산
@@ -114,13 +125,8 @@ export default function GameDetailEditor() {
         setIsLoadingGameId(false);
       }
     }
-
-    if (!bIsLoggedIn || !bIsDeveloper) {
-      router.push("/account");
-    } else {
-      fetchGames();
-    }
-  }, [bIsLoggedIn, bIsDeveloper]);
+    fetchGames();
+  }, []);
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
@@ -142,7 +148,7 @@ export default function GameDetailEditor() {
                 </span>
               </div>
             ) : (
-              <Input value={gameId} disabled />
+              <Input value={game.gameId} disabled />
             )}
           </CardContent>
         </Card>
@@ -158,8 +164,8 @@ export default function GameDetailEditor() {
           <CardContent>
             <Input
               type="number"
-              value={gameLatestRevision}
-              onChange={(e) => setGameLatestRevision(Number(e.target.value))}
+              value={game.gameLatestRevision}
+              onChange={(e) => setGameLatestVersion(Number(e.target.value))}
               placeholder="1"
               min="1"
             />
@@ -178,7 +184,7 @@ export default function GameDetailEditor() {
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="windows"
-                checked={gamePlatformWindows}
+                checked={game.gamePlatformWindows}
                 onCheckedChange={(checked) =>
                   setGamePlatformWindows(checked as boolean)
                 }
@@ -188,7 +194,7 @@ export default function GameDetailEditor() {
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="mac"
-                checked={gamePlatformMac}
+                checked={game.gamePlatformMac}
                 onCheckedChange={(checked) =>
                   setGamePlatformMac(checked as boolean)
                 }
@@ -198,7 +204,7 @@ export default function GameDetailEditor() {
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="mobile"
-                checked={gamePlatformMobile}
+                checked={game.gamePlatformMobile}
                 onCheckedChange={(checked) =>
                   setGamePlatformMobile(checked as boolean)
                 }
@@ -218,7 +224,7 @@ export default function GameDetailEditor() {
           </CardHeader>
           <CardContent>
             <Input
-              value={gameEngine}
+              value={game.gameEngine}
               onChange={(e) => setGameEngine(e.target.value)}
               placeholder="Unity, Unreal Engine 등"
             />
@@ -237,7 +243,7 @@ export default function GameDetailEditor() {
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="earlyAccess"
-                checked={isEarlyAccess}
+                checked={game.isEarlyAccess}
                 onCheckedChange={(checked) =>
                   setIsEarlyAccess(checked as boolean)
                 }
@@ -259,7 +265,7 @@ export default function GameDetailEditor() {
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="released"
-                checked={isReleased}
+                checked={game.isReleased}
                 onCheckedChange={(checked) => setIsReleased(checked as boolean)}
               />
               <Label htmlFor="released">정식 출시됨</Label>
@@ -277,7 +283,7 @@ export default function GameDetailEditor() {
           </CardHeader>
           <CardContent>
             <Input
-              value={gameWebsite}
+              value={game.gameWebsite}
               onChange={(e) => setGameWebsite(e.target.value)}
               placeholder="https://example.com"
               type="url"
@@ -295,7 +301,7 @@ export default function GameDetailEditor() {
           </CardHeader>
           <CardContent>
             <Input
-              value={gameVideoURL}
+              value={game.gameVideoURL}
               onChange={(e) => setGameVideoURL(e.target.value)}
               placeholder="https://www.youtube.com/embed/..."
               type="url"
@@ -312,24 +318,24 @@ export default function GameDetailEditor() {
             <CardDescription>{t("gameDownloadURLDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {gamePlatformMac && (
+            {game.gamePlatformMac && (
               <div>
                 <Label htmlFor="macDownload">{t("gameDownloadMacURL")}</Label>
                 <Input
                   id="macDownload"
-                  value={gameDownloadMacURL}
+                  value={game.gameDownloadMacURL as string}
                   onChange={(e) => setGameDownloadMacURL(e.target.value)}
                   placeholder="https://example.com/download/mac"
                   type="url"
                 />
               </div>
             )}
-            {gamePlatformWindows && (
+            {game.gamePlatformWindows && (
               <div>
                 <Label htmlFor="winDownload">{t("gameDownloadWinURL")}</Label>
                 <Input
                   id="winDownload"
-                  value={gameDownloadWinURL}
+                  value={game.gameDownloadWinURL as string}
                   onChange={(e) => setGameDownloadWinURL(e.target.value)}
                   placeholder="https://example.com/download/windows"
                   type="url"
@@ -378,7 +384,7 @@ export default function GameDetailEditor() {
           </CardHeader>
           <CardContent>
             <Input
-              value={gameBinaryName}
+              value={game.gameBinaryName}
               onChange={(e) => setGameBinaryName(e.target.value)}
               placeholder="Game.exe, Game.app, Game"
             />

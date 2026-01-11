@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Game } from "@/lib/types";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Clock, Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
 import { checkAuthor, formatDate } from "@/lib/utils";
