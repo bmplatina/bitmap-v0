@@ -26,7 +26,7 @@ export default function AccountLayout({
 
   return (
     <div>
-      <TabNav.Root>
+      <TabNav.Root className="sticky top-0 z-10 bg-background border-b-0">
         <TabNav.Link
           href="/account/profile"
           active={pathname === "/account/profile"}

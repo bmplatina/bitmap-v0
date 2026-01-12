@@ -11,10 +11,9 @@ import {
   User,
   Tag,
   Calendar as LucideCalendar,
-  Pencil,
   CalendarIcon,
   Clock,
-  Edit,
+  Pencil,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useLocale, useTranslations } from "next-intl";
@@ -24,14 +23,12 @@ import {
   IconButton,
   ScrollArea,
   Text,
-  HoverCard,
   Flex,
   Avatar,
   Heading,
   Tabs,
 } from "@radix-ui/themes";
-import { Link } from "@/i18n/routing";
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/AuthContext";
 import ClientMarkdown from "../../client-markdown";
@@ -197,7 +194,7 @@ export default function GameStoreViewEditor() {
   return (
     <div className="container mx-auto p-6 w-full">
       {!isAllRequiredFieldsFilled() && (
-        <Callout.Root className="mb-4">
+        <Callout.Root className="mb-4" color="red">
           <Callout.Icon>
             <Clock />
           </Callout.Icon>
@@ -255,24 +252,27 @@ export default function GameStoreViewEditor() {
         {/* 오른쪽 컬럼 - 상세 정보 */}
         <div className="lg:col-span-2">
           <div className="flex items-center gap-3 mb-4">
-            <HoverCard.Root>
-              <HoverCard.Trigger>
-                <Link href="#">
-                  <Text
-                    size="7"
-                    color={getIsTitleWritten() ? undefined : "indigo"}
-                    weight="bold"
-                  >
-                    {getIsTitleWritten()
-                      ? game.gameTitle
-                      : t_gameSubmit("gameTitle")}
-                  </Text>
-                  <Text size="7" color="red" weight="bold">
-                    *
-                  </Text>
-                </Link>
-              </HoverCard.Trigger>
-              <HoverCard.Content maxWidth="450px">
+            <div className="mr-1">
+              <Text
+                size="7"
+                color={getIsTitleWritten() ? undefined : "indigo"}
+                weight="bold"
+              >
+                {getIsTitleWritten()
+                  ? game.gameTitle
+                  : t_gameSubmit("gameTitle")}
+              </Text>
+              <Text size="7" color="red" weight="bold">
+                *
+              </Text>
+            </div>
+            <Popover>
+              <PopoverTrigger>
+                <IconButton size="1">
+                  <Pencil width="60%" />
+                </IconButton>
+              </PopoverTrigger>
+              <PopoverContent>
                 <Card>
                   <CardHeader>
                     <CardTitle>{t_gameSubmit("gameTitle")}</CardTitle>
@@ -289,55 +289,54 @@ export default function GameStoreViewEditor() {
                     />
                   </CardContent>
                 </Card>
-              </HoverCard.Content>
-            </HoverCard.Root>
+              </PopoverContent>
+            </Popover>
             {game.isEarlyAccess && (
               <Badge className="bg-amber-500">{t("early-access")}</Badge>
             )}
           </div>
 
           <h2 className="text-xl text-muted-foreground mb-6">
-            <HoverCard.Root>
-              <HoverCard.Trigger>
-                <Link href="#">
-                  <Text as="span">{`${t_gameSubmit(
-                    "gameHeadline"
-                  )} (한국어): `}</Text>
-                  <Text
-                    as="span"
-                    color={
-                      getIsGameHeadlineWritten("ko") ? undefined : "indigo"
-                    }
-                    weight="bold"
-                  >
-                    {getIsGameHeadlineWritten("ko")
-                      ? game.gameHeadline.ko
-                      : t_gameSubmit("gameHeadline")}
-                  </Text>
-                  <Text as="span" color="red" weight="bold">
-                    *
-                  </Text>
-                  <br />
-                  <Text as="span">{`${t_gameSubmit(
-                    "gameHeadline"
-                  )} (English): `}</Text>
-                  <Text
-                    as="span"
-                    color={
-                      getIsGameHeadlineWritten("en") ? undefined : "indigo"
-                    }
-                    weight="bold"
-                  >
-                    {getIsGameHeadlineWritten("en")
-                      ? game.gameHeadline.en
-                      : t_gameSubmit("gameHeadline")}
-                  </Text>
-                  <Text as="span" color="red" weight="bold">
-                    *
-                  </Text>
-                </Link>
-              </HoverCard.Trigger>
-              <HoverCard.Content maxWidth="450px">
+            <div className="mr-1">
+              <Text as="span">{`${t_gameSubmit(
+                "gameHeadline"
+              )} (한국어): `}</Text>
+              <Text
+                as="span"
+                color={getIsGameHeadlineWritten("ko") ? undefined : "indigo"}
+                weight="bold"
+              >
+                {getIsGameHeadlineWritten("ko")
+                  ? game.gameHeadline.ko
+                  : t_gameSubmit("gameHeadline")}
+              </Text>
+              <Text as="span" color="red" weight="bold">
+                *
+              </Text>
+              <br />
+              <Text as="span">{`${t_gameSubmit(
+                "gameHeadline"
+              )} (English): `}</Text>
+              <Text
+                as="span"
+                color={getIsGameHeadlineWritten("en") ? undefined : "indigo"}
+                weight="bold"
+              >
+                {getIsGameHeadlineWritten("en")
+                  ? game.gameHeadline.en
+                  : t_gameSubmit("gameHeadline")}
+              </Text>
+              <Text as="span" color="red" weight="bold">
+                *
+              </Text>
+            </div>
+            <Popover>
+              <PopoverTrigger>
+                <IconButton size="1">
+                  <Pencil width="60%" />
+                </IconButton>
+              </PopoverTrigger>
+              <PopoverContent>
                 <Card>
                   <CardHeader>
                     <CardTitle>{t_gameSubmit("gameHeadline")}</CardTitle>
@@ -360,32 +359,35 @@ export default function GameStoreViewEditor() {
                     />
                   </CardContent>
                 </Card>
-              </HoverCard.Content>
-            </HoverCard.Root>
+              </PopoverContent>
+            </Popover>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div className="flex items-center gap-2">
               <Code className="h-5 w-5 text-muted-foreground" />
-              <HoverCard.Root>
-                <HoverCard.Trigger>
-                  <Link href="#">
-                    <Text as="span">{`${t("developer")}: `}</Text>
-                    <Text
-                      as="span"
-                      color={getIsDeveloperWritten() ? undefined : "indigo"}
-                      weight="bold"
-                    >
-                      {getIsDeveloperWritten()
-                        ? game.gameDeveloper
-                        : t_gameSubmit("gameDeveloper")}
-                    </Text>
-                    <Text as="span" color="red" weight="bold">
-                      *
-                    </Text>
-                  </Link>
-                </HoverCard.Trigger>
-                <HoverCard.Content maxWidth="450px">
+              <div className="mr-1">
+                <Text as="span">{`${t("developer")}: `}</Text>
+                <Text
+                  as="span"
+                  color={getIsDeveloperWritten() ? undefined : "indigo"}
+                  weight="bold"
+                >
+                  {getIsDeveloperWritten()
+                    ? game.gameDeveloper
+                    : t_gameSubmit("gameDeveloper")}
+                </Text>
+                <Text as="span" color="red" weight="bold">
+                  *
+                </Text>
+              </div>
+              <Popover>
+                <PopoverTrigger>
+                  <IconButton size="1">
+                    <Pencil width="60%" />
+                  </IconButton>
+                </PopoverTrigger>
+                <PopoverContent>
                   <Card>
                     <CardHeader>
                       <CardTitle>{t_gameSubmit("gameDeveloper")}</CardTitle>
@@ -402,40 +404,43 @@ export default function GameStoreViewEditor() {
                       />
                     </CardContent>
                   </Card>
-                </HoverCard.Content>
-              </HoverCard.Root>
+                </PopoverContent>
+              </Popover>
             </div>
 
             <div className="flex items-center gap-2">
               <User className="h-5 w-5 text-muted-foreground" />
-              <HoverCard.Root>
-                <HoverCard.Trigger>
-                  <Link href="#">
-                    <Text as="span">{`${t("publisher")}: `}</Text>
-                    <Text
-                      as="span"
-                      color={getIsPublisherWritten() ? undefined : "indigo"}
-                      weight="bold"
-                    >
-                      {getIsPublisherWritten()
-                        ? game.gamePublisher
-                        : t_gameSubmit("gamePublisher")}
+              <div className="mr-1">
+                <Text as="span">{`${t("publisher")}: `}</Text>
+                <Text
+                  as="span"
+                  color={getIsPublisherWritten() ? undefined : "indigo"}
+                  weight="bold"
+                >
+                  {getIsPublisherWritten()
+                    ? game.gamePublisher
+                    : t_gameSubmit("gamePublisher")}
+                </Text>
+                <Text as="span" color="red" weight="bold">
+                  *
+                </Text>
+                <br />
+                {username && (
+                  <div>
+                    <Text as="span">{`${t("author")}: `}</Text>
+                    <Text as="span" weight="bold">
+                      {username}
                     </Text>
-                    <Text as="span" color="red" weight="bold">
-                      *
-                    </Text>
-                    <br />
-                    {username && (
-                      <div>
-                        <Text as="span">{`${t("author")}: `}</Text>
-                        <Text as="span" weight="bold">
-                          {username}
-                        </Text>
-                      </div>
-                    )}
-                  </Link>
-                </HoverCard.Trigger>
-                <HoverCard.Content maxWidth="450px">
+                  </div>
+                )}
+              </div>
+              <Popover>
+                <PopoverTrigger>
+                  <IconButton size="1">
+                    <Pencil width="60%" />
+                  </IconButton>
+                </PopoverTrigger>
+                <PopoverContent>
                   <Card>
                     <CardHeader>
                       <CardTitle>{t_gameSubmit("gamePublisher")}</CardTitle>
@@ -452,45 +457,48 @@ export default function GameStoreViewEditor() {
                       />
                     </CardContent>
                   </Card>
-                </HoverCard.Content>
-              </HoverCard.Root>
+                </PopoverContent>
+              </Popover>
             </div>
 
             <div className="flex items-center gap-2">
               <Tag className="h-5 w-5 text-muted-foreground" />
-              <HoverCard.Root>
-                <HoverCard.Trigger>
-                  <Link href="#">
-                    <Text as="span">{`${t("genre")} (한국어): `}</Text>
-                    <Text
-                      as="span"
-                      color={getIsGenreWritten("ko") ? undefined : "indigo"}
-                      weight="bold"
-                    >
-                      {getIsGenreWritten("ko")
-                        ? game.gameGenre.ko
-                        : t_gameSubmit("gameGenre")}
-                    </Text>
-                    <Text as="span" color="red" weight="bold">
-                      *
-                    </Text>
-                    <br />
-                    <Text as="span">{`${t("genre")} (English): `}</Text>
-                    <Text
-                      as="span"
-                      color={getIsGenreWritten("en") ? undefined : "indigo"}
-                      weight="bold"
-                    >
-                      {getIsGenreWritten("en")
-                        ? game.gameGenre.en
-                        : t_gameSubmit("gameGenre")}
-                    </Text>
-                    <Text as="span" color="red" weight="bold">
-                      *
-                    </Text>
-                  </Link>
-                </HoverCard.Trigger>
-                <HoverCard.Content maxWidth="450px">
+              <div>
+                <Text as="span">{`${t("genre")} (한국어): `}</Text>
+                <Text
+                  as="span"
+                  color={getIsGenreWritten("ko") ? undefined : "indigo"}
+                  weight="bold"
+                >
+                  {getIsGenreWritten("ko")
+                    ? game.gameGenre.ko
+                    : t_gameSubmit("gameGenre")}
+                </Text>
+                <Text as="span" color="red" weight="bold">
+                  *
+                </Text>
+                <br />
+                <Text as="span">{`${t("genre")} (English): `}</Text>
+                <Text
+                  as="span"
+                  color={getIsGenreWritten("en") ? undefined : "indigo"}
+                  weight="bold"
+                >
+                  {getIsGenreWritten("en")
+                    ? game.gameGenre.en
+                    : t_gameSubmit("gameGenre")}
+                </Text>
+                <Text as="span" color="red" weight="bold">
+                  *
+                </Text>
+              </div>
+              <Popover>
+                <PopoverTrigger>
+                  <IconButton size="1">
+                    <Pencil width="60%" />
+                  </IconButton>
+                </PopoverTrigger>
+                <PopoverContent>
                   <Card>
                     <CardHeader>
                       <CardTitle>{t_gameSubmit("gameGenre")}</CardTitle>
@@ -515,31 +523,34 @@ export default function GameStoreViewEditor() {
                       />
                     </CardContent>
                   </Card>
-                </HoverCard.Content>
-              </HoverCard.Root>
+                </PopoverContent>
+              </Popover>
             </div>
 
             <div className="flex items-center gap-2">
               <LucideCalendar className="h-5 w-5 text-muted-foreground" />
-              <HoverCard.Root>
-                <HoverCard.Trigger>
-                  <Link href="#">
-                    <Text as="span">{`${t("released-date")}: `}</Text>
-                    <Text
-                      as="span"
-                      color={getIsPublisherWritten() ? undefined : "indigo"}
-                      weight="bold"
-                    >
-                      {getIsReleasedDateSelected()
-                        ? formatDate(locale, game.gameReleasedDate)
-                        : t_gameSubmit("gameReleasedDate")}
-                    </Text>
-                    <Text as="span" color="red" weight="bold">
-                      *
-                    </Text>
-                  </Link>
-                </HoverCard.Trigger>
-                <HoverCard.Content maxWidth="450px">
+              <div className="mr-1">
+                <Text as="span">{`${t("released-date")}: `}</Text>
+                <Text
+                  as="span"
+                  color={getIsPublisherWritten() ? undefined : "indigo"}
+                  weight="bold"
+                >
+                  {getIsReleasedDateSelected()
+                    ? formatDate(locale, game.gameReleasedDate)
+                    : t_gameSubmit("gameReleasedDate")}
+                </Text>
+                <Text as="span" color="red" weight="bold">
+                  *
+                </Text>
+              </div>
+              <Popover>
+                <PopoverTrigger>
+                  <IconButton size="1">
+                    <Pencil width="60%" />
+                  </IconButton>
+                </PopoverTrigger>
+                <PopoverContent>
                   <Card>
                     <CardHeader>
                       <CardTitle>{t_gameSubmit("gameReleasedDate")}</CardTitle>
@@ -576,8 +587,8 @@ export default function GameStoreViewEditor() {
                       </Popover>
                     </CardContent>
                   </Card>
-                </HoverCard.Content>
-              </HoverCard.Root>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
 
@@ -637,7 +648,7 @@ export default function GameStoreViewEditor() {
                         variant="outline"
                         onClick={openDescriptionModalKo}
                       >
-                        <Edit className="mr-2 h-4 w-4" />
+                        <Pencil className="mr-2 h-4 w-4" />
                         {t_gameSubmit("edit-md")}
                       </Button>
                     </DialogTrigger>
@@ -669,7 +680,7 @@ export default function GameStoreViewEditor() {
                         variant="outline"
                         onClick={openDescriptionModalEn}
                       >
-                        <Edit className="mr-2 h-4 w-4" />
+                        <Pencil className="mr-2 h-4 w-4" />
                         {t_gameSubmit("edit-md")}
                       </Button>
                     </DialogTrigger>

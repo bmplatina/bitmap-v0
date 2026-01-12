@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Spinner, Text } from "@radix-ui/themes";
 import {
   Card,
   CardContent,
@@ -12,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
-import { Loader2 } from "lucide-react";
 import type { Game } from "@/lib/types";
 import { toast } from "@/hooks/use-toast";
 import { getGames, getPendingGames, uploadGameImage } from "@/lib/utils";
@@ -54,10 +54,6 @@ export default function GameDetailEditor() {
 
   function setGameWebsite(value: string) {
     updateField("gameWebsite", value);
-  }
-
-  function setGameVideoURL(value: string) {
-    updateField("gameVideoURL", value);
   }
 
   function setGameDownloadMacURL(value: string) {
@@ -130,8 +126,6 @@ export default function GameDetailEditor() {
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6">{t("game-submit")}</h1>
-
       <div className="space-y-6">
         {/* 게임 ID */}
         <Card>
@@ -142,10 +136,10 @@ export default function GameDetailEditor() {
           <CardContent>
             {isLoadingGameId ? (
               <div className="flex items-center space-x-2">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span className="text-muted-foreground">
+                <Spinner className="h-4 w-4" />
+                <Text as="span" className="text-muted-foreground">
                   {t("gameIdAutoGen")}
-                </span>
+                </Text>
               </div>
             ) : (
               <Input value={game.gameId} disabled />
@@ -291,26 +285,6 @@ export default function GameDetailEditor() {
           </CardContent>
         </Card>
 
-        <Separator />
-
-        {/* 비디오 URL */}
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("gameVideoURL")}</CardTitle>
-            <CardDescription>{t("gameVideoURLDesc")}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Input
-              value={game.gameVideoURL}
-              onChange={(e) => setGameVideoURL(e.target.value)}
-              placeholder="https://www.youtube.com/embed/..."
-              type="url"
-            />
-          </CardContent>
-        </Card>
-
-        <Separator />
-
         {/* 다운로드 URL */}
         <Card>
           <CardHeader>
@@ -342,35 +316,6 @@ export default function GameDetailEditor() {
                 />
               </div>
             )}
-          </CardContent>
-        </Card>
-
-        <Separator />
-
-        {/* 이미지 URL */}
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("gameImageURL")}</CardTitle>
-            <CardDescription>
-              {t("gameImageURLDesc")}
-              <br />
-              (1:1.414 비율 권장, 최대 10MiB 업로드 가능)
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* <Input
-              value={gameImageURL}
-              onChange={(e) => setGameImageURL(e.target.value)}
-              placeholder="https://example.com/image.jpg"
-              type="url"
-            /> */}
-            <div>
-              <input
-                type="file"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-              />
-              <button onClick={handleUpload}>업로드 하기</button>
-            </div>
           </CardContent>
         </Card>
 

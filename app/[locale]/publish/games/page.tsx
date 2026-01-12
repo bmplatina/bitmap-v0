@@ -6,6 +6,8 @@ import { Box, AlertDialog, Tabs, Text, Flex } from "@radix-ui/themes";
 import { useAuth } from "@/lib/AuthContext";
 import { GamePublishProvider } from "@/lib/GamePublishContext";
 import GameDetailEditor from "@/components/publish/games/game-detail-editor";
+import GameAssetsUploader from "@/components/publish/games/game-assets-uploader";
+import GamePublishSubmitter from "@/components/publish/games/game-publish-submitter";
 import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -55,14 +57,14 @@ export default function SubmitGames() {
       </AlertDialog.Root>
 
       <Tabs.Root defaultValue="store-viewed-info">
-        <Tabs.List>
+        <Tabs.List className="sticky top-0 z-10 bg-background border-b-0">
           <Tabs.Trigger value="store-viewed-info">
             {t("store-viewed-info")}
           </Tabs.Trigger>
           <Tabs.Trigger value="detailed-info">
             {t("detailed-info")}
           </Tabs.Trigger>
-          <Tabs.Trigger value="media">{t("media")}</Tabs.Trigger>
+          <Tabs.Trigger value="assets">{t("assets")}</Tabs.Trigger>
           <Tabs.Trigger value="submit">{t("submit")}</Tabs.Trigger>
         </Tabs.List>
 
@@ -75,15 +77,11 @@ export default function SubmitGames() {
             <GameDetailEditor />
           </Tabs.Content>
 
-          <Tabs.Content value="media">
-            <Text size="2">
-              Edit your profile or update contact information.
-            </Text>
+          <Tabs.Content value="assets">
+            <GameAssetsUploader />
           </Tabs.Content>
           <Tabs.Content value="submit">
-            <Text size="2">
-              Edit your profile or update contact information.
-            </Text>
+            <GamePublishSubmitter />
           </Tabs.Content>
         </Box>
       </Tabs.Root>

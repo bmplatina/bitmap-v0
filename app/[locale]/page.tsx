@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getYouTubeVideos, getGames } from "@/lib/utils";
 import type { Game } from "@/lib/types";
 import { getTranslations } from "next-intl/server";
+import GameRedirectButton from "@/components/game-redirect-button";
 
 export default async function Home() {
   // 서버에서 직접 데이터 페칭
@@ -54,31 +55,11 @@ export default async function Home() {
           <div className="flex gap-4 pb-4">
             {games.length > 0 ? (
               games.map((game) => (
-                <Link
+                <GameRedirectButton
                   key={game.gameId}
-                  href={`/games/${game.gameId}`}
-                  className="flex-none w-[85vw] md:w-[300px] aspect-video relative rounded-lg overflow-hidden shadow-md group"
-                >
-                  <Image
-                    src={
-                      game.gameImageURL[1] ||
-                      game.gameImageURL[0] ||
-                      "/placeholder.svg?height=400&width=283"
-                    }
-                    alt={game.gameTitle}
-                    fill
-                    className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
-                  />
-                  {/* 하단 텍스트 오버레이 */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-4 text-left">
-                    <h3 className="text-white text-2xl font-bold leading-tight">
-                      {game.gameTitle}
-                    </h3>
-                    <p className="text-white/80 text-sm font-medium">
-                      {game.gameDeveloper}
-                    </p>
-                  </div>
-                </Link>
+                  game={game}
+                  disabled={false}
+                />
               ))
             ) : (
               <p className="text-gray-500 w-full text-center py-10">

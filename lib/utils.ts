@@ -99,6 +99,35 @@ const renderMarkdown = (text: string) => {
   return html;
 };
 
+function extractYoutubeId(input: string): string {
+  // 1. 이미 ID 형태(11자리, 특수문자 포함 가능)만 입력되었는지 확인하는 정규식
+  // 유튜브 ID는 보통 11자리이며 영문 대소문자, 숫자, -, _ 로 구성됩니다.
+  const idOnlyRegex = /^[a-zA-Z0-9_-]{11}$/;
+
+  // 2. 다양한 유튜브 URL 패턴에서 ID를 추출하는 정규식
+  // - youtube.com/watch?v=ID
+  // - youtu.be/ID
+  // - youtube.com/embed/ID
+  // - youtube.com/v/ID
+  const urlRegex =
+    /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+
+  // 먼저 입력값이 이미 11자리 ID인지 확인
+  if (idOnlyRegex.test(input)) {
+    return input;
+  }
+
+  // URL에서 ID 추출 시도
+  const match = input.match(urlRegex);
+
+  if (match && match[1]) {
+    return match[1];
+  }
+
+  // 매칭되는 것이 없다면 빈 문자열 또는 원본 반환 (에러 처리에 따라 선택)
+  return input;
+}
+
 /**
  * API 링크 생성
  * @param substring 도메인 뒤 링크
@@ -465,6 +494,7 @@ const checkIsEmailDuplicated = async (email: string): Promise<boolean> => {
 export {
   cn,
   checkAuthor,
+  extractYoutubeId,
   formatDate,
   getApiLinkByPurpose,
   getEula,

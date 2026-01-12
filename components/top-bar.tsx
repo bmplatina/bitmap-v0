@@ -5,19 +5,20 @@ import { useEffect, useMemo, useState } from "react";
 import { Search, Menu, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Link } from "@/i18n/routing";
-import { useRouter } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 import Image from "next/image";
 import { MobileSidebar } from "./mobile-sidebar";
 import type { Game } from "@/lib/types";
 import { getGames } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { convertQwertyToHangul, getChoseong } from "es-hangul";
-import { Quote } from "@radix-ui/themes";
+import { Avatar } from "@radix-ui/themes";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function TopBar() {
   const router = useRouter();
   const t = useTranslations("Common");
+  const { bIsLoggedIn, username } = useAuth();
   // Electron 및 MacOS 환경 감지 변수 (실제 감지 코드는 구현하지 않음)
   const bIsElectron: boolean = false; // 예시 값, 실제로는 Electron 감지 로직 필요
   const bIsMacOS: boolean = false; // 예시 값, 실제로는 MacOS 감지 로직 필요
@@ -229,27 +230,36 @@ export default function TopBar() {
           )}
         </div>
 
-        {/* 모바일 검색 토글 버튼 */}
-        <div className="md:hidden ml-auto pl-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => {
-              if (isMobileSearchOpen) {
-                setSearchQuery("");
-                setIsSearchOpen(false);
-              }
-              setIsMobileSearchOpen(!isMobileSearchOpen);
-            }}
-          >
-            {isMobileSearchOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Search className="h-5 w-5" />
-            )}
-            <span className="sr-only">검색 토글</span>
-          </Button>
+        <div className="ml-auto pl-2 flex items-center gap-2">
+          {/* 모바일 검색 토글 버튼 */}
+          <div className="md:hidden flex items-center">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => {
+                if (isMobileSearchOpen) {
+                  setSearchQuery("");
+                  setIsSearchOpen(false);
+                }
+                setIsMobileSearchOpen(!isMobileSearchOpen);
+              }}
+            >
+              {isMobileSearchOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Search className="h-5 w-5" />
+              )}
+              <span className="sr-only">검색 토글</span>
+            </Button>
+          </div>
+          {bIsLoggedIn && (
+            <Avatar
+              radius="full"
+              size="2"
+              fallback={username.charAt(0).toUpperCase()}
+            />
+          )}
         </div>
       </div>
 
