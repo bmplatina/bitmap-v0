@@ -15,7 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import type { Game } from "@/lib/types";
 import { toast } from "@/hooks/use-toast";
-import { getGames, getPendingGames, uploadGameImage } from "@/lib/utils";
+import { getGames } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { useGameForm } from "@/lib/GamePublishContext";
 
@@ -31,14 +31,6 @@ export default function GameDetailEditor() {
 
   // 로딩 상태
   const [isLoadingGameId, setIsLoadingGameId] = useState(true);
-
-  const [file, setFile] = useState<File | null>(null);
-
-  async function handleUpload() {
-    if (!file) return;
-
-    await uploadGameImage(file);
-  }
 
   function setGameId(value: number) {
     updateField("gameId", value);
@@ -94,16 +86,9 @@ export default function GameDetailEditor() {
       try {
         setIsLoadingGameId(true);
 
-        const fetchedGames: Game[] = await getGames();
-        const fetchedGamesPending: Game[] = await getPendingGames();
+        const fetchedGames: Game[] = await getGames("all");
 
-        // 기존 게임 수 + 대기 중인 게임 수 + 1 (새로운 게임)
-        const newGameId = fetchedGames.length + fetchedGamesPending.length;
-        setGameId(newGameId);
-
-        console.log(
-          `게임 ID 생성: 기존 게임 ${fetchedGames.length}개 + 대기 중인 게임 ${fetchedGamesPending.length}개 = ${newGameId}`
-        );
+        setGameId(fetchedGames.length);
       } catch (error) {
         console.error("게임 데이터를 가져오는 중 오류가 발생했습니다:", error);
 

@@ -37,7 +37,7 @@ export default function TopBar() {
   useEffect(() => {
     let isMounted = true;
 
-    getGames()
+    getGames("released")
       .then((data) => {
         if (!isMounted) return;
         setGames(data);

@@ -5,6 +5,7 @@ export interface stringLocalized {
 
 export interface Game {
   gameId: number;
+  isApproved: boolean;
   uid: string;
   gameTitle: string;
   gameLatestRevision: number;

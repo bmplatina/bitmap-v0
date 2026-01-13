@@ -1,12 +1,11 @@
 import { Suspense } from "react";
 import type { Game } from "@/lib/types";
 import GameCard from "@/components/game-card";
-import { getPendingGames } from "@/lib/utils";
+import { getGames } from "@/lib/utils";
 
 export default async function PendingGamesPage() {
   // 서버 컴포넌트에서 직접 데이터 가져오기
-  const games: Game[] = await getPendingGames();
-
+  const games: Game[] = await getGames("pending");
   return (
     <div className="p-6 w-full">
       <h1 className="text-3xl font-bold mb-6">대기 중인 게임</h1>

@@ -38,7 +38,6 @@ import { toast } from "@/hooks/use-toast";
 import {
   renderMarkdown,
   getGames,
-  getPendingGames,
   submitGame,
   uploadGameImage,
 } from "@/lib/utils";
@@ -127,6 +126,7 @@ export default function RegisterGamePage() {
     return {
       gameId,
       uid,
+      isApproved: false,
       gameTitle,
       gameLatestRevision,
       gamePlatformWindows: gamePlatformWindows,
@@ -189,6 +189,7 @@ export default function RegisterGamePage() {
       const postGame: Game = {
         gameId,
         uid,
+        isApproved: false,
         gameTitle,
         gameLatestRevision,
         gamePlatformWindows: gamePlatformWindows,
@@ -252,7 +253,7 @@ export default function RegisterGamePage() {
   async function handleUpload() {
     if (!file) return;
 
-    await uploadGameImage(file);
+    await uploadGameImage(file, "", "");
   }
 
   // 마크다운 편집 모달 열기
@@ -294,16 +295,9 @@ export default function RegisterGamePage() {
       try {
         setIsLoadingGameId(true);
 
-        const fetchedGames: Game[] = await getGames();
-        const fetchedGamesPending: Game[] = await getPendingGames();
+        const fetchedGames: Game[] = await getGames("all");
 
-        // 기존 게임 수 + 대기 중인 게임 수 + 1 (새로운 게임)
-        const newGameId = fetchedGames.length + fetchedGamesPending.length;
-        setGameId(newGameId);
-
-        console.log(
-          `게임 ID 생성: 기존 게임 ${fetchedGames.length}개 + 대기 중인 게임 ${fetchedGamesPending.length}개 = ${newGameId}`
-        );
+        setGameId(fetchedGames.length);
       } catch (error) {
         console.error("게임 데이터를 가져오는 중 오류가 발생했습니다:", error);
 

@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { useDropzone } from "react-dropzone";
 import Image from "next/image";
-import { ScrollArea, Skeleton, Progress, Text } from "@radix-ui/themes";
+import { ScrollArea, Skeleton } from "@radix-ui/themes"; // @radix-ui/themes 사용
 import {
   Card,
   CardHeader,
@@ -18,48 +17,91 @@ import { useGameForm } from "@/lib/GamePublishContext";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { extractYoutubeId } from "@/lib/utils";
+import { extractYoutubeId, uploadGameImage } from "@/lib/utils";
 
 const GameRedirectButton = dynamic(
   () => import("@/components/game-redirect-button"),
   {
     ssr: false,
-    loading: () => <Skeleton />, // 로딩 중 보여줄 UI
+    loading: () => <Skeleton />,
   }
 );
 
 export default function GameAssetsUploader() {
   const t = useTranslations("GameSubmit");
   const t_common = useTranslations("Common");
-  const {
-    gameData: game,
-    updateField,
-    updateLocalizedField,
-    updateImages,
-    resetForm,
-  } = useGameForm();
+  const { gameData: game, updateField, setImage, updateImages } = useGameForm();
 
   const [tempYouTubeVideoId, setTempYouTubeVideoId] = useState<string>("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 컴포넌트 마운트 시 로컬 스토리지에서 캐시된 미리보기(Base64)가 있는지 확인
+  useEffect(() => {
+    const cachedImage = localStorage.getItem(`preview_${game.gameBinaryName}`);
+    if (cachedImage) {
+      setPreviewUrl(cachedImage);
+    }
+  }, [game.gameBinaryName]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+
+      // 즉각적인 미리보기를 위한 URL 생성
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
+
+      // (선택 사항) 로컬 스토리지에 Base64로 저장하여 새로고침 시에도 유지하고 싶다면:
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        localStorage.setItem(`preview_${game.gameBinaryName}`, base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  async function handleUpload(
+    imageType: "poster" | "gameListBanner" | "gameImage"
+  ) {
+    const token = localStorage.getItem("accessToken");
+    if (token && selectedFile && game.gameBinaryName.trim().length !== 0) {
+      const result = await uploadGameImage(
+        selectedFile,
+        token,
+        game.gameBinaryName,
+        (percent) => {}
+      );
+      if (result.includes("dl")) {
+        switch (imageType) {
+          case "poster":
+            setImage(0, result);
+            break;
+          case "gameListBanner":
+            setImage(1, result);
+            break;
+          case "gameImage":
+            updateImages([...game.gameImageURL, result]);
+            break;
+        }
+      }
+    } else {
+      alert("파일을 먼저 선택해주세요.");
+    }
+  }
 
   function setYouTubeTrailerId(id: string) {
     updateField("gameVideoURL", extractYoutubeId(id));
   }
 
-  function isYouTubeLinkValid() {
-    return extractYoutubeId(tempYouTubeVideoId).length === 11;
-  }
-
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    // 파일 처리 로직
-    console.log(acceptedFiles);
-  }, []);
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
   return (
     <div className="container mx-auto p-6 max-w-4xl">
       <div className="space-y-6">
-        {/* 비디오 URL */}
+        {/* 유튜브 트레일러 섹션 (기존 유지) */}
         <Card>
           <CardHeader>
             <CardTitle>{t("gameVideoURL")}</CardTitle>
@@ -70,22 +112,12 @@ export default function GameAssetsUploader() {
               value={tempYouTubeVideoId}
               onChange={(e) => setTempYouTubeVideoId(e.target.value)}
               placeholder="https://youtu.be/..."
-              type="url"
             />
-            {game.gameVideoURL.length === 11 && (
-              <div className="mt-4 shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted">
-                <iframe
-                  src={`https://www.youtube.com/embed/${game.gameVideoURL}`}
-                  className="absolute inset-0 w-full h-full"
-                  allowFullScreen
-                />
-              </div>
-            )}
           </CardContent>
           <CardFooter>
             <Button
               onClick={() => setYouTubeTrailerId(tempYouTubeVideoId)}
-              disabled={!isYouTubeLinkValid()}
+              disabled={extractYoutubeId(tempYouTubeVideoId).length !== 11}
             >
               {t_common("apply")}
             </Button>
@@ -94,107 +126,122 @@ export default function GameAssetsUploader() {
 
         <Separator />
 
-        {/* 이미지 URL */}
+        {/* 파일 업로드 섹션 */}
         <Card>
           <CardHeader>
             <CardTitle>{t("gamePoster")}</CardTitle>
             <CardDescription>
-              {t("gamePosterDesc")}
-              <br />
-              (1:1.414 비율 권장, 최대 10MiB 업로드 가능)
+              {t("gamePosterDesc")} (권장 1:1.414, Max 10MB)
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div
-              {...getRootProps()}
-              className={`dropzone ${isDragActive ? "active" : ""}`}
-              style={{
-                border: "2px dashed #ccc",
-                padding: "20px",
-                textAlign: "center",
-              }}
-            >
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <Text as="p">파일을 여기에 놓으세요!</Text>
-              ) : (
-                <Text as="p">파일을 드래그하거나 클릭하여 선택하세요.</Text>
-              )}
-
-              {/* 업로드 상태 표시 시 Radix Progress 사용 */}
-              <Progress value={25} size="1" />
+          <CardContent className="space-y-4">
+            <div className="flex gap-2">
+              <Input
+                readOnly
+                placeholder="파일을 선택하세요..."
+                value={selectedFile?.name || ""}
+                onClick={() => fileInputRef.current?.click()}
+                className="cursor-pointer"
+              />
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+                accept="image/*"
+              />
+              <Button
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                파일 선택
+              </Button>
             </div>
+
+            {(previewUrl || game.gameImageURL[0]) && (
+              <div className="relative w-48 aspect-[1/1.414] rounded-lg overflow-hidden border bg-muted">
+                <Image
+                  src={previewUrl || game.gameImageURL[0]}
+                  alt="Poster Preview"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                  {previewUrl ? "로컬 미리보기" : "서버 이미지"}
+                </div>
+              </div>
+            )}
           </CardContent>
+          <CardFooter>
+            <Button
+              onClick={() => handleUpload("poster")}
+              disabled={!selectedFile}
+            >
+              서버로 업로드
+            </Button>
+          </CardFooter>
         </Card>
 
         <Separator />
 
-        {/* 이미지 URL */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("gameListedImage")}</CardTitle>
-            <CardDescription>{t("gameListedImageDesc")}</CardDescription>
+            <CardTitle>{t("preview")}</CardTitle>
+            <CardDescription>{t("gameVideoURLDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div
-              {...getRootProps()}
-              className={`dropzone ${isDragActive ? "active" : ""}`}
-              style={{
-                border: "2px dashed #ccc",
-                padding: "20px",
-                textAlign: "center",
-              }}
-            >
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <Text as="p">파일을 여기에 놓으세요!</Text>
-              ) : (
-                <Text as="p">파일을 드래그하거나 클릭하여 선택하세요.</Text>
-              )}
-
-              {/* 업로드 상태 표시 시 Radix Progress 사용 */}
-              <Progress value={25} size="1" />
+            {/* 하단 전체 미리보기 (기존 유지 및 로컬 미리보기 반영) */}
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold mb-4">{t("preview")}</h3>
+              <ScrollArea type="always" scrollbars="horizontal">
+                <div className="flex gap-4 pb-4">
+                  {/* 로컬 미리보기가 있으면 가장 앞에 표시 */}
+                  {game.gameVideoURL && (
+                    <div className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${game.gameVideoURL}`}
+                        className="absolute inset-0 w-full h-full"
+                        allowFullScreen
+                      />
+                    </div>
+                  )}
+                  {game.gameImageURL[0] === "" && previewUrl && (
+                    <div className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden ring-4 ring-primary">
+                      <Image
+                        src={previewUrl}
+                        alt="Local Preview"
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center text-white font-bold text-lg">
+                        업로드 대기 중
+                      </div>
+                    </div>
+                  )}
+                  {/* 기존 서버 이미지들 */}
+                  {game.gameImageURL.map((url, index) => (
+                    <div
+                      key={index}
+                      className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
+                    >
+                      <Image
+                        src={url}
+                        alt={`Screenshot ${index}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
             </div>
+            <Separator />
+            {/* 미리보기 영역: 업로드 전/후 상태를 시각적으로 보여줌 */}
             <div className="flex gap-4 pb-4">
               <GameRedirectButton disabled={true} game={game} />
             </div>
           </CardContent>
         </Card>
-
-        <Separator />
-
-        <div className="space-y-6">
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4">{t("preview")}</h3>
-            <ScrollArea type="always" scrollbars="horizontal">
-              <div className="flex gap-4 pb-4">
-                <Card className=""></Card>
-                {game.gameVideoURL && (
-                  <div className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted">
-                    <iframe
-                      src={`https://www.youtube.com/embed/${game.gameVideoURL}`}
-                      className="absolute inset-0 w-full h-full"
-                      allowFullScreen
-                    />
-                  </div>
-                )}
-                {game.gameImageURL.slice(1).map((url, index) => (
-                  <div
-                    key={index}
-                    className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
-                  >
-                    <Image
-                      src={url}
-                      alt={`${game.gameTitle} screenshot ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </div>
-        </div>
       </div>
     </div>
   );

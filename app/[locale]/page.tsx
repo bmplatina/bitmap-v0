@@ -9,7 +9,7 @@ import GameRedirectButton from "@/components/game-redirect-button";
 export default async function Home() {
   // 서버에서 직접 데이터 페칭
   const youtubeVideos = await getYouTubeVideos("UCL137ZWChauNFsma6ifhNdA");
-  const games: Game[] = await getGames();
+  const games: Game[] = await getGames("released");
   const t = await getTranslations("MainPage");
 
   return (

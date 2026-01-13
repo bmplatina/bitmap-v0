@@ -21,12 +21,15 @@ interface GameFormContextType {
   ) => void;
   // 이미지 배열 업데이트
   updateImages: (urls: string[]) => void;
+  // 특정 인덱스 이미지 업데이트 (없으면 추가/할당)
+  setImage: (arrayIndex: number, arrayElement: string) => void;
   resetForm: () => void;
 }
 
 const initialGameData: Game = {
   gameId: 0,
   uid: "",
+  isApproved: false,
   gameTitle: "",
   gameLatestRevision: 1,
   gamePlatformWindows: false,
@@ -82,9 +85,20 @@ export function GamePublishProvider({ children }: { children: ReactNode }) {
     []
   );
 
-  // 3. 이미지 배열 업데이트
+  // 3. 이미지 배열 전체 업데이트
   const updateImages = useCallback((urls: string[]) => {
     setGameData((prev) => ({ ...prev, gameImageURL: urls }));
+  }, []);
+
+  // 4. 특정 인덱스 이미지 업데이트 (존재하면 교체, 없으면 해당 인덱스에 할당/확장)
+  const setImage = useCallback((arrayIndex: number, arrayElement: string) => {
+    setGameData((prev) => {
+      const newImages = [...prev.gameImageURL];
+      // 해당 인덱스에 값 할당 (배열 길이가 모자르면 자동으로 늘어남)
+      newImages[arrayIndex] = arrayElement;
+      // 빈 슬롯(undefined) 제거를 원한다면: return { ...prev, gameImageURL: newImages.filter(Boolean) };
+      return { ...prev, gameImageURL: newImages };
+    });
   }, []);
 
   const resetForm = useCallback(() => setGameData(initialGameData), []);
@@ -96,6 +110,7 @@ export function GamePublishProvider({ children }: { children: ReactNode }) {
         updateField,
         updateLocalizedField,
         updateImages,
+        setImage,
         resetForm,
       }}
     >
