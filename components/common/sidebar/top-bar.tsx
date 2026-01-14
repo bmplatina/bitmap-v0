@@ -141,7 +141,7 @@ export default function TopBar() {
             onClick={toggleMobileSidebar}
           >
             <Menu className="h-5 w-5" />
-            <span className="sr-only">메뉴 열기</span>
+            <span className="sr-only">{t("open-menu")}</span>
           </IconButton>
         </div>
 
@@ -167,8 +167,10 @@ export default function TopBar() {
 
         {/* 검색 폼 */}
         <div
-          className={`flex-1 max-w-md mx-auto relative ${
-            isMobileSearchOpen ? "block" : "hidden md:block"
+          className={`max-w-md mx-auto ${
+            isMobileSearchOpen
+              ? "flex-1 relative block"
+              : "hidden md:block md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full"
           }`}
         >
           <form onSubmit={handleSearch}>
@@ -229,7 +231,7 @@ export default function TopBar() {
                 </div>
               ) : (
                 <div className="p-4 text-center text-sm text-muted-foreground">
-                  검색 결과가 없습니다.
+                  {t("search-no-results")}
                 </div>
               )}
             </div>
@@ -256,30 +258,32 @@ export default function TopBar() {
               ) : (
                 <Search className="h-5 w-5" />
               )}
-              <span className="sr-only">검색 토글</span>
+              <span className="sr-only">{t("search-toggle")}</span>
             </IconButton>
           </div>
-          {bIsLoggedIn && (
-            <Popover.Root>
-              <Popover.Trigger>
-                <IconButton variant="ghost" radius="full">
-                  <Avatar
-                    radius="full"
-                    size="2"
-                    fallback={username.charAt(0).toUpperCase()}
-                  />
-                </IconButton>
-              </Popover.Trigger>
-              <Popover.Content>
-                <ProfilePopover />
-              </Popover.Content>
-            </Popover.Root>
-          )}
-          {getIsSigninButtonActive() && (
-            <Button radius="full" onClick={() => router.push("/auth")}>
-              Login
-            </Button>
-          )}
+          <div className="flex items-center">
+            {bIsLoggedIn && (
+              <Popover.Root>
+                <Popover.Trigger>
+                  <IconButton variant="ghost" radius="full">
+                    <Avatar
+                      radius="full"
+                      size="2"
+                      fallback={username.charAt(0).toUpperCase()}
+                    />
+                  </IconButton>
+                </Popover.Trigger>
+                <Popover.Content>
+                  <ProfilePopover />
+                </Popover.Content>
+              </Popover.Root>
+            )}
+            {getIsSigninButtonActive() && (
+              <Button radius="full" onClick={() => router.push("/auth")}>
+                {t("signin")}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -296,7 +300,7 @@ export default function TopBar() {
           <div className="fixed left-0 top-0 h-full w-64 bg-background border-r shadow-lg transform transition-transform duration-300 ease-in-out">
             {/* 사이드바 헤더 */}
             <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-lg font-semibold">메뉴</h2>
+              <h2 className="text-lg font-semibold">{t("menu")}</h2>
               <IconButton
                 variant="ghost"
                 className="h-8 w-8"
@@ -304,7 +308,7 @@ export default function TopBar() {
                 onClick={closeMobileSidebar}
               >
                 <X className="h-5 w-5" />
-                <span className="sr-only">메뉴 닫기</span>
+                <span className="sr-only">{t("close-menu")}</span>
               </IconButton>
             </div>
 

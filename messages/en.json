@@ -206,10 +206,18 @@
     "edit": "Edit",
     "preview": "Preview",
     "preview-blank": "No content to preview.",
+    "menu": "Menu",
+    "open-menu": "Open Menu",
+    "close-menu": "Close Menu",
+    "signin": "Sign In",
+    "signout": "Sign Out",
+    "search-no-results": "No search results found.",
+    "search-toggle": "Search Toggle",
 
     "bitmap-server-inaccessible": "Bitmap Store couldn't reach to server. Please check your internet connection.",
     "data-not-processable": "Bitmap Store couldn't process the data.",
-    "decode-failed": "Bitmap Store couldn't interpret the data from server."
+    "decode-failed": "Bitmap Store couldn't interpret the data from server.",
+    "search": "Search"
   },
 
   "Settings": {

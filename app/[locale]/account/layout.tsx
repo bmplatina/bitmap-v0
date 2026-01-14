@@ -27,17 +27,14 @@ export default function AccountLayout({
   return (
     <div>
       <TabNav.Root className="sticky top-0 z-10 bg-background border-b-0">
-        <TabNav.Link href="/account" active={pathname === "/account"}>
-          {t("general-info")}
+        <TabNav.Link asChild active={pathname === "/account"}>
+          <Link href="/account">{t("general-info")}</Link>
         </TabNav.Link>
-        <TabNav.Link href="/account/edit" active={pathname === "/account/edit"}>
-          {t("edit")}
+        <TabNav.Link asChild active={pathname === "/account/edit"}>
+          <Link href="/account/edit">{t("edit")}</Link>
         </TabNav.Link>
-        <TabNav.Link
-          href="/account/settings"
-          active={pathname === "/account/settings"}
-        >
-          {t("settings")}
+        <TabNav.Link asChild active={pathname === "/account/settings"}>
+          <Link href="/account/settings">{t("settings")}</Link>
         </TabNav.Link>
       </TabNav.Root>
       {bIsLoggedIn && children}
