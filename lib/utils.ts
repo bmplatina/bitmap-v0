@@ -12,10 +12,18 @@ import type {
 } from "@/lib/types";
 import axios from "axios";
 import dayjs from "dayjs";
+import localFont from "next/font/local";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+const pretendard = localFont({
+  src: "../app/[locale]/fonts/Pretendard/PretendardVariable.woff2", // 경로 확인 필요
+  display: "swap",
+  variable: "--font-pretendard", // CSS 변수 선언
+  weight: "45 920",
+});
 
 function getLocalizedString(locale: string, t: stringLocalized): string {
   return locale === "ko" ? t.ko : t.en;
@@ -496,6 +504,7 @@ export {
   getGameById,
   login,
   signup,
+  pretendard,
   renderMarkdown,
   submitGame,
   uploadGameImage,

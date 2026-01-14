@@ -238,7 +238,10 @@ export default function GameAssetsUploader() {
             <Separator />
             {/* 미리보기 영역: 업로드 전/후 상태를 시각적으로 보여줌 */}
             <div className="flex gap-4 pb-4">
-              <GameRedirectButton disabled={true} game={game} />
+              <GameRedirectButton
+                disabled={true}
+                game={game}
+              />
             </div>
           </CardContent>
         </Card>

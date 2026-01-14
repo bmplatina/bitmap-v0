@@ -13,9 +13,12 @@ import {
 import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/lib/AuthContext";
 import { useTranslations } from "next-intl";
+import { pretendard } from "@/lib/utils";
+import { useRouter } from "@/i18n/routing";
 
 export default function ProfilePopover() {
   const t = useTranslations("Authentication");
+  const router = useRouter();
 
   const {
     logout,
@@ -30,8 +33,12 @@ export default function ProfilePopover() {
   });
 
   return (
-    <Flex direction="column" gap="4" className="w-full max-w-md">
-      <Card>
+    <Flex
+      direction="column"
+      gap="4"
+      className="w-full max-w-[85vw] md:max-w-md"
+    >
+      <Card className={`${pretendard.variable} font-sans`}>
         <CardHeader>
           <CardTitle>Bitmap ID</CardTitle>
         </CardHeader>
@@ -45,7 +52,12 @@ export default function ProfilePopover() {
               <DataList.Label minWidth="88px">{t("email")}</DataList.Label>
               <DataList.Value>
                 <Flex align="center" gap="2">
-                  <Code variant="ghost">{emailResponse}</Code>
+                  <Code
+                    variant="ghost"
+                    className="break-all whitespace-pre-wrap"
+                  >
+                    {emailResponse}
+                  </Code>
                 </Flex>
               </DataList.Value>
             </DataList.Item>
@@ -67,7 +79,10 @@ export default function ProfilePopover() {
             </DataList.Item>
           </DataList.Root>
           <Flex direction="column" gap="2" className="mt-3">
-            <Button size="3" onClick={logout}>
+            <Button size="3" onClick={() => router.push("/account")}>
+              {t("account-settings")}
+            </Button>
+            <Button size="3" onClick={logout} color="red">
               {t("logout")}
             </Button>
           </Flex>

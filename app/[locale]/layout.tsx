@@ -11,17 +11,7 @@ import { ThemeProvider } from "@/components/common/theme-provider";
 import { TokenHandler } from "@/components/common/token-handler";
 import Sidebar from "@/components/common/sidebar/sidebar";
 import TopBar from "@/components/common/sidebar/top-bar";
-import localFont from "next/font/local";
-
-const inter = Inter({ subsets: ["latin"] });
-
-// 폰트 설정
-const pretendard = localFont({
-  src: "./fonts/Pretendard/PretendardVariable.woff2", // 경로 확인 필요
-  display: "swap",
-  variable: "--font-pretendard", // CSS 변수 선언
-  weight: "45 920",
-});
+import { pretendard } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Bitmap",

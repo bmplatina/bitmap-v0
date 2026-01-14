@@ -23,10 +23,9 @@ import {
   IconButton,
   ScrollArea,
   Text,
-  Flex,
-  Avatar,
-  Heading,
+  TextField,
   Tabs,
+  Flex,
 } from "@radix-ui/themes";
 import { useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
@@ -253,22 +252,24 @@ export default function GameStoreViewEditor() {
         <div className="lg:col-span-2">
           <div className="flex items-center gap-3 mb-4">
             <div className="mr-1">
-              <Text
-                size="7"
-                color={getIsTitleWritten() ? undefined : "indigo"}
-                weight="bold"
-              >
-                {getIsTitleWritten()
-                  ? game.gameTitle
-                  : t_gameSubmit("gameTitle")}
-              </Text>
-              <Text size="7" color="red" weight="bold">
-                *
-              </Text>
+              <Flex gap="2">
+                <TextField.Root
+                  value={
+                    getIsTitleWritten()
+                      ? game.gameTitle
+                      : t_gameSubmit("gameTitle")
+                  }
+                  size="3"
+                  disabled
+                ></TextField.Root>
+                <Text size="7" color="red" weight="bold">
+                  *
+                </Text>
+              </Flex>
             </div>
             <Popover>
               <PopoverTrigger>
-                <IconButton size="1">
+                <IconButton size="2">
                   <Pencil width="60%" />
                 </IconButton>
               </PopoverTrigger>
@@ -298,37 +299,38 @@ export default function GameStoreViewEditor() {
 
           <h2 className="text-xl text-muted-foreground mb-6">
             <div className="mr-1">
-              <Text as="span">{`${t_gameSubmit(
-                "gameHeadline"
-              )} (한국어): `}</Text>
-              <Text
-                as="span"
-                color={getIsGameHeadlineWritten("ko") ? undefined : "indigo"}
-                weight="bold"
-              >
-                {getIsGameHeadlineWritten("ko")
-                  ? game.gameHeadline.ko
-                  : t_gameSubmit("gameHeadline")}
-              </Text>
-              <Text as="span" color="red" weight="bold">
-                *
-              </Text>
-              <br />
-              <Text as="span">{`${t_gameSubmit(
-                "gameHeadline"
-              )} (English): `}</Text>
-              <Text
-                as="span"
-                color={getIsGameHeadlineWritten("en") ? undefined : "indigo"}
-                weight="bold"
-              >
-                {getIsGameHeadlineWritten("en")
-                  ? game.gameHeadline.en
-                  : t_gameSubmit("gameHeadline")}
-              </Text>
-              <Text as="span" color="red" weight="bold">
-                *
-              </Text>
+              <Flex gap="2">
+                <Text as="span">{`${t_gameSubmit(
+                  "gameHeadline"
+                )} (한국어): `}</Text>
+                <TextField.Root
+                  value={
+                    getIsGameHeadlineWritten("ko")
+                      ? game.gameHeadline.ko
+                      : t_gameSubmit("gameHeadline")
+                  }
+                  disabled
+                ></TextField.Root>
+                <Text color="red" weight="bold">
+                  *
+                </Text>
+              </Flex>
+              <Flex gap="2">
+                <Text as="span">{`${t_gameSubmit(
+                  "gameHeadline"
+                )} (English): `}</Text>
+                <TextField.Root
+                  value={
+                    getIsGameHeadlineWritten("en")
+                      ? game.gameHeadline.en
+                      : t_gameSubmit("gameHeadline")
+                  }
+                  disabled
+                ></TextField.Root>
+                <Text color="red" weight="bold">
+                  *
+                </Text>
+              </Flex>
             </div>
             <Popover>
               <PopoverTrigger>
@@ -367,19 +369,20 @@ export default function GameStoreViewEditor() {
             <div className="flex items-center gap-2">
               <Code className="h-5 w-5 text-muted-foreground" />
               <div className="mr-1">
-                <Text as="span">{`${t("developer")}: `}</Text>
-                <Text
-                  as="span"
-                  color={getIsDeveloperWritten() ? undefined : "indigo"}
-                  weight="bold"
-                >
-                  {getIsDeveloperWritten()
-                    ? game.gameDeveloper
-                    : t_gameSubmit("gameDeveloper")}
-                </Text>
-                <Text as="span" color="red" weight="bold">
-                  *
-                </Text>
+                <Flex gap="2">
+                  <Text as="span">{`${t("developer")}: `}</Text>
+                  <TextField.Root
+                    value={
+                      getIsDeveloperWritten()
+                        ? game.gameDeveloper
+                        : t_gameSubmit("gameDeveloper")
+                    }
+                    disabled
+                  ></TextField.Root>
+                  <Text color="red" weight="bold">
+                    *
+                  </Text>
+                </Flex>
               </div>
               <Popover>
                 <PopoverTrigger>
@@ -411,20 +414,20 @@ export default function GameStoreViewEditor() {
             <div className="flex items-center gap-2">
               <User className="h-5 w-5 text-muted-foreground" />
               <div className="mr-1">
-                <Text as="span">{`${t("publisher")}: `}</Text>
-                <Text
-                  as="span"
-                  color={getIsPublisherWritten() ? undefined : "indigo"}
-                  weight="bold"
-                >
-                  {getIsPublisherWritten()
-                    ? game.gamePublisher
-                    : t_gameSubmit("gamePublisher")}
-                </Text>
-                <Text as="span" color="red" weight="bold">
-                  *
-                </Text>
-                <br />
+                <Flex gap="2">
+                  <Text as="span">{`${t("publisher")}: `}</Text>
+                  <TextField.Root
+                    value={
+                      getIsPublisherWritten()
+                        ? game.gamePublisher
+                        : t_gameSubmit("gamePublisher")
+                    }
+                    disabled
+                  ></TextField.Root>
+                  <Text color="red" weight="bold">
+                    *
+                  </Text>
+                </Flex>
                 {username && (
                   <div>
                     <Text as="span">{`${t("author")}: `}</Text>
@@ -464,33 +467,35 @@ export default function GameStoreViewEditor() {
             <div className="flex items-center gap-2">
               <Tag className="h-5 w-5 text-muted-foreground" />
               <div>
-                <Text as="span">{`${t("genre")} (한국어): `}</Text>
-                <Text
-                  as="span"
-                  color={getIsGenreWritten("ko") ? undefined : "indigo"}
-                  weight="bold"
-                >
-                  {getIsGenreWritten("ko")
-                    ? game.gameGenre.ko
-                    : t_gameSubmit("gameGenre")}
-                </Text>
-                <Text as="span" color="red" weight="bold">
-                  *
-                </Text>
-                <br />
-                <Text as="span">{`${t("genre")} (English): `}</Text>
-                <Text
-                  as="span"
-                  color={getIsGenreWritten("en") ? undefined : "indigo"}
-                  weight="bold"
-                >
-                  {getIsGenreWritten("en")
-                    ? game.gameGenre.en
-                    : t_gameSubmit("gameGenre")}
-                </Text>
-                <Text as="span" color="red" weight="bold">
-                  *
-                </Text>
+                <Flex gap="2">
+                  <Text as="span">{`${t("genre")} (한국어): `}</Text>
+                  <TextField.Root
+                    value={
+                      getIsGenreWritten("ko")
+                        ? game.gameGenre.ko
+                        : t_gameSubmit("gameGenre")
+                    }
+                    disabled
+                  ></TextField.Root>
+                  <Text color="red" weight="bold">
+                    *
+                  </Text>
+                </Flex>
+
+                <Flex gap="2">
+                  <Text as="span">{`${t("genre")} (English): `}</Text>
+                  <TextField.Root
+                    value={
+                      getIsGenreWritten("en")
+                        ? game.gameGenre.en
+                        : t_gameSubmit("gameGenre")
+                    }
+                    disabled
+                  ></TextField.Root>
+                  <Text color="red" weight="bold">
+                    *
+                  </Text>
+                </Flex>
               </div>
               <Popover>
                 <PopoverTrigger>

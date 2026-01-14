@@ -28,6 +28,7 @@
   "Authentication": {
     "bitmap-id": "Bitmap ID",
     "bitmap-id-desc": "To use all Bitmap services, please sign in or sign up.",
+    "account-settings": "Account Settings",
     "settings": "Settings",
     "login": "Sign in",
     "login-google": "Login with Google",

@@ -80,6 +80,7 @@ export default function SubmitGames() {
           <Tabs.Content value="assets">
             <GameAssetsUploader />
           </Tabs.Content>
+
           <Tabs.Content value="submit">
             <GamePublishSubmitter />
           </Tabs.Content>

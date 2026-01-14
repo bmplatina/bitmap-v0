@@ -1,11 +1,22 @@
+"use client";
+
 import { Download } from "lucide-react";
 import { Button } from "./ui/button";
+import dynamic from "next/dynamic";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export default function BitmapAbout() {
   return (
     <div className="flex items-center justify-center h-full w-full">
       <div className="text-center">
         <p className="text-xl mb-2">Bitmap App</p>
+        {/* <div style={{ width: 300, height: 300 }}></div> */}
+        <Lottie
+          animationData={require("@/public/lottie_BitmapBaseIntro.json")}
+          loop={false}
+          autoplay={true}
+        />
         <p className="text-sm text-muted-foreground">
           Bitmap App은 예술과 기술을 넘나드는 창작자들과 정보를 공유하고, 그들이
           제작한 게임을 플레이하는 최고의 공간입니다.

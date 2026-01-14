@@ -28,6 +28,7 @@
   "Authentication": {
     "bitmap-id": "Bitmap ID",
     "bitmap-id-desc": "Bitmap의 모든 서비스를 사용하려면 로그인하거나 가입하십시오.",
+    "account-settings": "계정 설정",
     "settings": "설정",
     "login": "로그인",
     "login-google": "Google 계정으로 로그인",
