@@ -3,21 +3,22 @@
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Search, Menu, X } from "lucide-react";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Link, useRouter } from "@/i18n/routing";
+import { Input } from "../../ui/input";
+import { Link, useRouter, usePathname } from "@/i18n/routing";
 import Image from "next/image";
 import { MobileSidebar } from "./mobile-sidebar";
 import type { Game } from "@/lib/types";
 import { getGames } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { convertQwertyToHangul, getChoseong } from "es-hangul";
-import { Avatar } from "@radix-ui/themes";
+import { Avatar, Button, IconButton, Popover } from "@radix-ui/themes";
+import ProfilePopover from "@/components/accounts/profile";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function TopBar() {
   const router = useRouter();
   const t = useTranslations("Common");
+  const pathName = usePathname();
   const { bIsLoggedIn, username } = useAuth();
   // Electron 및 MacOS 환경 감지 변수 (실제 감지 코드는 구현하지 않음)
   const bIsElectron: boolean = false; // 예시 값, 실제로는 Electron 감지 로직 필요
@@ -123,20 +124,25 @@ export default function TopBar() {
     setIsMobileSidebarOpen(false);
   };
 
+  function getIsSigninButtonActive(): boolean {
+    const authPageRegExp: RegExp = /^\/auth/;
+    return !authPageRegExp.test(pathName) && !bIsLoggedIn;
+  }
+
   return (
     <>
       <div className="h-12 bg-background border-b flex items-center px-4 w-full relative z-50">
         {/* 모바일 메뉴 버튼 */}
         <div className={`md:hidden mr-3 ${isMobileSearchOpen ? "hidden" : ""}`}>
-          <Button
+          <IconButton
             variant="ghost"
-            size="icon"
+            radius="full"
             className="h-8 w-8"
             onClick={toggleMobileSidebar}
           >
             <Menu className="h-5 w-5" />
             <span className="sr-only">메뉴 열기</span>
-          </Button>
+          </IconButton>
         </div>
 
         {/* 로고 이미지 */}
@@ -233,9 +239,9 @@ export default function TopBar() {
         <div className="ml-auto pl-2 flex items-center gap-2">
           {/* 모바일 검색 토글 버튼 */}
           <div className="md:hidden flex items-center">
-            <Button
+            <IconButton
               variant="ghost"
-              size="icon"
+              radius="full"
               className="h-8 w-8"
               onClick={() => {
                 if (isMobileSearchOpen) {
@@ -251,14 +257,28 @@ export default function TopBar() {
                 <Search className="h-5 w-5" />
               )}
               <span className="sr-only">검색 토글</span>
-            </Button>
+            </IconButton>
           </div>
           {bIsLoggedIn && (
-            <Avatar
-              radius="full"
-              size="2"
-              fallback={username.charAt(0).toUpperCase()}
-            />
+            <Popover.Root>
+              <Popover.Trigger>
+                <IconButton variant="ghost" radius="full">
+                  <Avatar
+                    radius="full"
+                    size="2"
+                    fallback={username.charAt(0).toUpperCase()}
+                  />
+                </IconButton>
+              </Popover.Trigger>
+              <Popover.Content>
+                <ProfilePopover />
+              </Popover.Content>
+            </Popover.Root>
+          )}
+          {getIsSigninButtonActive() && (
+            <Button radius="full" onClick={() => router.push("/auth")}>
+              Login
+            </Button>
           )}
         </div>
       </div>
@@ -277,15 +297,15 @@ export default function TopBar() {
             {/* 사이드바 헤더 */}
             <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-lg font-semibold">메뉴</h2>
-              <Button
+              <IconButton
                 variant="ghost"
-                size="icon"
                 className="h-8 w-8"
+                radius="full"
                 onClick={closeMobileSidebar}
               >
                 <X className="h-5 w-5" />
                 <span className="sr-only">메뉴 닫기</span>
-              </Button>
+              </IconButton>
             </div>
 
             {/* 사이드바 콘텐츠 */}

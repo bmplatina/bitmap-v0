@@ -1,6 +1,6 @@
 "use client";
 
-import GameDetail from "@/components/game-details-pending";
+import GameDetail from "@/components/games/game-details-pending";
 import { useTranslations } from "next-intl";
 import { useGameForm } from "@/lib/GamePublishContext";
 import { Button } from "@/components/ui/button";

@@ -22,13 +22,13 @@
     "game-submit": "새로운 게임 등록",
     "games-pending": "대기 중인 게임",
     "accounts": "어카운트",
-    "projects": "프로젝트 파일",
-    "settings": "설정"
+    "projects": "프로젝트 파일"
   },
 
   "Authentication": {
     "bitmap-id": "Bitmap ID",
     "bitmap-id-desc": "Bitmap의 모든 서비스를 사용하려면 로그인하거나 가입하십시오.",
+    "settings": "설정",
     "login": "로그인",
     "login-google": "Google 계정으로 로그인",
     "keep-login": "로그인 상태 유지",

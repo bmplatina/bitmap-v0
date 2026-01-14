@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { getGameById } from "@/lib/utils";
 import { Metadata } from "@/lib/types";
-import GameDetail from "@/components/game-details";
+import GameDetail from "@/components/games/game-details";
 
 export async function generateMetadata({
   params,

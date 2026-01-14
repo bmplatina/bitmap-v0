@@ -4,7 +4,7 @@ import Image from "next/image";
 import { getYouTubeVideos, getGames } from "@/lib/utils";
 import type { Game } from "@/lib/types";
 import { getTranslations } from "next-intl/server";
-import GameRedirectButton from "@/components/game-redirect-button";
+import GameRedirectButton from "@/components/games/game-redirect-button";
 
 export default async function Home() {
   // 서버에서 직접 데이터 페칭

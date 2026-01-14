@@ -2,7 +2,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import rehypePrettyCode from "rehype-pretty-code";
 import { ExternalLink, Quote, Terminal } from "lucide-react"; // Lucide 아이콘
-import { Separator } from "./ui/separator"; // Radix 컴포넌트
+import { Separator } from "@/components/ui/separator"; // Radix 컴포넌트
 //import * as Separator from "@radix-ui/react-separator"; // Radix 컴포넌트
 
 export default function SmartMarkdown({ content }: { content: string }) {

@@ -38,8 +38,8 @@ export default function AccountEdit() {
 
   useEffect(
     function () {
-      if (bIsLoggedIn) {
-        router.push("/account/profile");
+      if (!bIsLoggedIn) {
+        router.push("/auth/signin");
       }
     },
     [bIsLoggedIn]
@@ -95,11 +95,11 @@ export default function AccountEdit() {
                     {t("login")}
                   </Button>
 
-                  <Link href="/account/signup">
+                  <Link href="/auth/signup">
                     <Button variant="ghost">{t("register")}</Button>
                   </Link>
 
-                  <Link href="/account/troubleshoot">
+                  <Link href="/auth/troubleshoot">
                     <Button variant="ghost">{t("troubleshoot-auth")}</Button>
                   </Link>
                 </Flex>

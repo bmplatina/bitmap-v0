@@ -7,10 +7,10 @@ import "./globals.css";
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import { NextIntlClientProvider } from "next-intl";
-import { ThemeProvider } from "@/components/theme-provider";
-import { TokenHandler } from "@/components/token-handler";
-import Sidebar from "@/components/sidebar";
-import TopBar from "@/components/top-bar";
+import { ThemeProvider } from "@/components/common/theme-provider";
+import { TokenHandler } from "@/components/common/token-handler";
+import Sidebar from "@/components/common/sidebar/sidebar";
+import TopBar from "@/components/common/sidebar/top-bar";
 import localFont from "next/font/local";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -30,11 +30,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params: { locale },
 }: Readonly<{
   children: React.ReactNode;
+  params: { locale: string };
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       {/* <body className={`${pretendard.variable} font-sans antialiased`} suppressHydrationWarning>*/}
       <body suppressHydrationWarning>
         <NextIntlClientProvider>

@@ -20,24 +20,24 @@ export default function AccountLayout({
   useEffect(() => {
     if (!bIsLoggedIn) {
       // Redirect or perform some action if not logged in
-      router.push("/account");
+      router.push("/auth");
     }
   }, [bIsLoggedIn]);
 
   return (
     <div>
       <TabNav.Root className="sticky top-0 z-10 bg-background border-b-0">
-        <TabNav.Link
-          href="/account/profile"
-          active={pathname === "/account/profile"}
-        >
+        <TabNav.Link href="/account" active={pathname === "/account"}>
           {t("general-info")}
         </TabNav.Link>
-        <TabNav.Link
-          href="/account/profile/edit"
-          active={pathname === "/account/profile/edit"}
-        >
+        <TabNav.Link href="/account/edit" active={pathname === "/account/edit"}>
           {t("edit")}
+        </TabNav.Link>
+        <TabNav.Link
+          href="/account/settings"
+          active={pathname === "/account/settings"}
+        >
+          {t("settings")}
         </TabNav.Link>
       </TabNav.Root>
       {bIsLoggedIn && children}

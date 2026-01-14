@@ -1,7 +1,7 @@
 import type { Game } from "@/lib/types";
 import { getLocalizedString, formatDate } from "@/lib/utils";
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
+import { Card, CardContent } from "../ui/card";
+import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { Calendar, Code, Tag, User } from "lucide-react";
@@ -32,7 +32,7 @@ export default async function GameCard({
             className="object-cover"
             priority
           />
-          {game.isEarlyAccess === 1 && (
+          {game.isEarlyAccess && (
             <Badge className="absolute top-2 right-2 bg-amber-500">
               {t("early-access")}
             </Badge>

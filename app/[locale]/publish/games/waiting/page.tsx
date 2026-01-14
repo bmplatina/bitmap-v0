@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import type { Game } from "@/lib/types";
-import GameCard from "@/components/game-card";
+import GameCard from "@/components/games/game-card";
 import { getGames } from "@/lib/utils";
 
 export default async function PendingGamesPage() {

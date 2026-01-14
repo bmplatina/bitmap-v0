@@ -31,7 +31,7 @@ import {
 import { useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/AuthContext";
-import ClientMarkdown from "../../client-markdown";
+import ClientMarkdown from "@/components/common/markdown/client-markdown";
 import Image from "next/image";
 import {
   Card,
@@ -47,7 +47,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import MarkdownEditor from "@/components/markdown-editor";
+import MarkdownEditor from "@/components/common/markdown/markdown-editor";
 import {
   Dialog,
   DialogContent,

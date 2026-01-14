@@ -33,7 +33,7 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { cn, getLocalizedString } from "@/lib/utils";
 import type { Game, stringLocalized } from "@/lib/types";
-import MarkdownEditor from "@/components/markdown-editor";
+import MarkdownEditor from "@/components/common/markdown/markdown-editor";
 import { toast } from "@/hooks/use-toast";
 import {
   renderMarkdown,
@@ -44,8 +44,8 @@ import {
 import { useAuth } from "@/lib/AuthContext";
 import { useTranslations, useLocale } from "next-intl";
 import { Flex, Quote } from "@radix-ui/themes";
-import GameDetail from "@/components/game-details-pending";
-import ClientMarkdown from "@/components/client-markdown";
+import GameDetail from "@/components/games/game-details-pending";
+import ClientMarkdown from "@/components/common/markdown/client-markdown";
 
 export default function RegisterGamePage() {
   const router = useRouter();

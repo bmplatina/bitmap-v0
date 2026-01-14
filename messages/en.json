@@ -22,13 +22,13 @@
     "game-submit": "Submit New Game",
     "games-pending": "Pending Games",
     "accounts": "Accounts",
-    "projects": "Project Files",
-    "settings": "Settings"
+    "projects": "Project Files"
   },
 
   "Authentication": {
     "bitmap-id": "Bitmap ID",
     "bitmap-id-desc": "To use all Bitmap services, please sign in or sign up.",
+    "settings": "Settings",
     "login": "Sign in",
     "login-google": "Login with Google",
     "keep-login": "Keep me logged in",

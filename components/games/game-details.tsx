@@ -1,67 +1,58 @@
-"use client";
-
-import { useState, useEffect, Suspense } from "react";
+import { Suspense } from "react";
 import type { Game } from "@/lib/types";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Clock, Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
-import {
-  checkAuthor,
-  formatDate,
-  renderMarkdown,
-  getLocalizedString,
-} from "@/lib/utils";
-import { useTranslations, useLocale } from "next-intl";
-import ClientMarkdown from "./client-markdown";
+import { checkAuthor, formatDate } from "@/lib/utils";
+import { getTranslations, getLocale } from "next-intl/server";
+import { getLocalizedString, renderMarkdown } from "@/lib/utils";
+import SmartMarkdown from "@/components/common/markdown/markdown-renderer";
 import { ScrollArea } from "@radix-ui/themes";
-
-interface AuthorInfo {
-  username: string;
-  email: string;
-}
 
 type GameDetailProps = {
   game: Game;
-  uid: string;
+  bIsPending: boolean;
 };
 
-export default function GameDetail({ game, uid }: GameDetailProps) {
-  const locale = useLocale();
-  const t = useTranslations("GamesView");
-  const t_gameSubmit = useTranslations("GameSubmit");
-  const [author, setAuthor] = useState<AuthorInfo | null>(null);
+export default async function GameDetail({
+  game,
+  bIsPending,
+}: GameDetailProps) {
+  const t = await getTranslations("GamesView");
+  const t_gameSubmit = await getTranslations("GameSubmit");
+  const locale = await getLocale();
 
   if (!game) {
     return (
       <div className="flex items-center justify-center h-full w-full">
         <div className="text-center">
-          <p className="text-xl mb-2">{t("unknown-game")}</p>
-          <p className="text-sm text-muted-foreground">{t("unknown-game")}</p>
+          <p className="text-xl mb-2">{t_gameSubmit("unknown-game")}</p>
+          <p className="text-sm text-muted-foreground">
+            {t_gameSubmit("unknown-game")}
+          </p>
         </div>
       </div>
     );
   }
 
-  useEffect(() => {
-    checkAuthor(undefined, uid).then((payload: AuthorInfo | null) => {
-      setAuthor(payload);
-    });
-  }, [author]);
+  const author = await checkAuthor(undefined, game.uid);
 
   return (
     <div className="container mx-auto p-6 w-full">
-      <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-        <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
-          <Clock className="h-5 w-5" />
-          <span className="font-medium">
-            이 게임은 현재 승인 대기 중입니다.
-          </span>
+      {bIsPending && (
+        <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+          <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+            <Clock className="h-5 w-5" />
+            <span className="font-medium">
+              이 게임은 현재 승인 대기 중입니다.
+            </span>
+          </div>
+          <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+            관리자 검토 후 정식 게임 라이브러리에 추가됩니다.
+          </p>
         </div>
-        <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-          관리자 검토 후 정식 게임 라이브러리에 추가됩니다.
-        </p>
-      </div>
+      )}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* 왼쪽 컬럼 - 이미지 */}
         <div className="lg:col-span-1 lg:sticky lg:top-6 self-start">
@@ -125,9 +116,9 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
         <div className="lg:col-span-2">
           <div className="flex items-center gap-3 mb-4">
             <h1 className="text-3xl font-bold">{game.gameTitle}</h1>
-            <Badge className="bg-amber-500">
-              {t_gameSubmit("waiting-approval")}
-            </Badge>
+            {bIsPending && (
+              <Badge className="bg-amber-500">{t("waiting-approval")}</Badge>
+            )}
             {game.isEarlyAccess && (
               <Badge className="bg-amber-500">{t("early-access")}</Badge>
             )}
@@ -150,7 +141,8 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
               <span>
                 {t("publisher")}: <strong>{game.gamePublisher}</strong>
                 <br />
-                {author && `${t("author")}: ${author.username}`}
+                {author && `${t("author")}: `}
+                <strong>{author?.username}</strong>
               </span>
             </div>
 
@@ -177,7 +169,7 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
               <ScrollArea type="always" scrollbars="horizontal">
                 <div className="flex gap-4 pb-4">
                   {game.gameVideoURL && (
-                    <div className="shrink-0 w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted">
+                    <div className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted">
                       <iframe
                         src={`https://www.youtube.com/embed/${game.gameVideoURL}`}
                         className="absolute inset-0 w-full h-full"
@@ -188,7 +180,7 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
                   {game.gameImageURL.slice(1).map((url, index) => (
                     <div
                       key={index}
-                      className="shrink-0 w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
+                      className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
                     >
                       <Image
                         src={url}
@@ -210,7 +202,7 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
             {/* <div className="prose prose-invert max-w-none">
               <p>{game.gameDescription}</p>
             </div> */}
-            <ClientMarkdown
+            <SmartMarkdown
               content={getLocalizedString(locale, game.gameDescription)}
             />
             {/*<div

@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { extractYoutubeId, uploadGameImage } from "@/lib/utils";
 
 const GameRedirectButton = dynamic(
-  () => import("@/components/game-redirect-button"),
+  () => import("@/components/games/game-redirect-button"),
   {
     ssr: false,
     loading: () => <Skeleton />,

@@ -31,7 +31,7 @@ import {
   checkIsEmailDuplicated,
 } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
-import ClientMarkdown from "@/components/client-markdown";
+import ClientMarkdown from "@/components/common/markdown/client-markdown";
 import { Separator } from "@radix-ui/themes";
 
 export default function Home() {
