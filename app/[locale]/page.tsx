@@ -1,7 +1,8 @@
 import { Box, Button, ScrollArea } from "@radix-ui/themes";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
-import { getYouTubeVideos, getGames } from "@/lib/utils";
+import { getYouTubeVideos } from "@/lib/utils";
+import { getGames } from "@/lib/games";
 import type { Game } from "@/lib/types";
 import { getTranslations } from "next-intl/server";
 import GameRedirectButton from "@/components/games/game-redirect-button";

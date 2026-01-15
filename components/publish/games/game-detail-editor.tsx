@@ -15,7 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import type { Game } from "@/lib/types";
 import { toast } from "@/hooks/use-toast";
-import { getGames } from "@/lib/utils";
+import { getGames } from "@/lib/games";
 import { useTranslations } from "next-intl";
 import { useGameForm } from "@/lib/GamePublishContext";
 

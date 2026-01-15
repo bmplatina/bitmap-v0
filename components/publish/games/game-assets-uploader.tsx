@@ -17,7 +17,8 @@ import { useGameForm } from "@/lib/GamePublishContext";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { extractYoutubeId, uploadGameImage } from "@/lib/utils";
+import { extractYoutubeId } from "@/lib/utils";
+import { uploadGameImage } from "@/lib/games";
 
 const GameRedirectButton = dynamic(
   () => import("@/components/games/game-redirect-button"),

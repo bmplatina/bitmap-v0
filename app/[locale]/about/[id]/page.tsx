@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import { Link } from "@/i18n/routing";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -9,11 +10,13 @@ import BitmapAbout from "@/components/bitmap-about";
 export default function RedirectAppPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = use(params);
+
   useEffect(() => {
-    window.location.href = `bitmap://games/${params.id}`;
-  }, [params.id]);
+    window.location.href = `bitmap://games/${id}`;
+  }, [id]);
 
   return (
     <div className="p-6 w-full">

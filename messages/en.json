@@ -19,7 +19,7 @@
     "bitmap-developer": "Bitmap Developer",
     "games": "Games",
     "publish": "Publish",
-    "game-submit": "Submit New Game",
+    "publish-dashboard": "Publisher Dashboard",
     "games-pending": "Pending Games",
     "accounts": "Accounts",
     "projects": "Project Files"
@@ -128,6 +128,16 @@
     "windows-system-requirements": "OS: Windows 10 or Windows 11, 64-bit versions only.\\nCPU: AMD64 architecture with SSE2 instruction set support\\nRAM: 16GB or more\\nGPU: DX10, DX11, and DX12-capable GPUs",
     "preview": "Preview",
     "processing": "Processing…"
+  },
+
+  "Publish": {
+    "publish-new": "Publish New",
+    "approved": "Approved",
+    "waiting-for-approval": "Waiting for Approval",
+    "game": "Game",
+    "project-file": "Project File",
+    "asset": "Asset",
+    "lecture": "Lecture"
   },
 
   "GameSubmit": {

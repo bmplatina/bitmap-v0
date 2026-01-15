@@ -4,7 +4,7 @@ import GameDetail from "@/components/games/game-details-pending";
 import { useTranslations } from "next-intl";
 import { useGameForm } from "@/lib/GamePublishContext";
 import { Button } from "@/components/ui/button";
-import { submitGame } from "@/lib/utils";
+import { submitGame } from "@/lib/games";
 import { useEffect, useState } from "react";
 
 export default function gamePublishSubmitter() {

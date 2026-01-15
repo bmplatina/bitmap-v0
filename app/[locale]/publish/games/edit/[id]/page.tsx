@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { getGameById } from "@/lib/utils";
+import { getGameById } from "@/lib/games";
 import { Metadata } from "@/lib/types";
 import GameDetail from "@/components/games/game-details";
 

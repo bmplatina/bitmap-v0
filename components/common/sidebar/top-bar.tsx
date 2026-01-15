@@ -3,16 +3,17 @@
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Search, Menu, X } from "lucide-react";
-import { Input } from "../../ui/input";
+import { Input } from "@/components/ui/input";
 import { Link, useRouter, usePathname } from "@/i18n/routing";
 import Image from "next/image";
 import { MobileSidebar } from "./mobile-sidebar";
 import type { Game } from "@/lib/types";
-import { getGames } from "@/lib/utils";
+import { getGames } from "@/lib/games";
 import { useTranslations } from "next-intl";
 import { convertQwertyToHangul, getChoseong } from "es-hangul";
 import { Avatar, Button, IconButton, Popover } from "@radix-ui/themes";
 import ProfilePopover from "@/components/accounts/profile";
+import GameListView from "@/components/games/game-listview";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function TopBar() {
@@ -34,6 +35,16 @@ export default function TopBar() {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   // 모바일 검색창 상태 관리
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  // 프로필 팝오버 상태 관리
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  // 라우트 변경 시 팝오버 및 사이드바 닫기
+  useEffect(() => {
+    setIsProfileOpen(false);
+    setIsMobileSidebarOpen(false);
+    setIsSearchOpen(false);
+    setIsMobileSearchOpen(false);
+  }, [pathName]);
 
   useEffect(() => {
     let isMounted = true;
@@ -197,36 +208,11 @@ export default function TopBar() {
               {searchResults.length > 0 ? (
                 <div className="py-2">
                   {searchResults.map((game) => (
-                    <Link
+                    <GameListView
                       key={game.gameId}
-                      href={`/games/${game.gameId}`}
-                      className="flex items-center gap-3 px-4 py-2 hover:bg-muted transition-colors"
-                      onClick={() => {
-                        setIsSearchOpen(false);
-                        setSearchQuery("");
-                        setIsMobileSearchOpen(false);
-                      }}
-                    >
-                      <div className="relative w-10 h-10 flex-shrink-0 rounded overflow-hidden bg-muted">
-                        <Image
-                          src={
-                            game.gameImageURL[0] ||
-                            "/placeholder.svg?height=40&width=40"
-                          }
-                          alt={game.gameTitle}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate">
-                          {game.gameTitle}
-                        </p>
-                        <p className="text-xs text-muted-foreground truncate">
-                          {game.gameDeveloper}
-                        </p>
-                      </div>
-                    </Link>
+                      game={game}
+                      bIsPending={false}
+                    />
                   ))}
                 </div>
               ) : (
@@ -263,7 +249,10 @@ export default function TopBar() {
           </div>
           <div className="flex items-center">
             {bIsLoggedIn && (
-              <Popover.Root>
+              <Popover.Root
+                open={isProfileOpen}
+                onOpenChange={setIsProfileOpen}
+              >
                 <Popover.Trigger>
                   <IconButton variant="ghost" radius="full">
                     <Avatar

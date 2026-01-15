@@ -16,6 +16,10 @@ const nextConfig = {
 
   output: "standalone", // 이 한 줄이 서버 리소스를 획기적으로 줄여줍니다.
 
+  experimental: {
+    allowedDevOrigins: ["playgrounds.prodbybitmap.com"],
+  },
+
   async rewrites() {
     return [
       {

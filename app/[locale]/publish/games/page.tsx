@@ -24,7 +24,7 @@ export default function SubmitGames() {
   useEffect(
     function () {
       if (!bIsLoggedIn || !bIsDeveloper) {
-        router.push("/account");
+        router.push("/auth");
       }
     },
     [bIsLoggedIn, bIsDeveloper]

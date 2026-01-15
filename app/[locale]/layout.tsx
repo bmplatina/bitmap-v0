@@ -16,15 +16,19 @@ import { pretendard } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Bitmap",
   description: "디지털 게임 배포 플랫폼",
+  icons: {
+    icon: "../../public/AppIcon.ico",
+  },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-  params: { locale },
+  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
   return (
     <html lang={locale} suppressHydrationWarning>
       {/* <body className={`${pretendard.variable} font-sans antialiased`} suppressHydrationWarning>*/}

@@ -35,12 +35,8 @@ import { cn, getLocalizedString } from "@/lib/utils";
 import type { Game, stringLocalized } from "@/lib/types";
 import MarkdownEditor from "@/components/common/markdown/markdown-editor";
 import { toast } from "@/hooks/use-toast";
-import {
-  renderMarkdown,
-  getGames,
-  submitGame,
-  uploadGameImage,
-} from "@/lib/utils";
+import { renderMarkdown } from "@/lib/utils";
+import { getGames, submitGame, uploadGameImage } from "@/lib/games";
 import { useAuth } from "@/lib/AuthContext";
 import { useTranslations, useLocale } from "next-intl";
 import { Flex, Quote } from "@radix-ui/themes";
