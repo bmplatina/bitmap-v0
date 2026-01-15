@@ -12,6 +12,7 @@ interface AuthContextType {
   login: (token: string) => Promise<void>; // 반환 타입을 Promise<void>로 변경
   logout: () => void;
   username: string;
+  uid: string;
   email: string;
   bIsDeveloper: boolean;
   bIsTeammate: boolean;
@@ -34,6 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [bIsDeveloper, setIsDeveloper] = useState(false);
   const [bIsTeammate, setIsTeammate] = useState(false);
   const [bIsEmailVerified, setIsEmailVerified] = useState(true);
+  const [uid, setUid] = useState("");
   const router = useRouter();
 
   const fetchUser = async (token: string) => {
@@ -58,6 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
           const decoded: any = jwtDecode(token);
           verified = decoded.isEmailVerified;
+          setUid(decoded.uid);
           console.log("JWT 수동 디코딩: ", verified);
         } catch (e) {
           console.error("토큰 디코딩 실패:", e);
@@ -102,6 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         username,
+        uid,
         email,
         bIsDeveloper,
         bIsTeammate,

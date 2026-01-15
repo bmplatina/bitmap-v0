@@ -3,6 +3,7 @@
 import GameDetail from "@/components/games/game-details-pending";
 import { useTranslations } from "next-intl";
 import { useGameForm } from "@/lib/GamePublishContext";
+import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 import { submitGame } from "@/lib/games";
 import { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ export default function gamePublishSubmitter() {
     updateImages,
     resetForm,
   } = useGameForm();
+  const { uid } = useAuth();
 
   const [token, setToken] = useState<string>("");
 
@@ -31,7 +33,7 @@ export default function gamePublishSubmitter() {
   return (
     <>
       <Button onClick={() => submitGame(token, game)}>{t("submit")}</Button>
-      <GameDetail game={game} uid="" />
+      <GameDetail game={game} uid={uid} />
     </>
   );
 }
