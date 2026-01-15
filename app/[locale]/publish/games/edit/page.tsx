@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Game } from "@/lib/types";
 import GameCard from "@/components/games/game-card";
-import { getGames } from "@/lib/utils";
+import { getGames } from "@/lib/games";
 
 export default async function PendingGamesPage() {
   // 서버 컴포넌트에서 직접 데이터 가져오기
