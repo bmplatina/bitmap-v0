@@ -84,12 +84,12 @@ async function getGamesByUid(token: string): Promise<Game[]> {
 }
 
 // API에서 특정 대기 중인 게임 데이터를 가져오는 함수
-async function submitGame(token: string, gameInfo: Game): Promise<boolean> {
+async function submitGame(token: string, newGame: Game): Promise<boolean> {
   try {
     // API 호출
     const response = await axios.post<Game>(
       getApiLinkByPurpose("games/submit"),
-      gameInfo,
+      newGame,
       {
         timeout: 30000, // 30초 타임아웃
         headers: {
