@@ -10,20 +10,10 @@ import { useEffect, useState } from "react";
 
 export default function gamePublishSubmitter() {
   const t = useTranslations("GameSubmit");
-  const {
-    gameData: game,
-    updateField,
-    updateLocalizedField,
-    updateImages,
-    resetForm,
-  } = useGameForm();
+  const { gameData: game, bIsEditingExisting } = useGameForm();
   const { uid } = useAuth();
 
   const [token, setToken] = useState<string>("");
-
-  function setYouTubeTrailerId(id: string) {
-    updateField("gameVideoURL", id);
-  }
 
   useEffect(() => {
     // You can add any side effects or subscriptions here if needed
@@ -32,8 +22,14 @@ export default function gamePublishSubmitter() {
 
   return (
     <>
-      <Button onClick={() => submitGame(token, game)}>{t("submit")}</Button>
-      <GameDetail game={game} uid={uid} />
+      <Button onClick={() => submitGame(token, game)}>
+        {bIsEditingExisting ? t("edit") : t("submit")}
+      </Button>
+      <GameDetail
+        game={game}
+        uid={uid}
+        submitState={bIsEditingExisting ? "editExisting" : "submitNew"}
+      />
     </>
   );
 }

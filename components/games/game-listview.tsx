@@ -44,7 +44,7 @@ export default function GameListView({ game, bIsPending }: GameProp) {
         <Flex align="center" gap="3" className="pr-4">
           {game.isApproved && <Badge>{t("approved")}</Badge>}
           <IconButton radius="full" variant="ghost" asChild>
-            <Link href={`/publish/games/edit/${game.gameId}`}>
+            <Link href={`/publish/games?edit=${game.gameId}`}>
               <Edit size={18} />
             </Link>
           </IconButton>

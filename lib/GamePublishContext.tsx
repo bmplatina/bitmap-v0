@@ -24,6 +24,9 @@ interface GameFormContextType {
   // 특정 인덱스 이미지 업데이트 (없으면 추가/할당)
   setImage: (arrayIndex: number, arrayElement: string) => void;
   resetForm: () => void;
+  setGame: (game: Game) => void;
+  setIsEditingExisting: (bIsEditing: boolean) => void;
+  bIsEditingExisting: boolean;
 }
 
 const initialGameData: Game = {
@@ -58,6 +61,8 @@ const GameFormContext = createContext<GameFormContextType | undefined>(
 
 export function GamePublishProvider({ children }: { children: ReactNode }) {
   const [gameData, setGameData] = useState<Game>(initialGameData);
+  const [bIsEditingExisting, setIsEditingExistingEffect] =
+    useState<boolean>(false);
 
   // 1. 일반 필드 업데이트
   const updateField = useCallback(
@@ -101,7 +106,15 @@ export function GamePublishProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const setGame = useCallback((game: Game) => {
+    setGameData(game);
+  }, []);
+
   const resetForm = useCallback(() => setGameData(initialGameData), []);
+
+  const setIsEditingExisting = useCallback((bIsEditing: boolean) => {
+    setIsEditingExistingEffect(bIsEditing);
+  }, []);
 
   return (
     <GameFormContext.Provider
@@ -112,6 +125,9 @@ export function GamePublishProvider({ children }: { children: ReactNode }) {
         updateImages,
         setImage,
         resetForm,
+        setGame,
+        setIsEditingExisting,
+        bIsEditingExisting,
       }}
     >
       {children}

@@ -201,7 +201,8 @@
     "mobile-publish-warning": "You are attempting to publish from a mobile device.",
     "mobile-publish-warning=desc": "Some features may not be supported when publishing games from a mobile device. Please try again on a PC or Mac.",
     "ignore-continue": "Ignore and Continue",
-    "go-back": "Go Back"
+    "go-back": "Go Back",
+    "edit": "Edit"
   },
 
   "Common": {

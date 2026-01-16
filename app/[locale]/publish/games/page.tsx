@@ -1,14 +1,16 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import GameStoreViewEditor from "@/components/publish/games/game-storeview-editor";
 import { Box, AlertDialog, Tabs, Text, Flex } from "@radix-ui/themes";
+import { useSearchParams } from "next/navigation";
+import { getGameById } from "@/lib/games";
 import { useAuth } from "@/lib/AuthContext";
-import { GamePublishProvider } from "@/lib/GamePublishContext";
+import { useGameForm } from "@/lib/GamePublishContext";
+import GameStoreViewEditor from "@/components/publish/games/game-storeview-editor";
 import GameDetailEditor from "@/components/publish/games/game-detail-editor";
 import GameAssetsUploader from "@/components/publish/games/game-assets-uploader";
 import GamePublishSubmitter from "@/components/publish/games/game-publish-submitter";
-import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
@@ -16,6 +18,10 @@ import { Button } from "@/components/ui/button";
 export default function SubmitGames() {
   const t = useTranslations("GameSubmit");
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const { setGame, setIsEditingExisting, bIsEditingExisting } = useGameForm();
+
   const { bIsLoggedIn, bIsDeveloper } = useAuth();
   const isMobile = useIsMobile();
   const [ignoreMobileWarning, setIgnoreMobileWarning] =
@@ -30,8 +36,20 @@ export default function SubmitGames() {
     [bIsLoggedIn, bIsDeveloper]
   );
 
+  useEffect(() => {
+    const gameId = searchParams.get("edit");
+    if (gameId) {
+      getGameById(gameId).then((game) => {
+        if (game) {
+          setGame(game);
+          setIsEditingExisting(true);
+        }
+      });
+    }
+  }, [searchParams]);
+
   return (
-    <GamePublishProvider>
+    <>
       <AlertDialog.Root open={isMobile && !ignoreMobileWarning}>
         <AlertDialog.Content>
           <AlertDialog.Title>{t("mobile-publish-warning")}</AlertDialog.Title>
@@ -65,7 +83,9 @@ export default function SubmitGames() {
             {t("detailed-info")}
           </Tabs.Trigger>
           <Tabs.Trigger value="assets">{t("assets")}</Tabs.Trigger>
-          <Tabs.Trigger value="submit">{t("submit")}</Tabs.Trigger>
+          <Tabs.Trigger value="submit">
+            {bIsEditingExisting ? t("edit") : t("submit")}
+          </Tabs.Trigger>
         </Tabs.List>
 
         <Box pt="3">
@@ -86,6 +106,6 @@ export default function SubmitGames() {
           </Tabs.Content>
         </Box>
       </Tabs.Root>
-    </GamePublishProvider>
+    </>
   );
 }

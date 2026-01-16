@@ -24,9 +24,14 @@ interface AuthorInfo {
 type GameDetailProps = {
   game: Game;
   uid: string;
+  submitState: "editExisting" | "submitNew";
 };
 
-export default function GameDetail({ game, uid }: GameDetailProps) {
+export default function GameDetail({
+  game,
+  uid,
+  submitState,
+}: GameDetailProps) {
   const locale = useLocale();
   const t = useTranslations("GamesView");
   const t_gameSubmit = useTranslations("GameSubmit");
@@ -55,7 +60,9 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
         <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
           <Clock className="h-5 w-5" />
           <span className="font-medium">
-            이 게임은 현재 승인 대기 중입니다.
+            {submitState === "editExisting"
+              ? "이 게임은 현재 편집 중입니다."
+              : "이 게임은 현재 승인 대기 중입니다."}
           </span>
         </div>
         <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
@@ -125,9 +132,11 @@ export default function GameDetail({ game, uid }: GameDetailProps) {
         <div className="lg:col-span-2">
           <div className="flex items-center gap-3 mb-4">
             <h1 className="text-3xl font-bold">{game.gameTitle}</h1>
-            <Badge className="bg-amber-500">
-              {t_gameSubmit("waiting-approval")}
-            </Badge>
+            {submitState === "submitNew" && (
+              <Badge className="bg-amber-500">
+                {t_gameSubmit("waiting-approval")}
+              </Badge>
+            )}
             {game.isEarlyAccess && (
               <Badge className="bg-amber-500">{t("early-access")}</Badge>
             )}

@@ -21,16 +21,10 @@ import { useGameForm } from "@/lib/GamePublishContext";
 
 export default function GameDetailEditor() {
   const t = useTranslations("GameSubmit");
-  const {
-    gameData: game,
-    updateField,
-    updateLocalizedField,
-    updateImages,
-    resetForm,
-  } = useGameForm();
+  const { gameData: game, updateField, bIsEditingExisting } = useGameForm();
 
   // 로딩 상태
-  const [isLoadingGameId, setIsLoadingGameId] = useState(true);
+  const [isLoadingGameId, setIsLoadingGameId] = useState(false);
 
   function setGameId(value: number) {
     updateField("gameId", value);
@@ -106,8 +100,10 @@ export default function GameDetailEditor() {
         setIsLoadingGameId(false);
       }
     }
-    fetchGames();
-  }, []);
+    if (!bIsEditingExisting) {
+      fetchGames();
+    }
+  }, [bIsEditingExisting, game.gameId]);
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">

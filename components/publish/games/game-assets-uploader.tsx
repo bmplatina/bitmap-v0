@@ -31,7 +31,13 @@ const GameRedirectButton = dynamic(
 export default function GameAssetsUploader() {
   const t = useTranslations("GameSubmit");
   const t_common = useTranslations("Common");
-  const { gameData: game, updateField, setImage, updateImages } = useGameForm();
+  const {
+    gameData: game,
+    updateField,
+    setImage,
+    updateImages,
+    bIsEditingExisting,
+  } = useGameForm();
 
   const [tempYouTubeVideoId, setTempYouTubeVideoId] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -45,7 +51,11 @@ export default function GameAssetsUploader() {
     if (cachedImage) {
       setPreviewUrl(cachedImage);
     }
-  }, [game.gameBinaryName]);
+
+    if (bIsEditingExisting) {
+      setTempYouTubeVideoId(game.gameVideoURL);
+    }
+  }, [bIsEditingExisting, game.gameBinaryName]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -239,10 +249,7 @@ export default function GameAssetsUploader() {
             <Separator />
             {/* 미리보기 영역: 업로드 전/후 상태를 시각적으로 보여줌 */}
             <div className="flex gap-4 pb-4">
-              <GameRedirectButton
-                disabled={true}
-                game={game}
-              />
+              <GameRedirectButton disabled={true} game={game} />
             </div>
           </CardContent>
         </Card>
