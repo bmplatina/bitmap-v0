@@ -5,7 +5,7 @@ import type { Game } from "@/lib/types";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
-import { Clock, Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
+import { Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
 import {
   checkAuthor,
   formatDate,
@@ -56,19 +56,6 @@ export default function GameDetail({
 
   return (
     <div className="container mx-auto p-6 w-full">
-      <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-        <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
-          <Clock className="h-5 w-5" />
-          <span className="font-medium">
-            {submitState === "editExisting"
-              ? "이 게임은 현재 편집 중입니다."
-              : "이 게임은 현재 승인 대기 중입니다."}
-          </span>
-        </div>
-        <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-          관리자 검토 후 정식 게임 라이브러리에 추가됩니다.
-        </p>
-      </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* 왼쪽 컬럼 - 이미지 */}
         <div className="lg:col-span-1 lg:sticky lg:top-6 self-start">

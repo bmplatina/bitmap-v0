@@ -196,13 +196,16 @@
     "edit-md": "Edit as Markdown",
     "edit-md-desc": "Use Markdown syntax to write a detailed description of the game.",
     "submit": "Submit",
-    "submitting": "Submitting ",
-    "submit-warning": "After submitting your game, redacting is not allowed. So please watch preview and submit carefully.",
+    "edit": "Edit",
+    "submitting": "Completing submission of the following game: ",
+    "submit-warning": "After admin review, your game will be added to the official game library. Click the submit button to complete the submission.",
+    "editing": "Completing editing of the following game: ",
+    "edit-warning": "Click the edit button to complete the editing.",
     "mobile-publish-warning": "You are attempting to publish from a mobile device.",
     "mobile-publish-warning=desc": "Some features may not be supported when publishing games from a mobile device. Please try again on a PC or Mac.",
     "ignore-continue": "Ignore and Continue",
     "go-back": "Go Back",
-    "edit": "Edit"
+    "view-gamepage": "View on Game Page"
   },
 
   "Common": {

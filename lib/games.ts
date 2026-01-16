@@ -84,11 +84,16 @@ async function getGamesByUid(token: string): Promise<Game[]> {
 }
 
 // API에서 특정 대기 중인 게임 데이터를 가져오는 함수
-async function submitGame(token: string, newGame: Game): Promise<boolean> {
+async function submitGame(
+  token: string,
+  newGame: Game,
+  bIsEditingExisting: boolean
+): Promise<any> {
+  const apiRoutesLink = bIsEditingExisting ? "games/edit" : "games/submit";
   try {
     // API 호출
-    const response = await axios.post<Game>(
-      getApiLinkByPurpose("games/submit"),
+    const response = await axios.post(
+      getApiLinkByPurpose(apiRoutesLink),
       newGame,
       {
         timeout: 30000, // 30초 타임아웃
@@ -102,10 +107,10 @@ async function submitGame(token: string, newGame: Game): Promise<boolean> {
     console.log("Submit succeed:", response.data);
 
     // 성공 알림
-    return true;
-  } catch (error) {
-    console.error("대기 중인 게임 데이터를 가져오는 중 오류 발생:", error);
-    return false;
+    return response.data;
+  } catch (error: any) {
+    console.error("게임 제출 중 오류 발생:", error.code);
+    return error;
   }
 }
 
