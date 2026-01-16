@@ -60,13 +60,7 @@ export default function GameStoreViewEditor() {
   const locale = useLocale();
   const t = useTranslations("GamesView");
   const t_gameSubmit = useTranslations("GameSubmit");
-  const {
-    gameData: game,
-    updateField,
-    updateLocalizedField,
-    updateImages,
-    resetForm,
-  } = useGameForm();
+  const { gameData: game, updateField, updateLocalizedField } = useGameForm();
   const { username } = useAuth();
 
   // 모달 상태
@@ -74,8 +68,6 @@ export default function GameStoreViewEditor() {
     useState(false);
   const [isDescriptionEnModalOpen, setIsDescriptionEnModalOpen] =
     useState(false);
-  const [isPreviewModalOpenKo, setIsPreviewModalOpenKo] = useState(false);
-  const [isPreviewModalOpenEn, setIsPreviewModalOpenEn] = useState(false);
   const [tempDescriptionKo, setTempDescriptionKo] = useState<string>("");
   const [tempDescriptionEn, setTempDescriptionEn] = useState<string>("");
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations, useLocale } from "next-intl";
-import { Box, AlertDialog, Tabs, Text, Flex } from "@radix-ui/themes";
+import { useTranslations } from "next-intl";
+import { Box, AlertDialog, Tabs, Flex } from "@radix-ui/themes";
 import { useSearchParams } from "next/navigation";
 import { getGameById } from "@/lib/games";
 import { useAuth } from "@/lib/AuthContext";
