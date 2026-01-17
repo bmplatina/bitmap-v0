@@ -48,7 +48,7 @@ export default async function GameDetailPage({
 
   return (
     <div>
-      <GameDetail game={game} bIsPending={true}></GameDetail>
+      <GameDetail game={game}></GameDetail>
     </div>
   );
 }

@@ -75,7 +75,7 @@ export default function SubmitGames() {
                   <GameListView
                     key={game.gameId}
                     game={game}
-                    bIsPending={true}
+                    bIsPublishingMode={true}
                   />
                 ))
               ) : (

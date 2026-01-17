@@ -127,7 +127,8 @@
     "macos-system-requirements": "OS: macOS Ventura 이상\\nCPU: SSE2 명령어를 지원하는 AMD64 CPU 또는 Apple Silicon\\nRAM: 16GB 이상\\nGPU: Metal 지원 Intel 및 AMD GPU 또는 Apple Silicon",
     "windows-system-requirements": "OS: 64비트 Windows 10 또는 Windows 11\\nCPU: SSE2 명령어를 지원하는 AMD64 CPU\\nRAM: 16GB 이상\\nGPU: DirectX 10, 11, 12 지원 GPU",
     "preview": "미리 보기",
-    "processing": "처리 중⋯"
+    "processing": "처리 중⋯",
+    "waiting-for-approval": "승인 대기 중"
   },
 
   "Publish": {
@@ -207,6 +208,7 @@
     "go-back": "돌아가기",
     "view-gamepage": "게임 페이지에서 보기",
     "submit-succeed": "게임이 성공적으로 등록되었으며 승인 대기 중입니다.",
+    "edit-succeed": "게임이 성공적으로 편집되었습니다.",
     "not-developer": "개발자 계정이 아닙니다. 개발자 계정으로 로그인한 후 다시 진행하십시오.",
     "not-author": "이 게임의 게시자가 아닙니다. 편집하거나 새로 등록할 수 없습니다.",
     "invalid-gameid": "유효하지 않은 게임 ID입니다",

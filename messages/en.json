@@ -127,7 +127,8 @@
     "macos-system-requirements": "OS: macOS Ventura or Later\\nCPU: AMD64 architecture with SSE2 instruction set support, Apple Silicon\\nRAM: 16GB or more\\nGPU: Metal-capable Intel and AMD GPUs, Apple Silicon",
     "windows-system-requirements": "OS: Windows 10 or Windows 11, 64-bit versions only.\\nCPU: AMD64 architecture with SSE2 instruction set support\\nRAM: 16GB or more\\nGPU: DX10, DX11, and DX12-capable GPUs",
     "preview": "Preview",
-    "processing": "Processing…"
+    "processing": "Processing…",
+    "waiting-for-approval": "Waiting for Approval"
   },
 
   "Publish": {
@@ -207,6 +208,7 @@
     "go-back": "Go Back",
     "view-gamepage": "View on Game Page",
     "submit-succeed": "The game has been successfully submitted and is pending approval.",
+    "edit-succeed": "The game has been successfully edited.",
     "not-developer": "Not a developer account. Please log in with a developer account and try again.",
     "not-author": "Not the author of this game. You cannot edit or register a new one.",
     "invalid-gameid": "Invalid Game ID.",

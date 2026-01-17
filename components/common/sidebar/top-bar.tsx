@@ -211,7 +211,7 @@ export default function TopBar() {
                     <GameListView
                       key={game.gameId}
                       game={game}
-                      bIsPending={false}
+                      bIsPublishingMode={false}
                     />
                   ))}
                 </div>

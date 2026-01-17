@@ -10,10 +10,10 @@ import type { Game } from "@/lib/types";
 
 interface GameProp {
   game: Game;
-  bIsPending: boolean;
+  bIsPublishingMode: boolean;
 }
 
-export default function GameListView({ game, bIsPending }: GameProp) {
+export default function GameListView({ game, bIsPublishingMode }: GameProp) {
   const t = useTranslations("Publish");
 
   return (
@@ -40,9 +40,11 @@ export default function GameListView({ game, bIsPending }: GameProp) {
           </Text>
         </div>
       </Link>
-      {bIsPending && (
+      {bIsPublishingMode && (
         <Flex align="center" gap="3" className="pr-4">
-          {game.isApproved && <Badge>{t("approved")}</Badge>}
+          <Badge>
+            {game.isApproved ? t("approved") : t("waiting-for-approval")}
+          </Badge>
           <IconButton radius="full" variant="ghost" asChild>
             <Link href={`/publish/games?edit=${game.gameId}`}>
               <Edit size={18} />

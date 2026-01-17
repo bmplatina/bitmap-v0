@@ -6,7 +6,7 @@ import { getTranslations } from "next-intl/server";
 
 export default async function GamesPage() {
   // 서버 컴포넌트에서 직접 데이터 가져오기
-  const games: Game[] = await getGames("released");
+  const games: Game[] = await getGames("all");
   const t = await getTranslations("GamesView");
 
   return (

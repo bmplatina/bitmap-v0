@@ -121,7 +121,7 @@ export default function GameDetail({
             <h1 className="text-3xl font-bold">{game.gameTitle}</h1>
             {submitState === "submitNew" && (
               <Badge className="bg-amber-500">
-                {t_gameSubmit("waiting-approval")}
+                {t_gameSubmit("waiting-for-approval")}
               </Badge>
             )}
             {game.isEarlyAccess && (

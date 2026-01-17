@@ -12,13 +12,9 @@ import { ScrollArea } from "@radix-ui/themes";
 
 type GameDetailProps = {
   game: Game;
-  bIsPending: boolean;
 };
 
-export default async function GameDetail({
-  game,
-  bIsPending,
-}: GameDetailProps) {
+export default async function GameDetail({ game }: GameDetailProps) {
   const t = await getTranslations("GamesView");
   const t_gameSubmit = await getTranslations("GameSubmit");
   const locale = await getLocale();
@@ -40,7 +36,7 @@ export default async function GameDetail({
 
   return (
     <div className="container mx-auto p-6 w-full">
-      {bIsPending && (
+      {!game.isApproved && (
         <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
           <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
             <Clock className="h-5 w-5" />
@@ -116,8 +112,10 @@ export default async function GameDetail({
         <div className="lg:col-span-2">
           <div className="flex items-center gap-3 mb-4">
             <h1 className="text-3xl font-bold">{game.gameTitle}</h1>
-            {bIsPending && (
-              <Badge className="bg-amber-500">{t("waiting-approval")}</Badge>
+            {!game.isApproved && (
+              <Badge className="bg-amber-500">
+                {t("waiting-for-approval")}
+              </Badge>
             )}
             {game.isEarlyAccess && (
               <Badge className="bg-amber-500">{t("early-access")}</Badge>

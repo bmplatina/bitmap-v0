@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Spinner, Text } from "@radix-ui/themes";
+import { Checkbox, Spinner, Text } from "@radix-ui/themes";
 import {
   Card,
   CardContent,
@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import type { Game } from "@/lib/types";
 import { toast } from "@/hooks/use-toast";
