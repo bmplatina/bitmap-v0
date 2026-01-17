@@ -32,14 +32,14 @@ export default async function GameCard({
             className="object-cover"
             priority
           />
-          {game.isEarlyAccess && (
+          {game.isApproved && game.isEarlyAccess && (
             <Badge className="absolute top-2 right-2 bg-amber-500">
               {t("early-access")}
             </Badge>
           )}
-          {linkPrefix === "/games/pending" && (
-            <Badge className="absolute top-2 left-2 bg-orange-500">
-              {t("pending")}
+          {!game.isApproved && (
+            <Badge className="absolute top-2 right-2 bg-orange-500">
+              {t("waiting-for-approval")}
             </Badge>
           )}
         </div>

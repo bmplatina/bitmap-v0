@@ -2,8 +2,6 @@ import axios from "axios";
 import { Game } from "@/lib/types";
 import { getApiLinkByPurpose } from "@/lib/utils";
 
-
-
 // API에서 게임 데이터를 가져오는 함수 - 서버 컴포넌트에서만 호출
 async function getGames(
   getPendingOnly: "released" | "pending" | "all"

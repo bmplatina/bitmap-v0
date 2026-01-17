@@ -76,15 +76,15 @@ export default function gamePublishSubmitter() {
             >
               {bIsEditingExisting ? t("edit-warning") : t("submit-warning")}
             </Text>
-            {
+            {postMessage.length !== 0 && (
               <Text
                 as="p"
                 className="text-sm text-amber-700 dark:text-amber-300 mt-1"
-                color="red"
+                color={bIsPostSucceed ? undefined : "red"}
               >
                 {t(postMessage)}
               </Text>
-            }
+            )}
           </div>
           {bIsPostSucceed ? (
             <Button

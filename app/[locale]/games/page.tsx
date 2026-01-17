@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Game } from "@/lib/types";
 import GameCard from "@/components/games/game-card";
+import { ScrollArea } from "@radix-ui/themes";
 import { getGames } from "@/lib/games";
 import { getTranslations } from "next-intl/server";
 
@@ -10,28 +11,31 @@ export default async function GamesPage() {
   const t = await getTranslations("GamesView");
 
   return (
-    <div className="p-6 w-full">
-      <h1 className="text-3xl font-bold mb-6">{t("explore")}</h1>
+    <ScrollArea scrollbars="vertical" style={{ height: "100%", width: "100%" }}>
+      <div className="p-6 w-full">
+        <h1 className="text-3xl font-bold mb-6">{t("explore")}</h1>
 
-      {games.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-xl text-muted-foreground">
-            현재 사용 가능한 게임이 없습니다.
-          </p>
-          <p className="text-sm text-muted-foreground mt-2">
-            게임 데이터를 불러오는 중 문제가 발생했거나 등록된 게임이 없습니다.
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {games.map((game) => (
-            <Suspense key={game.gameId} fallback={<GameCardSkeleton />}>
-              <GameCard game={game} />
-            </Suspense>
-          ))}
-        </div>
-      )}
-    </div>
+        {games.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-xl text-muted-foreground">
+              현재 사용 가능한 게임이 없습니다.
+            </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              게임 데이터를 불러오는 중 문제가 발생했거나 등록된 게임이
+              없습니다.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {games.map((game) => (
+              <Suspense key={game.gameId} fallback={<GameCardSkeleton />}>
+                <GameCard game={game} />
+              </Suspense>
+            ))}
+          </div>
+        )}
+      </div>
+    </ScrollArea>
   );
 }
 

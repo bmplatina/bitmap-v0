@@ -185,7 +185,7 @@ export default function GameDetail({
                       />
                     </div>
                   )}
-                  {game.gameImageURL.slice(1).map((url, index) => (
+                  {game.gameImageURL.slice(3).map((url, index) => (
                     <div
                       key={index}
                       className="shrink-0 w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"

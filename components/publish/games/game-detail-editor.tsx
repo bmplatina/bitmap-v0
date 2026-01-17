@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Checkbox, Spinner, Text } from "@radix-ui/themes";
+import { Callout, Checkbox, Spinner, Text } from "@radix-ui/themes";
 import {
   Card,
   CardContent,
@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Clock } from "lucide-react";
 import type { Game } from "@/lib/types";
 import { toast } from "@/hooks/use-toast";
 import { getGames } from "@/lib/games";
@@ -20,7 +21,12 @@ import { useGameForm } from "@/lib/GamePublishContext";
 
 export default function GameDetailEditor() {
   const t = useTranslations("GameSubmit");
-  const { gameData: game, updateField, bIsEditingExisting } = useGameForm();
+  const {
+    gameData: game,
+    updateField,
+    bIsEditingExisting,
+    getIsDetailEditorFieldAllValid,
+  } = useGameForm();
 
   // 로딩 상태
   const [isLoadingGameId, setIsLoadingGameId] = useState(false);
@@ -59,10 +65,6 @@ export default function GameDetailEditor() {
 
   function setGamePlatformMac(value: boolean) {
     updateField("gamePlatformMac", value);
-  }
-
-  function setGamePlatformMobile(value: boolean) {
-    updateField("gamePlatformMobile", value);
   }
 
   function setIsEarlyAccess(value: boolean) {
@@ -106,11 +108,22 @@ export default function GameDetailEditor() {
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
+      {!getIsDetailEditorFieldAllValid() && (
+        <Callout.Root className="mb-4" color="red">
+          <Callout.Icon>
+            <Clock />
+          </Callout.Icon>
+          <Callout.Text>{t("stored-view-required-context-alert")}</Callout.Text>
+        </Callout.Root>
+      )}
       <div className="space-y-6">
         {/* 게임 ID */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("gameId")}</CardTitle>
+            <CardTitle>
+              {t("gameId")}
+              <Text color="red"> *</Text>
+            </CardTitle>
             <CardDescription>{t("gameIdDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -132,7 +145,10 @@ export default function GameDetailEditor() {
         {/* 최신 리비전 */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("gameLatestRevision")}</CardTitle>
+            <CardTitle>
+              {t("gameLatestRevision")}
+              <Text color="red"> *</Text>
+            </CardTitle>
             <CardDescription>{t("gameLatestRevisionDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -151,7 +167,10 @@ export default function GameDetailEditor() {
         {/* 플랫폼 지원 */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("gamePlatform")}</CardTitle>
+            <CardTitle>
+              {t("gamePlatform")}
+              <Text color="red"> *</Text>
+            </CardTitle>
             <CardDescription>{t("gamePlatformDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -175,16 +194,6 @@ export default function GameDetailEditor() {
               />
               <Label htmlFor="mac">{t("gamePlatformMac")}</Label>
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="mobile"
-                checked={game.gamePlatformMobile}
-                onCheckedChange={(checked) =>
-                  setGamePlatformMobile(checked as boolean)
-                }
-              />
-              <Label htmlFor="mobile">{t("gamePlatformMobile")}</Label>
-            </div>
           </CardContent>
         </Card>
 
@@ -193,7 +202,10 @@ export default function GameDetailEditor() {
         {/* 게임 엔진 */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("gameEngine")}</CardTitle>
+            <CardTitle>
+              {t("gameEngine")}
+              <Text color="red"> *</Text>
+            </CardTitle>
             <CardDescription>{t("gameEngineDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -210,7 +222,10 @@ export default function GameDetailEditor() {
         {/* 얼리 액세스 */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("isEarlyAccess")}</CardTitle>
+            <CardTitle>
+              {t("isEarlyAccess")}
+              <Text color="red"> *</Text>
+            </CardTitle>
             <CardDescription>{t("isEarlyAccessDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -232,7 +247,10 @@ export default function GameDetailEditor() {
         {/* 출시 여부 */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("isReleased")}</CardTitle>
+            <CardTitle>
+              {t("isReleased")}
+              <Text color="red"> *</Text>
+            </CardTitle>
             <CardDescription>{t("isReleasedDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -252,7 +270,10 @@ export default function GameDetailEditor() {
         {/* 웹사이트 */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("gameWebsite")}</CardTitle>
+            <CardTitle>
+              {t("gameWebsite")}
+              <Text color="red"> *</Text>
+            </CardTitle>
             <CardDescription>{t("gameWebsiteDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -268,7 +289,10 @@ export default function GameDetailEditor() {
         {/* 다운로드 URL */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("gameDownloadURL")}</CardTitle>
+            <CardTitle>
+              {t("gameDownloadURL")}
+              <Text color="red"> *</Text>
+            </CardTitle>
             <CardDescription>{t("gameDownloadURLDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -304,7 +328,10 @@ export default function GameDetailEditor() {
         {/* 바이너리 이름 */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("gameBinaryName")}</CardTitle>
+            <CardTitle>
+              {t("gameBinaryName")}
+              <Text color="red"> *</Text>
+            </CardTitle>
             <CardDescription>{t("gameBinaryNameDesc")}</CardDescription>
           </CardHeader>
           <CardContent>

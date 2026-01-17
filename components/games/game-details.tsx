@@ -85,7 +85,12 @@ export default async function GameDetail({ game }: GameDetailProps) {
               </Button>
             )}
 
-            <Button className="w-full" variant="default" asChild>
+            <Button
+              className="w-full"
+              variant="default"
+              asChild
+              disabled={!game.isApproved}
+            >
               <a href={`/about/${game.gameId}`} rel="noopener noreferrer">
                 <Monitor className="mr-2 h-4 w-4" />
                 {t("view-in-bitmap-app")}
@@ -175,7 +180,7 @@ export default async function GameDetail({ game }: GameDetailProps) {
                       />
                     </div>
                   )}
-                  {game.gameImageURL.slice(1).map((url, index) => (
+                  {game.gameImageURL.slice(3).map((url, index) => (
                     <div
                       key={index}
                       className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"

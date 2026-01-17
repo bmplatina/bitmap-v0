@@ -60,7 +60,12 @@ export default function GameStoreViewEditor() {
   const locale = useLocale();
   const t = useTranslations("GamesView");
   const t_gameSubmit = useTranslations("GameSubmit");
-  const { gameData: game, updateField, updateLocalizedField } = useGameForm();
+  const {
+    gameData: game,
+    updateField,
+    updateLocalizedField,
+    getIsStoreviewEditorFieldAllValid,
+  } = useGameForm();
   const { username } = useAuth();
 
   // 모달 상태
@@ -125,22 +130,6 @@ export default function GameStoreViewEditor() {
     return game.gameReleasedDate.length > 0;
   }
 
-  // 모든 입력이 작성되었는지 확인
-  function isAllRequiredFieldsFilled(): boolean {
-    return (
-      getIsTitleWritten() &&
-      getIsGameHeadlineWritten("ko") &&
-      getIsGameHeadlineWritten("en") &&
-      getIsDeveloperWritten() &&
-      getIsPublisherWritten() &&
-      getIsGenreWritten("ko") &&
-      getIsGenreWritten("en") &&
-      getIsReleasedDateSelected() &&
-      game.gameDescription.ko.length > 0 &&
-      game.gameDescription.en.length > 0
-    );
-  }
-
   // 마크다운 편집 모달 열기
   const openDescriptionModalKo = () => {
     setTempDescriptionKo(game.gameDescription.ko);
@@ -176,7 +165,7 @@ export default function GameStoreViewEditor() {
 
   return (
     <div className="container mx-auto p-6 w-full">
-      {!isAllRequiredFieldsFilled() && (
+      {!getIsStoreviewEditorFieldAllValid() && (
         <Callout.Root className="mb-4" color="red">
           <Callout.Icon>
             <Clock />
@@ -595,7 +584,7 @@ export default function GameStoreViewEditor() {
                       />
                     </div>
                   )}
-                  {game.gameImageURL.slice(1).map((url, index) => (
+                  {game.gameImageURL.slice(3).map((url, index) => (
                     <div
                       key={index}
                       className="shrink-0 w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"

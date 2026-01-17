@@ -11,7 +11,6 @@ export interface Game {
   gameLatestRevision: number;
   gamePlatformWindows: boolean;
   gamePlatformMac: boolean;
-  gamePlatformMobile: boolean;
   gameEngine: string;
   gameGenre: stringLocalized;
   gameDeveloper: string;
@@ -22,7 +21,9 @@ export interface Game {
   gameWebsite: string;
   gameVideoURL: string;
   gameDownloadMacURL: string | null;
+  requirementsMac: stringLocalized;
   gameDownloadWinURL: string | null;
+  requirementsWindows: stringLocalized;
   gameImageURL: string[];
   gameBinaryName: string;
   gameHeadline: stringLocalized;
