@@ -226,7 +226,7 @@ export default function GameAssetsUploader() {
               <div className="flex gap-2">
                 <Input
                   readOnly
-                  placeholder="파일을 선택하세요..."
+                  placeholder= {t("select-file-placeholder")}
                   value={selectedFiles.poster?.name || ""}
                   onClick={() => fileInputRefs.poster.current?.click()}
                   className="cursor-pointer"
@@ -242,7 +242,7 @@ export default function GameAssetsUploader() {
                   variant="outline"
                   onClick={() => fileInputRefs.poster.current?.click()}
                 >
-                  파일 선택
+                   {t("select-file")}
                 </Button>
               </div>
 
@@ -255,7 +255,7 @@ export default function GameAssetsUploader() {
                     className="object-cover"
                   />
                   <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                    {previewUrls.poster ? "로컬 미리보기" : "서버 이미지"}
+                    {previewUrls.poster ? t("local-preview") : t("server-image")}
                   </div>
                 </div>
               )}
@@ -265,7 +265,7 @@ export default function GameAssetsUploader() {
                 onClick={() => handleUpload("poster")}
                 disabled={!selectedFiles.poster}
               >
-                서버로 업로드
+                 {t("upload")}
               </Button>
             </CardFooter>
           </Card>
@@ -287,7 +287,7 @@ export default function GameAssetsUploader() {
               <div className="flex gap-2">
                 <Input
                   readOnly
-                  placeholder="파일을 선택하세요..."
+                  placeholder= {t("select-file-placeholder")}
                   value={selectedFiles.gameListBanner?.name || ""}
                   onClick={() => fileInputRefs.gameListBanner.current?.click()}
                   className="cursor-pointer"
@@ -303,7 +303,7 @@ export default function GameAssetsUploader() {
                   variant="outline"
                   onClick={() => fileInputRefs.gameListBanner.current?.click()}
                 >
-                  파일 선택
+                   {t("select-file")}
                 </Button>
               </div>
 
@@ -316,7 +316,7 @@ export default function GameAssetsUploader() {
                     className="object-cover"
                   />
                   <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                    {previewUrl ? "로컬 미리보기" : "서버 이미지"}
+                    {previewUrl ? " {t("local-preview")}" : "서버 이미지"}
                   </div>
                 </div>
               )*/}
@@ -341,7 +341,7 @@ export default function GameAssetsUploader() {
                 onClick={() => handleUpload("gameListBanner")}
                 disabled={!selectedFiles.gameListBanner}
               >
-                서버로 업로드
+                 {t("upload")}
               </Button>
             </CardFooter>
           </Card>
@@ -360,7 +360,7 @@ export default function GameAssetsUploader() {
               <div className="flex gap-2">
                 <Input
                   readOnly
-                  placeholder="파일을 선택하세요..."
+                  placeholder= {t("select-file-placeholder")}
                   value={selectedFiles.gameImage?.name || ""}
                   onClick={() => fileInputRefs.gameImage.current?.click()}
                   className="cursor-pointer"
@@ -376,7 +376,7 @@ export default function GameAssetsUploader() {
                   variant="outline"
                   onClick={() => fileInputRefs.gameImage.current?.click()}
                 >
-                  파일 선택
+                   {t("select-file")}
                 </Button>
               </div>
 
@@ -389,7 +389,7 @@ export default function GameAssetsUploader() {
                     className="object-cover"
                   />
                   <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                    로컬 미리보기
+                     {t("local-preview")}
                   </div>
                 </div>
               )}
@@ -399,7 +399,7 @@ export default function GameAssetsUploader() {
                 onClick={() => handleUpload("gameImage")}
                 disabled={!selectedFiles.gameImage}
               >
-                서버로 업로드 (추가)
+                 {t("upload-append")}
               </Button>
             </CardFooter>
           </Card>
@@ -411,11 +411,11 @@ export default function GameAssetsUploader() {
               <CardTitle>{t("preview")}</CardTitle>
             </CardHeader>
             <CardContent>
-              {/* 하단 전체 미리보기 (기존 유지 및 로컬 미리보기 반영) */}
+              {/* 하단 전체 미리보기 (기존 유지 및  {t("local-preview")} 반영) */}
               <div className="space-y-6">
                 <ScrollArea type="always" scrollbars="horizontal">
                   <div className="flex gap-4 pb-4">
-                    {/* 로컬 미리보기가 있으면 가장 앞에 표시 */}
+                    {/*  {t("local-preview")}가 있으면 가장 앞에 표시 */}
                     {game.gameVideoURL && (
                       <div className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted">
                         <iframe

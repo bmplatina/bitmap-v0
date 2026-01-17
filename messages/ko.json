@@ -216,7 +216,13 @@
     "not-developer": "개발자 계정이 아닙니다. 개발자 계정으로 로그인한 후 다시 진행하십시오.",
     "not-author": "이 게임의 게시자가 아닙니다. 편집하거나 새로 등록할 수 없습니다.",
     "invalid-gameid": "유효하지 않은 게임 ID입니다",
-    "server-error": "서버 오류가 발생했습니다."
+    "server-error": "서버 오류가 발생했습니다.",
+    "local-preview": "사진 미리보기",
+    "server-image": "서버 이미지",
+    "upload": "업로드",
+    "upload-append": "업로드 (추가)",
+    "select-file": "파일 선택",
+    "select-file-placeholder": "파일을 선택하십시오⋯"
   },
 
   "Common": {

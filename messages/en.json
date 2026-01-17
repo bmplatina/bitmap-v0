@@ -216,7 +216,13 @@
     "not-developer": "Not a developer account. Please log in with a developer account and try again.",
     "not-author": "Not the author of this game. You cannot edit or register a new one.",
     "invalid-gameid": "Invalid Game ID.",
-    "server-error": "Server error occurred."
+    "server-error": "Server error occurred.",
+    "local-preview": "Local Preview",
+    "server-image": "Server Image",
+    "upload": "Upload",
+    "upload-append": "Upload (Add)",
+    "select-file": "Select File",
+    "select-file-placeholder": "Please select a file…"
   },
 
   "Common": {
