@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { extractYoutubeId } from "@/lib/utils";
 import { uploadGameImage } from "@/lib/games";
+import type { Game } from "@/lib/types";
 
 const GameRedirectButton = dynamic(
   () => import("@/components/games/game-redirect-button"),
@@ -40,46 +41,87 @@ export default function GameAssetsUploader() {
   } = useGameForm();
 
   const [tempYouTubeVideoId, setTempYouTubeVideoId] = useState<string>("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  // 통합된 파일 및 미리보기 상태 관리 타입 정의
+  type ImageType = "poster" | "gameListBanner" | "gameIcon" | "gameImage";
+
+  const [selectedFiles, setSelectedFiles] = useState<
+    Record<ImageType, File | null>
+  >({
+    poster: null,
+    gameListBanner: null,
+    gameIcon: null,
+    gameImage: null,
+  });
+
+  const [previewUrls, setPreviewUrls] = useState<
+    Record<ImageType, string | null>
+  >({
+    poster: null,
+    gameListBanner: null,
+    gameIcon: null,
+    gameImage: null,
+  });
+
+  // 개별 Ref 생성 (버그 수정: 하나의 Ref 공유 문제 해결)
+  const fileInputRefs = {
+    poster: useRef<HTMLInputElement>(null),
+    gameListBanner: useRef<HTMLInputElement>(null),
+    gameIcon: useRef<HTMLInputElement>(null),
+    gameImage: useRef<HTMLInputElement>(null),
+  };
 
   // 컴포넌트 마운트 시 로컬 스토리지에서 캐시된 미리보기(Base64)가 있는지 확인
   useEffect(() => {
-    const cachedImage = localStorage.getItem(`preview_${game.gameBinaryName}`);
-    if (cachedImage) {
-      setPreviewUrl(cachedImage);
-    }
+    const types: ImageType[] = [
+      "poster",
+      "gameListBanner",
+      "gameIcon",
+      "gameImage",
+    ];
+    types.forEach((type) => {
+      const cached = localStorage.getItem(
+        `${type}Preview_${game.gameBinaryName}`
+      );
+      // gameListBanner의 경우, 기존 로직상 배너 미리보기가 없으면 포스터나 기존 이미지를 보여주지 않도록 null 체크를 신중히 함
+      if (cached) {
+        setPreviewUrls((prev) => ({ ...prev, [type]: cached }));
+      }
+    });
 
     if (bIsEditingExisting) {
       setTempYouTubeVideoId(game.gameVideoURL);
     }
-  }, [bIsEditingExisting, game.gameBinaryName]);
+  }, [bIsEditingExisting, game.gameBinaryName, game.gameVideoURL]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function handleFileChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    imageType: ImageType
+  ) {
     const file = e.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
+      const objectUrl: string = URL.createObjectURL(file);
 
-      // 즉각적인 미리보기를 위한 URL 생성
-      const objectUrl = URL.createObjectURL(file);
-      setPreviewUrl(objectUrl);
+      setSelectedFiles((prev) => ({ ...prev, [imageType]: file }));
+      setPreviewUrls((prev) => ({ ...prev, [imageType]: objectUrl }));
 
-      // (선택 사항) 로컬 스토리지에 Base64로 저장하여 새로고침 시에도 유지하고 싶다면:
+      // 로컬 스토리지 캐싱
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result as string;
-        localStorage.setItem(`preview_${game.gameBinaryName}`, base64String);
+        localStorage.setItem(
+          `${imageType}Preview_${game.gameBinaryName}`,
+          base64String
+        );
       };
       reader.readAsDataURL(file);
     }
-  };
+  }
 
-  async function handleUpload(
-    imageType: "poster" | "gameListBanner" | "gameImage"
-  ) {
+  async function handleUpload(imageType: ImageType) {
     const token = localStorage.getItem("accessToken");
+    const selectedFile = selectedFiles[imageType];
+
     if (token && selectedFile && game.gameBinaryName.trim().length !== 0) {
       const result = await uploadGameImage(
         selectedFile,
@@ -95,10 +137,36 @@ export default function GameAssetsUploader() {
           case "gameListBanner":
             setImage(1, result);
             break;
+          case "gameIcon":
+            setImage(2, result);
+            break;
           case "gameImage":
-            updateImages([...game.gameImageURL, result]);
+            // 0: poster, 1: banner, 2: icon, 3+: previews
+            const newImages = [...game.gameImageURL];
+            // 3번 인덱스(미리보기)부터 사용하기 위해 앞쪽이 비어있으면 채움
+            while (newImages.length < 3) {
+              newImages.push("");
+            }
+
+            // 3번 인덱스 이상에서 빈 문자열("")인 슬롯이 있다면 그곳에 삽입
+            let inserted = false;
+            for (let i = 3; i < newImages.length; i++) {
+              if (newImages[i] === "") {
+                newImages[i] = result;
+                inserted = true;
+                break;
+              }
+            }
+
+            // 빈 슬롯을 찾지 못했다면 맨 뒤에 추가
+            if (!inserted) {
+              newImages.push(result);
+            }
+
+            updateImages(newImages);
             break;
         }
+        // alert(`${imageType} 업로드 성공`);
       }
     } else {
       alert("파일을 먼저 선택해주세요.");
@@ -143,7 +211,7 @@ export default function GameAssetsUploader() {
 
           <Separator />
 
-          {/* 파일 업로드 섹션 */}
+          {/* 게임 포스터 */}
           <Card>
             <CardHeader>
               <CardTitle>
@@ -159,35 +227,35 @@ export default function GameAssetsUploader() {
                 <Input
                   readOnly
                   placeholder="파일을 선택하세요..."
-                  value={selectedFile?.name || ""}
-                  onClick={() => fileInputRef.current?.click()}
+                  value={selectedFiles.poster?.name || ""}
+                  onClick={() => fileInputRefs.poster.current?.click()}
                   className="cursor-pointer"
                 />
                 <input
                   type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
+                  ref={fileInputRefs.poster}
+                  onChange={(e) => handleFileChange(e, "poster")}
                   className="hidden"
                   accept="image/*"
                 />
                 <Button
                   variant="outline"
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => fileInputRefs.poster.current?.click()}
                 >
                   파일 선택
                 </Button>
               </div>
 
-              {(previewUrl || game.gameImageURL[0]) && (
+              {(previewUrls.poster || game.gameImageURL[0]) && (
                 <div className="relative w-48 aspect-[1/1.414] rounded-lg overflow-hidden border bg-muted">
                   <Image
-                    src={previewUrl || game.gameImageURL[0]}
+                    src={previewUrls.poster || game.gameImageURL[0]}
                     alt="Poster Preview"
                     fill
                     className="object-cover"
                   />
                   <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                    {previewUrl ? "로컬 미리보기" : "서버 이미지"}
+                    {previewUrls.poster ? "로컬 미리보기" : "서버 이미지"}
                   </div>
                 </div>
               )}
@@ -195,7 +263,7 @@ export default function GameAssetsUploader() {
             <CardFooter>
               <Button
                 onClick={() => handleUpload("poster")}
-                disabled={!selectedFile}
+                disabled={!selectedFiles.poster}
               >
                 서버로 업로드
               </Button>
@@ -204,7 +272,7 @@ export default function GameAssetsUploader() {
 
           <Separator />
 
-          {/* 파일 업로드 섹션 */}
+          {/* 게임 배너 이미지 */}
           <Card>
             <CardHeader>
               <CardTitle>
@@ -220,26 +288,26 @@ export default function GameAssetsUploader() {
                 <Input
                   readOnly
                   placeholder="파일을 선택하세요..."
-                  value={selectedFile?.name || ""}
-                  onClick={() => fileInputRef.current?.click()}
+                  value={selectedFiles.gameListBanner?.name || ""}
+                  onClick={() => fileInputRefs.gameListBanner.current?.click()}
                   className="cursor-pointer"
                 />
                 <input
                   type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
+                  ref={fileInputRefs.gameListBanner}
+                  onChange={(e) => handleFileChange(e, "gameListBanner")}
                   className="hidden"
                   accept="image/*"
                 />
                 <Button
                   variant="outline"
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => fileInputRefs.gameListBanner.current?.click()}
                 >
                   파일 선택
                 </Button>
               </div>
 
-              {(previewUrl || game.gameImageURL[0]) && (
+              {/*(previewUrl || game.gameImageURL[0]) && (
                 <div className="relative w-48 aspect-[1/1.414] rounded-lg overflow-hidden border bg-muted">
                   <Image
                     src={previewUrl || game.gameImageURL[0]}
@@ -251,18 +319,87 @@ export default function GameAssetsUploader() {
                     {previewUrl ? "로컬 미리보기" : "서버 이미지"}
                   </div>
                 </div>
-              )}
+              )*/}
               {/* 미리보기 영역: 업로드 전/후 상태를 시각적으로 보여줌 */}
               <div className="flex gap-4 pb-4">
-                <GameRedirectButton disabled={true} game={game} />
+                <GameRedirectButton
+                  disabled={true}
+                  gameId={game.gameId}
+                  gameImageURL={
+                    previewUrls.gameListBanner ||
+                    game.gameImageURL[1] ||
+                    game.gameImageURL[0] ||
+                    ""
+                  }
+                  gameTitle={game.gameTitle}
+                  gameDeveloper={game.gameDeveloper}
+                />
               </div>
             </CardContent>
             <CardFooter>
               <Button
-                onClick={() => handleUpload("poster")}
-                disabled={!selectedFile}
+                onClick={() => handleUpload("gameListBanner")}
+                disabled={!selectedFiles.gameListBanner}
               >
                 서버로 업로드
+              </Button>
+            </CardFooter>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {t("gamePreviewImage")}
+                <Text color="red"> *</Text>
+              </CardTitle>
+              <CardDescription className="whitespace-pre-wrap">
+                {t("gamePreviewImageDesc")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex gap-2">
+                <Input
+                  readOnly
+                  placeholder="파일을 선택하세요..."
+                  value={selectedFiles.gameImage?.name || ""}
+                  onClick={() => fileInputRefs.gameImage.current?.click()}
+                  className="cursor-pointer"
+                />
+                <input
+                  type="file"
+                  ref={fileInputRefs.gameImage}
+                  onChange={(e) => handleFileChange(e, "gameImage")}
+                  className="hidden"
+                  accept="image/*"
+                />
+                <Button
+                  variant="outline"
+                  onClick={() => fileInputRefs.gameImage.current?.click()}
+                >
+                  파일 선택
+                </Button>
+              </div>
+
+              {previewUrls.gameImage && (
+                <div className="relative w-48 aspect-video rounded-lg overflow-hidden border bg-muted">
+                  <Image
+                    src={previewUrls.gameImage}
+                    alt="Preview Image"
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                    로컬 미리보기
+                  </div>
+                </div>
+              )}
+            </CardContent>
+            <CardFooter>
+              <Button
+                onClick={() => handleUpload("gameImage")}
+                disabled={!selectedFiles.gameImage}
+              >
+                서버로 업로드 (추가)
               </Button>
             </CardFooter>
           </Card>
@@ -272,14 +409,10 @@ export default function GameAssetsUploader() {
           <Card>
             <CardHeader>
               <CardTitle>{t("preview")}</CardTitle>
-              <CardDescription className="whitespace-pre-wrap">
-                {t("gameVideoURLDesc")}
-              </CardDescription>
             </CardHeader>
             <CardContent>
               {/* 하단 전체 미리보기 (기존 유지 및 로컬 미리보기 반영) */}
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold mb-4">{t("preview")}</h3>
                 <ScrollArea type="always" scrollbars="horizontal">
                   <div className="flex gap-4 pb-4">
                     {/* 로컬 미리보기가 있으면 가장 앞에 표시 */}
@@ -292,7 +425,7 @@ export default function GameAssetsUploader() {
                         />
                       </div>
                     )}
-                    {game.gameImageURL[0] === "" && previewUrl && (
+                    {/*{game.gameImageURL[0] === "" && previewUrl && (
                       <div className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden ring-4 ring-primary">
                         <Image
                           src={previewUrl}
@@ -304,9 +437,9 @@ export default function GameAssetsUploader() {
                           업로드 대기 중
                         </div>
                       </div>
-                    )}
+                    )}*/}
                     {/* 기존 서버 이미지들 */}
-                    {game.gameImageURL.map((url, index) => (
+                    {game.gameImageURL.slice(3).map((url, index) => (
                       <div
                         key={index}
                         className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"

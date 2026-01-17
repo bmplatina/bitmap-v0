@@ -301,7 +301,7 @@ export default function GameDetailEditor() {
                 <Label htmlFor="macDownload">{t("gameDownloadMacURL")}</Label>
                 <Input
                   id="macDownload"
-                  value={game.gameDownloadMacURL as string}
+                  value={game.gameDownloadMacURL || ""}
                   onChange={(e) => setGameDownloadMacURL(e.target.value)}
                   placeholder="https://example.com/download/mac"
                   type="url"
@@ -313,7 +313,7 @@ export default function GameDetailEditor() {
                 <Label htmlFor="winDownload">{t("gameDownloadWinURL")}</Label>
                 <Input
                   id="winDownload"
-                  value={game.gameDownloadWinURL as string}
+                  value={game.gameDownloadWinURL || ""}
                   onChange={(e) => setGameDownloadWinURL(e.target.value)}
                   placeholder="https://example.com/download/windows"
                   type="url"

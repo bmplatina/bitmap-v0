@@ -58,8 +58,11 @@ export default async function Home() {
               games.map((game) => (
                 <GameRedirectButton
                   key={game.gameId}
-                  game={game}
                   disabled={false}
+                  gameId={game.gameId}
+                  gameImageURL={game.gameImageURL[1] || game.gameImageURL[0]}
+                  gameTitle={game.gameTitle}
+                  gameDeveloper={game.gameDeveloper}
                 />
               ))
             ) : (

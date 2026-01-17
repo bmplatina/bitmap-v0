@@ -9,7 +9,6 @@ import { Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
 import {
   checkAuthor,
   formatDate,
-  renderMarkdown,
   getLocalizedString,
 } from "@/lib/utils";
 import { useTranslations, useLocale } from "next-intl";
