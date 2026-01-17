@@ -5,9 +5,10 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import { useGameForm } from "@/lib/GamePublishContext";
 import { useAuth } from "@/lib/AuthContext";
-import { Button, Text } from "@radix-ui/themes";
+import { Button, Text, Spinner } from "@radix-ui/themes";
 import { Clock } from "lucide-react";
 import { submitGame } from "@/lib/games";
+import { formatDateToMySQL } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 export default function gamePublishSubmitter() {
@@ -23,11 +24,16 @@ export default function gamePublishSubmitter() {
   async function submitHandler() {
     try {
       setIsPosting(true);
+      if (token.length === 0) {
+        throw Error("No token found");
+      }
       const result = await submitGame(token, game, bIsEditingExisting);
       setPostMessage(result.message as string);
       setIsPostSucceed(true);
     } catch (error: any) {
-      setPostMessage(error.code);
+      const errorMessage =
+        error.response?.data?.message || error.message || error.code;
+      setPostMessage(errorMessage);
       setIsPostSucceed(false);
     } finally {
       setIsPosting(false);
@@ -39,7 +45,18 @@ export default function gamePublishSubmitter() {
     if (!bIsEditingExisting) {
       updateField("uid", uid);
     }
-  }, []);
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      setToken(accessToken);
+    }
+
+    if (game.gameReleasedDate) {
+      updateField(
+        "gameReleasedDate",
+        formatDateToMySQL(new Date(game.gameReleasedDate))
+      );
+    }
+  }, [bIsEditingExisting, uid, game.gameReleasedDate]);
 
   return (
     <>
@@ -86,7 +103,11 @@ export default function gamePublishSubmitter() {
               variant="solid"
               color="amber"
             >
-              {bIsEditingExisting ? t("edit") : t("submit")}
+              {bIsPosting ? (
+                <Spinner className="h-4 w-4" />
+              ) : (
+                <>{bIsEditingExisting ? t("edit") : t("submit")}</>
+              )}
             </Button>
           )}
         </div>

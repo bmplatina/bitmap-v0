@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "Bitmap",
   description: "디지털 게임 배포 플랫폼",
   icons: {
-    icon: "../../public/AppIcon.ico",
+    icon: "/AppIcon.ico",
   },
 };
 

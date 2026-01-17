@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import { Link } from "@/i18n/routing";
-import { Flex, IconButton } from "@radix-ui/themes";
+import { Flex, IconButton, Text } from "@radix-ui/themes";
 import { Edit } from "lucide-react";
 import { Badge } from "../ui/badge";
 import type { Game } from "@/lib/types";
@@ -15,7 +14,6 @@ interface GameProp {
 }
 
 export default function GameListView({ game, bIsPending }: GameProp) {
-  const [href, setHref] = useState("");
   const t = useTranslations("Publish");
 
   return (
@@ -23,7 +21,7 @@ export default function GameListView({ game, bIsPending }: GameProp) {
       <Link
         key={game.gameId}
         href={`/games/${game.gameId}`}
-        className="flex-1 flex items-center gap-3 px-4 py-2 hover:bg-muted transition-colors"
+        className="flex-1 min-w-0 flex items-center gap-3 px-4 py-2 hover:bg-muted transition-colors"
       >
         <div className="relative w-10 h-10 flex-shrink-0 rounded overflow-hidden bg-muted">
           <Image
@@ -34,10 +32,12 @@ export default function GameListView({ game, bIsPending }: GameProp) {
           />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate">{game.gameTitle}</p>
-          <p className="text-xs text-muted-foreground truncate">
+          <Text as="p" size="2" weight="medium" truncate>
+            {game.gameTitle}
+          </Text>
+          <Text as="p" size="1" color="gray" truncate>
             {game.gameDeveloper}
-          </p>
+          </Text>
         </div>
       </Link>
       {bIsPending && (

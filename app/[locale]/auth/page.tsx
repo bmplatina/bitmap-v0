@@ -39,7 +39,7 @@ export default function AccountPage() {
   useEffect(
     function () {
       if (bIsLoggedIn) {
-        router.push("/account");
+        router.push("/");
       }
     },
     [bIsLoggedIn]

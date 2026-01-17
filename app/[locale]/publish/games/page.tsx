@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Box, AlertDialog, Tabs, Flex } from "@radix-ui/themes";
 import { useSearchParams } from "next/navigation";
-import { getGameById } from "@/lib/games";
+import { getGameById, getGames } from "@/lib/games";
 import { useAuth } from "@/lib/AuthContext";
 import { useGameForm } from "@/lib/GamePublishContext";
 import GameStoreViewEditor from "@/components/publish/games/game-storeview-editor";
@@ -20,9 +20,15 @@ export default function SubmitGames() {
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const { setGame, setIsEditingExisting, bIsEditingExisting } = useGameForm();
+  const {
+    gameData,
+    setGame,
+    setIsEditingExisting,
+    bIsEditingExisting,
+    updateField,
+  } = useGameForm();
 
-  const { bIsLoggedIn, bIsDeveloper } = useAuth();
+  const { bIsLoggedIn, bIsDeveloper, uid } = useAuth();
   const isMobile = useIsMobile();
   const [ignoreMobileWarning, setIgnoreMobileWarning] =
     useState<boolean>(false);
@@ -37,16 +43,28 @@ export default function SubmitGames() {
   );
 
   useEffect(() => {
+    async function getGameAmount() {
+      const games = await getGames("all");
+      return games.length;
+    }
+
     const gameId = searchParams.get("edit");
     if (gameId) {
       getGameById(gameId).then((game) => {
         if (game) {
           setGame(game);
           setIsEditingExisting(true);
+          // if (uid !== gameData.uid) {
+          //   router.push("/auth");
+          // }
         }
       });
+    } else {
+      getGameAmount().then((amount) => {
+        updateField("gameId", amount);
+      });
     }
-  }, [searchParams]);
+  }, [searchParams, bIsEditingExisting, uid, gameData.uid]);
 
   return (
     <>

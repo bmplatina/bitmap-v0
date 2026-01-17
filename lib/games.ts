@@ -2,6 +2,8 @@ import axios from "axios";
 import { Game } from "@/lib/types";
 import { getApiLinkByPurpose } from "@/lib/utils";
 
+
+
 // API에서 게임 데이터를 가져오는 함수 - 서버 컴포넌트에서만 호출
 async function getGames(
   getPendingOnly: "released" | "pending" | "all"
@@ -109,8 +111,11 @@ async function submitGame(
     // 성공 알림
     return response.data;
   } catch (error: any) {
-    console.error("게임 제출 중 오류 발생:", error.code);
-    return error;
+    console.error(
+      "게임 제출 중 오류 발생:",
+      error.response?.data?.message || error.message
+    );
+    throw error;
   }
 }
 

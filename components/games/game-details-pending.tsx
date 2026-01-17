@@ -14,7 +14,7 @@ import {
 } from "@/lib/utils";
 import { useTranslations, useLocale } from "next-intl";
 import ClientMarkdown from "@/components/common/markdown/client-markdown";
-import { ScrollArea } from "@radix-ui/themes";
+import { ScrollArea, Text } from "@radix-ui/themes";
 
 interface AuthorInfo {
   username: string;
@@ -136,34 +136,38 @@ export default function GameDetail({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div className="flex items-center gap-2">
               <Code className="h-5 w-5 text-muted-foreground" />
-              <span>
+              <Text as="span">
                 {t("developer")}: <strong>{game.gameDeveloper}</strong>
-              </span>
+              </Text>
             </div>
 
             <div className="flex items-center gap-2">
               <User className="h-5 w-5 text-muted-foreground" />
-              <span>
+              <Text as="span">
                 {t("publisher")}: <strong>{game.gamePublisher}</strong>
                 <br />
-                {author && `${t("author")}: ${author.username}`}
-              </span>
+                {author && (
+                  <>
+                    {t("author")}: <strong>{author.username}</strong>
+                  </>
+                )}
+              </Text>
             </div>
 
             <div className="flex items-center gap-2">
               <Tag className="h-5 w-5 text-muted-foreground" />
-              <span>
+              <Text as="span">
                 {t("genre")}:{" "}
                 <strong>{getLocalizedString(locale, game.gameGenre)}</strong>
-              </span>
+              </Text>
             </div>
 
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-muted-foreground" />
-              <span>
+              <Text as="span">
                 {t("released-date")}:{" "}
                 <strong>{formatDate(locale, game.gameReleasedDate)}</strong>
-              </span>
+              </Text>
             </div>
           </div>
 

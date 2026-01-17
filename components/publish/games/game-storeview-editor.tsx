@@ -3,7 +3,7 @@
 import { useGameForm } from "@/lib/GamePublishContext";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { cn, formatDate, getLocalizedString } from "@/lib/utils";
+import { cn, formatDate, formatDateToMySQL } from "@/lib/utils";
 import {
   Globe,
   Monitor,
@@ -114,14 +114,6 @@ export default function GameStoreViewEditor() {
       locale === "ko" ? game.gameGenre.ko : game.gameGenre.en;
     return localeLocal.length > 0 && localeLocal.length > 0;
   }
-
-  // 게임 장르 핸들링
-  const formatDateToMySQL = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
 
   // 게임 출시일 핸들링
   function setReleasedDate(value: Date | undefined) {
