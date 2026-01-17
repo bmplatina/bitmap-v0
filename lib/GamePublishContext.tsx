@@ -132,8 +132,9 @@ export function GamePublishProvider({ children }: { children: ReactNode }) {
       gameData.gameDescription.ko.length > 0 &&
       gameData.gameDescription.en.length > 0 &&
       ((gameData.gamePlatformWindows &&
-        gameData.requirementsWindows.length > 0) ||
-        (gameData.gamePlatformMac && gameData.requirementsMac.length > 0))
+        (gameData.requirementsWindows?.length ?? 0) > 0) ||
+        (gameData.gamePlatformMac &&
+          (gameData.requirementsMac?.length ?? 0) > 0))
     );
   }, [gameData]);
 

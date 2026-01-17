@@ -174,12 +174,12 @@ export default function GameStoreViewEditor() {
 
   // 게임 요구 사양 마크다운 편집 모달 열기
   const openRequirementsWindowsModal = () => {
-    setTempRequirementsWindows(game.requirementsWindows);
+    setTempRequirementsWindows(game.requirementsWindows ?? "");
     setIsRequirementsWindowsModalOpen(true);
   };
 
   const openRequirementsMacModal = () => {
-    setTempRequirementsMac(game.requirementsMac);
+    setTempRequirementsMac(game.requirementsMac ?? "");
     setIsRequirementsMacModalOpen(true);
   };
 
@@ -196,12 +196,12 @@ export default function GameStoreViewEditor() {
 
   // 게임 설명 마크다운 편집 취소
   const cancelRequirementsWindows = () => {
-    setTempRequirementsWindows(game.requirementsWindows);
+    setTempRequirementsWindows(game.requirementsWindows ?? "");
     setIsRequirementsWindowsModalOpen(false);
   };
 
   const cancelRequirementsMac = () => {
-    setTempRequirementsMac(game.requirementsMac);
+    setTempRequirementsMac(game.requirementsMac ?? "");
     setIsRequirementsMacModalOpen(false);
   };
 
@@ -772,7 +772,7 @@ export default function GameStoreViewEditor() {
                 </Tabs.Content>
 
                 <Tabs.Content value="macos">
-                  <ClientMarkdown content={game.requirementsMac} />
+                  <ClientMarkdown content={game.requirementsMac ?? ""} />
                   <Dialog
                     open={isRequirementsMacModalOpen}
                     onOpenChange={setIsRequirementsMacModalOpen}

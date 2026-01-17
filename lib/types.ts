@@ -21,9 +21,9 @@ export interface Game {
   gameWebsite: string;
   gameVideoURL: string;
   gameDownloadMacURL: string | null;
-  requirementsMac: string;
+  requirementsMac: string | null;
   gameDownloadWinURL: string | null;
-  requirementsWindows: string;
+  requirementsWindows: string | null;
   gameImageURL: string[];
   gameBinaryName: string;
   gameHeadline: stringLocalized;
