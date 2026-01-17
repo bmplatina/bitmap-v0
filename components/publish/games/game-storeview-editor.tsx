@@ -316,7 +316,7 @@ export default function GameStoreViewEditor() {
             <div className="mr-1">
               <Flex gap="2">
                 <Text as="span">{`${t_gameSubmit(
-                  "gameHeadline"
+                  "gameHeadline",
                 )} (한국어): `}</Text>
                 <TextField.Root
                   value={
@@ -332,7 +332,7 @@ export default function GameStoreViewEditor() {
               </Flex>
               <Flex gap="2">
                 <Text as="span">{`${t_gameSubmit(
-                  "gameHeadline"
+                  "gameHeadline",
                 )} (English): `}</Text>
                 <TextField.Root
                   value={
@@ -585,7 +585,7 @@ export default function GameStoreViewEditor() {
                             variant="outline"
                             className={cn(
                               "w-full justify-start text-left font-normal",
-                              !game.gameReleasedDate && "text-muted-foreground"
+                              !game.gameReleasedDate && "text-muted-foreground",
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -642,7 +642,7 @@ export default function GameStoreViewEditor() {
                             className="object-cover"
                           />
                         </div>
-                      )
+                      ),
                   )}
                 </div>
               </ScrollArea>
@@ -651,7 +651,7 @@ export default function GameStoreViewEditor() {
 
           <div className="mb-8">
             <Text as="label" size="7" weight="bold" className="mb-4">{`${t(
-              "information-of"
+              "information-of",
             )} ${
               getIsTitleWritten() ? game.gameTitle : t_gameSubmit("gameTitle")
             }`}</Text>
@@ -740,7 +740,7 @@ export default function GameStoreViewEditor() {
 
               <Box pt="3">
                 <Tabs.Content value="windows">
-                  <ClientMarkdown content={game.gameDescription.ko} />
+                  <ClientMarkdown content={game.requirementsWindows ?? ""} />
                   <Dialog
                     open={isRequirementsWindowsModalOpen}
                     onOpenChange={setIsRequirementsWindowsModalOpen}
