@@ -202,7 +202,7 @@ export default function GameDetail({
                             className="object-cover"
                           />
                         </div>
-                      )
+                      ),
                   )}
                 </div>
               </ScrollArea>
@@ -211,7 +211,7 @@ export default function GameDetail({
 
           <div className="my-8">
             <Text as="label" size="7" weight="bold" className="mb-4">{`${t(
-              "information-of"
+              "information-of",
             )} ${game.gameTitle}`}</Text>
             <ClientMarkdown
               content={getLocalizedString(locale, game.gameDescription)}
@@ -226,13 +226,13 @@ export default function GameDetail({
             {game.gamePlatformWindows && (
               <div className="my-2">
                 <Text as="p">Windows</Text>
-                <ClientMarkdown content={game.requirementsWindows} />
+                <ClientMarkdown content={game.requirementsWindows ?? ""} />
               </div>
             )}
             {game.gamePlatformMac && (
               <div className="my-2">
                 <Text as="p">macOS</Text>
-                <ClientMarkdown content={game.requirementsMac} />
+                <ClientMarkdown content={game.requirementsMac ?? ""} />
               </div>
             )}
           </div>

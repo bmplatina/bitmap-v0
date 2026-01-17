@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Clock, Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
-import { checkAuthor, formatDate } from "@/lib/utils";
+import { checkAuthor, formatDate, imageUriRegExp } from "@/lib/utils";
 import { getTranslations, getLocale } from "next-intl/server";
 import { getLocalizedString } from "@/lib/utils";
 import SmartMarkdown from "@/components/common/markdown/markdown-renderer";
@@ -183,19 +183,22 @@ export default async function GameDetail({ game }: GameDetailProps) {
                       />
                     </div>
                   )}
-                  {game.gameImageURL.slice(3).map((url, index) => url && (
-                    <div
-                      key={index}
-                      className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
-                    >
-                      <Image
-                        src={url}
-                        alt={`${game.gameTitle} screenshot ${index + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
+                  {game.gameImageURL.slice(3).map(
+                    (url, index) =>
+                      imageUriRegExp.test(url) && (
+                        <div
+                          key={index}
+                          className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
+                        >
+                          <Image
+                            src={url}
+                            alt={`${game.gameTitle} screenshot ${index + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      ),
+                  )}
                 </div>
               </ScrollArea>
             </div>
@@ -203,7 +206,7 @@ export default async function GameDetail({ game }: GameDetailProps) {
 
           <div className="my-8">
             <Text as="label" size="7" weight="bold" className="mb-4">{`${t(
-              "information-of"
+              "information-of",
             )} ${game.gameTitle}`}</Text>
             <SmartMarkdown
               content={getLocalizedString(locale, game.gameDescription)}
@@ -217,13 +220,13 @@ export default async function GameDetail({ game }: GameDetailProps) {
             {game.gamePlatformWindows && (
               <div className="my-2">
                 <Text as="p">Windows</Text>
-                <SmartMarkdown content={game.requirementsWindows} />
+                <SmartMarkdown content={game.requirementsWindows ?? ""} />
               </div>
             )}
             {game.gamePlatformMac && (
               <div className="my-2">
                 <Text as="p">macOS</Text>
-                <SmartMarkdown content={game.requirementsMac} />
+                <SmartMarkdown content={game.requirementsMac ?? ""} />
               </div>
             )}
           </div>
