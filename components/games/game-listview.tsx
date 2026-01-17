@@ -25,7 +25,11 @@ export default function GameListView({ game, bIsPublishingMode }: GameProp) {
       >
         <div className="relative w-10 h-10 flex-shrink-0 rounded overflow-hidden bg-muted">
           <Image
-            src={game.gameImageURL[0] || "/placeholder.svg?height=40&width=40"}
+            src={
+              game.gameImageURL[2] ||
+              game.gameImageURL[0] ||
+              "/placeholder.svg?height=40&width=40"
+            }
             alt={game.gameTitle}
             fill
             className="object-cover"
