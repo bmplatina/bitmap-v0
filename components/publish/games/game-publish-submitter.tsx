@@ -82,7 +82,7 @@ export default function gamePublishSubmitter() {
                 className="text-sm text-amber-700 dark:text-amber-300 mt-1"
                 color="red"
               >
-                {postMessage}
+                {t(postMessage)}
               </Text>
             }
           </div>

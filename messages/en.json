@@ -205,7 +205,12 @@
     "mobile-publish-warning=desc": "Some features may not be supported when publishing games from a mobile device. Please try again on a PC or Mac.",
     "ignore-continue": "Ignore and Continue",
     "go-back": "Go Back",
-    "view-gamepage": "View on Game Page"
+    "view-gamepage": "View on Game Page",
+    "submit-succeed": "The game has been successfully submitted and is pending approval.",
+    "not-developer": "Not a developer account. Please log in with a developer account and try again.",
+    "not-author": "Not the author of this game. You cannot edit or register a new one.",
+    "invalid-gameid": "Invalid Game ID.",
+    "server-error": "Server error occurred."
   },
 
   "Common": {
