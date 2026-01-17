@@ -10,10 +10,12 @@ import {
   checkAuthor,
   formatDate,
   getLocalizedString,
+  imageUriRegExp,
 } from "@/lib/utils";
 import { useTranslations, useLocale } from "next-intl";
 import ClientMarkdown from "@/components/common/markdown/client-markdown";
 import { ScrollArea, Text } from "@radix-ui/themes";
+import { Separator } from "../ui/separator";
 
 interface AuthorInfo {
   username: string;
@@ -172,7 +174,9 @@ export default function GameDetail({
 
           {(game.gameVideoURL || game.gameImageURL.length > 1) && (
             <div className="mb-8">
-              <h3 className="text-xl font-semibold mb-4">{t("preview")}</h3>
+              <Text as="label" size="7" weight="bold" className="mb-4">
+                {t("preview")}
+              </Text>
               <ScrollArea type="always" scrollbars="horizontal">
                 <div className="flex gap-4 pb-4">
                   {game.gameVideoURL && (
@@ -184,42 +188,53 @@ export default function GameDetail({
                       />
                     </div>
                   )}
-                  {game.gameImageURL.slice(3).map((url, index) => (
-                    <div
-                      key={index}
-                      className="shrink-0 w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
-                    >
-                      <Image
-                        src={url}
-                        alt={`${game.gameTitle} screenshot ${index + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
+                  {game.gameImageURL.slice(3).map(
+                    (url, index) =>
+                      imageUriRegExp.test(url) && (
+                        <div
+                          key={index}
+                          className="shrink-0 w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
+                        >
+                          <Image
+                            src={url}
+                            alt={`${game.gameTitle} screenshot ${index + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      )
+                  )}
                 </div>
               </ScrollArea>
             </div>
           )}
 
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4">{`${t(
+          <div className="my-8">
+            <Text as="label" size="7" weight="bold" className="mb-4">{`${t(
               "information-of"
-            )} ${game.gameTitle}`}</h3>
-            {/* <div className="prose prose-invert max-w-none">
-              <p>{game.gameDescription}</p>
-            </div> */}
+            )} ${game.gameTitle}`}</Text>
             <ClientMarkdown
               content={getLocalizedString(locale, game.gameDescription)}
             />
-            {/*<div
-              className="prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{
-                __html: renderMarkdown(
-                  getLocalizedString(locale, game.gameDescription)
-                ),
-              }}
-            />*/}
+          </div>
+          <Separator />
+          <Separator />
+          <div className="my-8">
+            <Text as="label" size="7" weight="bold" className="mb-4">
+              {t("system-requirements")}
+            </Text>
+            {game.gamePlatformWindows && (
+              <div className="my-2">
+                <Text as="p">Windows</Text>
+                <ClientMarkdown content={game.requirementsWindows} />
+              </div>
+            )}
+            {game.gamePlatformMac && (
+              <div className="my-2">
+                <Text as="p">macOS</Text>
+                <ClientMarkdown content={game.requirementsMac} />
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -18,6 +18,8 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+const imageUriRegExp: RegExp = /^https?:\/\/.*\.(jpg|jpeg|png)$/i;
+
 const pretendard = localFont({
   src: "../app/[locale]/fonts/Pretendard/PretendardVariable.woff2", // 경로 확인 필요
   display: "swap",
@@ -66,8 +68,8 @@ const formatDate = (locale: string, dateString: string) => {
 };
 
 // 간단한 마크다운 렌더링 함수
-const renderMarkdown = (text: string) => {
-  if (!text) return "";
+const renderMarkdown = (text: string | null | undefined) => {
+  if (!text || typeof text !== "string") return "";
 
   let html = text.replace(/\\n/g, "\n");
 
@@ -381,6 +383,7 @@ export {
   getEula,
   getLocalizedString,
   getYouTubeVideos,
+  imageUriRegExp,
   login,
   signup,
   pretendard,

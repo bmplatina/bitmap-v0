@@ -6,9 +6,10 @@ import Image from "next/image";
 import { Clock, Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
 import { checkAuthor, formatDate } from "@/lib/utils";
 import { getTranslations, getLocale } from "next-intl/server";
-import { getLocalizedString, renderMarkdown } from "@/lib/utils";
+import { getLocalizedString } from "@/lib/utils";
 import SmartMarkdown from "@/components/common/markdown/markdown-renderer";
-import { ScrollArea } from "@radix-ui/themes";
+import { ScrollArea, Text } from "@radix-ui/themes";
+import { Separator } from "../ui/separator";
 
 type GameDetailProps = {
   game: Game;
@@ -168,7 +169,9 @@ export default async function GameDetail({ game }: GameDetailProps) {
 
           {(game.gameVideoURL || game.gameImageURL.length > 1) && (
             <div className="mb-8">
-              <h3 className="text-xl font-semibold mb-4">{t("preview")}</h3>
+              <Text as="label" size="7" weight="bold" className="mb-4">
+                {t("preview")}
+              </Text>
               <ScrollArea type="always" scrollbars="horizontal">
                 <div className="flex gap-4 pb-4">
                   {game.gameVideoURL && (
@@ -180,7 +183,7 @@ export default async function GameDetail({ game }: GameDetailProps) {
                       />
                     </div>
                   )}
-                  {game.gameImageURL.slice(3).map((url, index) => (
+                  {game.gameImageURL.slice(3).map((url, index) => url && (
                     <div
                       key={index}
                       className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
@@ -198,24 +201,31 @@ export default async function GameDetail({ game }: GameDetailProps) {
             </div>
           )}
 
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4">{`${t(
+          <div className="my-8">
+            <Text as="label" size="7" weight="bold" className="mb-4">{`${t(
               "information-of"
-            )} ${game.gameTitle}`}</h3>
-            {/* <div className="prose prose-invert max-w-none">
-              <p>{game.gameDescription}</p>
-            </div> */}
+            )} ${game.gameTitle}`}</Text>
             <SmartMarkdown
               content={getLocalizedString(locale, game.gameDescription)}
             />
-            {/*<div
-              className="prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{
-                __html: renderMarkdown(
-                  getLocalizedString(locale, game.gameDescription)
-                ),
-              }}
-            />*/}
+          </div>
+          <Separator />
+          <div className="my-8">
+            <Text as="label" size="7" weight="bold" className="mb-4">
+              {t("system-requirements")}
+            </Text>
+            {game.gamePlatformWindows && (
+              <div className="my-2">
+                <Text as="p">Windows</Text>
+                <SmartMarkdown content={game.requirementsWindows} />
+              </div>
+            )}
+            {game.gamePlatformMac && (
+              <div className="my-2">
+                <Text as="p">macOS</Text>
+                <SmartMarkdown content={game.requirementsMac} />
+              </div>
+            )}
           </div>
         </div>
       </div>

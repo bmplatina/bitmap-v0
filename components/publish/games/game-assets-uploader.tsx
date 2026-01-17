@@ -17,9 +17,8 @@ import { useGameForm } from "@/lib/GamePublishContext";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { extractYoutubeId } from "@/lib/utils";
+import { extractYoutubeId, imageUriRegExp } from "@/lib/utils";
 import { uploadGameImage } from "@/lib/games";
-import type { Game } from "@/lib/types";
 
 const GameRedirectButton = dynamic(
   () => import("@/components/games/game-redirect-button"),
@@ -226,7 +225,7 @@ export default function GameAssetsUploader() {
               <div className="flex gap-2">
                 <Input
                   readOnly
-                  placeholder= {t("select-file-placeholder")}
+                  placeholder={t("select-file-placeholder")}
                   value={selectedFiles.poster?.name || ""}
                   onClick={() => fileInputRefs.poster.current?.click()}
                   className="cursor-pointer"
@@ -242,7 +241,7 @@ export default function GameAssetsUploader() {
                   variant="outline"
                   onClick={() => fileInputRefs.poster.current?.click()}
                 >
-                   {t("select-file")}
+                  {t("select-file")}
                 </Button>
               </div>
 
@@ -255,7 +254,9 @@ export default function GameAssetsUploader() {
                     className="object-cover"
                   />
                   <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                    {previewUrls.poster ? t("local-preview") : t("server-image")}
+                    {previewUrls.poster
+                      ? t("local-preview")
+                      : t("server-image")}
                   </div>
                 </div>
               )}
@@ -265,7 +266,7 @@ export default function GameAssetsUploader() {
                 onClick={() => handleUpload("poster")}
                 disabled={!selectedFiles.poster}
               >
-                 {t("upload")}
+                {t("upload")}
               </Button>
             </CardFooter>
           </Card>
@@ -287,7 +288,7 @@ export default function GameAssetsUploader() {
               <div className="flex gap-2">
                 <Input
                   readOnly
-                  placeholder= {t("select-file-placeholder")}
+                  placeholder={t("select-file-placeholder")}
                   value={selectedFiles.gameListBanner?.name || ""}
                   onClick={() => fileInputRefs.gameListBanner.current?.click()}
                   className="cursor-pointer"
@@ -303,7 +304,7 @@ export default function GameAssetsUploader() {
                   variant="outline"
                   onClick={() => fileInputRefs.gameListBanner.current?.click()}
                 >
-                   {t("select-file")}
+                  {t("select-file")}
                 </Button>
               </div>
 
@@ -341,7 +342,7 @@ export default function GameAssetsUploader() {
                 onClick={() => handleUpload("gameListBanner")}
                 disabled={!selectedFiles.gameListBanner}
               >
-                 {t("upload")}
+                {t("upload")}
               </Button>
             </CardFooter>
           </Card>
@@ -360,7 +361,7 @@ export default function GameAssetsUploader() {
               <div className="flex gap-2">
                 <Input
                   readOnly
-                  placeholder= {t("select-file-placeholder")}
+                  placeholder={t("select-file-placeholder")}
                   value={selectedFiles.gameImage?.name || ""}
                   onClick={() => fileInputRefs.gameImage.current?.click()}
                   className="cursor-pointer"
@@ -376,7 +377,7 @@ export default function GameAssetsUploader() {
                   variant="outline"
                   onClick={() => fileInputRefs.gameImage.current?.click()}
                 >
-                   {t("select-file")}
+                  {t("select-file")}
                 </Button>
               </div>
 
@@ -389,7 +390,7 @@ export default function GameAssetsUploader() {
                     className="object-cover"
                   />
                   <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                     {t("local-preview")}
+                    {t("local-preview")}
                   </div>
                 </div>
               )}
@@ -399,7 +400,7 @@ export default function GameAssetsUploader() {
                 onClick={() => handleUpload("gameImage")}
                 disabled={!selectedFiles.gameImage}
               >
-                 {t("upload-append")}
+                {t("upload-append")}
               </Button>
             </CardFooter>
           </Card>
@@ -439,19 +440,22 @@ export default function GameAssetsUploader() {
                       </div>
                     )}*/}
                     {/* 기존 서버 이미지들 */}
-                    {game.gameImageURL.slice(3).map((url, index) => (
-                      <div
-                        key={index}
-                        className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
-                      >
-                        <Image
-                          src={url}
-                          alt={`Screenshot ${index}`}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    ))}
+                    {game.gameImageURL.slice(3).map(
+                      (url, index) =>
+                        imageUriRegExp.test(url) && (
+                          <div
+                            key={index}
+                            className="shrink-0 w-[85vw] md:w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
+                          >
+                            <Image
+                              src={url}
+                              alt={`Screenshot ${index}`}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )
+                    )}
                   </div>
                 </ScrollArea>
               </div>

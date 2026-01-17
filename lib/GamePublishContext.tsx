@@ -49,9 +49,9 @@ const initialGameData: Game = {
   gameWebsite: "",
   gameVideoURL: "",
   gameDownloadMacURL: null,
-  requirementsMac: { ko: "", en: "" },
+  requirementsMac: "",
   gameDownloadWinURL: null,
-  requirementsWindows: { ko: "", en: "" },
+  requirementsWindows: "",
   gameImageURL: [],
   gameBinaryName: "",
   gameHeadline: { ko: "", en: "" },
@@ -119,21 +119,6 @@ export function GamePublishProvider({ children }: { children: ReactNode }) {
     setIsEditingExistingEffect(bIsEditing);
   }, []);
 
-  /*function isAllRequiredFieldsFilled(): boolean {
-    return (
-      getIsTitleWritten() &&
-      getIsGameHeadlineWritten("ko") &&
-      getIsGameHeadlineWritten("en") &&
-      getIsDeveloperWritten() &&
-      getIsPublisherWritten() &&
-      getIsGenreWritten("ko") &&
-      getIsGenreWritten("en") &&
-      getIsReleasedDateSelected() &&
-      game.gameDescription.ko.length > 0 &&
-      game.gameDescription.en.length > 0
-    );
-  }*/
-
   const getIsStoreviewEditorFieldAllValid = useCallback(() => {
     return (
       gameData.gameTitle.length > 0 &&
@@ -145,29 +130,30 @@ export function GamePublishProvider({ children }: { children: ReactNode }) {
       gameData.gameGenre.en.length > 0 &&
       gameData.gameReleasedDate.length > 0 &&
       gameData.gameDescription.ko.length > 0 &&
-      gameData.gameDescription.en.length > 0
+      gameData.gameDescription.en.length > 0 &&
+      ((gameData.gamePlatformWindows &&
+        gameData.requirementsWindows.length > 0) ||
+        (gameData.gamePlatformMac && gameData.requirementsMac.length > 0))
     );
   }, [gameData]);
 
   const getIsDetailEditorFieldAllValid = useCallback(() => {
-    if (gameData.gameDownloadMacURL && gameData.gameDownloadWinURL) {
-      const bIsWindowsDownloadURIValid: boolean = gameData.gamePlatformWindows
-        ? gameData.gameDownloadWinURL.length > 0
-        : true;
-      const bIsMacDownloadURIValid: boolean = gameData.gamePlatformMac
-        ? gameData.gameDownloadMacURL.length > 0
-        : true;
+    const bIsWindowsDownloadURIValid: boolean = gameData.gamePlatformWindows
+      ? (gameData.gameDownloadWinURL?.length ?? 0) > 0
+      : true;
+    const bIsMacDownloadURIValid: boolean = gameData.gamePlatformMac
+      ? (gameData.gameDownloadMacURL?.length ?? 0) > 0
+      : true;
 
-      return (
-        gameData.gameId >= 0 &&
-        gameData.gameLatestRevision >= 0 &&
-        gameData.gameEngine.length > 0 &&
-        gameData.gameWebsite.length > 0 &&
-        ((gameData.gamePlatformMac && bIsMacDownloadURIValid) ||
-          (gameData.gamePlatformWindows && bIsWindowsDownloadURIValid)) &&
-        gameData.gameBinaryName.length > 0
-      );
-    } else return false;
+    return (
+      gameData.gameId >= 0 &&
+      gameData.gameLatestRevision >= 0 &&
+      gameData.gameEngine.length > 0 &&
+      gameData.gameWebsite.length > 0 &&
+      bIsWindowsDownloadURIValid &&
+      bIsMacDownloadURIValid &&
+      gameData.gameBinaryName.length > 0
+    );
   }, [gameData]);
 
   return (

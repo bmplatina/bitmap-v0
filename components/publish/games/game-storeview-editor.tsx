@@ -3,7 +3,7 @@
 import { useGameForm } from "@/lib/GamePublishContext";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { cn, formatDate, formatDateToMySQL } from "@/lib/utils";
+import { cn, formatDate, formatDateToMySQL, imageUriRegExp } from "@/lib/utils";
 import {
   Globe,
   Monitor,
@@ -68,13 +68,22 @@ export default function GameStoreViewEditor() {
   } = useGameForm();
   const { username } = useAuth();
 
-  // 모달 상태
+  // 게임 설명 모달 상태
   const [isDescriptionKoModalOpen, setIsDescriptionKoModalOpen] =
     useState(false);
   const [isDescriptionEnModalOpen, setIsDescriptionEnModalOpen] =
     useState(false);
   const [tempDescriptionKo, setTempDescriptionKo] = useState<string>("");
   const [tempDescriptionEn, setTempDescriptionEn] = useState<string>("");
+
+  // 게임 요구 사양 모달 상태
+  const [isRequirementsWindowsModalOpen, setIsRequirementsWindowsModalOpen] =
+    useState(false);
+  const [isRequirementsMacModalOpen, setIsRequirementsMacModalOpen] =
+    useState(false);
+  const [tempRequirementsWindows, setTempRequirementsWindows] =
+    useState<string>("");
+  const [tempRequirementsMac, setTempRequirementsMac] = useState<string>("");
 
   // 게임 제목 핸들링
   function setTitle(value: string) {
@@ -130,7 +139,7 @@ export default function GameStoreViewEditor() {
     return game.gameReleasedDate.length > 0;
   }
 
-  // 마크다운 편집 모달 열기
+  // 게임 설명 마크다운 편집 모달 열기
   const openDescriptionModalKo = () => {
     setTempDescriptionKo(game.gameDescription.ko);
     setIsDescriptionKoModalOpen(true);
@@ -141,7 +150,7 @@ export default function GameStoreViewEditor() {
     setIsDescriptionEnModalOpen(true);
   };
 
-  // 마크다운 편집 저장
+  // 게임 설명 마크다운 편집 저장
   const saveDescriptionKo = () => {
     updateLocalizedField("gameDescription", "ko", tempDescriptionKo);
     setIsDescriptionKoModalOpen(false);
@@ -152,7 +161,7 @@ export default function GameStoreViewEditor() {
     setIsDescriptionEnModalOpen(false);
   };
 
-  // 마크다운 편집 취소
+  // 게임 설명 마크다운 편집 취소
   const cancelDescriptionKo = () => {
     setTempDescriptionKo(game.gameDescription.ko);
     setIsDescriptionKoModalOpen(false);
@@ -161,6 +170,39 @@ export default function GameStoreViewEditor() {
   const cancelDescriptionEn = () => {
     setTempDescriptionEn(game.gameDescription.en);
     setIsDescriptionEnModalOpen(false);
+  };
+
+  // 게임 요구 사양 마크다운 편집 모달 열기
+  const openRequirementsWindowsModal = () => {
+    setTempRequirementsWindows(game.requirementsWindows);
+    setIsRequirementsWindowsModalOpen(true);
+  };
+
+  const openRequirementsMacModal = () => {
+    setTempRequirementsMac(game.requirementsMac);
+    setIsRequirementsMacModalOpen(true);
+  };
+
+  // 게임 요구 사양 마크다운 편집 저장
+  const saveRequirementsWindows = () => {
+    updateField("requirementsWindows", tempRequirementsWindows);
+    setIsRequirementsWindowsModalOpen(false);
+  };
+
+  const saveRequirementsMac = () => {
+    updateField("requirementsMac", tempRequirementsMac);
+    setIsRequirementsMacModalOpen(false);
+  };
+
+  // 게임 설명 마크다운 편집 취소
+  const cancelRequirementsWindows = () => {
+    setTempRequirementsWindows(game.requirementsWindows);
+    setIsRequirementsWindowsModalOpen(false);
+  };
+
+  const cancelRequirementsMac = () => {
+    setTempRequirementsMac(game.requirementsMac);
+    setIsRequirementsMacModalOpen(false);
   };
 
   return (
@@ -572,7 +614,9 @@ export default function GameStoreViewEditor() {
 
           {(game.gameVideoURL || game.gameImageURL.length > 1) && (
             <div className="mb-8">
-              <h3 className="text-xl font-semibold mb-4">{t("preview")}</h3>
+              <Text as="label" size="7" weight="bold" className="mb-4">
+                {t("preview")}
+              </Text>
               <ScrollArea type="always" scrollbars="horizontal">
                 <div className="flex gap-4 pb-4">
                   {game.gameVideoURL && (
@@ -584,26 +628,29 @@ export default function GameStoreViewEditor() {
                       />
                     </div>
                   )}
-                  {game.gameImageURL.slice(3).map((url, index) => (
-                    <div
-                      key={index}
-                      className="shrink-0 w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
-                    >
-                      <Image
-                        src={url}
-                        alt={`${game.gameTitle} screenshot ${index + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
+                  {game.gameImageURL.slice(3).map(
+                    (url, index) =>
+                      imageUriRegExp.test(url) && ( // 빈 문자열("") 체크: url이 있을 때만 렌더링
+                        <div
+                          key={index}
+                          className="shrink-0 w-[500px] aspect-video relative rounded-lg overflow-hidden bg-muted"
+                        >
+                          <Image
+                            src={url}
+                            alt={`${game.gameTitle} screenshot ${index + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      )
+                  )}
                 </div>
               </ScrollArea>
             </div>
           )}
 
           <div className="mb-8">
-            <Text className="mb-4" size="5" weight="bold">{`${t(
+            <Text as="label" size="7" weight="bold" className="mb-4">{`${t(
               "information-of"
             )} ${
               getIsTitleWritten() ? game.gameTitle : t_gameSubmit("gameTitle")
@@ -674,6 +721,83 @@ export default function GameStoreViewEditor() {
                         onChange={setTempDescriptionEn}
                         onSave={saveDescriptionEn}
                         onCancel={cancelDescriptionEn}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </Tabs.Content>
+              </Box>
+            </Tabs.Root>
+          </div>
+          <div className="mb-8">
+            <Text as="label" size="7" weight="bold" className="mb-4">
+              {t("system-requirements")}
+            </Text>
+            <Tabs.Root defaultValue="windows">
+              <Tabs.List>
+                <Tabs.Trigger value="windows">Windows</Tabs.Trigger>
+                <Tabs.Trigger value="macos">macOS</Tabs.Trigger>
+              </Tabs.List>
+
+              <Box pt="3">
+                <Tabs.Content value="windows">
+                  <ClientMarkdown content={game.gameDescription.ko} />
+                  <Dialog
+                    open={isRequirementsWindowsModalOpen}
+                    onOpenChange={setIsRequirementsWindowsModalOpen}
+                  >
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        onClick={openRequirementsWindowsModal}
+                      >
+                        <Pencil className="mr-2 h-4 w-4" />
+                        {t_gameSubmit("edit-md")}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-6xl max-h-[80vh]">
+                      <DialogHeader>
+                        <DialogTitle>{t_gameSubmit("edit-md")}</DialogTitle>
+                        <DialogDescription>
+                          {t_gameSubmit("edit-md-desc")}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <MarkdownEditor
+                        value={tempRequirementsWindows}
+                        onChange={setTempRequirementsWindows}
+                        onSave={saveRequirementsWindows}
+                        onCancel={cancelRequirementsWindows}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </Tabs.Content>
+
+                <Tabs.Content value="macos">
+                  <ClientMarkdown content={game.requirementsMac} />
+                  <Dialog
+                    open={isRequirementsMacModalOpen}
+                    onOpenChange={setIsRequirementsMacModalOpen}
+                  >
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        onClick={openRequirementsMacModal}
+                      >
+                        <Pencil className="mr-2 h-4 w-4" />
+                        {t_gameSubmit("edit-md")}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-6xl max-h-[80vh]">
+                      <DialogHeader>
+                        <DialogTitle>{t_gameSubmit("edit-md")}</DialogTitle>
+                        <DialogDescription>
+                          {t_gameSubmit("edit-md-desc")}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <MarkdownEditor
+                        value={tempRequirementsMac}
+                        onChange={setTempRequirementsMac}
+                        onSave={saveRequirementsMac}
+                        onCancel={cancelRequirementsMac}
                       />
                     </DialogContent>
                   </Dialog>

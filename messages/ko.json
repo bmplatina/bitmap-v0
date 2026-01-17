@@ -124,8 +124,6 @@
     "writing-to-disk": "디스크에 쓰는 중⋯",
     "not-released": "출시되지 않음",
     "system-requirements": "요구 사양",
-    "macos-system-requirements": "OS: macOS Ventura 이상\\nCPU: SSE2 명령어를 지원하는 AMD64 CPU 또는 Apple Silicon\\nRAM: 16GB 이상\\nGPU: Metal 지원 Intel 및 AMD GPU 또는 Apple Silicon",
-    "windows-system-requirements": "OS: 64비트 Windows 10 또는 Windows 11\\nCPU: SSE2 명령어를 지원하는 AMD64 CPU\\nRAM: 16GB 이상\\nGPU: DirectX 10, 11, 12 지원 GPU",
     "preview": "미리 보기",
     "processing": "처리 중⋯",
     "waiting-for-approval": "승인 대기 중"

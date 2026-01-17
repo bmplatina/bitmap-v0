@@ -124,8 +124,6 @@
     "writing-to-disk": "Writing to disk…",
     "not-released": "Not released",
     "system-requirements": "System Requirements",
-    "macos-system-requirements": "OS: macOS Ventura or Later\\nCPU: AMD64 architecture with SSE2 instruction set support, Apple Silicon\\nRAM: 16GB or more\\nGPU: Metal-capable Intel and AMD GPUs, Apple Silicon",
-    "windows-system-requirements": "OS: Windows 10 or Windows 11, 64-bit versions only.\\nCPU: AMD64 architecture with SSE2 instruction set support\\nRAM: 16GB or more\\nGPU: DX10, DX11, and DX12-capable GPUs",
     "preview": "Preview",
     "processing": "Processing…",
     "waiting-for-approval": "Waiting for Approval"
