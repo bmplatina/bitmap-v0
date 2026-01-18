@@ -1,33 +1,55 @@
 import { Suspense } from "react";
-import type { Game } from "@/lib/types";
+import type { Game, GameRating } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { Clock, Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
+import {
+  Clock,
+  Calendar,
+  User,
+  Tag,
+  Globe,
+  Monitor,
+  Code,
+  Star,
+} from "lucide-react";
 import { checkAuthor, formatDate, imageUriRegExp } from "@/lib/utils";
 import { getTranslations, getLocale } from "next-intl/server";
 import { getLocalizedString } from "@/lib/utils";
 import SmartMarkdown from "@/components/common/markdown/markdown-renderer";
-import { ScrollArea, Text } from "@radix-ui/themes";
+import { Box, Card, Flex, ScrollArea, Tabs, Text } from "@radix-ui/themes";
 import { Separator } from "../ui/separator";
+import {
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import GameRateSubmitter from "./game-rate-submitter";
+import GameRateViewer from "./game-rate-viewer";
 
 type GameDetailProps = {
   game: Game;
+  gameRates: GameRating[];
 };
 
-export default async function GameDetail({ game }: GameDetailProps) {
+export default async function GameDetail({ game, gameRates }: GameDetailProps) {
   const t = await getTranslations("GamesView");
-  const t_gameSubmit = await getTranslations("GameSubmit");
   const locale = await getLocale();
+  let rateAvg: number = 0;
+
+  for (const rate of gameRates) {
+    rateAvg += rate.rating;
+  }
+  rateAvg /= gameRates.length;
 
   if (!game) {
     return (
       <div className="flex items-center justify-center h-full w-full">
         <div className="text-center">
-          <p className="text-xl mb-2">{t_gameSubmit("unknown-game")}</p>
-          <p className="text-sm text-muted-foreground">
-            {t_gameSubmit("unknown-game")}
-          </p>
+          <p className="text-xl mb-2">{t("unknown-game")}</p>
+          <p className="text-sm text-muted-foreground">{t("unknown-game")}</p>
         </div>
       </div>
     );
@@ -217,18 +239,54 @@ export default async function GameDetail({ game }: GameDetailProps) {
             <Text as="label" size="7" weight="bold" className="mb-4">
               {t("system-requirements")}
             </Text>
-            {game.gamePlatformWindows && (
-              <div className="my-2">
-                <Text as="p">Windows</Text>
-                <SmartMarkdown content={game.requirementsWindows ?? ""} />
-              </div>
+            <Tabs.Root defaultValue="windows">
+              <Tabs.List>
+                {game.gamePlatformWindows && (
+                  <Tabs.Trigger value="windows">Windows</Tabs.Trigger>
+                )}
+
+                {game.gamePlatformMac && (
+                  <Tabs.Trigger value="macos">macOS</Tabs.Trigger>
+                )}
+              </Tabs.List>
+
+              <Box pt="3">
+                {game.gamePlatformWindows && (
+                  <Tabs.Content value="windows">
+                    <SmartMarkdown content={game.requirementsWindows ?? ""} />
+                  </Tabs.Content>
+                )}
+
+                {game.gamePlatformMac && (
+                  <Tabs.Content value="macos">
+                    <SmartMarkdown content={game.requirementsMac ?? ""} />
+                  </Tabs.Content>
+                )}
+              </Box>
+            </Tabs.Root>
+          </div>
+          <Separator />
+          <div className="my-8">
+            <Text as="label" size="7" weight="bold" className="mb-4">
+              {t("rating")}
+            </Text>
+            {rateAvg > 0 && (
+              <Flex>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star
+                    color="orange"
+                    key={i + 1}
+                    fill={i + 1 <= rateAvg ? "yellow" : "none"}
+                  />
+                ))}
+              </Flex>
             )}
-            {game.gamePlatformMac && (
-              <div className="my-2">
-                <Text as="p">macOS</Text>
-                <SmartMarkdown content={game.requirementsMac ?? ""} />
-              </div>
-            )}
+            <div className="mt-2">
+              <GameRateSubmitter gameId={game.gameId} bIsEditing={false} />
+              {gameRates.map(
+                (rate) => rate && <GameRateViewer key={rate.id} rate={rate} />,
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -126,7 +126,11 @@
     "system-requirements": "System Requirements",
     "preview": "Preview",
     "processing": "Processing…",
-    "waiting-for-approval": "Waiting for Approval"
+    "waiting-for-approval": "Waiting for Approval",
+    "new-rate": "평가 작성",
+    "title-required": "제목을 입력해주십시오.",
+    "content-required": "내용을 입력해주십시오.",
+    "rating-required": "평점을 입력해주십시오."
   },
 
   "Publish": {

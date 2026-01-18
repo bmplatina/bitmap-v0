@@ -1,10 +1,10 @@
 import axios from "axios";
-import { Game } from "@/lib/types";
+import { Game, GameRating, GameRatingRequest } from "@/lib/types";
 import { getApiLinkByPurpose } from "@/lib/utils";
 
 // API에서 게임 데이터를 가져오는 함수 - 서버 컴포넌트에서만 호출
 async function getGames(
-  getPendingOnly: "released" | "pending" | "all"
+  getPendingOnly: "released" | "pending" | "all",
 ): Promise<Game[]> {
   try {
     const response = await axios.get<Game[]>(
@@ -15,7 +15,7 @@ async function getGames(
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     if (getPendingOnly === "all") {
@@ -49,7 +49,7 @@ async function getGameById(id: string): Promise<Game | null> {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     const game = response.data.find((g) => g.gameId.toString() === id);
@@ -71,7 +71,7 @@ async function getGamesByUid(token: string): Promise<Game[]> {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -87,7 +87,7 @@ async function getGamesByUid(token: string): Promise<Game[]> {
 async function submitGame(
   token: string,
   newGame: Game,
-  bIsEditingExisting: boolean
+  bIsEditingExisting: boolean,
 ): Promise<any> {
   const apiRoutesLink = bIsEditingExisting ? "games/edit" : "games/submit";
   try {
@@ -101,7 +101,7 @@ async function submitGame(
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     console.log("Submit succeed:", response.data);
@@ -111,7 +111,7 @@ async function submitGame(
   } catch (error: any) {
     console.error(
       "게임 제출 중 오류 발생:",
-      error.response?.data?.message || error.message
+      error.response?.data?.message || error.message,
     );
     throw error;
   }
@@ -121,7 +121,7 @@ async function uploadGameImage(
   file: File | null,
   token: string,
   gameBinaryName: string,
-  onProgress?: (progress: number) => void
+  onProgress?: (progress: number) => void,
 ): Promise<string> {
   if (!file) return "file-not-found";
   if (gameBinaryName === "") return "name-not-specified";
@@ -143,12 +143,12 @@ async function uploadGameImage(
         onUploadProgress: (progressEvent) => {
           if (onProgress && progressEvent.total) {
             const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
+              (progressEvent.loaded * 100) / progressEvent.total,
             );
             onProgress(percentCompleted);
           }
         },
-      }
+      },
     );
 
     const data = response.data;
@@ -160,4 +160,67 @@ async function uploadGameImage(
   }
 }
 
-export { getGames, getGameById, getGamesByUid, submitGame, uploadGameImage };
+// API에서 특정 게임 데이터를 가져오는 함수
+async function getGameRatesById(id: string): Promise<GameRating[] | null> {
+  try {
+    const response = await axios.get<GameRating[]>(
+      getApiLinkByPurpose(`games/rate/${id}`),
+      {
+        timeout: 10000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("게임 데이터를 가져오는 중 오류 발생:", error);
+    return null;
+  }
+}
+
+// API에서 특정 대기 중인 게임 데이터를 가져오는 함수
+async function submitGameRate(
+  token: string,
+  newGame: GameRatingRequest,
+  bIsUpdating: boolean,
+): Promise<any> {
+  const apiRoutesLink = bIsUpdating ? "games/edit" : "games/submit";
+  try {
+    // API 호출
+    const response = await axios.post(
+      getApiLinkByPurpose(apiRoutesLink),
+      newGame,
+      {
+        timeout: 30000, // 30초 타임아웃
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    console.log("Submit succeed:", response.data);
+
+    // 성공 알림
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "게임 제출 중 오류 발생:",
+      error.response?.data?.message || error.message,
+    );
+    throw error;
+  }
+}
+
+export {
+  getGames,
+  getGameById,
+  getGamesByUid,
+  submitGame,
+  uploadGameImage,
+  getGameRatesById,
+  submitGameRate,
+};

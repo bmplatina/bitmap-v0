@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { getGameById } from "@/lib/games";
+import { getGameById, getGameRatesById } from "@/lib/games";
 import { Metadata } from "@/lib/types";
 import GameDetail from "@/components/games/game-details";
 
@@ -31,6 +31,7 @@ export default async function GameDetailPage({
   const { id } = await params;
   const t = await getTranslations("GamesView");
   const game = await getGameById(id);
+  const gameRates = await getGameRatesById(id);
 
   if (!game) {
     return (
@@ -45,7 +46,7 @@ export default async function GameDetailPage({
 
   return (
     <div>
-      <GameDetail game={game}></GameDetail>
+      <GameDetail game={game} gameRates={gameRates ??[]}></GameDetail>
     </div>
   );
 }

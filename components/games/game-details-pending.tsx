@@ -14,7 +14,7 @@ import {
 } from "@/lib/utils";
 import { useTranslations, useLocale } from "next-intl";
 import ClientMarkdown from "@/components/common/markdown/client-markdown";
-import { ScrollArea, Text } from "@radix-ui/themes";
+import { Box, ScrollArea, Tabs, Text } from "@radix-ui/themes";
 import { Separator } from "../ui/separator";
 
 interface AuthorInfo {
@@ -223,18 +223,31 @@ export default function GameDetail({
             <Text as="label" size="7" weight="bold" className="mb-4">
               {t("system-requirements")}
             </Text>
-            {game.gamePlatformWindows && (
-              <div className="my-2">
-                <Text as="p">Windows</Text>
-                <ClientMarkdown content={game.requirementsWindows ?? ""} />
-              </div>
-            )}
-            {game.gamePlatformMac && (
-              <div className="my-2">
-                <Text as="p">macOS</Text>
-                <ClientMarkdown content={game.requirementsMac ?? ""} />
-              </div>
-            )}
+            <Tabs.Root defaultValue="windows">
+              <Tabs.List>
+                {game.gamePlatformWindows && (
+                  <Tabs.Trigger value="windows">Windows</Tabs.Trigger>
+                )}
+
+                {game.gamePlatformMac && (
+                  <Tabs.Trigger value="macos">macOS</Tabs.Trigger>
+                )}
+              </Tabs.List>
+
+              <Box pt="3">
+                {game.gamePlatformWindows && (
+                  <Tabs.Content value="windows">
+                    <ClientMarkdown content={game.requirementsWindows ?? ""} />
+                  </Tabs.Content>
+                )}
+
+                {game.gamePlatformMac && (
+                  <Tabs.Content value="macos">
+                    <ClientMarkdown content={game.requirementsMac ?? ""} />
+                  </Tabs.Content>
+                )}
+              </Box>
+            </Tabs.Root>
           </div>
         </div>
       </div>

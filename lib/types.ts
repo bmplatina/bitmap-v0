@@ -1,9 +1,9 @@
-export interface stringLocalized {
+interface stringLocalized {
   en: string;
   ko: string;
 }
 
-export interface Game {
+interface Game {
   gameId: number;
   isApproved: boolean;
   uid: string;
@@ -30,29 +30,50 @@ export interface Game {
   gameDescription: stringLocalized;
 }
 
-export interface AuthorInfo {
+interface AuthorInfo {
   username: string;
   email: string;
 }
 
-export interface Metadata {
+interface Metadata {
   title?: string;
   description?: string;
 }
 
 /**
+ * 게임 평점 및 리뷰 데이터의 기본 구조
+ */
+interface GameRating {
+  id: number;
+  gameId: number;
+  uid: string; // DB의 uid (UUID)
+  rating: number; // 1~5 또는 1~10 (tinyint 대응)
+  title: string | null; // 제목은 없을 수도 있으므로 null 허용
+  content: string; // DB의 body/text 대응
+  createdAt: string; // ISO 8601 날짜 문자열
+  updatedAt: string;
+}
+
+interface GameRatingRequest extends Omit<
+  GameRating,
+  "id" | "createdAt" | "updatedAt"
+> {
+  // 클라이언트에서 보낼 때는 이 데이터들만 포함됩니다.
+}
+
+/**
  * 로그인 성공 시 서버로부터 받는 응답 데이터 타입
  */
-export interface AuthResponse {
+interface AuthResponse {
   token: string;
 }
 
-export interface AuthResponseInternal {
+interface AuthResponseInternal {
   success: boolean;
   token: string;
 }
 
-export interface SignupResponse {
+interface SignupResponse {
   uid: string;
   username: string;
 }
@@ -61,12 +82,25 @@ export interface SignupResponse {
  * API 요청 실패 시 서버로부터 받는 에러 응답 타입
  * (서버 구현에 따라 달라질 수 있습니다)
  */
-export interface ErrorResponse {
+interface ErrorResponse {
   message: string;
 }
 
-export interface YouTubeQuery {
+interface YouTubeQuery {
   success: boolean;
   totalCount: number;
   videoIds: string[];
 }
+
+export type {
+  Game,
+  AuthorInfo,
+  Metadata,
+  GameRating,
+  GameRatingRequest,
+  AuthResponse,
+  AuthResponseInternal,
+  SignupResponse,
+  ErrorResponse,
+  YouTubeQuery,
+};
