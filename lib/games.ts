@@ -187,7 +187,7 @@ async function submitGameRate(
   newGame: GameRatingRequest,
   bIsUpdating: boolean,
 ): Promise<any> {
-  const apiRoutesLink = bIsUpdating ? "games/edit" : "games/submit";
+  const apiRoutesLink = bIsUpdating ? "games/rate/edit" : "games/rate/add";
   try {
     // API 호출
     const response = await axios.post(
