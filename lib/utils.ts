@@ -4,8 +4,8 @@ import type {
   AuthResponse,
   AuthResponseInternal,
   AuthorInfo,
+  Carousel,
   ErrorResponse,
-  Game,
   SignupResponse,
   YouTubeQuery,
   stringLocalized,
@@ -48,7 +48,7 @@ async function getEula(eula: string): Promise<stringLocalized> {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     if (response.data?.ko) {
@@ -76,7 +76,7 @@ const renderMarkdown = (text: string | null | undefined) => {
   // --- 인용문 처리 ---
   html = html.replace(
     /^> (.*$)/gim,
-    '<Quote class="mt-4 mb-2 pl-4 border-l-4 border-muted-foreground italic text-muted-foreground">$1</Quote>'
+    '<Quote class="mt-4 mb-2 pl-4 border-l-4 border-muted-foreground italic text-muted-foreground">$1</Quote>',
   );
 
   // --- 헤더 처리 (크기 Up!) ---
@@ -84,29 +84,29 @@ const renderMarkdown = (text: string | null | undefined) => {
     // H3: text-lg -> text-xl (조금 더 크게)
     .replace(
       /^### (.*$)/gim,
-      '<h3 class="text-xl font-bold mt-6 mb-2 text-foreground">$1</h3>'
+      '<h3 class="text-xl font-bold mt-6 mb-2 text-foreground">$1</h3>',
     )
     // H2: text-xl -> text-3xl (확실히 크게)
     .replace(
       /^## (.*$)/gim,
-      '<h2 class="text-3xl font-extrabold mt-10 mb-3 tracking-tight text-foreground">$1</h2>'
+      '<h2 class="text-3xl font-extrabold mt-10 mb-3 tracking-tight text-foreground">$1</h2>',
     )
     // H1: text-2xl -> text-4xl (가장 크게)
     .replace(
       /^# (.*$)/gim,
-      '<h1 class="text-4xl font-black mt-12 mb-4 tracking-tight text-foreground">$1</h1>'
+      '<h1 class="text-4xl font-black mt-12 mb-4 tracking-tight text-foreground">$1</h1>',
     );
 
   // --- 인라인 스타일 ---
   html = html
     .replace(
       /\*\*(.*?)\*\*/gim,
-      '<strong class="font-bold text-foreground">$1</strong>'
+      '<strong class="font-bold text-foreground">$1</strong>',
     )
     .replace(/\*(.*?)\*/gim, '<em class="italic">$1</em>')
     .replace(
       /`([^`]+)`/gim,
-      '<code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-foreground">$1</code>'
+      '<code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-foreground">$1</code>',
     );
 
   // --- 줄바꿈 정리 ---
@@ -174,7 +174,7 @@ async function getYouTubeVideos(channelId: string): Promise<string[]> {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     if (response.data?.success) {
@@ -189,7 +189,7 @@ async function getYouTubeVideos(channelId: string): Promise<string[]> {
 
 const checkAuthor = async (
   token: string = process.env.NEXT_PUBLIC_MASTER_TOKEN || "",
-  uid: string
+  uid: string,
 ): Promise<AuthorInfo | null> => {
   // 1. 초기값을 null로 설정하여 에러 발생 시에도 안전하게 리턴
   let author: AuthorInfo | null = null;
@@ -206,7 +206,7 @@ const checkAuthor = async (
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     // 2. 백엔드에서 보낸 JSON 구조에 맞춰 할당
@@ -224,7 +224,7 @@ const checkAuthor = async (
     } else {
       console.error(
         "데이터를 불러오는 중 에러 발생:",
-        error.response?.data || error.message
+        error.response?.data || error.message,
       );
     }
   }
@@ -241,7 +241,7 @@ const checkAuthor = async (
 const login = async (
   email: string,
   password: string,
-  bKeepLoggedIn: boolean
+  bKeepLoggedIn: boolean,
 ): Promise<AuthResponseInternal> => {
   try {
     const response = await axios.post<AuthResponse>(
@@ -256,7 +256,7 @@ const login = async (
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     if (response.data.token) {
@@ -272,7 +272,7 @@ const login = async (
       const errorMessage: string =
         typeof payload === "string"
           ? payload
-          : payload?.message ?? "알 수 없는 에러가 발생했습니다.";
+          : (payload?.message ?? "알 수 없는 에러가 발생했습니다.");
       console.error("로그인 실패:", errorMessage);
       return { success: false, token: errorMessage };
 
@@ -293,12 +293,12 @@ const signup = async (
   email: string,
   password: string,
   bIsDeveloper: boolean,
-  bIsTeammate: boolean
+  bIsTeammate: boolean,
 ): Promise<SignupResponse> => {
   try {
     const response = await axios.post<SignupResponse>(
       getApiLinkByPurpose("auth/signup"),
-      { locale, username, email, password, bIsDeveloper, bIsTeammate }
+      { locale, username, email, password, bIsDeveloper, bIsTeammate },
     );
     return response.data;
   } catch (error: any) {
@@ -317,7 +317,7 @@ const verifyEmail = async (token: string, code: string): Promise<string> => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -333,7 +333,7 @@ const verifyEmail = async (token: string, code: string): Promise<string> => {
 
 const sendVerifyEmail = async (
   locale: string,
-  token: string
+  token: string,
 ): Promise<string> => {
   try {
     const response = await axios.post<string>(
@@ -343,7 +343,7 @@ const sendVerifyEmail = async (
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -361,7 +361,7 @@ const checkIsEmailDuplicated = async (email: string): Promise<boolean> => {
   try {
     const response = await axios.post<boolean>(
       getApiLinkByPurpose("auth/signup/check-duplicate"),
-      { email }
+      { email },
     );
 
     // 백엔드 반환값: isAvailable (true: 사용 가능, false: 중복)
@@ -373,6 +373,25 @@ const checkIsEmailDuplicated = async (email: string): Promise<boolean> => {
   }
 };
 
+async function getCarousel(): Promise<Carousel[]> {
+  try {
+    const response = await axios.get<Carousel[]>(
+      getApiLinkByPurpose("general/carousel"),
+      {
+        timeout: 10000, // 10초 타임아웃
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    return response.data;
+  } catch (err: any) {
+    return [];
+  }
+}
+
 export {
   cn,
   checkAuthor,
@@ -380,6 +399,7 @@ export {
   formatDate,
   formatDateToMySQL,
   getApiLinkByPurpose,
+  getCarousel,
   getEula,
   getLocalizedString,
   getYouTubeVideos,

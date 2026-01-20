@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { getCarousel } from "@/lib/utils";
+import type { Carousel } from "@/lib/types";
 
 const slides = [
   { id: 1, image: "/img1.jpg", text: "첫 번째 컬렉션" },
@@ -12,6 +14,7 @@ const slides = [
 
 export default function AutoSliderCarousel() {
   const [index, setIndex] = useState(0);
+  const [carousel, setCarousel] = useState<Carousel[]>([]);
 
   // 1. 자동 재생 로직
   useEffect(() => {
@@ -20,6 +23,13 @@ export default function AutoSliderCarousel() {
     }, 4000); // 4초마다 전환
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    async function fetchCarousel() {
+      const payloads = await getCarousel();
+      setCarousel(payloads);
+    }
+  });
 
   return (
     <div className="relative w-full h-[500px] overflow-hidden">

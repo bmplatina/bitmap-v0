@@ -92,7 +92,16 @@ interface YouTubeQuery {
   videoIds: string[];
 }
 
+interface Carousel {
+  id: number;
+  image: string;
+  title: stringLocalized;
+  description: stringLocalized;
+  href: string | null;
+}
+
 export type {
+  stringLocalized,
   Game,
   AuthorInfo,
   Metadata,
@@ -103,4 +112,5 @@ export type {
   SignupResponse,
   ErrorResponse,
   YouTubeQuery,
+  Carousel,
 };
