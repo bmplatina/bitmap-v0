@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
+import { Link, useRouter } from "@/i18n/routing";
 import { useAuth } from "@/lib/AuthContext";
 import {
   Card,
@@ -12,35 +13,91 @@ import {
   CardDescription,
 } from "../ui/card";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Button,
   Flex,
   IconButton,
   Text,
   TextArea,
   TextField,
+  Theme,
 } from "@radix-ui/themes";
 import { submitGameRate } from "@/lib/games";
-import type { GameRatingRequest } from "@/lib/types";
+import type { GameRating, GameRatingRequest } from "@/lib/types";
 import { Star } from "lucide-react";
 
 type GameIdProps = {
   gameId: number;
   bIsEditing: boolean;
+  rates: GameRating[];
 };
 
-export default function GameRateSubmitter({ gameId, bIsEditing }: GameIdProps) {
+export default function GameRateSubmitter({
+  gameId,
+  bIsEditing,
+  rates,
+}: GameIdProps) {
   const t = useTranslations("GamesView");
-  const locale = useLocale();
-  const { uid, bIsLoggedIn } = useAuth();
+  const { bIsLoggedIn, uid } = useAuth();
+
+  const [bIsAlreadySubmitted, setIsAlreadySubmitted] = useState(false);
+
+  useEffect(() => {
+    const existingRate = rates.find(
+      (rate) => rate.uid === uid && rate.gameId === gameId,
+    );
+    if (existingRate) {
+      if (!bIsEditing) {
+        setIsAlreadySubmitted(true);
+      }
+    }
+  }, [bIsEditing, rates, gameId]);
+
+  if (!bIsLoggedIn || bIsAlreadySubmitted) return null;
+
+  return (
+    <>
+      {bIsEditing ? (
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button>
+              <Text>{t("rate-edit")}</Text>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[calc(100vw-32px)] sm:w-[480px]">
+            <GameRateCard
+              gameId={gameId}
+              bIsEditing={bIsEditing}
+              rates={rates}
+            ></GameRateCard>
+          </PopoverContent>
+        </Popover>
+      ) : (
+        <div className="my-2">
+          <GameRateCard gameId={gameId} bIsEditing={bIsEditing} rates={rates} />
+        </div>
+      )}
+    </>
+  );
+}
+
+function GameRateCard({ gameId, bIsEditing, rates }: GameIdProps) {
+  const t = useTranslations("GamesView");
+  const router = useRouter();
+  const { uid } = useAuth();
   const [rating, setRating] = useState<number>(5);
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [postFailMessage, setPostFailMessage] = useState<string>("");
 
-  async function submitHandler(bIsUpdating: boolean) {
+  async function submitHandler() {
     try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) throw Error("login-required");
+      const storageToken = localStorage.getItem("accessToken");
+      if (!storageToken) throw Error("login-required");
 
       if (title.length === 0) throw Error("title-required");
       if (content.length === 0) throw Error("content-required");
@@ -54,23 +111,35 @@ export default function GameRateSubmitter({ gameId, bIsEditing }: GameIdProps) {
         content: content,
       };
 
-      await submitGameRate(token, newRate, bIsUpdating);
+      await submitGameRate(storageToken, newRate, bIsEditing);
+      router.refresh();
     } catch (err: any) {
       setPostFailMessage(err.message || String(err));
       console.error(err);
     }
   }
 
-  if (!bIsLoggedIn) return null;
+  useEffect(() => {
+    const existingRate = rates.find(
+      (rate) => rate.uid === uid && rate.gameId === gameId,
+    );
+    if (existingRate) {
+      if (bIsEditing) {
+        setTitle(existingRate.title ?? "");
+        setContent(existingRate.content);
+        setRating(existingRate.rating);
+      }
+    }
+  }, [bIsEditing, rates, uid, gameId]);
 
   return (
-    <div className="my-2">
+    <Theme>
       <Card>
         <CardHeader>
           <CardTitle>
-            <Text>평점 남기기</Text>
+            <Text>{bIsEditing ? t("rate-edit") : t("new-rate")}</Text>
             <TextField.Root
-              placeholder="Title…"
+              placeholder={t("rate-title")}
               onChange={(e) => setTitle(e.target.value)}
               value={title}
             >
@@ -97,7 +166,7 @@ export default function GameRateSubmitter({ gameId, bIsEditing }: GameIdProps) {
         </CardHeader>
         <CardContent>
           <TextArea
-            placeholder="Reply to comment…"
+            placeholder={t("rate-description")}
             value={content}
             onChange={(e) => setContent(e.target.value)}
           ></TextArea>
@@ -108,11 +177,11 @@ export default function GameRateSubmitter({ gameId, bIsEditing }: GameIdProps) {
           )}
         </CardContent>
         <CardFooter>
-          <Button onClick={() => submitHandler(false)}>
-            <Text>Submit</Text>
+          <Button onClick={() => submitHandler()}>
+            <Text>{bIsEditing ? t("rate-edit") : t("rate-submit")}</Text>
           </Button>
         </CardFooter>
       </Card>
-    </div>
+    </Theme>
   );
 }

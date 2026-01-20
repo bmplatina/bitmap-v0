@@ -127,10 +127,14 @@
     "preview": "Preview",
     "processing": "Processing…",
     "waiting-for-approval": "Waiting for Approval",
-    "new-rate": "평가 작성",
-    "title-required": "제목을 입력해주십시오.",
-    "content-required": "내용을 입력해주십시오.",
-    "rating-required": "평점을 입력해주십시오."
+    "new-rate": "Write a review",
+    "rate-edit": "Edit",
+    "title-required": "Title is required.",
+    "content-required": "Content is required.",
+    "rating-required": "Rating is required.",
+    "rate-title": "Title…",
+    "rate-description": "Description…",
+    "rate-submit": "Submit"
   },
 
   "Publish": {

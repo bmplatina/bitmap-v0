@@ -1,5 +1,4 @@
 import { getLocale, getTranslations } from "next-intl/server";
-
 import { checkAuthor, formatDate } from "@/lib/utils";
 import {
   Card,
@@ -10,6 +9,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Star } from "lucide-react";
+import GameRateSubmitter from "./game-rate-submitter";
 import { Flex, Text } from "@radix-ui/themes";
 import { GameRating } from "@/lib/types";
 
@@ -42,7 +42,10 @@ export default async function GameRateViewer({ rate }: GameRateProp) {
           </CardDescription>
         </CardHeader>
         <CardContent>{rate.content}</CardContent>
-        <CardFooter>{formatDate(locale, rate.createdAt)}</CardFooter>
+        <CardFooter>
+          {formatDate(locale, rate.createdAt)}
+          <GameRateSubmitter gameId={rate.gameId} bIsEditing={true} rates={[rate]} />
+        </CardFooter>
       </Card>
     </>
   );

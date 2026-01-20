@@ -283,7 +283,7 @@ export default function GameStoreViewEditor() {
               </Flex>
             </div>
             <Popover>
-              <PopoverTrigger>
+              <PopoverTrigger asChild>
                 <IconButton size="2">
                   <Pencil width="60%" />
                 </IconButton>
@@ -348,7 +348,7 @@ export default function GameStoreViewEditor() {
               </Flex>
             </div>
             <Popover>
-              <PopoverTrigger>
+              <PopoverTrigger asChild>
                 <IconButton size="1">
                   <Pencil width="60%" />
                 </IconButton>
@@ -400,7 +400,7 @@ export default function GameStoreViewEditor() {
                 </Flex>
               </div>
               <Popover>
-                <PopoverTrigger>
+                <PopoverTrigger asChild>
                   <IconButton size="1">
                     <Pencil width="60%" />
                   </IconButton>
@@ -453,7 +453,7 @@ export default function GameStoreViewEditor() {
                 )}
               </div>
               <Popover>
-                <PopoverTrigger>
+                <PopoverTrigger asChild>
                   <IconButton size="1">
                     <Pencil width="60%" />
                   </IconButton>
@@ -513,7 +513,7 @@ export default function GameStoreViewEditor() {
                 </Flex>
               </div>
               <Popover>
-                <PopoverTrigger>
+                <PopoverTrigger asChild>
                   <IconButton size="1">
                     <Pencil width="60%" />
                   </IconButton>
@@ -565,7 +565,7 @@ export default function GameStoreViewEditor() {
                 </Text>
               </div>
               <Popover>
-                <PopoverTrigger>
+                <PopoverTrigger asChild>
                   <IconButton size="1">
                     <Pencil width="60%" />
                   </IconButton>

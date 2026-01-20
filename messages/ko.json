@@ -129,9 +129,13 @@
     "waiting-for-approval": "승인 대기 중",
     "rating": "평가",
     "new-rate": "평가 작성",
+    "rate-edit": "편집",
     "title-required": "제목을 입력해주십시오.",
     "content-required": "내용을 입력해주십시오.",
-    "rating-required": "평점을 입력해주십시오."
+    "rating-required": "평점을 입력해주십시오.",
+    "rate-title": "제목⋯",
+    "rate-description": "내용⋯",
+    "rate-submit": "제출"
   },
 
   "Publish": {

@@ -1,11 +1,10 @@
 import { Box, Button, ScrollArea } from "@radix-ui/themes";
-import { Link } from "@/i18n/routing";
-import Image from "next/image";
 import { getYouTubeVideos } from "@/lib/utils";
 import { getGames } from "@/lib/games";
 import type { Game } from "@/lib/types";
 import { getTranslations } from "next-intl/server";
 import GameRedirectButton from "@/components/games/game-redirect-button";
+import AutoSliderCarousel from "@/components/common/main-page-carousel";
 
 export default async function Home() {
   // 서버에서 직접 데이터 페칭
@@ -15,10 +14,11 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-full p-6 text-center space-y-12">
-      <div className="flex flex-col items-center">
+      {/* <div className="flex flex-col items-center">
         <h1 className="text-4xl font-bold mb-6">{t("welcome-bitmap")}</h1>
         <p className="text-xl mb-8 max-w-2xl">{t("welcome-bitmap-desc")}</p>
-      </div>
+      </div> */}
+      <AutoSliderCarousel />
 
       {/* 유튜브 영상 가로 스크롤 섹션 */}
       <div className="w-full max-w-6xl">

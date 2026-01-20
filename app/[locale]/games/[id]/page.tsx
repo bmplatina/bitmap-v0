@@ -46,7 +46,7 @@ export default async function GameDetailPage({
 
   return (
     <div>
-      <GameDetail game={game} gameRates={gameRates ??[]}></GameDetail>
+      <GameDetail game={game} gameRates={gameRates ?? []}></GameDetail>
     </div>
   );
 }

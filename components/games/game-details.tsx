@@ -282,7 +282,7 @@ export default async function GameDetail({ game, gameRates }: GameDetailProps) {
               </Flex>
             )}
             <div className="mt-2">
-              <GameRateSubmitter gameId={game.gameId} bIsEditing={false} />
+              <GameRateSubmitter gameId={game.gameId} bIsEditing={false} rates={gameRates} />
               {gameRates.map(
                 (rate) => rate && <GameRateViewer key={rate.id} rate={rate} />,
               )}

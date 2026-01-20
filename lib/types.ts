@@ -48,7 +48,7 @@ interface GameRating {
   gameId: number;
   uid: string; // DB의 uid (UUID)
   rating: number; // 1~5 또는 1~10 (tinyint 대응)
-  title: string | null; // 제목은 없을 수도 있으므로 null 허용
+  title: string;
   content: string; // DB의 body/text 대응
   createdAt: string; // ISO 8601 날짜 문자열
   updatedAt: string;
