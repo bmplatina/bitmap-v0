@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { Text } from "@radix-ui/themes";
+import { Link } from "@/i18n/routing";
+import { Button, Text } from "@radix-ui/themes";
 import { getCarousel, getLocalizedString, imageUriRegExp } from "@/lib/utils";
 import type { Carousel } from "@/lib/types";
 
@@ -21,6 +22,7 @@ const swipePower = (offset: number, velocity: number) => {
 
 export default function AutoSliderCarousel() {
   const locale = useLocale();
+  const t = useTranslations("MainPage");
   const [[page, direction], setPage] = useState([0, 0]);
   const [carousel, setCarousel] = useState<Carousel[]>([]);
 
@@ -112,19 +114,30 @@ export default function AutoSliderCarousel() {
                 src={carousel[index].image}
                 alt="collection"
                 className="w-full h-full object-cover"
-                width={1920}
-                height={1080}
+                fill={true}
                 draggable={false}
               />
             )}
-          <div className="absolute bottom-24 left-10 right-10 text-center pointer-events-none">
-            <Text className="text-white text-4xl font-bold shadow-sm">
-              {getLocalizedString(locale, carousel[index].title)}
-            </Text>
+
+          <div className="absolute bottom-24 left-10 right-10 text-center">
+            <div className="mb-auto">
+              <Text className="text-white text-2xl md:text-4xl font-bold shadow-sm">
+                {getLocalizedString(locale, carousel[index].title)}
+              </Text>
+              {getLocalizedString(locale, carousel[index].description) !==
+                "" && (
+                <>
+                  <br />
+                  <Text className="text-white text-lg md:text-2xl font-medium shadow-sm">
+                    {getLocalizedString(locale, carousel[index].description)}
+                  </Text>
+                </>
+              )}
+            </div>
             <br />
-            <Text className="text-white text-2xl font-medium shadow-sm">
-              {getLocalizedString(locale, carousel[index].description)}
-            </Text>
+            <Button radius="full" asChild>
+              <Link href={carousel[index].href ?? "#"}>{t("view")}</Link>
+            </Button>
           </div>
         </motion.div>
       </AnimatePresence>
