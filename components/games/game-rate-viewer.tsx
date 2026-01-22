@@ -29,7 +29,9 @@ export default async function GameRateViewer({ rate }: GameRateProp) {
         <CardHeader>
           <CardTitle>{rate.title}</CardTitle>
           <CardDescription>
-            <Text>{author?.username}</Text>
+            <Text>
+              {author?.username} ({formatDate(locale, rate.createdAt)})
+            </Text>
             <Flex className="mt-2">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star
@@ -43,8 +45,11 @@ export default async function GameRateViewer({ rate }: GameRateProp) {
         </CardHeader>
         <CardContent>{rate.content}</CardContent>
         <CardFooter>
-          {formatDate(locale, rate.createdAt)}
-          <GameRateSubmitter gameId={rate.gameId} bIsEditing={true} rates={[rate]} />
+          <GameRateSubmitter
+            gameId={rate.gameId}
+            bIsEditing={true}
+            rates={[rate]}
+          />
         </CardFooter>
       </Card>
     </>

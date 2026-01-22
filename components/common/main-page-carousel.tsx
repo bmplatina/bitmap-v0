@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocale } from "next-intl";
 import Image from "next/image";
+import { Text } from "@radix-ui/themes";
 import { getCarousel, getLocalizedString, imageUriRegExp } from "@/lib/utils";
 import type { Carousel } from "@/lib/types";
 
@@ -13,10 +14,21 @@ import type { Carousel } from "@/lib/types";
 //   { id: 3, image: "/img3.jpg", text: "세 번째 컬렉션" },
 // ];
 
+const swipeConfidenceThreshold = 10000;
+const swipePower = (offset: number, velocity: number) => {
+  return Math.abs(offset) * velocity;
+};
+
 export default function AutoSliderCarousel() {
   const locale = useLocale();
-  const [index, setIndex] = useState(0);
+  const [[page, direction], setPage] = useState([0, 0]);
   const [carousel, setCarousel] = useState<Carousel[]>([]);
+
+  // 인덱스 계산 (무한 루프)
+  const index =
+    carousel.length > 0
+      ? ((page % carousel.length) + carousel.length) % carousel.length
+      : 0;
 
   useEffect(() => {
     async function fetchCarousel() {
@@ -30,31 +42,68 @@ export default function AutoSliderCarousel() {
     fetchCarousel();
   }, []);
 
+  const paginate = (newDirection: number) => {
+    setPage((prev) => [prev[0] + newDirection, newDirection]);
+  };
+
   // 1. 자동 재생 로직
   useEffect(() => {
-    if (carousel.length > 0) {
+    if (carousel.length > 1) {
       const timer = setInterval(() => {
-        setIndex((prev) => (prev === carousel.length - 1 ? 0 : prev + 1));
+        paginate(1);
       }, 4000); // 4초마다 전환
       return () => clearInterval(timer);
     }
-  }, [carousel.length]);
+  }, [carousel.length, page]);
 
   if (carousel.length === 0) {
     return <div className="w-full h-[500px] bg-gray-100 animate-pulse" />; // 로딩 상태 표시
   }
 
+  const variants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? "100%" : "-100%",
+      opacity: 1,
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? "100%" : "-100%",
+      opacity: 1,
+    }),
+  };
+
   return (
-    <div className="relative w-full h-[500px] overflow-hidden">
+    <div className="relative w-full h-[500px] overflow-hidden bg-black">
       {/* 2. 사진/텍스트 영역 */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence initial={false} custom={direction}>
         <motion.div
-          key={carousel[index].id}
-          drag="x"
-          initial={{ opacity: 0, x: 50 }} // 나타날 때 (오른쪽에서)
-          animate={{ opacity: 1, x: 0 }} // 화면에 보일 때
-          exit={{ opacity: 0, x: -50 }} // 사라질 때 (왼쪽으로)
-          transition={{ duration: 0.6, ease: "easeInOut" }}
+          key={page}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 },
+          }}
+          drag={carousel.length > 1 ? "x" : false}
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={1}
+          onDragEnd={(e, { offset, velocity }) => {
+            const swipe = swipePower(offset.x, velocity.x);
+
+            if (swipe < -swipeConfidenceThreshold) {
+              paginate(1);
+            } else if (swipe > swipeConfidenceThreshold) {
+              paginate(-1);
+            }
+          }}
           className="absolute inset-0 flex items-center justify-center"
         >
           {carousel[index].image &&
@@ -65,26 +114,38 @@ export default function AutoSliderCarousel() {
                 className="w-full h-full object-cover"
                 width={1920}
                 height={1080}
+                draggable={false}
               />
             )}
-          <h2 className="absolute text-white text-4xl font-bold">
-            {getLocalizedString(locale, carousel[index].title)}
-          </h2>
+          <div className="absolute bottom-24 left-10 right-10 text-center pointer-events-none">
+            <Text className="text-white text-4xl font-bold shadow-sm">
+              {getLocalizedString(locale, carousel[index].title)}
+            </Text>
+            <br />
+            <Text className="text-white text-2xl font-medium shadow-sm">
+              {getLocalizedString(locale, carousel[index].description)}
+            </Text>
+          </div>
         </motion.div>
       </AnimatePresence>
 
       {/* 3. 인디케이터 영역 */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-2">
-        {carousel.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setIndex(i)}
-            className={`h-2 rounded-full transition-all ${
-              i === index ? "w-8 bg-white" : "w-2 bg-white/50"
-            }`}
-          />
-        ))}
-      </div>
+      {carousel.length > 1 && (
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+          {carousel.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                const newDirection = i - index;
+                setPage((prev) => [prev[0] + newDirection, newDirection]);
+              }}
+              className={`h-2 rounded-full transition-all ${
+                i === index ? "w-8 bg-white" : "w-2 bg-white/50"
+              }`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

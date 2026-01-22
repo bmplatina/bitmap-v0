@@ -2,7 +2,7 @@ import type React from "react";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { AuthProvider } from "@/lib/AuthContext";
-import { Inter } from "next/font/google";
+import NextToploader from "nextjs-toploader";
 import "./globals.css";
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
@@ -33,6 +33,7 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       {/* <body className={`${pretendard.variable} font-sans antialiased`} suppressHydrationWarning>*/}
       <body suppressHydrationWarning>
+        <NextToploader showSpinner={false} />
         <NextIntlClientProvider>
           <AuthProvider>
             <ThemeProvider
