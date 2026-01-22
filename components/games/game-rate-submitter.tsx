@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/popover";
 import {
   Button,
+  AlertDialog,
   Flex,
   IconButton,
   Text,
@@ -62,20 +63,47 @@ export default function GameRateSubmitter({
   return (
     <>
       {bIsEditing ? (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button>
-              <Text>{t("rate-edit")}</Text>
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-[calc(100vw-32px)] sm:w-[480px]">
-            <GameRateCard
-              gameId={gameId}
-              bIsEditing={bIsEditing}
-              rates={rates}
-            ></GameRateCard>
-          </PopoverContent>
-        </Popover>
+        <Flex gap="3" mt="4" justify="end">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button>
+                <Text>{t("rate-edit")}</Text>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[calc(100vw-32px)] sm:w-[480px]">
+              <GameRateCard
+                gameId={gameId}
+                bIsEditing={bIsEditing}
+                rates={rates}
+              ></GameRateCard>
+            </PopoverContent>
+          </Popover>
+          <AlertDialog.Root>
+            <AlertDialog.Trigger>
+              <Button color="red">삭제</Button>
+            </AlertDialog.Trigger>
+            <AlertDialog.Content maxWidth="450px">
+              <AlertDialog.Title>평점 삭제</AlertDialog.Title>
+              <AlertDialog.Description size="2">
+                Are you sure? This application will no longer be accessible and
+                any existing sessions will be expired.
+              </AlertDialog.Description>
+
+              <Flex gap="3" mt="4" justify="end">
+                <AlertDialog.Cancel>
+                  <Button variant="soft" color="gray">
+                    Cancel
+                  </Button>
+                </AlertDialog.Cancel>
+                <AlertDialog.Action>
+                  <Button variant="solid" color="red">
+                    Revoke access
+                  </Button>
+                </AlertDialog.Action>
+              </Flex>
+            </AlertDialog.Content>
+          </AlertDialog.Root>
+        </Flex>
       ) : (
         <div className="my-2">
           <GameRateCard gameId={gameId} bIsEditing={bIsEditing} rates={rates} />

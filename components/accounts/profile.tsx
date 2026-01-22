@@ -1,24 +1,15 @@
 "use client";
 
-import { useEffect, type KeyboardEvent } from "react";
-import {
-  Checkbox,
-  Button,
-  Flex,
-  Spinner,
-  Text,
-  DataList,
-  Code,
-} from "@radix-ui/themes";
+import { useEffect } from "react";
+import { Button, Flex, Text, DataList, Code } from "@radix-ui/themes";
 import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/lib/AuthContext";
 import { useTranslations } from "next-intl";
 import { pretendard } from "@/lib/utils";
-import { useRouter } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 
 export default function ProfilePopover() {
   const t = useTranslations("Authentication");
-  const router = useRouter();
 
   const {
     logout,
@@ -79,8 +70,8 @@ export default function ProfilePopover() {
             </DataList.Item>
           </DataList.Root>
           <Flex direction="column" gap="2" className="mt-3">
-            <Button size="3" onClick={() => router.push("/account")}>
-              {t("account-settings")}
+            <Button size="3" asChild>
+              <Link href="/account">{t("account-settings")}</Link>
             </Button>
             <Button size="3" onClick={logout} color="red">
               {t("logout")}

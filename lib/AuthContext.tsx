@@ -17,6 +17,7 @@ interface AuthContextType {
   bIsDeveloper: boolean;
   bIsTeammate: boolean;
   bIsEmailVerified: boolean;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -36,6 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [bIsTeammate, setIsTeammate] = useState(false);
   const [bIsEmailVerified, setIsEmailVerified] = useState(true);
   const [uid, setUid] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const fetchUser = async (token: string) => {
@@ -74,11 +76,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 1. 앱이 켜지자마자 로그인 상태 체크
   useEffect(() => {
-    if (localStorage.getItem("accessToken")) {
-      fetchUser(localStorage.getItem("accessToken") as string);
-    }
+    const initializeAuth = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        await fetchUser(token);
+      }
+      setIsLoggedIn(checkIsLoggedIn());
+      setIsLoading(false);
+    };
 
-    setIsLoggedIn(checkIsLoggedIn());
+    initializeAuth();
   }, []);
 
   // 2. 로그인 함수 (로그인 성공 시 실행)
@@ -110,6 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         bIsDeveloper,
         bIsTeammate,
         bIsEmailVerified,
+        isLoading,
       }}
     >
       {children}

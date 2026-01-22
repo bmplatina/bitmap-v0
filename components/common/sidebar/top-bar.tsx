@@ -268,8 +268,8 @@ export default function TopBar() {
               </Popover.Root>
             )}
             {getIsSigninButtonActive() && (
-              <Button radius="full" onClick={() => router.push("/auth")}>
-                {t("signin")}
+              <Button radius="full" asChild>
+                <Link href="/auth">{t("signin")}</Link>
               </Button>
             )}
           </div>

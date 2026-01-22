@@ -17,6 +17,7 @@ export default function AccountPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [bRequestAutoLogin, setAutoLogin] = useState<boolean>(false);
+  const [bIsRequestingLogin, setIsRequestingLogin] = useState<boolean>(false);
   const [loginFailMessage, setLoginFailMsg] = useState<string>("");
   const { bIsLoggedIn, login } = useAuth();
 
@@ -28,12 +29,14 @@ export default function AccountPage() {
   };
 
   async function handleLogin() {
+    setIsRequestingLogin(true);
     const loginResult = await loginPost(email, password, bRequestAutoLogin);
     if (loginResult.success) {
       await login(loginResult.token);
     } else {
       setLoginFailMsg(t(loginResult.token));
     }
+    setIsRequestingLogin(false);
   }
 
   useEffect(
@@ -42,94 +45,94 @@ export default function AccountPage() {
         router.push("/");
       }
     },
-    [bIsLoggedIn]
+    [bIsLoggedIn],
   );
+
+  if (bIsLoggedIn) return null;
 
   return (
     <div className="flex flex-col items-center justify-center h-full p-4 md:p-6 text-center">
-      {!bIsLoggedIn && (
-        <div>
-          <h1 className="text-4xl font-bold mb-6">Bitmap ID</h1>
-          <Text as="p" size="5" className="mb-8 max-w-2xl">
-            {t("bitmap-id-desc")}
-          </Text>
+      <div>
+        <h1 className="text-4xl font-bold mb-6">Bitmap ID</h1>
+        <Text as="p" size="5" className="mb-8 max-w-2xl">
+          {t("bitmap-id-desc")}
+        </Text>
 
-          <Flex direction="column" gap="4" className="w-full max-w-md">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("login")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Flex direction="column" gap="2">
-                  <TextField.Root
-                    placeholder={t("email")}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                  />
-                  <TextField.Root
-                    placeholder={t("password")}
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                  />
-                  <Text as="label" size="2">
-                    <Flex as="span" gap="2">
-                      <Checkbox
-                        size="1"
-                        checked={bRequestAutoLogin}
-                        onCheckedChange={(checked) =>
-                          setAutoLogin(checked as boolean)
-                        }
-                      />{" "}
-                      {t("keep-login")}
-                    </Flex>
+        <Flex direction="column" gap="4" className="w-full max-w-md">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("login")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Flex direction="column" gap="2">
+                <TextField.Root
+                  placeholder={t("email")}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+                <TextField.Root
+                  placeholder={t("password")}
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+                <Text as="label" size="2">
+                  <Flex as="span" gap="2">
+                    <Checkbox
+                      size="1"
+                      checked={bRequestAutoLogin}
+                      onCheckedChange={(checked) =>
+                        setAutoLogin(checked as boolean)
+                      }
+                    />{" "}
+                    {t("keep-login")}
+                  </Flex>
+                </Text>
+                {loginFailMessage !== "" && (
+                  <Text color="red" size="3">
+                    {loginFailMessage}
                   </Text>
-                  {loginFailMessage !== "" && (
-                    <Text color="red" size="3">
-                      {loginFailMessage}
-                    </Text>
-                  )}
-                  <Button size="3" onClick={handleLogin}>
-                    {t("login")}
-                  </Button>
+                )}
+                <Button size="3" onClick={handleLogin}>
+                  {bIsRequestingLogin ? <Spinner /> : <Text>{t("login")}</Text>}
+                </Button>
 
-                  <Link href="/auth/signup">
-                    <Button variant="ghost">{t("register")}</Button>
+                <Link href="/auth/signup">
+                  <Button variant="ghost">{t("register")}</Button>
+                </Link>
+
+                <Link href="/auth/troubleshoot">
+                  <Button variant="ghost">{t("troubleshoot-auth")}</Button>
+                </Link>
+              </Flex>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("other-login-methods")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Flex direction="column" gap="2">
+                <Button size="3" asChild>
+                  <Link href={getApiLinkByPurpose("auth/google")}>
+                    <Image
+                      src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
+                      alt="Google"
+                      width={20}
+                      height={20}
+                      style={{ marginRight: "4px" }}
+                    />
+                    {t("login-google")}
                   </Link>
-
-                  <Link href="/auth/troubleshoot">
-                    <Button variant="ghost">{t("troubleshoot-auth")}</Button>
-                  </Link>
-                </Flex>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("other-login-methods")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Flex direction="column" gap="2">
-                  <Button size="3" asChild>
-                    <a href={getApiLinkByPurpose("auth/google")}>
-                      <Image
-                        src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
-                        alt="Google"
-                        width={20}
-                        height={20}
-                        style={{ marginRight: "4px" }}
-                      />
-                      {t("login-google")}
-                    </a>
-                  </Button>
-                </Flex>
-              </CardContent>
-            </Card>
-          </Flex>
-        </div>
-      )}
+                </Button>
+              </Flex>
+            </CardContent>
+          </Card>
+        </Flex>
+      </div>
     </div>
   );
 }

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@/lib/AuthContext";
 import { useEffect, useState } from "react";
-import { useRouter } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { getGamesByUid } from "@/lib/games";
 import GameListView from "@/components/games/game-listview";
 import { Game } from "@/lib/types";
@@ -19,18 +19,20 @@ import { Game } from "@/lib/types";
 export default function SubmitGames() {
   const t = useTranslations("Publish");
   const router = useRouter();
-  const { bIsLoggedIn, bIsDeveloper, bIsTeammate } = useAuth();
+  const { bIsLoggedIn, bIsDeveloper, bIsTeammate, isLoading } = useAuth();
 
   const [games, setGames] = useState<Game[]>([]);
   const [bIsLoading, setIsLoading] = useState(true);
 
   useEffect(
     function () {
-      if (!bIsLoggedIn || !bIsDeveloper || !bIsTeammate) {
-        router.push("/auth");
+      if (!isLoading) {
+        if (!bIsLoggedIn || !bIsDeveloper || !bIsTeammate) {
+          router.push("/auth");
+        }
       }
     },
-    [bIsLoggedIn, bIsDeveloper, bIsTeammate, router]
+    [bIsLoggedIn, bIsDeveloper, bIsTeammate, router, isLoading],
   );
 
   useEffect(() => {
@@ -85,8 +87,8 @@ export default function SubmitGames() {
               )}
             </CardContent>
             <CardFooter>
-              <Button onClick={() => router.push("/publish/games")}>
-                {t("publish-new")}
+              <Button asChild>
+                <Link href="/publish/games">{t("publish-new")}</Link>
               </Button>
             </CardFooter>
           </Card>
@@ -100,8 +102,8 @@ export default function SubmitGames() {
               </CardHeader>
               <CardContent>준비 중인 기능</CardContent>
               <CardFooter>
-                <Button onClick={() => router.push("/publish/projectfiles")}>
-                  {t("publish-new")}
+                <Button asChild>
+                  <Link href="/publish/projectfiles">{t("publish-new")}</Link>
                 </Button>
               </CardFooter>
             </Card>
@@ -112,8 +114,8 @@ export default function SubmitGames() {
               </CardHeader>
               <CardContent>준비 중인 기능</CardContent>
               <CardFooter>
-                <Button onClick={() => router.push("/publish/lectures")}>
-                  {t("publish-new")}
+                <Button asChild>
+                  <Link href="/publish/lectures">{t("publish-new")}</Link>
                 </Button>
               </CardFooter>
             </Card>

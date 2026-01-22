@@ -28,18 +28,20 @@ export default function SubmitGames() {
     updateField,
   } = useGameForm();
 
-  const { bIsLoggedIn, bIsDeveloper, uid } = useAuth();
+  const { bIsLoggedIn, bIsDeveloper, uid, isLoading } = useAuth();
   const isMobile = useIsMobile();
   const [ignoreMobileWarning, setIgnoreMobileWarning] =
     useState<boolean>(false);
 
   useEffect(
     function () {
-      if (!bIsLoggedIn || !bIsDeveloper) {
-        router.push("/auth");
+      if (!isLoading) {
+        if (!bIsLoggedIn || !bIsDeveloper) {
+          router.push("/auth");
+        }
       }
     },
-    [bIsLoggedIn, bIsDeveloper]
+    [bIsLoggedIn, bIsDeveloper, isLoading],
   );
 
   useEffect(() => {
