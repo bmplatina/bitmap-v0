@@ -8,7 +8,7 @@ import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "@/components/common/theme-provider";
-import { TokenHandler } from "@/components/common/token-handler";
+import TokenHandler from "@/components/common/token-handler";
 import Sidebar from "@/components/common/sidebar/sidebar";
 import TopBar from "@/components/common/sidebar/top-bar";
 import { pretendard } from "@/lib/utils";
@@ -48,6 +48,7 @@ export default async function RootLayout({
                 >
                   <div className="flex flex-col min-h-screen">
                     <div className="sticky top-0 z-50 bg-background w-full">
+                      <TokenHandler />
                       <TopBar />
                     </div>
                     <div className="flex flex-1">
@@ -57,9 +58,6 @@ export default async function RootLayout({
                       <main className="flex-1 w-full pb-10">{children}</main>
                     </div>
                   </div>
-                  <Suspense fallback={null}>
-                    <TokenHandler />
-                  </Suspense>
                 </div>
                 {/* 클라이언트 사이드 로직(토큰 처리)은 별도 컴포넌트로 유지 */}
               </Theme>

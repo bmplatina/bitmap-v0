@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
-import { Button, Flex, Text, DataList, Code } from "@radix-ui/themes";
+import { useEffect, useState } from "react";
+import { Button, Checkbox, Flex, DataList, Code } from "@radix-ui/themes";
 import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/lib/AuthContext";
 import { useTranslations } from "next-intl";
 import { pretendard } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
+import EmailVerificationDialog from "./email-verification";
 
 export default function ProfilePopover() {
   const t = useTranslations("Authentication");
+  const [bIsVerifyClicked, setVerificationClicked] = useState<boolean>(false);
 
   const {
     logout,
@@ -17,6 +19,7 @@ export default function ProfilePopover() {
     bIsDeveloper,
     bIsTeammate,
     email: emailResponse,
+    bIsEmailVerified,
   } = useAuth();
 
   useEffect(() => {
@@ -57,7 +60,7 @@ export default function ProfilePopover() {
                 {t("teammate-account")}
               </DataList.Label>
               <DataList.Value>
-                <Text>{bIsTeammate ? t("teammate-account") : "N/A"}</Text>
+                <Checkbox disabled checked={bIsTeammate} />
               </DataList.Value>
             </DataList.Item>
             <DataList.Item>
@@ -65,7 +68,7 @@ export default function ProfilePopover() {
                 {t("developer-account")}
               </DataList.Label>
               <DataList.Value>
-                <Text>{bIsDeveloper ? t("developer-account") : "N/A"}</Text>
+                <Checkbox disabled checked={bIsDeveloper} />
               </DataList.Value>
             </DataList.Item>
           </DataList.Root>
@@ -73,12 +76,22 @@ export default function ProfilePopover() {
             <Button size="3" asChild>
               <Link href="/account">{t("account-settings")}</Link>
             </Button>
+            {!bIsEmailVerified && (
+              <Button
+                size="3"
+                variant="outline"
+                onClick={() => setVerificationClicked(true)}
+              >
+                {t("verify")}
+              </Button>
+            )}
             <Button size="3" onClick={logout} color="red">
               {t("logout")}
             </Button>
           </Flex>
         </CardContent>
       </Card>
+      <EmailVerificationDialog open={bIsVerifyClicked} />
     </Flex>
   );
 }

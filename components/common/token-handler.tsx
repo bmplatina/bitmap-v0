@@ -4,70 +4,17 @@ import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/AuthContext";
-import { sendVerifyEmail, verifyEmail, login as loginPost } from "@/lib/utils";
-import { AlertDialog, Button, Flex, Text, TextField } from "@radix-ui/themes";
-import { useTranslations, useLocale } from "next-intl";
+import { Button, Flex, Text } from "@radix-ui/themes";
+import { useTranslations } from "next-intl";
+import EmailVerificationDialog from "@/components/accounts/email-verification";
 
-export function TokenHandler() {
-  const router = useRouter();
+export default function TokenHandler() {
   const searchParams = useSearchParams();
-  const locale = useLocale();
-  const { login, logout, bIsEmailVerified, bIsLoggedIn, email } = useAuth();
-  const [verificationCode, setVerificationCode] = useState("");
-  const [password, setPassword] = useState("");
-  const [bIsVerificationMailSent, setIsVerificationMailSent] = useState(false);
-  const [verificationFailMessage, setVerificationFailMessage] = useState("");
+  const router = useRouter();
+  const { login, logout, bIsEmailVerified, bIsLoggedIn, username } = useAuth();
   const t = useTranslations("Authentication");
-
-  async function handleSendVerificationEmail() {
-    try {
-      const token = localStorage.getItem("accessToken");
-
-      if (!token) throw new Error("token-required");
-      const response = await sendVerifyEmail(locale, token);
-      if (response !== "email-sent") {
-        throw Error(response);
-      }
-      console.log("로그인 이메일 인증 번호 발송 성공");
-      setVerificationFailMessage(t(response));
-      setIsVerificationMailSent(true);
-    } catch (error: any) {
-      setVerificationFailMessage(t(error.message));
-      setIsVerificationMailSent(false);
-    }
-  }
-
-  async function handleVerification() {
-    try {
-      const token = localStorage.getItem("accessToken");
-
-      if (!token) throw new Error("token-required");
-      const verifyResult = await verifyEmail(token, verificationCode);
-      if (verifyResult !== "verified") {
-        throw Error(verifyResult);
-      }
-
-      console.log("인증 성공:", verifyResult);
-
-      const loginResult = await loginPost(email, password, false);
-
-      if (loginResult.success) {
-        await login(loginResult.token);
-        router.push("/");
-      } else {
-        setVerificationFailMessage(t(loginResult.token));
-      }
-
-      // router.push("/");
-    } catch (error: any) {
-      setVerificationFailMessage(t(error.message));
-      alert(t(error.message)); // "username-exists" 등의 메시지 출력
-    }
-  }
-
-  function enableVerifyButton(): boolean {
-    return verificationCode.length === 6 && password.length >= 6;
-  }
+  const [bIsVerificationClicked, setVerificationClicked] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const token = searchParams.get("token");
@@ -78,60 +25,28 @@ export function TokenHandler() {
     }
   }, [searchParams, router, login]);
 
-  return (
-    <div>
-      <AlertDialog.Root open={!bIsEmailVerified && bIsLoggedIn}>
-        <AlertDialog.Content maxWidth="450px">
-          <AlertDialog.Title>
-            {t("email-verification-incomplete")}
-          </AlertDialog.Title>
-          <AlertDialog.Description size="2">
-            {t("email-verification-incomplete-desc")}
-          </AlertDialog.Description>
+  if (!bIsEmailVerified && bIsLoggedIn) {
+    return (
+      <div className="h-12 bg-background border-b flex items-center px-4 w-full relative z-50">
+        <div className="mr-auto text-sm md:text-base">
+          <Text weight="bold">{username}</Text>
+          <Text wrap="pretty">{t("email-verification-incomplete-top")}</Text>
+        </div>
 
-          <Flex direction="column" gap="3" mt="3">
-            <Flex gap="3" width="100%">
-              <TextField.Root
-                disabled={!bIsVerificationMailSent}
-                style={{ flex: 6 }}
-                placeholder={t("verification-code")}
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
-              />
-              <Button style={{ flex: 4 }} onClick={handleSendVerificationEmail}>
-                {t("send-verification-email")}
-              </Button>
-            </Flex>
-            <TextField.Root
-              placeholder={t("password")}
-              value={password}
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {verificationFailMessage && (
-              <Text color="red" size="2">
-                {verificationFailMessage}
-              </Text>
-            )}
-          </Flex>
-          <Flex gap="3" mt="4" justify="end">
-            <AlertDialog.Action>
-              <Button variant="surface" color="gray" onClick={logout}>
-                {t("logout")}
-              </Button>
-            </AlertDialog.Action>
-            <AlertDialog.Action>
-              <Button
-                variant="solid"
-                disabled={!enableVerifyButton}
-                onClick={handleVerification}
-              >
-                {t("verify")}
-              </Button>
-            </AlertDialog.Action>
-          </Flex>
-        </AlertDialog.Content>
-      </AlertDialog.Root>
-    </div>
-  );
+        <Flex gap="2">
+          <Button onClick={() => setVerificationClicked(true)} radius="full">
+            <Text>{t("verify")}</Text>
+          </Button>
+          <div className="hidden md:block">
+            <Button onClick={() => logout()} radius="full" variant="outline">
+              <Text>{t("logout")}</Text>
+            </Button>
+          </div>
+        </Flex>
+
+        <EmailVerificationDialog open={bIsVerificationClicked} />
+      </div>
+    );
+  }
+  return null;
 }
