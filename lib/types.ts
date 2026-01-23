@@ -98,6 +98,7 @@ interface Carousel {
   title: stringLocalized;
   description: stringLocalized;
   href: string | null;
+  button: stringLocalized;
 }
 
 export type {

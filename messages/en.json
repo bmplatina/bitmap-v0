@@ -93,6 +93,8 @@
   "GamesView": {
     "explore": "Explore",
     "details": "Details",
+    "released": "Released",
+    "all": "All Games",
     "pending": "Waiting for Approval",
     "unknown-game": "Unable to find game",
     "view-in-bitmap-app": "View in Bitmap App…",

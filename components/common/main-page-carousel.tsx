@@ -121,23 +121,27 @@ export default function AutoSliderCarousel() {
 
           <div className="absolute bottom-24 left-10 right-10 text-center">
             <div className="mb-auto">
-              <Text className="text-white text-2xl md:text-4xl font-bold shadow-sm">
+              <Text className="text-white text-2xl md:text-4xl font-bold filter drop-shadow-[0_0_15px_black]">
                 {getLocalizedString(locale, carousel[index].title)}
               </Text>
               {getLocalizedString(locale, carousel[index].description) !==
                 "" && (
                 <>
                   <br />
-                  <Text className="text-white text-lg md:text-2xl font-medium shadow-sm">
+                  <Text className="text-white text-lg md:text-2xl font-light filter drop-shadow-[0_0_15px_black]">
                     {getLocalizedString(locale, carousel[index].description)}
                   </Text>
                 </>
               )}
             </div>
             <br />
-            <Button radius="full" asChild>
-              <Link href={carousel[index].href ?? "#"}>{t("view")}</Link>
-            </Button>
+            {carousel[index].href !== "#" && (
+              <Button radius="full" asChild>
+                <Link href={carousel[index].href ?? "#"}>
+                  {getLocalizedString(locale, carousel[index].button)}
+                </Link>
+              </Button>
+            )}
           </div>
         </motion.div>
       </AnimatePresence>

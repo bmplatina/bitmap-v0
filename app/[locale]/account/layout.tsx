@@ -25,7 +25,7 @@ export default function AccountLayout({
   }, [bIsLoggedIn]);
 
   return (
-    <div>
+    <>
       <TabNav.Root className="sticky top-0 z-10 bg-background border-b-0">
         <TabNav.Link asChild active={pathname === "/account"}>
           <Link href="/account">{t("general-info")}</Link>
@@ -38,6 +38,6 @@ export default function AccountLayout({
         </TabNav.Link>
       </TabNav.Root>
       {bIsLoggedIn && children}
-    </div>
+    </>
   );
 }
