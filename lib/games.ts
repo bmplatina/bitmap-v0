@@ -208,7 +208,36 @@ async function submitGameRate(
     return response.data;
   } catch (error: any) {
     console.error(
-      "게임 제출 중 오류 발생:",
+      "게임 평점 편집 중 오류 발생:",
+      error.response?.data?.message || error.message,
+    );
+    throw error;
+  }
+}
+
+// API에서 특정 대기 중인 게임 데이터를 가져오는 함수
+async function deleteGameRate(token: string, gameId: number): Promise<any> {
+  try {
+    // API 호출
+    const response = await axios.post(
+      getApiLinkByPurpose("games/rate/delete"),
+      { gameId },
+      {
+        timeout: 30000, // 30초 타임아웃
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    console.log("Deletion succeed:", response.data);
+
+    // 성공 알림
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "게임 평점 삭제 중 오류 발생:",
       error.response?.data?.message || error.message,
     );
     throw error;
@@ -223,4 +252,5 @@ export {
   uploadGameImage,
   getGameRatesById,
   submitGameRate,
+  deleteGameRate,
 };

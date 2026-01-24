@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { Link, useRouter } from "@/i18n/routing";
+import { useRouter } from "@/i18n/routing";
 import { useAuth } from "@/lib/AuthContext";
 import {
   Card,
@@ -22,12 +22,13 @@ import {
   AlertDialog,
   Flex,
   IconButton,
+  Spinner,
   Text,
   TextArea,
   TextField,
   Theme,
 } from "@radix-ui/themes";
-import { submitGameRate } from "@/lib/games";
+import { submitGameRate, deleteGameRate } from "@/lib/games";
 import type { GameRating, GameRatingRequest } from "@/lib/types";
 import { Star } from "lucide-react";
 
@@ -43,9 +44,26 @@ export default function GameRateSubmitter({
   rates,
 }: GameIdProps) {
   const t = useTranslations("GamesView");
+  const router = useRouter();
   const { bIsLoggedIn, uid } = useAuth();
 
   const [bIsAlreadySubmitted, setIsAlreadySubmitted] = useState(false);
+  const [bIsDeleting, setIsDeleting] = useState(false);
+  const [postFailMessage, setPostFailMessage] = useState<string>("");
+
+  async function rateDeleteHandler() {
+    try {
+      setIsDeleting(true);
+      const token = localStorage.getItem("accessToken");
+      if (!token) throw Error("login-required");
+      const response = await deleteGameRate(token, gameId);
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      setIsDeleting(false);
+      router.refresh();
+    }
+  }
 
   useEffect(() => {
     const existingRate = rates.find(
@@ -80,24 +98,31 @@ export default function GameRateSubmitter({
           </Popover>
           <AlertDialog.Root>
             <AlertDialog.Trigger>
-              <Button color="red">삭제</Button>
+              <Button color="red">{t("rate-delete-btn")}</Button>
             </AlertDialog.Trigger>
             <AlertDialog.Content maxWidth="450px">
-              <AlertDialog.Title>평점 삭제</AlertDialog.Title>
+              <AlertDialog.Title>{t("rate-delete")}</AlertDialog.Title>
               <AlertDialog.Description size="2">
-                Are you sure? This application will no longer be accessible and
-                any existing sessions will be expired.
+                {t("rate-delete-desc")}
               </AlertDialog.Description>
 
               <Flex gap="3" mt="4" justify="end">
                 <AlertDialog.Cancel>
                   <Button variant="soft" color="gray">
-                    Cancel
+                    {t("rate-delete-cancel-btn")}
                   </Button>
                 </AlertDialog.Cancel>
                 <AlertDialog.Action>
-                  <Button variant="solid" color="red">
-                    Revoke access
+                  <Button
+                    variant="solid"
+                    color="red"
+                    onClick={rateDeleteHandler}
+                  >
+                    {bIsDeleting ? (
+                      <Spinner />
+                    ) : (
+                      <Text>{t("rate-delete-btn")}</Text>
+                    )}
                   </Button>
                 </AlertDialog.Action>
               </Flex>
@@ -121,9 +146,11 @@ function GameRateCard({ gameId, bIsEditing, rates }: GameIdProps) {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [postFailMessage, setPostFailMessage] = useState<string>("");
+  const [bIsSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   async function submitHandler() {
     try {
+      setIsSubmitting(true);
       const storageToken = localStorage.getItem("accessToken");
       if (!storageToken) throw Error("login-required");
 
@@ -144,6 +171,9 @@ function GameRateCard({ gameId, bIsEditing, rates }: GameIdProps) {
     } catch (err: any) {
       setPostFailMessage(err.message || String(err));
       console.error(err);
+    } finally {
+      setIsSubmitting(false);
+      router.refresh();
     }
   }
 
@@ -206,7 +236,11 @@ function GameRateCard({ gameId, bIsEditing, rates }: GameIdProps) {
         </CardContent>
         <CardFooter>
           <Button onClick={() => submitHandler()}>
-            <Text>{bIsEditing ? t("rate-edit") : t("rate-submit")}</Text>
+            {bIsSubmitting ? (
+              <Spinner />
+            ) : (
+              <Text>{bIsEditing ? t("rate-edit") : t("rate-submit")}</Text>
+            )}
           </Button>
         </CardFooter>
       </Card>

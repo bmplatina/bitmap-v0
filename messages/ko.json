@@ -140,7 +140,11 @@
     "rating-required": "평점을 입력해주십시오.",
     "rate-title": "제목⋯",
     "rate-description": "내용⋯",
-    "rate-submit": "제출"
+    "rate-submit": "제출",
+    "rate-delete": "평가 삭제",
+    "rate-delete-desc": "평가를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+    "rate-delete-btn": "삭제",
+    "rate-delete-cancel-btn": "취소"
   },
 
   "Publish": {
