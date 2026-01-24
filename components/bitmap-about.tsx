@@ -55,7 +55,7 @@ export default function BitmapAbout() {
                 initial={{ opacity: 0, y: 20 }} // 20px 아래에서 투명하게 시작
                 animate={{ opacity: 1, y: 0 }} // 제자리로 올라오며 선명해짐
                 transition={{
-                  delay: 1 + i * 0.075, // 1초 대기 후 0.1초 간격으로 시작
+                  delay: 1.15 + i * 0.075, // 1초 대기 후 0.1초 간격으로 시작
                   duration: 0.4, // 나타나는 데 걸리는 시간
                   ease: "easeOut", // 부드럽게 감속하며 도착
                 }}

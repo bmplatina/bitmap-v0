@@ -268,6 +268,14 @@
     "search": "Search"
   },
 
+  "Footer": {
+    "copyright-bitmap": "Copyright © 2026 Bitmap Production. All Rights Reserved.",
+    "privacy-policy": "Privacy Policy",
+    "terms-of-use": "Terms of Use",
+    "legal": "Legal",
+    "site-map": "Site Map"
+  },
+
   "Settings": {
     "settings-general": "General Settings",
     "theme": "Theme",

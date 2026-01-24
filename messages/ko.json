@@ -264,7 +264,16 @@
 
     "bitmap-server-inaccessible": "서버에 접근할 수 없습니다. 인터넷 연결을 확인하십시오.",
     "data-not-processable": "데이터를 처리하지 못했습니다.",
-    "decode-failed": "서버의 값을 처리하지 못했습니다."
+    "decode-failed": "서버의 값을 처리하지 못했습니다.",
+    "search": "검색"
+  },
+
+  "Footer": {
+    "copyright-bitmap": "Copyright © 2026 Bitmap Production. 모든 권리 보유.",
+    "privacy-policy": "개인정보 처리방침",
+    "terms-of-use": "웹 사이트 이용 약관",
+    "legal": "법적 고지",
+    "site-map": "사이트 맵"
   },
 
   "Settings": {

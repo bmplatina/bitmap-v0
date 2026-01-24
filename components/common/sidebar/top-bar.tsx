@@ -37,6 +37,18 @@ export default function TopBar() {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   // 프로필 팝오버 상태 관리
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  // 스크롤 상태 관리
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // 스크롤 감지
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // 라우트 변경 시 팝오버 및 사이드바 닫기
   useEffect(() => {
@@ -142,7 +154,20 @@ export default function TopBar() {
 
   return (
     <>
-      <div className="h-12 bg-background border-b flex items-center px-4 w-full relative z-50">
+      <div
+        className={`h-12 border-b flex items-center px-4 w-full relative z-50 transition-all duration-300 ${
+          isScrolled ? "border-border/50" : "bg-background border-border"
+        }`}
+        style={
+          isScrolled
+            ? {
+                WebkitBackdropFilter: "saturate(180%) blur(20px)",
+                backdropFilter: "saturate(180%) blur(20px)",
+                backgroundColor: "var(--topbar-bg, rgba(255, 255, 255, 0.72))",
+              }
+            : {}
+        }
+      >
         {/* 모바일 메뉴 버튼 */}
         <div className={`md:hidden mr-3 ${isMobileSearchOpen ? "hidden" : ""}`}>
           <IconButton
