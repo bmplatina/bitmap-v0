@@ -287,7 +287,18 @@ export default function TopBar() {
                     />
                   </IconButton>
                 </Popover.Trigger>
-                <Popover.Content>
+                <Popover.Content
+                  style={
+                    isScrolled
+                      ? {
+                          WebkitBackdropFilter: "saturate(180%) blur(20px)",
+                          backdropFilter: "saturate(180%) blur(20px)",
+                          backgroundColor:
+                            "var(--topbar-bg, rgba(255, 255, 255, 0.72))",
+                        }
+                      : {}
+                  }
+                >
                   <ProfilePopover />
                 </Popover.Content>
               </Popover.Root>
@@ -311,7 +322,16 @@ export default function TopBar() {
           />
 
           {/* 사이드바 */}
-          <div className="fixed left-0 top-0 h-full w-64 bg-background border-r shadow-lg transform transition-transform duration-300 ease-in-out">
+          <div
+            className={`fixed left-0 top-0 h-full w-64 border-r shadow-lg transform transition-transform duration-300 ease-in-out ${
+              isScrolled ? "border-border/50" : "bg-background border-border"
+            }`}
+            style={{
+              WebkitBackdropFilter: "saturate(180%) blur(20px)",
+              backdropFilter: "saturate(180%) blur(20px)",
+              backgroundColor: "var(--topbar-bg, rgba(255, 255, 255, 0.72))",
+            }}
+          >
             {/* 사이드바 헤더 */}
             <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-lg font-semibold">{t("menu")}</h2>
