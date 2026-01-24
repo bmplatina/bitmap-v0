@@ -117,7 +117,7 @@ export default function AccountPage() {
             <CardContent>
               <Flex direction="column" gap="2">
                 <Button size="3" asChild>
-                  <Link href={getApiLinkByPurpose("auth/google")}>
+                  <Link href="https://api.prodbybitmap.com/auth/google">
                     <Image
                       src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
                       alt="Google"

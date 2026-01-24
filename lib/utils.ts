@@ -150,6 +150,8 @@ function extractYoutubeId(input: string): string {
  * @param substring 도메인 뒤 링크
  */
 function getApiLinkByPurpose(substring: string): string {
+  const API_DOMAIN: string = "https://api.prodbybitmap.com/";
+
   // 클라이언트 환경(브라우저)에서는 CORS 방지를 위해 Next.js Rewrite 프록시 사용
   if (typeof window !== "undefined") {
     const basePath = "/absproxy/3000";
@@ -158,8 +160,6 @@ function getApiLinkByPurpose(substring: string): string {
     }
     return `/api-proxy/${substring}`;
   }
-
-  const API_DOMAIN: string = "https://api.prodbybitmap.com/";
   return `${API_DOMAIN}${substring}`;
 }
 
