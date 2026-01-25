@@ -17,7 +17,25 @@ export const metadata: Metadata = {
   title: "Bitmap",
   description: "디지털 게임 배포 플랫폼",
   icons: {
-    icon: "/AppIcon.ico",
+    icon: "/Bitmap/AppIcon.ico",
+    apple: [
+      { url: "/Bitmap/AppIcon_1024.png" }, // public/apple-touch-icon.png
+      {
+        url: "/Bitmap/AppIcon_128.png",
+        sizes: "128x128",
+        type: "image/png",
+      },
+      {
+        url: "/Bitmap/AppIcon_64.png",
+        sizes: "64x64",
+        type: "image/png",
+      },
+    ],
+  },
+  appleWebApp: {
+    capable: true,
+    title: "Bitmap",
+    statusBarStyle: "default",
   },
 };
 
