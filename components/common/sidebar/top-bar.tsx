@@ -16,6 +16,8 @@ import ProfilePopover from "@/components/accounts/profile";
 import GameListView from "@/components/games/game-listview";
 import { useAuth } from "@/lib/AuthContext";
 
+import BitmapLogoBMP from "@/public/bitmap_bmp.png";
+
 export default function TopBar() {
   const router = useRouter();
   const t = useTranslations("Common");
@@ -189,15 +191,12 @@ export default function TopBar() {
           }`}
         >
           <Image
-            src="/bitmap_bmp.png"
+            src={BitmapLogoBMP}
             alt="Bitmap"
             width={120}
             height={32}
-            className="h-8 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+            className="h-8 w-auto cursor-pointer hover:opacity-80 transition-opacity invert dark:invert-0 object-contain"
             priority
-            style={{
-              mixBlendMode: "difference",
-            }}
           />
         </Link>
 

@@ -1,6 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { Flex, Separator, Text, Container } from "@radix-ui/themes";
+import Image from "next/image";
+
+import BitmapLogo from "@/public/bitmaplogo-notext.png";
 
 export default async function Footer() {
   const t = await getTranslations("Footer");
@@ -14,13 +17,24 @@ export default async function Footer() {
           justify="between"
           align={{ initial: "start", md: "center" }}
         >
-          <Flex direction="column" gap="2">
-            <Text size="3" weight="bold" className="tracking-tighter">
-              Bitmap Production
-            </Text>
-            <Text size="1" color="gray" className="opacity-70">
-              {t("copyright-bitmap")}
-            </Text>
+          <Flex gap="4" align="center">
+            <Link href="/">
+              <Image
+                src={BitmapLogo}
+                alt="Bitmap Production Logo"
+                width={36}
+                className="invert dark:invert-0 object-contain"
+              />
+            </Link>
+
+            <Flex direction="column" gap="2">
+              <Text size="3" weight="bold" className="tracking-tighter">
+                Bitmap Production
+              </Text>
+              <Text size="1" color="gray" className="opacity-70">
+                {t("copyright-bitmap")}
+              </Text>
+            </Flex>
           </Flex>
 
           <Flex
@@ -68,9 +82,7 @@ export default async function Footer() {
         </Flex>
         <div className="mt-8">
           <Text size="2" as="p" color="gray">
-            Bitmap Production | 대표자: 이재혁 | 메일: platina@prodbybitmap.com
-            | 호스팅 서비스 제공: Bitmap Production. | 본 서비스는 영리 목적을
-            취하지 않으며 법인 및 사업자가 아닌 개인이 관리하고 있습니다.
+            {t("bitmap-about")}
           </Text>
         </div>
       </Container>

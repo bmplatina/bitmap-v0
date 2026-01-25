@@ -10,6 +10,8 @@ import { Link } from "@/i18n/routing";
 import { motion } from "framer-motion";
 import { UAParser } from "ua-parser-js";
 
+import BitmapAnim from "@/public/lottie/BitmapSquare.json";
+
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export default function BitmapAbout() {
@@ -31,12 +33,10 @@ export default function BitmapAbout() {
         <Flex direction="row" align="center" justify="center" gap="2" mb="4">
           <div className="w-16 h-16">
             <Lottie
-              animationData={require("@/public/lottie/BitmapSquare.json")}
+              animationData={BitmapAnim}
               loop={false}
               autoplay={true}
-              style={{
-                mixBlendMode: "difference",
-              }}
+              className="invert dark:invert-0 object-contain"
             />
           </div>
           {/* <Text
