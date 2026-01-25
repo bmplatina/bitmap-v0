@@ -310,7 +310,7 @@ export default function GameStoreViewEditor() {
                 </Card>
               </PopoverContent>
             </Popover>
-            {game.isEarlyAccess && (
+            {!!game.isEarlyAccess && (
               <Badge className="bg-amber-500">{t("early-access")}</Badge>
             )}
           </div>

@@ -12,7 +12,7 @@
     "bitmap": "Bitmap",
     "bitmap-store": "Bitmap Store",
     "store": "Store",
-    "about": "About Bitmap Store",
+    "about": "About Bitmap",
     "home": "Home",
     "bitmap-wiki": "Bitmap Wiki",
     "bitmap-app": "Get Bitmap App",
@@ -154,7 +154,8 @@
     "game": "Game",
     "project-file": "Project File",
     "asset": "Asset",
-    "lecture": "Lecture"
+    "lecture": "Lecture",
+    "distribution-agreement": "Distribution Agreement"
   },
 
   "GameSubmit": {
@@ -263,7 +264,7 @@
     "search-toggle": "Search Toggle",
 
     "bitmap-server-inaccessible": "Bitmap Store couldn't reach to server. Please check your internet connection.",
-    "data-not-processable": "Bitmap Store couldn't process the data.",
+    "data-not-processable": "Bitmap couldn't process the data.",
     "decode-failed": "Bitmap Store couldn't interpret the data from server.",
     "search": "Search"
   },
@@ -274,6 +275,7 @@
     "terms-of-use": "Terms of Use",
     "legal": "Legal",
     "site-map": "Site Map",
+    "about": "About Bitmap…",
     "bitmap-about": "Bitmap Production | Platina | Mail: public@prodbybitmap.com | Hosting service provided by Bitmap Production. | This service is non-commercial and managed by an individual, not a corporation or business."
   },
 

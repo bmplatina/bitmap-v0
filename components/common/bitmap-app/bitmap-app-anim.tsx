@@ -1,14 +1,22 @@
 "use client";
 
 import { Flex, Text } from "@radix-ui/themes";
-import { useTranslations } from "next-intl";
 import { motion, Variants } from "framer-motion";
 import Lottie from "lottie-react";
 import BitmapAnim from "@/public/lottie/BitmapSquare.json";
 
-export default function BitmapAppAnim() {
-  const t = useTranslations("Sidebar");
-  const bitmapAppTitle = "BITMAP APP";
+interface ShowTextProps {
+  bHideText?: boolean;
+  bIsAppText?: boolean;
+  logoSize?: number;
+}
+
+export default function BitmapAppAnim({
+  bHideText = false,
+  bIsAppText = true,
+  logoSize = 16,
+}: ShowTextProps) {
+  const bitmapAppTitle = bIsAppText ? "BITMAP APP" : "BITMAP";
 
   // Variants를 정의하면 코드가 훨씬 깔끔해집니다.
   const charVariants: Variants = {
@@ -27,42 +35,35 @@ export default function BitmapAppAnim() {
   };
 
   return (
-    <Flex direction="row" align="center" justify="center" gap="2" mb="4">
-      <div className="w-16 h-16">
+    <Flex align="center" justify="center" gap="3" mb="2">
+      <div className={`w-${logoSize} h-${logoSize}`}>
         <Lottie
           animationData={BitmapAnim}
           loop={false}
           autoplay={true}
-          className="invert dark:invert-0 object-contain"
+          className="invert dark:invert-0 shrink-0"
         />
       </div>
       <motion.div className="flex" initial="hidden" animate="visible">
-        {bitmapAppTitle.split("").map((char, i) => (
-          <motion.span
-            key={i}
-            custom={i} // variants에 인덱스(i)를 전달
-            variants={charVariants}
-            style={{ display: "inline-block" }} // transform 적용을 위해 필요
-          >
-            <Text
-              as="span"
-              size="9"
-              weight="bold"
-              className="whitespace-nowrap"
+        {!bHideText &&
+          bitmapAppTitle.split("").map((char, i) => (
+            <motion.span
+              key={i}
+              custom={i}
+              variants={charVariants}
+              style={{ display: "inline-block" }}
             >
-              {char === " " ? "\u00A0" : char}
-            </Text>
-          </motion.span>
-        ))}
+              <Text
+                as="span"
+                size="9"
+                weight="bold"
+                className="whitespace-nowrap tracking-tighter"
+              >
+                {char === " " ? "\u00A0" : char}
+              </Text>
+            </motion.span>
+          ))}
       </motion.div>
-      {/* <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }} // 한 번만 실행하고 싶을 때
-        transition={{ duration: 0.5 }}
-      >
-        <Text>스크롤하면 나타나는 제목</Text>
-      </motion.div> */}
     </Flex>
   );
 }

@@ -36,7 +36,12 @@ export default function BitmapAppRedirector({ gameId }: GameProps) {
   if (!gameId) return null;
 
   return (
-    <Button className="w-full" asChild disabled={bIsFetching}>
+    <Button
+      variant="outline"
+      className="w-full cursor-pointer"
+      asChild
+      disabled={bIsFetching}
+    >
       <Link
         href={`bitmap://games/${gameId}`}
         target="_blank"

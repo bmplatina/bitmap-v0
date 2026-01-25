@@ -38,13 +38,13 @@ export default async function Footer() {
           </Flex>
 
           <Flex
-            gap="5"
+            gap="2"
             wrap="wrap"
             align="center"
             className="text-muted-foreground"
           >
             <Link
-              href="#"
+              href="/legal?license=BitmapPrivacy"
               className="hover:text-foreground transition-colors duration-200"
             >
               <Text size="2" weight="medium">
@@ -53,7 +53,7 @@ export default async function Footer() {
             </Link>
             <Separator orientation="vertical" />
             <Link
-              href="/legal/"
+              href="/legal?license=BitmapEULA"
               className="hover:text-foreground transition-colors duration-200"
             >
               <Text size="2" weight="medium">
@@ -62,7 +62,7 @@ export default async function Footer() {
             </Link>
             <Separator orientation="vertical" />
             <Link
-              href="#"
+              href="/legal?license=sla"
               className="hover:text-foreground transition-colors duration-200"
             >
               <Text size="2" weight="medium">
@@ -71,11 +71,11 @@ export default async function Footer() {
             </Link>
             <Separator orientation="vertical" />
             <Link
-              href="#"
+              href="/about"
               className="hover:text-foreground transition-colors duration-200"
             >
               <Text size="2" weight="medium">
-                {t("site-map")}
+                {t("about")}
               </Text>
             </Link>
           </Flex>

@@ -115,7 +115,10 @@ export default async function GameDetail({ game, gameRates }: GameDetailProps) {
               asChild
               disabled={!game.isApproved}
             >
-              <Link href={`/download?gameId=${game.gameId}`} rel="noopener noreferrer">
+              <Link
+                href={`/download?gameId=${game.gameId}`}
+                rel="noopener noreferrer"
+              >
                 <Monitor className="mr-2 h-4 w-4" />
                 {t("view-in-bitmap-app")}
               </Link>
@@ -146,7 +149,7 @@ export default async function GameDetail({ game, gameRates }: GameDetailProps) {
                 {t("waiting-for-approval")}
               </Badge>
             )}
-            {game.isEarlyAccess && (
+            {!!game.isEarlyAccess && (
               <Badge className="bg-amber-500">{t("early-access")}</Badge>
             )}
           </div>
@@ -242,23 +245,23 @@ export default async function GameDetail({ game, gameRates }: GameDetailProps) {
             </Text>
             <Tabs.Root defaultValue="windows">
               <Tabs.List>
-                {game.gamePlatformWindows && (
+                {!!game.gamePlatformWindows && (
                   <Tabs.Trigger value="windows">Windows</Tabs.Trigger>
                 )}
 
-                {game.gamePlatformMac && (
+                {!!game.gamePlatformMac && (
                   <Tabs.Trigger value="macos">macOS</Tabs.Trigger>
                 )}
               </Tabs.List>
 
               <Box pt="3">
-                {game.gamePlatformWindows && (
+                {!!game.gamePlatformWindows && (
                   <Tabs.Content value="windows">
                     <SmartMarkdown content={game.requirementsWindows ?? ""} />
                   </Tabs.Content>
                 )}
 
-                {game.gamePlatformMac && (
+                {!!game.gamePlatformMac && (
                   <Tabs.Content value="macos">
                     <SmartMarkdown content={game.requirementsMac ?? ""} />
                   </Tabs.Content>

@@ -12,7 +12,7 @@
     "bitmap": "Bitmap",
     "bitmap-store": "Bitmap 스토어",
     "store": "스토어",
-    "about": "Bitmap 스토어에 관하여",
+    "about": "Bitmap에 대하여⋯",
     "home": "홈",
     "bitmap-wiki": "Bitmap 위키",
     "bitmap-app": "Bitmap 앱 받기",
@@ -154,7 +154,8 @@
     "game": "게임",
     "project-file": "프로젝트 파일",
     "asset": "애셋",
-    "lecture": "강좌"
+    "lecture": "강좌",
+    "distribution-agreement": "배포 계약"
   },
 
   "GameSubmit": {
@@ -274,6 +275,7 @@
     "terms-of-use": "웹 사이트 이용 약관",
     "legal": "법적 고지",
     "site-map": "사이트 맵",
+    "about": "Bitmap에 대하여⋯",
     "bitmap-about": "Bitmap Production | 대표자: 이재혁 | 메일: public@prodbybitmap.com | 호스팅 서비스 제공: Bitmap Production. | 본 서비스는 영리 목적을 취하지 않으며 법인 및 사업자가 아닌 개인이 관리하고 있습니다."
   },
 

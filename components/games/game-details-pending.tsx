@@ -128,7 +128,7 @@ export default function GameDetail({
                 {t_gameSubmit("waiting-for-approval")}
               </Badge>
             )}
-            {game.isEarlyAccess && (
+            {!!game.isEarlyAccess && (
               <Badge className="bg-amber-500">{t("early-access")}</Badge>
             )}
           </div>
@@ -228,17 +228,17 @@ export default function GameDetail({
             </Text>
             <Tabs.Root defaultValue="windows">
               <Tabs.List>
-                {game.gamePlatformWindows && (
+                {!!game.gamePlatformWindows && (
                   <Tabs.Trigger value="windows">Windows</Tabs.Trigger>
                 )}
 
-                {game.gamePlatformMac && (
+                {!!game.gamePlatformMac && (
                   <Tabs.Trigger value="macos">macOS</Tabs.Trigger>
                 )}
               </Tabs.List>
 
               <Box pt="3">
-                {game.gamePlatformWindows && (
+                {!!game.gamePlatformWindows && (
                   <Tabs.Content value="windows">
                     <ClientMarkdown content={game.requirementsWindows ?? ""} />
                   </Tabs.Content>

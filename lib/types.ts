@@ -101,6 +101,10 @@ interface Carousel {
   button: stringLocalized;
 }
 
+interface searchParamsPropsSSR {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
 export type {
   stringLocalized,
   Game,
@@ -114,4 +118,5 @@ export type {
   ErrorResponse,
   YouTubeQuery,
   Carousel,
+  searchParamsPropsSSR,
 };

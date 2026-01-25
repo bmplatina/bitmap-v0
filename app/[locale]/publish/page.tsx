@@ -87,9 +87,16 @@ export default function SubmitGames() {
               )}
             </CardContent>
             <CardFooter>
-              <Button asChild>
-                <Link href="/publish/games">{t("publish-new")}</Link>
-              </Button>
+              <Flex gap="2">
+                <Button asChild>
+                  <Link href="/publish/games">{t("publish-new")}</Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link href="/legal?license=BitmapGameDistributionAggrement">
+                    {t("distribution-agreement")}
+                  </Link>
+                </Button>
+              </Flex>
             </CardFooter>
           </Card>
         )}
