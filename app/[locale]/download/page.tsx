@@ -20,7 +20,7 @@ export default async function BitmapAbout({
       <Container size="1">
         <Flex direction="column" align="center" gap="6" className="text-center">
           {/* 애니메이션 및 타이틀 영역 */}
-          <BitmapAppAnim />
+          <BitmapAppAnim bIsAppText />
 
           {/* 설명 텍스트 영역 */}
           <Text

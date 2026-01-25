@@ -105,8 +105,17 @@ interface searchParamsPropsSSR {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
+interface BitmapMemberInfo {
+  id: number;
+  name: string;
+  channelId: string;
+  avatarUrl: string;
+  position: string;
+}
+
 export type {
   stringLocalized,
+  BitmapMemberInfo,
   Game,
   AuthorInfo,
   Metadata,

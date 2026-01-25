@@ -13,7 +13,7 @@ interface ShowTextProps {
 
 export default function BitmapAppAnim({
   bHideText = false,
-  bIsAppText = true,
+  bIsAppText = false,
   logoSize = 16,
 }: ShowTextProps) {
   const bitmapAppTitle = bIsAppText ? "BITMAP APP" : "BITMAP";
@@ -36,7 +36,10 @@ export default function BitmapAppAnim({
 
   return (
     <Flex align="center" justify="center" gap="3" mb="2">
-      <div className={`w-${logoSize} h-${logoSize}`}>
+      <div
+        style={{ width: logoSize * 4, height: logoSize * 4 }}
+        className="shrink-0"
+      >
         <Lottie
           animationData={BitmapAnim}
           loop={false}

@@ -27,6 +27,16 @@ const pretendard = localFont({
   weight: "45 920",
 });
 
+/**
+ * 숫자를 지정된 범위 내로 제한합니다.
+ * @param value 제한할 숫자
+ * @param min 최소값
+ * @param max 최대값
+ */
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
 function getLocalizedString(locale: string, t: stringLocalized): string {
   return locale === "ko" ? t.ko : t.en;
 }
@@ -394,6 +404,7 @@ async function getCarousel(): Promise<Carousel[]> {
 
 export {
   cn,
+  clamp,
   checkAuthor,
   extractYoutubeId,
   formatDate,
