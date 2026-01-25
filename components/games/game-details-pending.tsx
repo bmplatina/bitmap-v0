@@ -94,7 +94,10 @@ export default function GameDetail({
             )}
 
             <Button className="w-full" variant="default" asChild>
-              <a href={`/about/${game.gameId}`} rel="noopener noreferrer">
+              <a
+                href={`/download?gameId=${game.gameId}`}
+                rel="noopener noreferrer"
+              >
                 <Monitor className="mr-2 h-4 w-4" />
                 {t("view-in-bitmap-app")}
               </a>

@@ -28,7 +28,7 @@ export const sidebarItems = [
         icon: <Download className="h-5 w-5" />,
         bRequire: "",
         appIcon: Download,
-        href: "/about",
+        href: "/download",
       },
       {
         title: "bitmap-developer",

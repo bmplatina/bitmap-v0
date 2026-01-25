@@ -255,7 +255,7 @@ export default function GameStoreViewEditor() {
             )}
 
             <Button className="w-full" asChild>
-              <a href={`/about/${game.gameId}`} rel="noopener noreferrer">
+              <a href={`/download/${game.gameId}`} rel="noopener noreferrer">
                 <Monitor className="mr-2 h-4 w-4" />
                 {t("view-in-bitmap-app")}
               </a>

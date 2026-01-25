@@ -28,6 +28,7 @@ import {
 } from "../ui/card";
 import GameRateSubmitter from "./game-rate-submitter";
 import GameRateViewer from "./game-rate-viewer";
+import { Link } from "@/i18n/routing";
 
 type GameDetailProps = {
   game: Game;
@@ -97,14 +98,14 @@ export default async function GameDetail({ game, gameRates }: GameDetailProps) {
           <div className="mt-6 space-y-4">
             {game.gameWebsite && (
               <Button variant="outline" className="w-full" asChild>
-                <a
+                <Link
                   href={game.gameWebsite}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <Globe className="mr-2 h-4 w-4" />
                   {t("official-website")}
-                </a>
+                </Link>
               </Button>
             )}
 
@@ -114,10 +115,10 @@ export default async function GameDetail({ game, gameRates }: GameDetailProps) {
               asChild
               disabled={!game.isApproved}
             >
-              <a href={`/about/${game.gameId}`} rel="noopener noreferrer">
+              <Link href={`/download?gameId=${game.gameId}`} rel="noopener noreferrer">
                 <Monitor className="mr-2 h-4 w-4" />
                 {t("view-in-bitmap-app")}
-              </a>
+              </Link>
             </Button>
 
             {/*game.gameDownloadWinURL && (
@@ -282,7 +283,11 @@ export default async function GameDetail({ game, gameRates }: GameDetailProps) {
               </Flex>
             )}
             <div className="mt-2">
-              <GameRateSubmitter gameId={game.gameId} bIsEditing={false} rates={gameRates} />
+              <GameRateSubmitter
+                gameId={game.gameId}
+                bIsEditing={false}
+                rates={gameRates}
+              />
               {gameRates.map(
                 (rate) => rate && <GameRateViewer key={rate.id} rate={rate} />,
               )}
