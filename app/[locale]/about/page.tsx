@@ -5,6 +5,7 @@ import Image from "next/image";
 import {
   Avatar,
   Container,
+  Button,
   Flex,
   Text,
   Section,
@@ -12,9 +13,8 @@ import {
   Grid,
   Box,
   ScrollArea,
-  Button,
 } from "@radix-ui/themes";
-import { animate, motion, Variants } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { clamp, getYouTubeVideos } from "@/lib/utils";
 import { getMembers } from "@/lib/general";
@@ -23,6 +23,8 @@ import BitmapLogo from "@/public/bitmaplogo-notext.png";
 import { Link } from "@/i18n/routing";
 import { Play, Pause } from "lucide-react";
 import { BitmapMemberInfo } from "@/lib/types";
+import { useAuth } from "@/lib/AuthContext";
+import MultiLineText from "@/components/common/multi-line-text";
 
 export default function BitmapAbout() {
   const t = useTranslations("About");
@@ -32,6 +34,8 @@ export default function BitmapAbout() {
   const [members, setMembers] = useState<BitmapMemberInfo[]>([]);
   const [isMemberPaused, setIsMemberPaused] = useState(false);
   const [isMemberHovered, setIsMemberHovered] = useState(false);
+
+  const { bIsLoggedIn, bIsTeammate, bIsDeveloper, isLoading } = useAuth();
 
   const fadeInUp: Variants = {
     hidden: { opacity: 0, y: 50 },
@@ -112,16 +116,14 @@ export default function BitmapAbout() {
                   Bitmap Production™
                 </Text>
               </Flex>
-              <Text
+              <MultiLineText
                 as="p"
                 size="5"
                 color="gray"
                 className="max-w-[600px] leading-relaxed break-keep"
               >
-                우리는 기술과 예술의 경계에서 새로운 가치를 만들어냅니다.
-                <br />
-                창작자들의 상상을 현실로 만드는 여정에 함께하세요.
-              </Text>
+                {t("bitmap-overview-desc")}
+              </MultiLineText>
             </Flex>
           </motion.div>
         </Section>
@@ -373,8 +375,37 @@ export default function BitmapAbout() {
                 Ready to Start?
               </Text>
               <Text size="4" color="gray" className="mb-4">
-                지금 바로 Bitmap과 함께 새로운 창작을 시작해보세요.
+                {t("start-with-bitmap")}
               </Text>
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <>
+                  {bIsLoggedIn ? (
+                    <Flex direction="column" gap="2">
+                      {!bIsTeammate && (
+                        <Button asChild>
+                          <Link href="/team/apply">Apply to Bitmap</Link>
+                        </Button>
+                      )}
+                      {!bIsDeveloper && (
+                        <Button asChild>
+                          <Link href="/account/edit">Bitmap Developer</Link>
+                        </Button>
+                      )}
+                    </Flex>
+                  ) : (
+                    <Flex direction="column" gap="2">
+                      <Button asChild>
+                        <Link href="/auth">Signin or Signup</Link>
+                      </Button>
+                      <Button asChild>
+                        <Link href="/">Get Started</Link>
+                      </Button>
+                    </Flex>
+                  )}
+                </>
+              )}
             </Flex>
           </motion.div>
         </Section>
