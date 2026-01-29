@@ -11,7 +11,7 @@ import type { Game } from "@/lib/types";
 import { getGames } from "@/lib/games";
 import { useTranslations } from "next-intl";
 import { convertQwertyToHangul, getChoseong } from "es-hangul";
-import { Avatar, Button, IconButton, Popover } from "@radix-ui/themes";
+import { Avatar, Button, IconButton, Popover, Spinner } from "@radix-ui/themes";
 import ProfilePopover from "@/components/accounts/profile";
 import GameListView from "@/components/games/game-listview";
 import { useAuth } from "@/lib/AuthContext";
@@ -22,7 +22,7 @@ export default function TopBar() {
   const router = useRouter();
   const t = useTranslations("Common");
   const pathName = usePathname();
-  const { bIsLoggedIn, username } = useAuth();
+  const { bIsLoggedIn, username, isLoading } = useAuth();
   // Electron 및 MacOS 환경 감지 변수 (실제 감지 코드는 구현하지 않음)
   const bIsElectron: boolean = false; // 예시 값, 실제로는 Electron 감지 로직 필요
   const bIsMacOS: boolean = false; // 예시 값, 실제로는 MacOS 감지 로직 필요
@@ -272,40 +272,42 @@ export default function TopBar() {
             </IconButton>
           </div>
           <div className="flex items-center">
-            {bIsLoggedIn && (
-              <Popover.Root
-                open={isProfileOpen}
-                onOpenChange={setIsProfileOpen}
-              >
-                <Popover.Trigger>
-                  <IconButton variant="ghost" radius="full">
-                    <Avatar
-                      radius="full"
-                      size="2"
-                      fallback={username.charAt(0).toUpperCase()}
-                    />
-                  </IconButton>
-                </Popover.Trigger>
-                <Popover.Content
-                  style={
-                    isScrolled
-                      ? {
-                          WebkitBackdropFilter: "saturate(180%) blur(20px)",
-                          backdropFilter: "saturate(180%) blur(20px)",
-                          backgroundColor:
-                            "var(--topbar-bg, rgba(255, 255, 255, 0.72))",
-                        }
-                      : {}
-                  }
-                >
-                  <ProfilePopover />
-                </Popover.Content>
-              </Popover.Root>
-            )}
-            {getIsSigninButtonActive() && (
-              <Button radius="full" asChild>
-                <Link href="/auth">{t("signin")}</Link>
-              </Button>
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <>
+                {bIsLoggedIn && (
+                  <Popover.Root
+                    open={isProfileOpen}
+                    onOpenChange={setIsProfileOpen}
+                  >
+                    <Popover.Trigger>
+                      <IconButton variant="ghost" radius="full">
+                        <Avatar
+                          radius="full"
+                          size="2"
+                          fallback={username.charAt(0).toUpperCase()}
+                        />
+                      </IconButton>
+                    </Popover.Trigger>
+                    <Popover.Content
+                      style={{
+                        WebkitBackdropFilter: "saturate(180%) blur(20px)",
+                        backdropFilter: "saturate(180%) blur(20px)",
+                        backgroundColor:
+                          "var(--topbar-bg, rgba(255, 255, 255, 0.72))",
+                      }}
+                    >
+                      <ProfilePopover />
+                    </Popover.Content>
+                  </Popover.Root>
+                )}
+                {getIsSigninButtonActive() && (
+                  <Button radius="full" asChild>
+                    <Link href="/auth">{t("signin")}</Link>
+                  </Button>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -324,7 +326,7 @@ export default function TopBar() {
           <div
             className={`fixed left-0 top-0 h-full w-64 border-r shadow-lg transform transition-transform duration-300 ease-in-out ${
               isScrolled ? "border-border/50" : "bg-background border-border"
-            }`}
+            } flex flex-col`}
             style={{
               WebkitBackdropFilter: "saturate(180%) blur(20px)",
               backdropFilter: "saturate(180%) blur(20px)",

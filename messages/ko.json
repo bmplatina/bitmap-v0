@@ -40,7 +40,7 @@
     "edit": "수정",
     "general-info": "기본 정보",
     "other-info": "기타 정보",
-    "id": "유저 이름",
+    "id": "닉네임",
     "email": "메일",
     "password": "비밀번호",
     "again": "(다시 입력)",
@@ -88,6 +88,43 @@
     "user-not-found": "유효하지 않은 메일 주소입니다. 다시 입력하십시오.",
     "invalid-code": "유효하지 않은 인증 코드입니다.",
     "code-expired": "인증 코드가 만료되었습니다."
+  },
+
+  "AccountEdit": {
+    "account-edit": "계정 정보 수정",
+    "username-edit": "닉네임 수정",
+    "password-edit": "비밀번호 수정",
+    "id": "닉네임",
+    "password": "비밀번호",
+    "again": "(다시 입력)",
+    "bitmap-apply": "Bitmap 팀 가입",
+    "bitmap-apply-desc": "Bitmap 팀에 가입하여 제공하는 모든 서비스를 누릴 수 있습니다. 아래 가입 버튼을 클릭하여 가입을 신청하십시오.",
+    "bitmap-quit": "Bitmap 팀 탈퇴",
+    "bitmap-quit-desc": "Bitmap 팀에서 탈퇴합니다. 팀원 자격을 잃으면 제한되는 내용을 확인하십시오:\\n\\n1. Bitmap 커뮤니티 (카카오톡 오픈채팅 접근, Discord 서버 팀원 권한)의 접근이 제한됩니다.\\n2. Bitmap의 소셜 미디어 (YouTube, Bitmap 사이트 등)에 컨텐츠를 게시하거나 기존 컨텐츠를 수정할 수 없습니다.\\n3. 과한 분쟁으로 인해 탈퇴되는 경우 분쟁 로그에 분쟁 내용이 사전 고지 없이 투명하게 공개될 수 있습니다.",
+    "bitmap-developer-enable": "Bitmap Developer 계정으로 전환",
+    "bitmap-developer-enable-desc": "",
+    "apply": "가입하기",
+    "quit": "탈퇴하기"
+  },
+
+  "BitmapTeammate": {
+    "apply-title": "Bitmap Teammates 지원서",
+    "name": "성명 / 활동명",
+    "age": "연령",
+    "introduction": "귀하에 대하여 간략히 소개해주십시오. (200자 이내)",
+    "motivation": "Bitmap을 알게 된 경로와 지원하게 된 동기를 작성하여 주십시오. (400자 이내)",
+    "working-field": "본인의 멀티미디어 제작에 있어 분야를 선택하여 주십시오. (중복 선택 가능)",
+    "vp-post": "영상 제작 (포스트 프로덕션)",
+    "vp-mograph": "영상 제작 (모션 그래픽)",
+    "illustration": "일러스트레이션 및 아트워크",
+    "music-produce": "음악 프로듀싱",
+    "dev-web": "프로그래밍 (웹 프론트엔드 및 백엔드)",
+    "dev-app": "프로그래밍 (응용 프로그램)",
+    "dev-game": "프로그래밍 (게임 개발)",
+    "prod-tools": "주로 사용하는 멀티미디어 제작 프로그램은 무엇입니까? (100자 이내)",
+    "affiliation": "본인이 속해 있거나 이전에 속하였던 집단 (팀, 스튜디오, 회사 등)이 있습니까? 현재 소속 여부도 알려 주시기 바랍니다.",
+    "work-submission": "본인이 가장 열정적으로 만들었거나 잘 만들었다고 생각한 작품을 올려주십시오.",
+    "submit": "가입 신청하기"
   },
 
   "GamesView": {

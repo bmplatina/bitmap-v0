@@ -90,6 +90,43 @@
     "code-expired": "Verification code has expired."
   },
 
+  "AccountEdit": {
+    "account-edit": "Edit Account Info",
+    "username-edit": "Edit Username",
+    "password-edit": "Edit Password",
+    "id": "Username",
+    "password": "Password",
+    "again": "(Type again)",
+    "bitmap-apply": "Join Bitmap Team",
+    "bitmap-apply-desc": "Join the Bitmap team to enjoy all the services we provide. Click the Join button below to apply.",
+    "bitmap-quit": "Leave Bitmap Team",
+    "bitmap-quit-desc": "Leaving the Bitmap team. Please note the following restrictions when you lose your teammate status:\\n\\n1. Access to the Bitmap community (KakaoTalk open chat, Discord server teammate roles) will be restricted.\\n2. You will no longer be able to post or edit content on Bitmap's social media (YouTube, Bitmap site, etc.).\\n3. If you leave due to excessive conflict, details may be disclosed in the conflict log without prior notice.",
+    "bitmap-developer-enable": "Switch to Bitmap Developer Account",
+    "bitmap-developer-enable-desc": "",
+    "apply": "Apply",
+    "quit": "Leave"
+  },
+
+  "BitmapTeammate": {
+    "apply-title": "Bitmap Teammates Application Form",
+    "name": "Name / Alias",
+    "age": "Age",
+    "introduction": "Please briefly introduce yourself. (Max 200 characters)",
+    "motivation": "How did you hear about Bitmap and what motivated you to apply? (Max 400 characters)",
+    "working-field": "Please select your fields of multimedia production. (Multiple selections possible)",
+    "vp-post": "Video Production (Post-production)",
+    "vp-mograph": "Video Production (Motion Graphics)",
+    "illustration": "Illustration and Artwork",
+    "music-produce": "Music Producing",
+    "dev-web": "Programming (Web Frontend and Backend)",
+    "dev-app": "Programming (Application)",
+    "dev-game": "Programming (Game Development)",
+    "prod-tools": "What multimedia production programs do you mainly use? (Max 100 characters)",
+    "affiliation": "Are there any groups (teams, studios, companies, etc.) you belong to or have belonged to? Please specify your current status.",
+    "work-submission": "Please upload the work you are most passionate about or think is your best.",
+    "submit": "Submit Application"
+  },
+
   "GamesView": {
     "explore": "Explore",
     "details": "Details",

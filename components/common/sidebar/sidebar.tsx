@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
 import { sidebarItems } from "@/lib/sidebar-items";
 import { useTranslations } from "next-intl";
+import LanguageSwitcher from "./language-changer";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -42,7 +43,7 @@ export default function Sidebar() {
                         "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
                         pathname === item.href
                           ? "bg-accent text-accent-foreground"
-                          : "text-muted-foreground"
+                          : "text-muted-foreground",
                       )}
                     >
                       {item.icon}
@@ -54,6 +55,9 @@ export default function Sidebar() {
             </div>
           );
         })}
+      </div>
+      <div className="p-4 border-t">
+        <LanguageSwitcher />
       </div>
     </div>
   );
