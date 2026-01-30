@@ -1,5 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { checkAuthor, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
+import { checkAuthor } from "@/lib/auth";
 import {
   Card,
   CardContent,

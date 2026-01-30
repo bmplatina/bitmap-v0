@@ -6,12 +6,8 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
-import {
-  checkAuthor,
-  formatDate,
-  getLocalizedString,
-  imageUriRegExp,
-} from "@/lib/utils";
+import { formatDate, getLocalizedString, imageUriRegExp } from "@/lib/utils";
+import { checkAuthor } from "@/lib/auth";
 import { useTranslations, useLocale } from "next-intl";
 import ClientMarkdown from "@/components/common/markdown/client-markdown";
 import { Box, ScrollArea, Tabs, Text } from "@radix-ui/themes";

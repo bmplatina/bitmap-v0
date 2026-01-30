@@ -23,13 +23,13 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { TextField, AlertDialog } from "@radix-ui/themes";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations, useLocale } from "next-intl";
+import { getEula } from "@/lib/utils";
 import {
-  getEula,
   signup,
   login as loginPost,
   verifyEmail,
   checkIsEmailDuplicated,
-} from "@/lib/utils";
+} from "@/lib/auth";
 import { useAuth } from "@/lib/AuthContext";
 import ClientMarkdown from "@/components/common/markdown/client-markdown";
 import { Separator } from "@radix-ui/themes";
@@ -98,7 +98,7 @@ export default function Home() {
         email,
         password,
         bIsDeveloper,
-        bIsTeammate
+        bIsTeammate,
       );
       console.log("회원가입 성공:", signupResult.username);
 

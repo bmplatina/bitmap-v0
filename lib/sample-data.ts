@@ -9,7 +9,6 @@ export const sampleGames: Game[] = [
     gameLatestRevision: 1,
     gamePlatformWindows: true,
     gamePlatformMac: false,
-    gamePlatformMobile: false,
     gameEngine: "Creation Engine 2",
     gameGenre: { ko: "RPG", en: "RPG" },
     gameDeveloper: "베데스다 게임 스튜디오",
@@ -33,6 +32,8 @@ export const sampleGames: Game[] = [
       ko: "스타필드는 베데스다 게임 스튜디오가 25년 만에 개발한 첫 번째 새로운 우주를 배경으로 한 게임입니다. 이 차세대 롤플레잉 게임에서 플레이어는 자신만의 캐릭터를 만들고 전례 없는 자유로 광활한 우주를 탐험할 수 있습니다. 인류의 마지막 위대한 여정인 우주로 떠나 수많은 행성을 탐험하고, 신비로운 비밀을 발견하세요.",
       en: "Starfield is the first new space-themed game developed by Bethesda Game Studios in 25 years. In this next-generation role-playing game, players create their own characters and explore the vast universe with unprecedented freedom. Embark on humanity's last great journey into space, explore countless planets, and uncover mysterious secrets.",
     },
+    requirementsMac: null,
+    requirementsWindows: null
   },
   // {
   //   gameId: 2,

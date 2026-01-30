@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useAuth } from "@/lib/AuthContext";
-import { sendVerifyEmail, verifyEmail, login as loginPost } from "@/lib/utils";
+import { sendVerifyEmail, verifyEmail, login as loginPost } from "@/lib/auth";
 import {
   AlertDialog,
   Button,

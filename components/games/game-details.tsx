@@ -13,7 +13,8 @@ import {
   Code,
   Star,
 } from "lucide-react";
-import { checkAuthor, formatDate, imageUriRegExp } from "@/lib/utils";
+import { formatDate, imageUriRegExp } from "@/lib/utils";
+import { checkAuthor } from "@/lib/auth";
 import { getTranslations, getLocale } from "next-intl/server";
 import { getLocalizedString } from "@/lib/utils";
 import SmartMarkdown from "@/components/common/markdown/markdown-renderer";

@@ -6,7 +6,8 @@ import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { TextField } from "@radix-ui/themes";
 import { useAuth } from "@/lib/AuthContext";
-import { getApiLinkByPurpose, login as loginPost } from "@/lib/utils";
+import { getApiLinkByPurpose } from "@/lib/utils";
+import { login as loginPost } from "@/lib/auth";
 import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 
