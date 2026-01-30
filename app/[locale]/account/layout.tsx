@@ -12,26 +12,40 @@ export default function AccountLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const t = useTranslations("Authentication");
+  const t = useTranslations("AccountTabs");
   const pathname = usePathname();
   const router = useRouter();
-  const { bIsLoggedIn } = useAuth();
+  const { isLoading, bIsLoggedIn } = useAuth();
 
-  useEffect(() => {
-    if (!bIsLoggedIn) {
-      // Redirect or perform some action if not logged in
-      router.push("/auth");
-    }
-  }, [bIsLoggedIn]);
+  useEffect(
+    function () {
+      if (!isLoading) {
+        if (!bIsLoggedIn) router.push("/auth");
+      }
+    },
+    [isLoading, bIsLoggedIn],
+  );
 
   return (
     <>
       <TabNav.Root className="sticky top-0 z-10 bg-background border-b-0">
         <TabNav.Link asChild active={pathname === "/account"}>
-          <Link href="/account">{t("general-info")}</Link>
+          <Link href="/account">{t("profile")}</Link>
         </TabNav.Link>
-        <TabNav.Link asChild active={pathname === "/account/edit"}>
-          <Link href="/account/edit">{t("edit")}</Link>
+        <TabNav.Link
+          asChild
+          active={pathname.startsWith("/account/personal-info")}
+        >
+          <Link href="/account/personal-info">{t("personal-info")}</Link>
+        </TabNav.Link>
+        <TabNav.Link asChild active={pathname.startsWith("/account/security")}>
+          <Link href="/account/security">{t("security-login")}</Link>
+        </TabNav.Link>
+        <TabNav.Link
+          asChild
+          active={pathname.startsWith("/account/permissions")}
+        >
+          <Link href="/account/permissions">{t("permissions")}</Link>
         </TabNav.Link>
         <TabNav.Link asChild active={pathname === "/account/settings"}>
           <Link href="/account/settings">{t("settings")}</Link>

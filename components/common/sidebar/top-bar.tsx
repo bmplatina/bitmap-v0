@@ -12,7 +12,7 @@ import { getGames } from "@/lib/games";
 import { useTranslations } from "next-intl";
 import { convertQwertyToHangul, getChoseong } from "es-hangul";
 import { Avatar, Button, IconButton, Popover, Spinner } from "@radix-ui/themes";
-import ProfilePopover from "@/components/accounts/profile";
+import { ProfilePopover } from "@/components/accounts/profile";
 import GameListView from "@/components/games/game-listview";
 import { useAuth } from "@/lib/AuthContext";
 

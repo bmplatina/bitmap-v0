@@ -38,10 +38,18 @@ export default function SubmitGames() {
       if (!isLoading) {
         if (!bIsLoggedIn || !bIsDeveloper) {
           router.push("/auth");
+          return;
+        }
+
+        // 수정 모드인 경우에만, 데이터가 완전히 로드된 후(bIsEditingExisting) 권한(uid)을 확인합니다.
+        if (bIsEditingExisting && gameData) {
+          if (uid !== gameData.uid) {
+            router.push("/publish");
+          }
         }
       }
     },
-    [bIsLoggedIn, bIsDeveloper, isLoading],
+    [bIsLoggedIn, bIsDeveloper, isLoading, gameData, uid, bIsEditingExisting],
   );
 
   useEffect(() => {
@@ -56,9 +64,6 @@ export default function SubmitGames() {
         if (game) {
           setGame(game);
           setIsEditingExisting(true);
-          // if (uid !== gameData.uid) {
-          //   router.push("/auth");
-          // }
         }
       });
     } else {
@@ -66,7 +71,7 @@ export default function SubmitGames() {
         updateField("gameId", amount);
       });
     }
-  }, [searchParams, bIsEditingExisting, uid, gameData.uid]);
+  }, [searchParams]);
 
   return (
     <>

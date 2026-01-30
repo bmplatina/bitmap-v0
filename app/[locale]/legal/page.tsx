@@ -10,13 +10,17 @@ export default async function EulaPage({ searchParams }: searchParamsPropsSSR) {
   const { license } = await searchParams;
   const eula = await getEula(license as string);
 
-  return (
-    <div className="px-4 pt-6">
-      {eula ? (
-        <SmartMarkdown content={getLocalizedString(locale, eula)} />
-      ) : (
+  if (!eula) {
+    return (
+      <div className="px-4 md:px-32 pt-6 items-center justify-center">
         <Text className="text-center">{t("data-not-processable")}</Text>
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="px-4 md:px-32 pt-6">
+      <SmartMarkdown content={getLocalizedString(locale, eula)} />
     </div>
   );
 }

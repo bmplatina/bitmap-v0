@@ -25,12 +25,11 @@ import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import MultiLineText from "@/components/common/multi-line-text";
 
-export default function AccountEdit() {
+export default function BitmapDeveloperApply() {
   const t = useTranslations("BitmapTeammate");
   const router = useRouter();
 
-  const { bIsLoggedIn, login, isLoading, bIsTeammate, bIsDeveloper } =
-    useAuth();
+  const { isLoading, bIsDeveloper } = useAuth();
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -41,12 +40,12 @@ export default function AccountEdit() {
   useEffect(
     function () {
       if (!isLoading) {
-        if (!bIsLoggedIn) {
+        if (bIsDeveloper) {
           router.push("/auth");
         }
       }
     },
-    [isLoading, bIsLoggedIn],
+    [isLoading, bIsDeveloper],
   );
 
   return (
@@ -70,7 +69,6 @@ export default function AccountEdit() {
             </TextField.Root>
           </CardContent>
         </Card>
-        <Separator />
         <Card>
           <CardHeader>
             <CardTitle>{t("age")}</CardTitle>
@@ -92,7 +90,6 @@ export default function AccountEdit() {
             <TextArea placeholder="Reply to comment…" resize="vertical" />
           </CardContent>
         </Card>
-        <Separator />
         <Card>
           <CardHeader>
             <CardTitle>{t("motivation")}</CardTitle>
@@ -124,7 +121,6 @@ export default function AccountEdit() {
             </CheckboxGroup.Root>
           </CardContent>
         </Card>
-        <Separator />
         <Card>
           <CardHeader>
             <CardTitle>{t("prod-tools")}</CardTitle>
