@@ -1,12 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type {
-  AuthResponse,
-  AuthResponseInternal,
-  AuthorInfo,
   Carousel,
-  ErrorResponse,
-  SignupResponse,
   YouTubeQuery,
   stringLocalized,
 } from "@/lib/types";

@@ -18,12 +18,14 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Link as LinkIcon, User } from "lucide-react";
+import { Link as LinkIcon, User, Youtube, Building2 } from "lucide-react";
+import type { BitmapMemberInfo } from "@/lib/types";
 import Image from "next/image";
 import { useAuth } from "@/lib/AuthContext";
 import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import MultiLineText from "@/components/common/multi-line-text";
+import PreventExit from "@/components/common/prevent-exit";
 
 export default function BitmapApply() {
   const t = useTranslations("BitmapTeammate");
@@ -41,7 +43,7 @@ export default function BitmapApply() {
     function () {
       if (!isLoading) {
         if (bIsTeammate) {
-          router.push("/auth");
+          router.push("/account/permissions");
         }
       }
     },
@@ -50,7 +52,8 @@ export default function BitmapApply() {
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
-      <Flex direction="column" gap="3">
+      <PreventExit />
+      <Flex direction="column" gap="5">
         <MultiLineText size="7" as="p" weight="bold">
           {t("apply-title")}
         </MultiLineText>
@@ -59,103 +62,186 @@ export default function BitmapApply() {
         </MultiLineText>
         <Card>
           <CardHeader>
-            <CardTitle>{t("name")}</CardTitle>
+            <CardTitle>{t("personal-info")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <TextField.Root placeholder={t("name")}>
-              <TextField.Slot>
-                <User height="16" width="16" />
-              </TextField.Slot>
-            </TextField.Root>
+            <Flex direction="column" gap="5">
+              <Flex direction="column" gap="2">
+                <Text as="label" weight="bold" size="5">
+                  {t("name")}
+                </Text>
+                <TextField.Root placeholder={t("name")}>
+                  <TextField.Slot>
+                    <User height="16" width="16" />
+                  </TextField.Slot>
+                </TextField.Root>
+              </Flex>
+              <Separator />
+              <Flex direction="column" gap="2">
+                <Text as="label" weight="bold" size="5">
+                  {t("alias")}
+                </Text>
+                <TextField.Root placeholder={t("alias")}>
+                  <TextField.Slot>
+                    <User height="16" width="16" />
+                  </TextField.Slot>
+                </TextField.Root>
+              </Flex>
+              <Separator />
+              <Flex direction="column" gap="2">
+                <Text as="label" weight="bold" size="5">
+                  {t("age")}
+                </Text>
+                <TextField.Root placeholder={t("age")} type="number" min="17">
+                  <TextField.Slot>
+                    <User height="16" width="16" />
+                  </TextField.Slot>
+                </TextField.Root>
+              </Flex>
+            </Flex>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("age")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <TextField.Root placeholder={t("age")} type="number" min="17">
-              <TextField.Slot>
-                <User height="16" width="16" />
-              </TextField.Slot>
-            </TextField.Root>
-          </CardContent>
-        </Card>
+
         <Separator />
+
         <Card>
           <CardHeader>
-            <CardTitle>{t("introduction")}</CardTitle>
+            <CardTitle>{t("self-promotion")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <TextArea placeholder="Reply to comment…" resize="vertical" />
+            <Flex direction="column" gap="5">
+              <Flex direction="column" gap="2">
+                <Text as="label" weight="bold" size="5">
+                  {t("introduction")}
+                </Text>
+                <TextArea placeholder={t("introduction")} resize="vertical" />
+              </Flex>
+
+              <Separator />
+
+              <Flex direction="column" gap="2">
+                <Text as="label" weight="bold" size="5">
+                  {t("motivation")}
+                </Text>
+                <TextArea placeholder={t("motivation")} resize="vertical" />
+              </Flex>
+
+              <Separator />
+
+              <Flex direction="column" gap="2">
+                <Text as="label" weight="bold" size="5">
+                  {t("affiliation")}
+                </Text>
+                <TextArea placeholder={t("affiliation")} />
+              </Flex>
+            </Flex>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("motivation")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <TextArea placeholder="Reply to comment…" resize="vertical" />
-          </CardContent>
-        </Card>
+
         <Separator />
+
         <Card>
           <CardHeader>
-            <CardTitle>{t("working-field")}</CardTitle>
+            <CardTitle>{t("field")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <CheckboxGroup.Root name="Working Fields">
-              <CheckboxGroup.Item value="1">{t("vp-post")}</CheckboxGroup.Item>
-              <CheckboxGroup.Item value="2">
-                {t("vp-mograph")}
-              </CheckboxGroup.Item>
-              <CheckboxGroup.Item value="3">
-                {t("illustration")}
-              </CheckboxGroup.Item>
-              <CheckboxGroup.Item value="4">
-                {t("music-produce")}
-              </CheckboxGroup.Item>
-              <CheckboxGroup.Item value="5">{t("dev-web")}</CheckboxGroup.Item>
-              <CheckboxGroup.Item value="6">{t("dev-app")}</CheckboxGroup.Item>
-              <CheckboxGroup.Item value="7">{t("dev-game")}</CheckboxGroup.Item>
-            </CheckboxGroup.Root>
+            <Flex direction="column" gap="5">
+              <Flex direction="column" gap="2">
+                <Text as="label" weight="bold" size="5">
+                  {t("working-field")}
+                </Text>
+                <CheckboxGroup.Root name="Working Fields">
+                  <CheckboxGroup.Item value="1">
+                    {t("vp-post")}
+                  </CheckboxGroup.Item>
+                  <CheckboxGroup.Item value="2">
+                    {t("vp-mograph")}
+                  </CheckboxGroup.Item>
+                  <CheckboxGroup.Item value="5">
+                    {t("illustration")}
+                  </CheckboxGroup.Item>
+                  <CheckboxGroup.Item value="5">
+                    {t("music-produce")}
+                  </CheckboxGroup.Item>
+                  <CheckboxGroup.Item value="5">
+                    {t("dev-web")}
+                  </CheckboxGroup.Item>
+                  <CheckboxGroup.Item value="6">
+                    {t("dev-app")}
+                  </CheckboxGroup.Item>
+                  <CheckboxGroup.Item value="7">
+                    {t("dev-game")}
+                  </CheckboxGroup.Item>
+                </CheckboxGroup.Root>
+              </Flex>
+
+              <Separator />
+
+              <Flex direction="column" gap="2">
+                <Text as="label" weight="bold" size="5">
+                  {t("prod-tools")}
+                </Text>
+                <TextArea placeholder={t("prod-tools")} resize="vertical" />
+              </Flex>
+
+              <Separator />
+
+              <Flex direction="column" gap="2">
+                <Text as="label" weight="bold" size="5">
+                  {t("work-submission")}
+                </Text>
+                <TextField.Root
+                  placeholder={t("work-submission")}
+                  type="number"
+                  min="17"
+                >
+                  <TextField.Slot>
+                    <LinkIcon height="16" width="16" />
+                  </TextField.Slot>
+                </TextField.Root>
+              </Flex>
+            </Flex>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("prod-tools")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <TextArea placeholder="Reply to comment…" />
-          </CardContent>
-        </Card>
+
         <Separator />
+
         <Card>
           <CardHeader>
-            <CardTitle>{t("affiliation")}</CardTitle>
+            <CardTitle>{t("bitmap-about-expose")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <TextArea placeholder="Reply to comment…" />
+            <Flex direction="column" gap="5">
+              <Flex direction="column" gap="2">
+                <Text as="label" weight="bold" size="5">
+                  {t("yt-channel-handle")}
+                </Text>
+                <Text>{t("yt-channel-handle-desc")}</Text>
+                <TextField.Root placeholder={t("yt-channel-handle")}>
+                  <TextField.Slot>
+                    <Youtube height="16" width="16" />
+                  </TextField.Slot>
+                </TextField.Root>
+              </Flex>
+
+              <Separator />
+
+              <Flex direction="column" gap="2">
+                <Text as="label" weight="bold" size="5">
+                  {t("position")}
+                </Text>
+                <TextField.Root placeholder={t("position")}>
+                  <TextField.Slot>
+                    <Building2 height="16" width="16" />
+                  </TextField.Slot>
+                </TextField.Root>
+              </Flex>
+            </Flex>
           </CardContent>
         </Card>
+
         <Separator />
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("work-submission")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <TextField.Root
-              placeholder="Search the docs…"
-              type="number"
-              min="17"
-            >
-              <TextField.Slot>
-                <LinkIcon height="16" width="16" />
-              </TextField.Slot>
-            </TextField.Root>
-          </CardContent>
-        </Card>
-        <Separator />
+
         <Button>{t("submit")}</Button>
       </Flex>
     </div>

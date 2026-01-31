@@ -35,7 +35,7 @@ export default function AccountEdit() {
   return (
     <div className="container mx-auto p-6 max-w-4xl">
       <Flex direction="column" gap="3">
-        {bIsTeammate ? (
+        {!!bIsTeammate ? (
           <Card>
             <CardHeader>
               <CardTitle>{t("bitmap-quit")}</CardTitle>
@@ -64,7 +64,7 @@ export default function AccountEdit() {
             </CardFooter>
           </Card>
         )}
-        {bIsDeveloper && (
+        {!!bIsDeveloper && (
           <Card>
             <CardHeader>
               <CardTitle>{t("bitmap-developer-enable")}</CardTitle>

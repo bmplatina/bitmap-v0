@@ -1,7 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Checkbox, Flex, DataList, Code } from "@radix-ui/themes";
+import {
+  Button,
+  Text,
+  Checkbox,
+  Flex,
+  DataList,
+  Code,
+  Avatar,
+} from "@radix-ui/themes";
 import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/lib/AuthContext";
 import { useTranslations } from "next-intl";
@@ -66,36 +74,51 @@ function ProfileList() {
   } = useAuth();
 
   return (
-    <DataList.Root>
-      <DataList.Item>
-        <DataList.Label minWidth="88px">{t("id")}</DataList.Label>
-        <DataList.Value>{username}</DataList.Value>
-      </DataList.Item>
-      <DataList.Item>
-        <DataList.Label minWidth="88px">{t("email")}</DataList.Label>
-        <DataList.Value>
-          <Flex align="center" gap="2">
-            <Code variant="ghost" className="break-all whitespace-pre-wrap">
-              {emailResponse}
-            </Code>
-          </Flex>
-        </DataList.Value>
-      </DataList.Item>
-      <DataList.Item>
-        <DataList.Label minWidth="88px">{t("teammate-account")}</DataList.Label>
-        <DataList.Value>
-          <Checkbox disabled checked={bIsTeammate} />
-        </DataList.Value>
-      </DataList.Item>
-      <DataList.Item>
-        <DataList.Label minWidth="88px">
-          {t("developer-account")}
-        </DataList.Label>
-        <DataList.Value>
-          <Checkbox disabled checked={bIsDeveloper} />
-        </DataList.Value>
-      </DataList.Item>
-    </DataList.Root>
+    <Flex direction="column" gap="6" align="center">
+      <Flex direction="column" gap="4" align="center">
+        <Avatar
+          radius="full"
+          size="6"
+          fallback={username.charAt(0).toUpperCase()}
+        />
+        <Text as="span" size="6" weight="bold">
+          {username}
+        </Text>
+      </Flex>
+
+      <DataList.Root>
+        <DataList.Item>
+          <DataList.Label minWidth="88px">{t("id")}</DataList.Label>
+          <DataList.Value>{username}</DataList.Value>
+        </DataList.Item>
+        <DataList.Item>
+          <DataList.Label minWidth="88px">{t("email")}</DataList.Label>
+          <DataList.Value>
+            <Flex align="center" gap="2">
+              <Code variant="ghost" className="break-all whitespace-pre-wrap">
+                {emailResponse}
+              </Code>
+            </Flex>
+          </DataList.Value>
+        </DataList.Item>
+        <DataList.Item>
+          <DataList.Label minWidth="88px">
+            {t("teammate-account")}
+          </DataList.Label>
+          <DataList.Value>
+            <Checkbox disabled checked={bIsTeammate} />
+          </DataList.Value>
+        </DataList.Item>
+        <DataList.Item>
+          <DataList.Label minWidth="88px">
+            {t("developer-account")}
+          </DataList.Label>
+          <DataList.Value>
+            <Checkbox disabled checked={bIsDeveloper} />
+          </DataList.Value>
+        </DataList.Item>
+      </DataList.Root>
+    </Flex>
   );
 }
 

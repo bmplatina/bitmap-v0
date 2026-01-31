@@ -2,14 +2,12 @@
 
 import { useState, useEffect, type KeyboardEvent } from "react";
 import {
-  Checkbox,
   Button,
   Flex,
   Spinner,
   Text,
   Dialog,
 } from "@radix-ui/themes";
-import { Separator } from "@/components/ui/separator";
 import {
   Card,
   CardTitle,
@@ -22,7 +20,6 @@ import { TextField } from "@radix-ui/themes";
 import { useAuth } from "@/lib/AuthContext";
 import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import MultiLineText from "@/components/common/multi-line-text";
 import { ProfileList } from "@/components/accounts/profile";
 
 export default function AccountEdit() {
@@ -84,6 +81,15 @@ function AccountInfoEditor({
   const t = useTranslations("AccountEdit");
   const { username } = useAuth();
 
+  const [newUsername, setNewUsername] = useState(username);
+
+  useEffect(
+    function () {
+      setNewUsername(username);
+    },
+    [username],
+  );
+
   return (
     <Dialog.Root open={bIsOpened} onOpenChange={onOpenChange}>
       <Dialog.Content maxWidth="450px">
@@ -98,7 +104,8 @@ function AccountInfoEditor({
               Username
             </Text>
             <TextField.Root
-              defaultValue={username}
+              value={newUsername}
+              onChange={(e) => setNewUsername(e.target.value)}
               placeholder={t("username-edit")}
             />
           </label>
