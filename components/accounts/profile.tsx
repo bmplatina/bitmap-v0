@@ -58,7 +58,7 @@ function ProfilePopover() {
           </Flex>
         </CardContent>
       </Card>
-      <EmailVerificationDialog open={bIsVerifyClicked} />
+      <EmailVerificationDialog open={bIsVerifyClicked} openHandle={setVerificationClicked}/>
     </Flex>
   );
 }

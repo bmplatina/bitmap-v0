@@ -23,7 +23,7 @@ import BitmapAppAnim from "@/components/common/bitmap-app/bitmap-app-anim";
 import BitmapLogo from "@/public/bitmaplogo-notext.png";
 import { Link } from "@/i18n/routing";
 import { Play, Pause } from "lucide-react";
-import { BitmapMemberInfo } from "@/lib/types";
+import { MembershipApplies } from "@/lib/types";
 import { useAuth } from "@/lib/AuthContext";
 import MultiLineText from "@/components/common/multi-line-text";
 
@@ -32,7 +32,7 @@ export default function BitmapAbout() {
   const [youtubeVideos, setYoutubeVideos] = useState<string[]>([]);
   const [youtubeSliceIndex, setYouTubeSliceIndex] = useState<number>(10);
 
-  const [members, setMembers] = useState<BitmapMemberInfo[]>([]);
+  const [members, setMembers] = useState<MembershipApplies[]>([]);
   const [isMemberPaused, setIsMemberPaused] = useState(false);
   const [isMemberHovered, setIsMemberHovered] = useState(false);
 
@@ -66,7 +66,7 @@ export default function BitmapAbout() {
     }
     async function fetchMembers() {
       try {
-        const payloads = await getMembers();
+        const payloads = await getMembers("approved");
         setMembers(payloads);
       } catch (error) {
         console.log(error);
@@ -335,22 +335,25 @@ export default function BitmapAbout() {
                         className="flex-none min-w-[150px]"
                       >
                         <Avatar
-                          src={member.avatarUrl}
+                          src={member.avatarUri}
                           fallback="P"
                           radius="full"
                           size="6"
                           asChild
                         >
                           <Link
-                            href={`https://www.youtube.com/${member.channelId}`}
+                            href={`https://www.youtube.com/${member.youtubeHandle}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           />
                         </Avatar>
                         <Text size="4" weight="bold">
+                          {member.alias}
+                        </Text>
+                        <Text size="3" color="gray">
                           {member.name}
                         </Text>
-                        <Text size="2" color="gray">
+                        <Text size="2" color="gray" className="opacity-90">
                           {member.position}
                         </Text>
                       </Flex>

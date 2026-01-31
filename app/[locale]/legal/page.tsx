@@ -1,4 +1,5 @@
-import { getEula, getLocalizedString } from "@/lib/utils";
+import { getLocalizedString } from "@/lib/utils";
+import { getEula } from "@/lib/general";
 import type { searchParamsPropsSSR } from "@/lib/types";
 import { getLocale, getTranslations } from "next-intl/server";
 import SmartMarkdown from "@/components/common/markdown/markdown-renderer";

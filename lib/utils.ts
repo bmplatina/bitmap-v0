@@ -1,10 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import type {
-  Carousel,
-  YouTubeQuery,
-  stringLocalized,
-} from "@/lib/types";
+import type { Carousel, YouTubeQuery, stringLocalized } from "@/lib/types";
 import axios from "axios";
 import dayjs from "dayjs";
 import localFont from "next/font/local";
@@ -42,29 +38,6 @@ const formatDateToMySQL = (date: Date): string => {
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
-
-async function getEula(eula: string): Promise<stringLocalized> {
-  try {
-    const response = await axios.get<stringLocalized>(
-      getApiLinkByPurpose(`eula/${eula}`),
-      {
-        timeout: 10000,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      },
-    );
-
-    if (response.data?.ko) {
-      return response.data;
-    }
-    return { ko: "", en: "" };
-  } catch (error) {
-    console.error("EULA 가져오는 중 오류 발생:", error);
-    return { ko: "", en: "" };
-  }
-}
 
 const formatDate = (locale: string, dateString: string) => {
   if (!dateString) return "미정";
@@ -219,7 +192,6 @@ export {
   formatDateToMySQL,
   getApiLinkByPurpose,
   getCarousel,
-  getEula,
   getLocalizedString,
   getYouTubeVideos,
   imageUriRegExp,

@@ -29,7 +29,7 @@ export default function AccountLayout({
 
   return (
     <>
-      {!bIsEmailVerified && <EmailVerificationDialog open />}
+      <EmailVerificationDialog open={!bIsEmailVerified} />
       <TabNav.Root className="sticky top-0 z-10 bg-background border-b-0">
         <TabNav.Link asChild active={pathname === "/account"}>
           <Link href="/account">{t("profile")}</Link>

@@ -17,7 +17,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import PreventExit from "@/components/common/prevent-exit";
 import MultiLineText from "@/components/common/multi-line-text";
 import { useTranslations } from "next-intl";
-import { User } from "lucide-react";
+import type { MembershipLeaveRequest } from "@/lib/types";
+
 
 export default function BitmapQuit() {
   const router = useRouter();

@@ -26,17 +26,13 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { TextField, AlertDialog } from "@radix-ui/themes";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations, useLocale } from "next-intl";
-import { getEula } from "@/lib/utils";
-import {
-  signup,
-  login as loginPost,
-  verifyEmail,
-  checkIsEmailDuplicated,
-} from "@/lib/auth";
+import { getEula } from "@/lib/general";
+import { signup, checkIsEmailDuplicated } from "@/lib/auth";
 import { useAuth } from "@/lib/AuthContext";
 import ClientMarkdown from "@/components/common/markdown/client-markdown";
 import { Separator } from "@radix-ui/themes";
 import ProfilePicsEditor from "@/components/accounts/profile-pics-editor";
+import EmailVerificationDialog from "@/components/accounts/email-verification";
 
 export default function Signup() {
   const router = useRouter();
@@ -58,9 +54,9 @@ export default function Signup() {
   const { bIsLoggedIn, login } = useAuth();
   const [eula, setEula] = useState<string>("");
   const [bIsEmailDuplicated, setIsEmailDuplicated] = useState<boolean>(false);
-  const [verificationCode, setVerificationCode] = useState("");
-  const [verificationFailMessage, setVerificationFailMsg] =
-    useState<string>("");
+  const [bIsSignupProcessing, setIsSignupProcessing] = useState<boolean>(false);
+  const [bIsEmailVerificationDialogOpen, setEmailVerificationDialogOpen] =
+    useState<boolean>(false);
 
   function validateEmail(): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -95,6 +91,7 @@ export default function Signup() {
 
   async function handleSignup() {
     try {
+      setIsSignupProcessing(true);
       const signupResult = await signup(
         locale,
         username,
@@ -103,6 +100,8 @@ export default function Signup() {
         avatarUri,
       );
       console.log("회원가입 성공:", signupResult.username);
+
+      setEmailVerificationDialogOpen(true);
 
       // const loginResult = await loginPost(email, password);
 
@@ -116,35 +115,8 @@ export default function Signup() {
     } catch (error: any) {
       setSignupFailMsg(t(error.message));
       alert(t(error.message)); // "username-exists" 등의 메시지 출력
-    }
-  }
-
-  async function handleVerification() {
-    try {
-      const token = localStorage.getItem("accessToken");
-
-      if (!token) throw new Error("token-required");
-      const verifyResult = await verifyEmail(token, verificationCode);
-
-      if (verifyResult !== "verified") {
-        throw Error(verifyResult);
-      }
-
-      console.log("인증 성공:", verifyResult);
-
-      const loginResult = await loginPost(email, password, false);
-
-      if (loginResult.success) {
-        await login(loginResult.token);
-        router.push("/");
-      } else {
-        setVerificationFailMsg(t(loginResult.token));
-      }
-
-      // router.push("/");
-    } catch (error: any) {
-      setVerificationFailMsg(t(error.message));
-      alert(t(error.message)); // "username-exists" 등의 메시지 출력
+    } finally {
+      setIsSignupProcessing(false);
     }
   }
 
@@ -353,42 +325,13 @@ export default function Signup() {
                   <Button onClick={() => setCurrentView(2)} variant="surface">
                     {t_common("back")}
                   </Button>
-                  <AlertDialog.Root>
-                    <AlertDialog.Trigger>
-                      <Button onClick={handleSignup}>{t("register")}</Button>
-                      {/* <Button onClick={handleSignup}>{t("register")}</Button> */}
-                    </AlertDialog.Trigger>
-                    <AlertDialog.Content maxWidth="450px">
-                      <AlertDialog.Title>
-                        {t("registering-bitmap-id")}
-                      </AlertDialog.Title>
-                      <AlertDialog.Description size="2">
-                        {t("email-verification")}
-                        <TextField.Root
-                          placeholder={t("verification-code")}
-                          value={verificationCode}
-                          onChange={(e) => setVerificationCode(e.target.value)}
-                        />
-                        {verificationFailMessage && (
-                          <Text color="red" size="2" className="mt-2">
-                            {verificationFailMessage}
-                          </Text>
-                        )}
-                      </AlertDialog.Description>
-                      <Flex gap="3" mt="4" justify="end">
-                        <AlertDialog.Cancel>
-                          <Button variant="surface" color="gray">
-                            {t_common("cancel")}
-                          </Button>
-                        </AlertDialog.Cancel>
-                        <AlertDialog.Action>
-                          <Button variant="solid" onClick={handleVerification}>
-                            {t("verify")}
-                          </Button>
-                        </AlertDialog.Action>
-                      </Flex>
-                    </AlertDialog.Content>
-                  </AlertDialog.Root>
+                  <Button onClick={handleSignup}>
+                    {bIsSignupProcessing ? <Spinner /> : t("register")}
+                  </Button>
+                  <EmailVerificationDialog
+                    open={bIsEmailVerificationDialogOpen}
+                    openHandle={setEmailVerificationDialogOpen}
+                  />
                 </Flex>
               </div>
             )}

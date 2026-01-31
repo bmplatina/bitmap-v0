@@ -13,7 +13,7 @@ export default function TokenHandler() {
   const router = useRouter();
   const { login, logout, bIsEmailVerified, bIsLoggedIn, username } = useAuth();
   const t = useTranslations("Authentication");
-  const [bIsVerificationClicked, setVerificationClicked] =
+  const [bIsVerificationClicked, setIsVerificationClicked] =
     useState<boolean>(false);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function TokenHandler() {
         </div>
 
         <Flex gap="2">
-          <Button onClick={() => setVerificationClicked(true)} radius="full">
+          <Button onClick={() => setIsVerificationClicked(true)} radius="full">
             <Text>{t("verify")}</Text>
           </Button>
           <div className="hidden md:block">
@@ -44,7 +44,10 @@ export default function TokenHandler() {
           </div>
         </Flex>
 
-        <EmailVerificationDialog open={bIsVerificationClicked} />
+        <EmailVerificationDialog
+          open={bIsVerificationClicked}
+          openHandle={setIsVerificationClicked}
+        />
       </div>
     );
   }

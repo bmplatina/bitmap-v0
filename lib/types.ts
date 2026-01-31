@@ -105,17 +105,35 @@ interface searchParamsPropsSSR {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-interface BitmapMemberInfo {
+interface MembershipApplies {
   id: number;
-  name: string;
-  channelId: string;
-  avatarUrl: string;
-  position: string;
+  locale: string; // varchar(2)
+  uid: string; // varchar(36) - 사용자 고유 식별자
+  name: string; // varchar(20)
+  alias: string; // varchar(20)
+  age: number; // int
+  introduction: string; // text
+  motivation: string; // text
+  affiliate: string; // text
+  field: number[]; // json [number]
+  prodTools: string; // text (기존 prodToold에서 변경)
+  portfolio: string; // text
+  youtubeHandle: string; // text
+  avatarUri: string; // text
+  position: string; // varchar(30)
+  isApproved: boolean; // tinyint(1) (0 또는 1)
+}
+
+interface MembershipLeaveRequest {
+  id: number;
+  locale: string; // varchar(2)
+  uid: string; // varchar(36) - 사용자 고유 식별자
+  leaveReason: string; // text
+  satisfaction: number[]; // json [number]
 }
 
 export type {
   stringLocalized,
-  BitmapMemberInfo,
   Game,
   AuthorInfo,
   Metadata,
@@ -128,4 +146,6 @@ export type {
   YouTubeQuery,
   Carousel,
   searchParamsPropsSSR,
+  MembershipApplies,
+  MembershipLeaveRequest,
 };

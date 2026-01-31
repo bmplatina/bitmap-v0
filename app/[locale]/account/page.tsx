@@ -6,10 +6,8 @@ import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/lib/AuthContext";
 import { useTranslations } from "next-intl";
 import { ProfileList } from "@/components/accounts/profile";
-import { useRouter } from "@/i18n/routing";
 
 export default function AccountPage() {
-  const router = useRouter();
   const t = useTranslations("Authentication");
 
   const { logout } = useAuth();

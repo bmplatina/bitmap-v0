@@ -19,25 +19,71 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Link as LinkIcon, User, Youtube, Building2 } from "lucide-react";
-import type { BitmapMemberInfo } from "@/lib/types";
-import Image from "next/image";
+import type { MembershipApplies } from "@/lib/types";
+import { applyMembership } from "@/lib/permissions";
 import { useAuth } from "@/lib/AuthContext";
 import { Link, useRouter } from "@/i18n/routing";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import MultiLineText from "@/components/common/multi-line-text";
 import PreventExit from "@/components/common/prevent-exit";
 
 export default function BitmapApply() {
   const t = useTranslations("BitmapTeammate");
   const router = useRouter();
+  const locale = useLocale();
 
-  const { isLoading, bIsTeammate } = useAuth();
+  const { isLoading, bIsTeammate, uid } = useAuth();
+
+  const [name, setName] = useState("");
+  const [alias, setAlias] = useState("");
+  const [age, setAge] = useState(17);
+  const [introduction, setIntroduction] = useState("");
+  const [motivation, setMotivation] = useState("");
+  const [affiliation, setAffiliation] = useState("");
+  const [workingField, setWorkingField] = useState<Array<number>>([0]);
+  const [prodTools, setProdTools] = useState("");
+  const [workSubmission, setWorkSubmission] = useState("");
+  const [ytChannelHandle, setYtChannelHandle] = useState("");
+  const [position, setPosition] = useState("");
+  const [avatarUri, setAvatarUri] = useState("");
+
+  const [bIsSubmitting, setIsSubmitting] = useState(false);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
     }
   };
+
+  /**
+   * @todo avatarUri uid에서 연동해오기
+   * @todo MembershipApplies Omit해서 id와 isApproved 제거
+   */
+  async function handleApplication() {
+    try {
+      const form: MembershipApplies = {
+        id: 10000,
+        name,
+        alias,
+        age,
+        introduction,
+        motivation,
+        affiliate: affiliation,
+        field: workingField,
+        prodTools,
+        portfolio: workSubmission,
+        youtubeHandle: ytChannelHandle,
+        position,
+        uid,
+        locale,
+        avatarUri,
+        isApproved: false,
+      };
+      await applyMembership(form);
+    } catch (error: any) {
+    } finally {
+    }
+  }
 
   useEffect(
     function () {

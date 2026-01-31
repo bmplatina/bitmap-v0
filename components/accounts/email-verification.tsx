@@ -21,10 +21,12 @@ import { useTranslations, useLocale } from "next-intl";
 
 interface EmailVerificationDialogProps {
   open?: boolean;
+  openHandle?: (bIsOpened: boolean) => void;
 }
 
 export default function EmailVerificationDialog({
   open = true,
+  openHandle,
 }: EmailVerificationDialogProps) {
   const router = useRouter();
 
@@ -38,6 +40,7 @@ export default function EmailVerificationDialog({
   const [bIsVerificationMailSent, setIsVerificationMailSent] = useState(false);
   const [verificationFailMessage, setVerificationFailMessage] = useState("");
   const t = useTranslations("Authentication");
+  const t_common = useTranslations("Common");
 
   async function handleSendVerificationEmail() {
     try {
@@ -97,7 +100,7 @@ export default function EmailVerificationDialog({
   }
 
   return (
-    <AlertDialog.Root open={open}>
+    <AlertDialog.Root open={open} onOpenChange={openHandle}>
       <AlertDialog.Content maxWidth="450px">
         <AlertDialog.Title>
           {t("email-verification-incomplete")}
@@ -151,6 +154,17 @@ export default function EmailVerificationDialog({
           )}
         </Flex>
         <Flex gap="3" mt="4" justify="end">
+          {openHandle && (
+            <AlertDialog.Action>
+              <Button
+                variant="surface"
+                color="gray"
+                onClick={() => openHandle(false)}
+              >
+                {t_common("cancel")}
+              </Button>
+            </AlertDialog.Action>
+          )}
           <AlertDialog.Action>
             <Button variant="surface" color="gray" onClick={logout}>
               {t("logout")}
@@ -159,7 +173,7 @@ export default function EmailVerificationDialog({
           <AlertDialog.Action>
             <Button
               variant="solid"
-              disabled={!enableVerifyButton}
+              disabled={!enableVerifyButton()}
               onClick={handleVerification}
             >
               {bIsVerifying ? (

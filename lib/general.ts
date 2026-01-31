@@ -1,11 +1,13 @@
 import axios from "axios";
-import type { BitmapMemberInfo } from "@/lib/types";
+import type { MembershipApplies, stringLocalized } from "@/lib/types";
 import { getApiLinkByPurpose } from "./utils";
 
-async function getMembers(): Promise<BitmapMemberInfo[]> {
+async function getMembers(
+  scope: "approved" | "all" | "pending",
+): Promise<MembershipApplies[]> {
   try {
-    const response = await axios.get<BitmapMemberInfo[]>(
-      getApiLinkByPurpose("general/members"),
+    const response = await axios.get<MembershipApplies[]>(
+      getApiLinkByPurpose(`general/members/${scope}`),
       {
         timeout: 10000, // 10초 타임아웃
         headers: {
@@ -24,4 +26,29 @@ async function getMembers(): Promise<BitmapMemberInfo[]> {
   }
 }
 
-export { getMembers };
+async function getEula(eula: string): Promise<stringLocalized> {
+  try {
+    const response = await axios.get<stringLocalized>(
+      getApiLinkByPurpose(`general/eula/${eula}`),
+      {
+        timeout: 10000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (response.data?.ko) {
+      return response.data;
+    }
+    return { ko: "", en: "" };
+  } catch (error) {
+    console.error("EULA 가져오는 중 오류 발생:", error);
+    return { ko: "", en: "" };
+  }
+}
+
+
+
+export { getMembers, getEula };
