@@ -285,7 +285,11 @@ export default function TopBar() {
                     <Popover.Trigger>
                       <IconButton variant="ghost" radius="full">
                         <Avatar
-                          src={imageUriRegExp.test(avatarUri) ? avatarUri : undefined}
+                          src={
+                            imageUriRegExp.test(avatarUri)
+                              ? avatarUri
+                              : undefined
+                          }
                           radius="full"
                           size="2"
                           fallback={username.charAt(0).toUpperCase()}
@@ -299,6 +303,7 @@ export default function TopBar() {
                         backgroundColor:
                           "var(--topbar-bg, rgba(255, 255, 255, 0.72))",
                       }}
+                      className="text-center"
                     >
                       <ProfilePopover />
                     </Popover.Content>

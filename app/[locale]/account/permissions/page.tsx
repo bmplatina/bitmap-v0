@@ -64,6 +64,7 @@ export default function AccountEdit() {
             </CardFooter>
           </Card>
         )}
+        <Separator />
         {!!bIsDeveloper && (
           <Card>
             <CardHeader>

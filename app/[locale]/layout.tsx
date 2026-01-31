@@ -70,9 +70,9 @@ export default async function RootLayout({
                       <TopBar />
                     </div>
                     <div className="flex flex-1">
-                      <div className="sticky top-12 h-[calc(100vh-3rem)] hidden md:block">
+                      <aside className="sticky top-12 h-[calc(100vh-48px)] hidden md:block self-start z-30">
                         <Sidebar />
-                      </div>
+                      </aside>
                       <main className="flex-1 w-full pb-10">
                         {children}
                         <Footer />

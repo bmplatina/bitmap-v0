@@ -8,6 +8,11 @@
     "api-error": "Unable to fetch data from the API."
   },
 
+  "BitmapApp": {
+    "about": "Bitmap App은 예술과 기술을 넘나드는 창작자들과 정보를 공유하고,\\n제작된 게임을 플레이하며 소통하는 최적의 공간입니다.",
+    "download-alert": "안전한 설치를 위해 GitHub 릴리즈 페이지로 이동합니다."
+  },
+
   "Sidebar": {
     "bitmap": "Bitmap",
     "bitmap-store": "Bitmap Store",
@@ -42,16 +47,8 @@
     "email": "Email",
     "password": "Password",
     "again": "(Type again)",
-    "developer-account": "Developer Account",
-    "developer-account-confirm-true": "Request to register as a developer.",
-    "developer-account-confirm-false": "Sign up as a regular account. You can switch to a developer account later in account settings.",
-    "is-developer": "Are you a developer or artist?",
-    "is-developer-desc": "Register your Bitmap ID as a developer or artist account to publish games.",
-    "teammate-account": "Bitmap Teammate Account",
-    "teammate-account-confirm-true": "Request to register as a Bitmap teammate.",
-    "teammate-account-confirm-false": "Sign up as a regular account. You can switch to a teammate account later in account settings.",
-    "is-teammate": "Are you affiliated with Bitmap?",
-    "is-teammate-desc": "Register your Bitmap ID as a teammate account to publish your own artwork. (Authorization required)",
+    "general-info": "기본 정보",
+    "personalization": "개인화",
     "troubleshoot-auth": "Troubleshoot Login Problem",
     "email-rules": "Please enter a valid email address.",
     "username-rules": "Username must be between 3 and 15 characters.",
@@ -65,6 +62,8 @@
     "registering-bitmap-id": "Registering Bitmap ID",
     "email-duplicate": "Email address already exists.",
     "email-duplicate-pass": "Email address is available.",
+    "profile-pics": "Profile Pictures",
+    "profile-pics-click": "Click to upload",
     "email-verification": "Almost done. We have sent a verification code to your email. Please enter it within 10 minutes.",
     "email-verification-incomplete-top": ", your Bitmap ID email verification has not been completed.",
     "email-verification-incomplete": "Email verification is incomplete.",
@@ -85,7 +84,11 @@
     "require-email-code": "Email verification code is required.",
     "user-not-found": "Invalid Email Address. Type Again.",
     "invalid-code": "Invalid verification code.",
-    "code-expired": "Verification code has expired."
+    "code-expired": "Verification code has expired.",
+    "teammate-account": "Bitmap Teammate",
+    "developer-account": "Bitmap Developer",
+    "admin-account": "Bitmap Administrator",
+    "email-verified": "Email Verified"
   },
 
   "AccountTabs": {

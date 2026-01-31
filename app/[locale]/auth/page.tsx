@@ -10,6 +10,8 @@ import { getApiLinkByPurpose } from "@/lib/utils";
 import { login as loginPost } from "@/lib/auth";
 import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
+import BitmapLogo from "@/public/bitmaplogo-notext.png";
+import { Separator } from "@/components/ui/separator";
 
 export default function AccountPage() {
   const t = useTranslations("Authentication");
@@ -20,7 +22,7 @@ export default function AccountPage() {
   const [bRequestAutoLogin, setAutoLogin] = useState<boolean>(false);
   const [bIsRequestingLogin, setIsRequestingLogin] = useState<boolean>(false);
   const [loginFailMessage, setLoginFailMsg] = useState<string>("");
-  const { bIsLoggedIn, login } = useAuth();
+  const { isLoading, bIsLoggedIn, login } = useAuth();
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -42,24 +44,43 @@ export default function AccountPage() {
 
   useEffect(
     function () {
-      if (bIsLoggedIn) {
-        router.push("/");
+      if (!isLoading) {
+        if (bIsLoggedIn) {
+          router.push("/");
+        }
       }
     },
-    [bIsLoggedIn],
+    [isLoading, bIsLoggedIn],
   );
 
   if (bIsLoggedIn) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center h-full p-4 md:p-6 text-center">
-      <div>
-        <h1 className="text-4xl font-bold mb-6">Bitmap ID</h1>
-        <Text as="p" size="5" className="mb-8 max-w-2xl">
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-250px)] p-4 md:p-6 text-center">
+      <Flex
+        direction="column"
+        gap="4"
+        align="center"
+        className="w-full max-w-md"
+      >
+        <Flex gap="2">
+          <Image
+            src={BitmapLogo}
+            alt="Bitmap Logo"
+            width={32}
+            height={32}
+            className="invert dark:invert-0 object-contain"
+          />
+          <Text size="8" weight="bold">
+            Bitmap ID
+          </Text>
+        </Flex>
+
+        <Text as="p" size="4" color="gray">
           {t("bitmap-id-desc")}
         </Text>
 
-        <Flex direction="column" gap="4" className="w-full max-w-md">
+        <Flex direction="column" gap="4" className="w-full">
           <Card>
             <CardHeader>
               <CardTitle>{t("login")}</CardTitle>
@@ -111,6 +132,8 @@ export default function AccountPage() {
             </CardContent>
           </Card>
 
+          <Separator />
+
           <Card>
             <CardHeader>
               <CardTitle>{t("other-login-methods")}</CardTitle>
@@ -133,7 +156,7 @@ export default function AccountPage() {
             </CardContent>
           </Card>
         </Flex>
-      </div>
+      </Flex>
     </div>
   );
 }

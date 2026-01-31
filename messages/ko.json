@@ -8,6 +8,11 @@
     "api-error": "API에서 데이터를 가져올 수 없습니다."
   },
 
+  "BitmapApp": {
+    "about": "Bitmap App은 예술과 기술을 넘나드는 창작자들과 정보를 공유하고,\\n제작된 게임을 플레이하며 소통하는 최적의 공간입니다.",
+    "download-alert": "안전한 설치를 위해 GitHub 릴리즈 페이지로 이동합니다."
+  },
+
   "Sidebar": {
     "bitmap": "Bitmap",
     "bitmap-store": "Bitmap 스토어",
@@ -42,16 +47,8 @@
     "email": "메일",
     "password": "비밀번호",
     "again": "(다시 입력)",
-    "developer-account": "개발자 계정",
-    "developer-account-confirm-true": "개발자로 등록을 요청합니다.",
-    "developer-account-confirm-false": "일반 어카운트로 가입합니다. 이후 어카운트 설정에서 개발자 어카운트로 전환할 수 있습니다.",
-    "is-developer": "개발자나 아티스트이십니까?",
-    "is-developer-desc": "Bitmap ID를 개발자나 아티스트 어카운트로 등록하면 게임을 게시할 수 있습니다.",
-    "teammate-account": "Bitmap 팀원 계정",
-    "teammate-account-confirm-true": "Bitmap 팀원으로 등록을 요청합니다.",
-    "teammate-account-confirm-false": "일반 어카운트로 가입합니다. 이후 어카운트 설정에서 팀원 어카운트로 전환할 수 있습니다.",
-    "is-teammate": "Bitmap에 소속되어 있으십니까?",
-    "is-teammate-desc": "Bitmap에 소속된 팀원 어카운트로 등록하면 자신의 아트워크를 게시할 수 있습니다. (인증 필요)",
+    "general-info": "기본 정보",
+    "personalization": "개인화",
     "troubleshoot-auth": "로그인 문제 해결",
     "email-rules": "유효한 메일 주소를 입력하십시오.",
     "username-rules": "사용자 이름은 3자 이상 15자 이하이어야 합니다.",
@@ -65,6 +62,8 @@
     "registering-bitmap-id": "Bitmap ID 가입하는 중",
     "email-duplicate": "이미 존재하는 메일 주소입니다.",
     "email-duplicate-pass": "사용 가능한 메일 주소입니다.",
+    "profile-pics": "프로필 사진",
+    "profile-pics-click": "클릭하여 업로드",
     "email-verification": "거의 완료되었습니다. 메일로 인증 번호를 보내드렸으니, 10분 내에 입력해주십시오.",
     "email-verification-incomplete-top": "님, Bitmap ID의 메일 인증이 완료되지 않았습니다.",
     "email-verification-incomplete": "메일 인증이 완료되지 않았습니다.",
@@ -85,7 +84,11 @@
     "require-email-code": "메일 인증 코드가 필요합니다.",
     "user-not-found": "유효하지 않은 메일 주소입니다. 다시 입력하십시오.",
     "invalid-code": "유효하지 않은 인증 코드입니다.",
-    "code-expired": "인증 코드가 만료되었습니다."
+    "code-expired": "인증 코드가 만료되었습니다.",
+    "teammate-account": "Bitmap 팀원",
+    "developer-account": "Bitmap Developer",
+    "admin-account": "Bitmap 관리자",
+    "email-verified": "메일이 인증됨"
   },
 
   "AccountTabs": {

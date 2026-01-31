@@ -63,42 +63,94 @@ function ProfilePopover() {
   );
 }
 
-function ProfileList() {
+interface ProfileSampleProps {
+  username?: string;
+  email?: string;
+  bIsAdmin?: boolean;
+  bIsDeveloper?: boolean;
+  bIsTeammate?: boolean;
+  bIsEmailVerified?: boolean;
+  avatarUri?: string;
+}
+
+function ProfileList({
+  username = "",
+  email = "",
+  bIsAdmin = false,
+  bIsDeveloper = false,
+  bIsTeammate = false,
+  bIsEmailVerified = false,
+  avatarUri = "",
+}: ProfileSampleProps) {
   const t = useTranslations("Authentication");
 
   const {
-    username,
-    bIsDeveloper,
-    bIsTeammate,
-    avatarUri,
-    email: emailResponse,
+    username: authUsername,
+    email: authEmail,
+    bIsAdmin: authIsAdmin,
+    bIsDeveloper: authIsDeveloper,
+    bIsTeammate: authIsTeammate,
+    bIsEmailVerified: authIsEmailVerified,
+    avatarUri: authAvatarUri,
+    isLoading,
+    bIsLoggedIn,
   } = useAuth();
+
+  const [displayedUsername, setDisplayedUsername] = useState("");
+  const [displayedEmail, setDisplayedEmail] = useState("");
+  const [displayedIsAdmin, setDisplayedIsAdmin] = useState(false);
+  const [displayedIsDeveloper, setDisplayedIsDeveloper] = useState(false);
+  const [displayedIsTeammate, setDisplayedIsTeammate] = useState(false);
+  const [displayedIsEmailVerified, setDisplayedIsEmailVerified] =
+    useState(false);
+  const [displayedAvatarUri, setDisplayedAvatarUri] = useState("");
+
+  useEffect(
+    function () {
+      if (!isLoading) {
+        setDisplayedUsername(bIsLoggedIn ? authUsername : username);
+        setDisplayedEmail(bIsLoggedIn ? authEmail : email);
+        setDisplayedIsAdmin(bIsLoggedIn ? authIsAdmin : bIsAdmin);
+        setDisplayedIsDeveloper(bIsLoggedIn ? authIsDeveloper : bIsDeveloper);
+        setDisplayedIsTeammate(bIsLoggedIn ? authIsTeammate : bIsTeammate);
+        setDisplayedIsEmailVerified(
+          bIsLoggedIn ? authIsEmailVerified : bIsEmailVerified,
+        );
+        setDisplayedAvatarUri(bIsLoggedIn ? authAvatarUri : avatarUri);
+      }
+    },
+    [isLoading, bIsLoggedIn],
+  );
 
   return (
     <Flex direction="column" gap="6" align="center">
       <Flex direction="column" gap="4" align="center">
         <Avatar
-          src={imageUriRegExp.test(avatarUri) ? avatarUri : undefined}
+          src={
+            imageUriRegExp.test(displayedAvatarUri)
+              ? displayedAvatarUri
+              : undefined
+          }
           radius="full"
           size="6"
-          fallback={username.charAt(0).toUpperCase()}
+          fallback={displayedUsername.charAt(0).toUpperCase()}
         />
         <Text as="span" size="6" weight="bold">
-          {username}
+          {displayedUsername}
         </Text>
       </Flex>
 
       <DataList.Root>
         <DataList.Item>
           <DataList.Label minWidth="88px">{t("id")}</DataList.Label>
-          <DataList.Value>{username}</DataList.Value>
+          <DataList.Value>{displayedUsername}</DataList.Value>
         </DataList.Item>
         <DataList.Item>
           <DataList.Label minWidth="88px">{t("email")}</DataList.Label>
           <DataList.Value>
             <Flex align="center" gap="2">
               <Code variant="ghost" className="break-all whitespace-pre-wrap">
-                {emailResponse}
+                {displayedEmail}
               </Code>
             </Flex>
           </DataList.Value>
@@ -108,7 +160,7 @@ function ProfileList() {
             {t("teammate-account")}
           </DataList.Label>
           <DataList.Value>
-            <Checkbox disabled checked={bIsTeammate} />
+            <Checkbox disabled checked={displayedIsTeammate} />
           </DataList.Value>
         </DataList.Item>
         <DataList.Item>
@@ -116,9 +168,29 @@ function ProfileList() {
             {t("developer-account")}
           </DataList.Label>
           <DataList.Value>
-            <Checkbox disabled checked={bIsDeveloper} />
+            <Checkbox disabled checked={displayedIsDeveloper} />
           </DataList.Value>
         </DataList.Item>
+        {!!displayedIsAdmin && (
+          <DataList.Item>
+            <DataList.Label minWidth="88px">
+              {t("admin-account")}
+            </DataList.Label>
+            <DataList.Value>
+              <Checkbox disabled defaultChecked />
+            </DataList.Value>
+          </DataList.Item>
+        )}
+        {!!!displayedIsEmailVerified && (
+          <DataList.Item>
+            <DataList.Label minWidth="88px">
+              {t("email-verified")}
+            </DataList.Label>
+            <DataList.Value>
+              <Checkbox disabled />
+            </DataList.Value>
+          </DataList.Item>
+        )}
       </DataList.Root>
     </Flex>
   );

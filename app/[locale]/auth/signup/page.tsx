@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import {
+  Avatar,
   Checkbox,
   Code,
   Button,
@@ -10,6 +11,7 @@ import {
   Spinner,
   Text,
   DataList,
+  IconButton,
 } from "@radix-ui/themes";
 import {
   Card,
@@ -19,6 +21,7 @@ import {
   CardFooter,
   CardDescription,
 } from "@/components/ui/card";
+import { ProfileList } from "@/components/accounts/profile";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { TextField, AlertDialog } from "@radix-ui/themes";
 import { useRouter } from "@/i18n/routing";
@@ -33,8 +36,9 @@ import {
 import { useAuth } from "@/lib/AuthContext";
 import ClientMarkdown from "@/components/common/markdown/client-markdown";
 import { Separator } from "@radix-ui/themes";
+import ProfilePicsEditor from "@/components/accounts/profile-pics-editor";
 
-export default function Home() {
+export default function Signup() {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations("Authentication");
@@ -48,8 +52,7 @@ export default function Home() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [bIsDeveloper, setIsDeveloper] = useState(false);
-  const [bIsTeammate, setIsTeammate] = useState(false);
+  const [avatarUri, setAvatarUri] = useState<string>("");
 
   const [signupFailMessage, setSignupFailMsg] = useState<string>("");
   const { bIsLoggedIn, login } = useAuth();
@@ -97,8 +100,7 @@ export default function Home() {
         username,
         email,
         password,
-        bIsDeveloper,
-        bIsTeammate,
+        avatarUri,
       );
       console.log("회원가입 성공:", signupResult.username);
 
@@ -194,7 +196,7 @@ export default function Home() {
                   <Flex align="center" gap="2">
                     {currentView != 2 && <Separator orientation="vertical" />}
                     <Text weight={currentView == 2 ? "bold" : "light"}>
-                      {t("other-info")}
+                      {t("personalization")}
                     </Text>
                   </Flex>
                 )}
@@ -289,87 +291,14 @@ export default function Home() {
             )}
             {currentView == 2 && (
               <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{t("developer-account")}</CardTitle>
-                    <CardDescription>{t("is-developer-desc")}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <Text as="label" size="3">
-                      <Flex as="span" gap="2">
-                        <Checkbox
-                          id="isDeveloper"
-                          checked={bIsDeveloper}
-                          onCheckedChange={(checked) =>
-                            setIsDeveloper(checked as boolean)
-                          }
-                        />
-                        {t("is-developer")}
-                      </Flex>
-                    </Text>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{t("teammate-account")}</CardTitle>
-                    <CardDescription>{t("is-teammate-desc")}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <Text as="label" size="3">
-                      <Flex as="span" gap="2">
-                        <Checkbox
-                          id="isTeammate"
-                          checked={bIsTeammate}
-                          onCheckedChange={(checked) =>
-                            setIsTeammate(checked as boolean)
-                          }
-                        />
-                        {t("is-teammate")}
-                      </Flex>
-                    </Text>
-                  </CardContent>
-                </Card>
+                <ProfilePicsEditor
+                  username={username}
+                  profileUri={setAvatarUri}
+                />
               </div>
             )}
             {currentView == 3 && (
-              <DataList.Root>
-                <DataList.Item>
-                  <DataList.Label minWidth="88px">{t("id")}</DataList.Label>
-                  <DataList.Value>{username}</DataList.Value>
-                </DataList.Item>
-                <DataList.Item>
-                  <DataList.Label minWidth="88px">{t("email")}</DataList.Label>
-                  <DataList.Value>
-                    <Flex align="center" gap="2">
-                      <Code variant="ghost">{email}</Code>
-                    </Flex>
-                  </DataList.Value>
-                </DataList.Item>
-                <DataList.Item>
-                  <DataList.Label minWidth="88px">
-                    {t("teammate-account")}
-                  </DataList.Label>
-                  <DataList.Value>
-                    <Text>
-                      {bIsTeammate
-                        ? t("teammate-account-confirm-true")
-                        : t("teammate-account-confirm-false")}
-                    </Text>
-                  </DataList.Value>
-                </DataList.Item>
-                <DataList.Item>
-                  <DataList.Label minWidth="88px">
-                    {t("developer-account")}
-                  </DataList.Label>
-                  <DataList.Value>
-                    <Text>
-                      {bIsDeveloper
-                        ? t("developer-account-confirm-true")
-                        : t("developer-account-confirm-false")}
-                    </Text>
-                  </DataList.Value>
-                </DataList.Item>
-              </DataList.Root>
+              <ProfileList username={username} email={email} />
             )}
           </CardContent>
           <CardFooter>
@@ -396,7 +325,7 @@ export default function Home() {
               </div>
             )}
             {currentView == 1 && (
-              <div className="flex justify-end space-x-2 pt-4">
+              <Flex gap="2">
                 <Button onClick={() => setCurrentView(0)} variant="surface">
                   {t_common("back")}
                 </Button>
@@ -406,59 +335,61 @@ export default function Home() {
                 >
                   {t_common("next")}
                 </Button>
-              </div>
+              </Flex>
             )}
             {currentView == 2 && (
-              <div className="flex justify-end space-x-2 pt-4">
+              <Flex gap="2">
                 <Button onClick={() => setCurrentView(1)} variant="surface">
                   {t_common("back")}
                 </Button>
                 <Button onClick={() => setCurrentView(3)}>
                   {t_common("next")}
                 </Button>
-              </div>
+              </Flex>
             )}
             {currentView == 3 && (
               <div className="flex justify-end space-x-2 pt-4">
-                <Button onClick={() => setCurrentView(2)} variant="surface">
-                  {t_common("back")}
-                </Button>
-                <AlertDialog.Root>
-                  <AlertDialog.Trigger>
-                    <Button onClick={handleSignup}>{t("register")}</Button>
-                    {/* <Button onClick={handleSignup}>{t("register")}</Button> */}
-                  </AlertDialog.Trigger>
-                  <AlertDialog.Content maxWidth="450px">
-                    <AlertDialog.Title>
-                      {t("registering-bitmap-id")}
-                    </AlertDialog.Title>
-                    <AlertDialog.Description size="2">
-                      {t("email-verification")}
-                      <TextField.Root
-                        placeholder={t("verification-code")}
-                        value={verificationCode}
-                        onChange={(e) => setVerificationCode(e.target.value)}
-                      />
-                      {verificationFailMessage && (
-                        <Text color="red" size="2" className="mt-2">
-                          {verificationFailMessage}
-                        </Text>
-                      )}
-                    </AlertDialog.Description>
-                    <Flex gap="3" mt="4" justify="end">
-                      <AlertDialog.Cancel>
-                        <Button variant="surface" color="gray">
-                          {t_common("cancel")}
-                        </Button>
-                      </AlertDialog.Cancel>
-                      <AlertDialog.Action>
-                        <Button variant="solid" onClick={handleVerification}>
-                          {t("verify")}
-                        </Button>
-                      </AlertDialog.Action>
-                    </Flex>
-                  </AlertDialog.Content>
-                </AlertDialog.Root>
+                <Flex gap="2">
+                  <Button onClick={() => setCurrentView(2)} variant="surface">
+                    {t_common("back")}
+                  </Button>
+                  <AlertDialog.Root>
+                    <AlertDialog.Trigger>
+                      <Button onClick={handleSignup}>{t("register")}</Button>
+                      {/* <Button onClick={handleSignup}>{t("register")}</Button> */}
+                    </AlertDialog.Trigger>
+                    <AlertDialog.Content maxWidth="450px">
+                      <AlertDialog.Title>
+                        {t("registering-bitmap-id")}
+                      </AlertDialog.Title>
+                      <AlertDialog.Description size="2">
+                        {t("email-verification")}
+                        <TextField.Root
+                          placeholder={t("verification-code")}
+                          value={verificationCode}
+                          onChange={(e) => setVerificationCode(e.target.value)}
+                        />
+                        {verificationFailMessage && (
+                          <Text color="red" size="2" className="mt-2">
+                            {verificationFailMessage}
+                          </Text>
+                        )}
+                      </AlertDialog.Description>
+                      <Flex gap="3" mt="4" justify="end">
+                        <AlertDialog.Cancel>
+                          <Button variant="surface" color="gray">
+                            {t_common("cancel")}
+                          </Button>
+                        </AlertDialog.Cancel>
+                        <AlertDialog.Action>
+                          <Button variant="solid" onClick={handleVerification}>
+                            {t("verify")}
+                          </Button>
+                        </AlertDialog.Action>
+                      </Flex>
+                    </AlertDialog.Content>
+                  </AlertDialog.Root>
+                </Flex>
               </div>
             )}
             {signupFailMessage && (

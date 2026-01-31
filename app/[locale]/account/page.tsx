@@ -22,7 +22,7 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-full p-4 md:p-6 text-center">
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-160px)] p-4 md:p-6 text-center">
       <Flex direction="column" gap="4" className="w-full max-w-md">
         <Card>
           <CardHeader>

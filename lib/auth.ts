@@ -133,13 +133,12 @@ async function signup(
   username: string,
   email: string,
   password: string,
-  bIsDeveloper: boolean,
-  bIsTeammate: boolean,
+  avatarUri: string,
 ): Promise<SignupResponse> {
   try {
     const response = await axios.post<SignupResponse>(
       getApiLinkByPurpose("auth/signup"),
-      { locale, username, email, password, bIsDeveloper, bIsTeammate },
+      { locale, username, email, password, avatarUri },
     );
     return response.data;
   } catch (error: any) {
