@@ -6,6 +6,7 @@ import { TabNav } from "@radix-ui/themes";
 import { useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { useAuth } from "@/lib/AuthContext";
+import EmailVerificationDialog from "@/components/accounts/email-verification";
 
 export default function AccountLayout({
   children,
@@ -15,7 +16,7 @@ export default function AccountLayout({
   const t = useTranslations("AccountTabs");
   const pathname = usePathname();
   const router = useRouter();
-  const { isLoading, bIsLoggedIn } = useAuth();
+  const { isLoading, bIsLoggedIn, bIsEmailVerified } = useAuth();
 
   useEffect(
     function () {
@@ -28,6 +29,7 @@ export default function AccountLayout({
 
   return (
     <>
+      {!bIsEmailVerified && <EmailVerificationDialog open />}
       <TabNav.Root className="sticky top-0 z-10 bg-background border-b-0">
         <TabNav.Link asChild active={pathname === "/account"}>
           <Link href="/account">{t("profile")}</Link>

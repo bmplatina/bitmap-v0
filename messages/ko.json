@@ -118,7 +118,7 @@
   },
 
   "BitmapTeammate": {
-    "apply-title": "Bitmap Teammates 지원서",
+    "apply-title": "Bitmap Teammates 멤버십 신청",
     "personal-info": "개인 정보",
     "name": "성명",
     "alias": "별명",
@@ -142,7 +142,24 @@
     "yt-channel-handle": "YouTube 채널 핸들",
     "yt-channel-handle-desc": "핸들은 YouTube에서 크리에이터를 찾아 소통할 수 있는 수단입니다. 핸들은 채널 이름과 구분되는 고유하고 짧은 채널 식별자로, '@' 기호로 시작합니다. @youtubecreators를 예로 들 수 있습니다.",
     "position": "직무",
-    "submit": "가입 신청하기"
+    "leave-title": "Bitmap Teammates 멤버십 탈퇴",
+    "leave-reason": "탈퇴하시려는 이유를 말씀해주십시오. 이는 Bitmap의 문제점을 개선해나가는 중요한 피드백이 될 수 있습니다. (200자 이내)",
+    "bitmap-satisfaction": "Bitmap에서의 활동은 만족하신 편이었습니까?",
+    "satisfaction-1": "매우 불만족",
+    "satisfaction-2": "불만족",
+    "satisfaction-3": "보통",
+    "satisfaction-4": "만족",
+    "satisfaction-5": "매우 만족",
+    "leave-alert": "Bitmap 멤버십을 탈퇴하면 귀하가 게시한 콘텐츠를 수정하거나 삭제할 수 없습니다.\\n탈퇴를 신청하기 전 완료하지 않은 작업을 모두 마치시기 바랍니다.",
+    "leave-alert-checkbox": "위 내용을 확인하였고 탈퇴를 계속 진행합니다.",
+    "submit": "제출하기"
+  },
+
+  "BitmapDeveloper": {
+    "apply-title": "Bitmap Developer 계정 전환",
+    "personal-info": "개인 정보",
+    "agreement-checkbox": "위 내용을 확인하였고 약관에 동의합니다.",
+    "submit": "전환"
   },
 
   "GamesView": {

@@ -13,7 +13,7 @@ import {
 import { Card, CardTitle, CardHeader, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/lib/AuthContext";
 import { useTranslations } from "next-intl";
-import { pretendard } from "@/lib/utils";
+import { pretendard, imageUriRegExp } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
 import EmailVerificationDialog from "./email-verification";
 
@@ -70,6 +70,7 @@ function ProfileList() {
     username,
     bIsDeveloper,
     bIsTeammate,
+    avatarUri,
     email: emailResponse,
   } = useAuth();
 
@@ -77,6 +78,7 @@ function ProfileList() {
     <Flex direction="column" gap="6" align="center">
       <Flex direction="column" gap="4" align="center">
         <Avatar
+          src={imageUriRegExp.test(avatarUri) ? avatarUri : undefined}
           radius="full"
           size="6"
           fallback={username.charAt(0).toUpperCase()}

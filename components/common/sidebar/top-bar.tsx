@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Search, Menu, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Link, useRouter, usePathname } from "@/i18n/routing";
+import { imageUriRegExp } from "@/lib/utils";
 import Image from "next/image";
 import { MobileSidebar } from "./mobile-sidebar";
 import type { Game } from "@/lib/types";
@@ -22,7 +23,7 @@ export default function TopBar() {
   const router = useRouter();
   const t = useTranslations("Common");
   const pathName = usePathname();
-  const { bIsLoggedIn, username, isLoading } = useAuth();
+  const { bIsLoggedIn, username, isLoading, avatarUri } = useAuth();
   // Electron 및 MacOS 환경 감지 변수 (실제 감지 코드는 구현하지 않음)
   const bIsElectron: boolean = false; // 예시 값, 실제로는 Electron 감지 로직 필요
   const bIsMacOS: boolean = false; // 예시 값, 실제로는 MacOS 감지 로직 필요
@@ -284,6 +285,7 @@ export default function TopBar() {
                     <Popover.Trigger>
                       <IconButton variant="ghost" radius="full">
                         <Avatar
+                          src={imageUriRegExp.test(avatarUri) ? avatarUri : undefined}
                           radius="full"
                           size="2"
                           fallback={username.charAt(0).toUpperCase()}

@@ -33,7 +33,7 @@ export const sidebarItems = [
       {
         title: "bitmap-developer",
         icon: <Code className="h-5 w-5" />,
-        bRequire: "",
+        bRequire: "developer",
         appIcon: Code,
         href: "https://developer.prodbybitmap.com",
       },

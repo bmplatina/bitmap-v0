@@ -8,8 +8,9 @@ import {
   Flex,
   TextField,
   Text,
-  CheckboxGroup,
+  RadioGroup,
   TextArea,
+  Checkbox,
 } from "@radix-ui/themes";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,6 +23,7 @@ export default function BitmapQuit() {
   const router = useRouter();
   const t = useTranslations("BitmapTeammate");
   const { isLoading, bIsTeammate } = useAuth();
+  const [bIsAlertRead, setIsAlertRead] = useState(false);
 
   useEffect(
     function () {
@@ -39,156 +41,47 @@ export default function BitmapQuit() {
       <PreventExit />
       <Flex direction="column" gap="3">
         <MultiLineText size="7" as="p" weight="bold">
-          {t("apply-title")}
+          {t("leave-title")}
         </MultiLineText>
         <MultiLineText as="span" color="gray">
-          BMP_JOINREVISION_260129_v08
+          BMP_QUITREVISION_200315_v01
         </MultiLineText>
         <Card>
           <CardHeader>
-            <CardTitle>{t("personal-info")}</CardTitle>
+            <CardTitle>{t("leave-reason")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <Flex direction="column" gap="4">
-              <Flex direction="column" gap="2">
-                <Text as="label" weight="bold">
-                  {t("name")}
-                </Text>
-                <TextField.Root placeholder={t("name")}>
-                  <TextField.Slot>
-                    <User height="16" width="16" />
-                  </TextField.Slot>
-                </TextField.Root>
-              </Flex>
-              <Separator />
-              <Flex direction="column" gap="2">
-                <Text as="label" weight="bold">
-                  {t("alias")}
-                </Text>
-                <TextField.Root placeholder={t("alias")}>
-                  <TextField.Slot>
-                    <User height="16" width="16" />
-                  </TextField.Slot>
-                </TextField.Root>
-              </Flex>
-              <Separator />
-              <Flex direction="column" gap="2">
-                <Text as="label" weight="bold">
-                  {t("age")}
-                </Text>
-                <TextField.Root placeholder={t("age")} type="number" min="17">
-                  <TextField.Slot>
-                    <User height="16" width="16" />
-                  </TextField.Slot>
-                </TextField.Root>
-              </Flex>
-            </Flex>
+            <TextArea placeholder={t("leave-reason")} resize="vertical" />
           </CardContent>
         </Card>
-
         <Separator />
-
         <Card>
           <CardHeader>
-            <CardTitle>{t("self-promotion")}</CardTitle>
+            <CardTitle>{t("bitmap-satisfaction")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <Flex direction="column" gap="4">
-              <Flex direction="column" gap="2">
-                <Text as="label" weight="bold">
-                  {t("introduction")}
-                </Text>
-                <TextArea placeholder={t("introduction")} resize="vertical" />
-              </Flex>
-
-              <Separator />
-
-              <Flex direction="column" gap="2">
-                <Text as="label" weight="bold">
-                  {t("motivation")}
-                </Text>
-                <TextArea placeholder={t("motivation")} resize="vertical" />
-              </Flex>
-
-              <Separator />
-
-              <Flex direction="column" gap="2">
-                <Text as="label" weight="bold">
-                  {t("affiliation")}
-                </Text>
-                <TextArea placeholder={t("affiliation")} />
-              </Flex>
-            </Flex>
+            <RadioGroup.Root defaultValue="5" name="example">
+              <RadioGroup.Item value="1">{t("satisfaction-1")}</RadioGroup.Item>
+              <RadioGroup.Item value="2">{t("satisfaction-2")}</RadioGroup.Item>
+              <RadioGroup.Item value="3">{t("satisfaction-3")}</RadioGroup.Item>
+              <RadioGroup.Item value="4">{t("satisfaction-4")}</RadioGroup.Item>
+              <RadioGroup.Item value="5">{t("satisfaction-5")}</RadioGroup.Item>
+            </RadioGroup.Root>
           </CardContent>
         </Card>
-
         <Separator />
+        <MultiLineText>{t("leave-alert")}</MultiLineText>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("field")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Flex direction="column" gap="4">
-              <Flex direction="column" gap="2">
-                <Text as="label" weight="bold">
-                  {t("working-field")}
-                </Text>
-                <CheckboxGroup.Root name="Working Fields">
-                  <CheckboxGroup.Item value="1">
-                    {t("vp-post")}
-                  </CheckboxGroup.Item>
-                  <CheckboxGroup.Item value="2">
-                    {t("vp-mograph")}
-                  </CheckboxGroup.Item>
-                  <CheckboxGroup.Item value="3">
-                    {t("illustration")}
-                  </CheckboxGroup.Item>
-                  <CheckboxGroup.Item value="4">
-                    {t("music-produce")}
-                  </CheckboxGroup.Item>
-                  <CheckboxGroup.Item value="5">
-                    {t("dev-web")}
-                  </CheckboxGroup.Item>
-                  <CheckboxGroup.Item value="6">
-                    {t("dev-app")}
-                  </CheckboxGroup.Item>
-                  <CheckboxGroup.Item value="7">
-                    {t("dev-game")}
-                  </CheckboxGroup.Item>
-                </CheckboxGroup.Root>
-              </Flex>
-
-              <Separator />
-
-              <Flex direction="column" gap="2">
-                <Text as="label" weight="bold">
-                  {t("prod-tools")}
-                </Text>
-                <TextArea placeholder={t("prod-tools")} resize="vertical" />
-              </Flex>
-
-              <Separator />
-
-              <Flex direction="column" gap="2">
-                <Text as="label" weight="bold">
-                  {t("work-submission")}
-                </Text>
-                <TextField.Root
-                  placeholder={t("work-submission")}
-                  type="number"
-                  min="17"
-                >
-                  <TextField.Slot></TextField.Slot>
-                </TextField.Root>
-              </Flex>
-            </Flex>
-          </CardContent>
-        </Card>
-
-        <Separator />
-
-        <Button>{t("submit")}</Button>
+        <Text as="label" size="2">
+          <Flex gap="2">
+            <Checkbox
+              checked={bIsAlertRead}
+              onCheckedChange={(checked) => setIsAlertRead(checked as boolean)}
+            />
+            {t("leave-alert-checkbox")}
+          </Flex>
+        </Text>
+        <Button disabled={!bIsAlertRead}>{t("submit")}</Button>
       </Flex>
     </div>
   );

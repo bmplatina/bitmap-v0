@@ -20,11 +20,11 @@ import {
 import { useTranslations, useLocale } from "next-intl";
 
 interface EmailVerificationDialogProps {
-  open: boolean;
+  open?: boolean;
 }
 
 export default function EmailVerificationDialog({
-  open,
+  open = true,
 }: EmailVerificationDialogProps) {
   const router = useRouter();
 

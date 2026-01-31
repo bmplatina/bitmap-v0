@@ -56,7 +56,7 @@ export default function BitmapAppDownloadButton() {
             alt="OS Logo"
             className="mr-2"
             style={{
-              filter: "brightness(0) invert(0.85)", // 검은색을 강제로 흰색(#ffffff)으로 변경
+              filter: "brightness(0) invert(0.9)", // 검은색을 강제로 흰색(#ffffff)으로 변경
             }}
           />
           <Text weight="bold">{t("bitmap-app")}</Text>

@@ -1,7 +1,6 @@
-import { Flex, Text, Container } from "@radix-ui/themes";
+import { Suspense } from "react";
+import { Flex, Text, Container, Button, Spinner } from "@radix-ui/themes";
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/routing";
-import { motion, Variants } from "framer-motion";
 import type { searchParamsPropsSSR } from "@/lib/types";
 import BitmapAppDownloadButton from "@/components/common/bitmap-app/bitmap-app-dl-btn";
 import BitmapAppAnim from "@/components/common/bitmap-app/bitmap-app-anim";
@@ -38,7 +37,9 @@ export default async function BitmapAbout({
             gap="4"
             className="w-full max-w-[300px] mt-2"
           >
-            <BitmapAppRedirector gameId={gameId as string} />
+            <Suspense fallback={<RedirectorSkeleton />}>
+              <BitmapAppRedirector gameId={gameId as string} />
+            </Suspense>
             <BitmapAppDownloadButton />
             <Text size="1" color="gray" className="opacity-60">
               안전한 설치를 위해 공식 릴리즈 페이지로 이동합니다.
@@ -47,5 +48,13 @@ export default async function BitmapAbout({
         </Flex>
       </Container>
     </div>
+  );
+}
+
+function RedirectorSkeleton() {
+  return (
+    <Button variant="outline" className="w-full cursor-pointer" disabled>
+      <Spinner />
+    </Button>
   );
 }

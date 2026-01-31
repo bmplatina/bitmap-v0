@@ -14,8 +14,10 @@ interface AuthContextType {
   username: string;
   uid: string;
   email: string;
+  bIsAdmin: boolean;
   bIsDeveloper: boolean;
   bIsTeammate: boolean;
+  avatarUri: string;
   bIsEmailVerified: boolean;
   isLoading: boolean;
 }
@@ -33,8 +35,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [bIsLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [bIsAdmin, setIsAdmin] = useState(false);
   const [bIsDeveloper, setIsDeveloper] = useState(false);
   const [bIsTeammate, setIsTeammate] = useState(false);
+  const [avatarUri, setAvatarUri] = useState("");
   const [bIsEmailVerified, setIsEmailVerified] = useState(true);
   const [uid, setUid] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -49,26 +53,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           Authorization: `Bearer ${token}`,
         },
       });
-      // console.log("User fetched:", res.data); // 데이터 확인용 로그
-      setUsername(res.data.username);
-      setEmail(res.data.email);
-      setIsDeveloper(res.data.isDeveloper);
-      setIsTeammate(res.data.isTeammate);
-      // 백엔드 응답 필드명이 isEmailVerified 또는 is_verified일 수 있으므로 둘 다 확인
+
       // API 응답에 없으면 토큰에서 직접 디코딩하여 확인 (강력한 대비책)
-      let verified = res.data.isEmailVerified ?? res.data.is_verified;
-      console.log("Email verified status from API:", verified);
-      if (verified === undefined) {
+      if (res.data === undefined) {
         try {
           const decoded: any = jwtDecode(token);
-          verified = decoded.isEmailVerified;
+          console.log("JWT 수동 디코딩", decoded);
+          setUsername(decoded.username);
+          setEmail(decoded.email);
+          setIsAdmin(!!decoded.isAdmin);
+          setIsDeveloper(!!decoded.isDeveloper);
+          setIsTeammate(!!decoded.isTeammate);
+          setIsEmailVerified(!!decoded.isEmailVerified);
           setUid(decoded.uid);
-          console.log("JWT 수동 디코딩: ", verified);
+          setAvatarUri(decoded.avatarUri);
         } catch (e) {
           console.error("토큰 디코딩 실패:", e);
         }
+      } else {
+        setUsername(res.data.username);
+        setEmail(res.data.email);
+        setIsAdmin(!!res.data.isAdmin);
+        setIsDeveloper(!!res.data.isDeveloper);
+        setIsTeammate(!!res.data.isTeammate);
+        setIsEmailVerified(!!res.data.isEmailVerified);
+        setUid(res.data.uid);
+        setAvatarUri(res.data.avatarUri);
       }
-      setIsEmailVerified(!!verified);
     } catch (error) {
       console.error("유저 정보 불러오기 실패", error);
     }
@@ -114,8 +125,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         username,
         uid,
         email,
+        bIsAdmin,
         bIsDeveloper,
         bIsTeammate,
+        avatarUri,
         bIsEmailVerified,
         isLoading,
       }}

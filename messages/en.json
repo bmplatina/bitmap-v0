@@ -118,7 +118,7 @@
   },
 
   "BitmapTeammate": {
-    "apply-title": "Bitmap Teammates Application Form",
+    "apply-title": "Bitmap Teammates Membership Application",
     "personal-info": "Personal Information",
     "name": "Name",
     "alias": "Alias",
@@ -142,7 +142,24 @@
     "yt-channel-handle": "YouTube Channel Handle",
     "yt-channel-handle-desc": "Handles are a way for you to find and connect with creators on YouTube. Handles are unique and short channel identifiers distinct from channel names, and they start with the “@” symbol. For example, @youtubecreators.",
     "position": "Positions",
-    "submit": "Submit Application"
+    "leave-title": "Leaving Bitmap Teammates Membership",
+    "leave-reason": "Please provide the reason for leaving. This feedback is important for improving Bitmap. (Max 200 characters)",
+    "bitmap-satisfaction": "Were you satisfied with your activities at Bitmap?",
+    "satisfaction-1": "Very Dissatisfied",
+    "satisfaction-2": "Dissatisfied",
+    "satisfaction-3": "Neutral",
+    "satisfaction-4": "Satisfied",
+    "satisfaction-5": "Very Satisfied",
+    "leave-alert": "Leaving Bitmap membership means you will no longer be able to edit or delete content you have posted.\\nPlease complete all unfinished tasks before applying to leave.",
+    "leave-alert-checkbox": "I have read the above and wish to proceed with leaving.",
+    "submit": "Submit"
+  },
+
+  "BitmapDeveloper": {
+    "apply-title": "Switch to Bitmap Developer Account",
+    "personal-info": "Personal Information",
+    "agreement-checkbox": "I have read the above and agree to the terms.",
+    "submit": "Switch"
   },
 
   "GamesView": {
