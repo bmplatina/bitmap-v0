@@ -389,12 +389,12 @@ export default function BitmapAbout() {
                     <Flex direction="column" gap="2">
                       {!bIsTeammate && (
                         <Button asChild>
-                          <Link href="/team/apply">Apply to Bitmap</Link>
+                          <Link href="/account/permissions/team/apply">Apply to Bitmap</Link>
                         </Button>
                       )}
                       {!bIsDeveloper && (
                         <Button asChild>
-                          <Link href="/account/edit">Bitmap Developer</Link>
+                          <Link href="/account/permissions/developer/apply">Bitmap Developer</Link>
                         </Button>
                       )}
                     </Flex>

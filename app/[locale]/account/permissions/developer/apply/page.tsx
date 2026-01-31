@@ -21,11 +21,8 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { getEula } from "@/lib/utils";
+import { getEula } from "@/lib/general";
 import ClientMarkdown from "@/components/common/markdown/client-markdown";
-import { Link as LinkIcon, User, Youtube, Building2 } from "lucide-react";
-import type { BitmapMemberInfo } from "@/lib/types";
-import Image from "next/image";
 import { useAuth } from "@/lib/AuthContext";
 import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations, useLocale } from "next-intl";
@@ -84,7 +81,11 @@ export default function BitmapApply() {
           <CardFooter>
             <Text as="label" size="2">
               <Flex gap="2">
-                <Checkbox onCheckedChange={(checked) => setIsAgreementRead(checked as boolean)} />
+                <Checkbox
+                  onCheckedChange={(checked) =>
+                    setIsAgreementRead(checked as boolean)
+                  }
+                />
                 {t("agreement-checkbox")}
               </Flex>
             </Text>
