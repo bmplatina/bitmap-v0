@@ -7,6 +7,7 @@ import {
   AuthResponseInternal,
   ErrorResponse,
   SignupResponse,
+  UserQueriedByUid,
 } from "./types";
 
 function checkIsLoggedIn() {
@@ -71,6 +72,42 @@ const checkAuthor = async (
   }
 
   return author; // 실패 시 null, 성공 시 객체 리턴
+};
+
+const getProfile = async (
+  token: string = process.env.NEXT_PUBLIC_MASTER_TOKEN || "",
+  uid: string,
+): Promise<UserQueriedByUid> => {
+  try {
+    const response = await axios.post<UserQueriedByUid>(
+      getApiLinkByPurpose("auth/profile/query/uid"), // 백엔드 라우트 주소와 일치 확인
+      {
+        uid: uid,
+      },
+      {
+        timeout: 30000,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    // 2. 백엔드에서 보낸 JSON 구조에 맞춰 할당
+    // 백엔드 응답: { username: "...", email: "..." }
+    return response.data;
+  } catch (error: any) {
+    // 3. 에러 핸들링 구체화
+    if (error.code === "ECONNABORTED") {
+      console.error("요청 시간이 초과되었습니다.");
+    } else {
+      console.error(
+        "데이터를 불러오는 중 에러 발생:",
+        error.response?.data || error.message,
+      );
+    }
+  }
+  return { username: "", email: "", avatarUri: "", id: 0 };
 };
 
 /**
@@ -260,6 +297,7 @@ async function editUsername(
 export {
   checkIsLoggedIn,
   checkAuthor,
+  getProfile,
   editUsername,
   login,
   signup,

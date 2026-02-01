@@ -3,6 +3,25 @@ interface stringLocalized {
   ko: string;
 }
 
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  password: string;
+  isAdmin: boolean;
+  isDeveloper: boolean;
+  isTeammate: boolean;
+  avatarUri: string;
+  createdAt: string;
+  google_id: string;
+  uid: string;
+  verification_code: number;
+  code_expires_at: string;
+  isEmailVerified: boolean;
+}
+
+interface UserQueriedByUid extends Pick<User, "username" | "email" | "avatarUri" | "id"> {}
+
 interface Game {
   gameId: number;
   isApproved: boolean;
@@ -157,4 +176,5 @@ export type {
   MembershipApplyRequest,
   MembershipLeaves,
   MembershipLeaveRequest,
+  UserQueriedByUid
 };

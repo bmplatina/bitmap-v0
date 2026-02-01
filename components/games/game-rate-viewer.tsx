@@ -21,7 +21,7 @@ interface GameRateProp {
 export default async function GameRateViewer({ rate }: GameRateProp) {
   const locale = await getLocale();
   const author = await checkAuthor(
-    process.env.NEXT_PUBLIC_MASTER_TOKEN,
+    undefined,
     rate.uid,
   );
   return (

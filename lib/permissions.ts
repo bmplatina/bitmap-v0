@@ -1,9 +1,29 @@
 import axios from "axios";
 import type {
+  MembershipApplies,
   MembershipApplyRequest,
   MembershipLeaveRequest,
 } from "@/lib/types";
 import { getApiLinkByPurpose } from "./utils";
+
+const emptyMembershipApplies: MembershipApplies = {
+  id: 0,
+  locale: "",
+  uid: "",
+  name: "",
+  alias: "",
+  age: 0,
+  introduction: "",
+  motivation: "",
+  affiliate: "",
+  field: [],
+  prodTools: "",
+  portfolio: "",
+  youtubeHandle: "",
+  avatarUri: "",
+  position: "",
+  isApproved: false,
+};
 
 async function applyMembership(token: string, body: MembershipApplyRequest) {
   try {
@@ -52,9 +72,12 @@ async function getMembershipApplications(token: string) {
   }
 }
 
-async function getMembershipApplicationById(token: string, id: string) {
+async function getMembershipApplicationById(
+  token: string = process.env.NEXT_PUBLIC_MASTER_TOKEN || "",
+  id: string,
+): Promise<MembershipApplies> {
   try {
-    const response = await axios.get(
+    const response = await axios.get<MembershipApplies>(
       getApiLinkByPurpose(`permissions/members/apply/${id}`),
       {
         timeout: 10000, // 10초 타임아웃
@@ -69,9 +92,7 @@ async function getMembershipApplicationById(token: string, id: string) {
     return response.data;
   } catch (error: any) {
     console.error("멤버 데이터를 가져오는 중 오류 발생:", error);
-
-    // API 오류 시 에러 메시지 객체 반환
-    return { message: error.message || "server-error" };
+    return emptyMembershipApplies;
   }
 }
 
@@ -99,7 +120,9 @@ async function leaveMembership(token: string, body: MembershipLeaveRequest) {
   }
 }
 
-async function getMembershipLeaveReqs(token: string) {
+async function getMembershipLeaveReqs(
+  token: string = process.env.NEXT_PUBLIC_MASTER_TOKEN || "",
+) {
   try {
     const response = await axios.get(
       getApiLinkByPurpose(`permissions/members/leave`),
@@ -122,7 +145,10 @@ async function getMembershipLeaveReqs(token: string) {
   }
 }
 
-async function getMembershipLeaveReqById(token: string, id: string) {
+async function getMembershipLeaveReqById(
+  token: string = process.env.NEXT_PUBLIC_MASTER_TOKEN || "",
+  id: string,
+) {
   try {
     const response = await axios.get(
       getApiLinkByPurpose(`permissions/members/leave/${id}`),
@@ -168,4 +194,12 @@ async function switchBitmapDeveloper(token: string) {
   }
 }
 
-export { applyMembership, leaveMembership, switchBitmapDeveloper, getMembershipApplications, getMembershipApplicationById, getMembershipLeaveReqs, getMembershipLeaveReqById };
+export {
+  applyMembership,
+  leaveMembership,
+  switchBitmapDeveloper,
+  getMembershipApplications,
+  getMembershipApplicationById,
+  getMembershipLeaveReqs,
+  getMembershipLeaveReqById,
+};

@@ -16,13 +16,27 @@ import {
 } from "@/components/ui/card";
 import { getTranslations } from "next-intl/server";
 import { getMembers } from "@/lib/general";
-import { MembershipApplicationListElement } from "@/components/admin/membership-application-list";
+import { getMembershipLeaveReqs } from "@/lib/permissions";
+import type { MembershipApplies, MembershipLeaves } from "@/lib/types";
+import {
+  MembershipApplicationListElement,
+  MembershipLeavingRequestListElement,
+} from "@/components/admin/membership-application-list";
 import { Users, UserPlus, UserMinus } from "lucide-react";
 
 export default async function AllMembers() {
   const t = await getTranslations("Admin");
-  const approvedMembers = await getMembers("approved");
-  const pendingMembers = await getMembers("pending");
+
+  const memberRows: MembershipApplies[] = await getMembers("all");
+  const approvedMembers = memberRows.filter(
+    (g): g is MembershipApplies => g.isApproved,
+  );
+  const pendingMembers = memberRows.filter(
+    (g): g is MembershipApplies => !g.isApproved,
+  );
+
+  const leavingReqs: MembershipLeaves[] =
+    await getMembershipLeaveReqs(undefined);
 
   return (
     <div className="container mx-auto p-6 max-w-6xl min-h-[85vh]">
@@ -77,7 +91,7 @@ export default async function AllMembers() {
                   <Text size="1" color="gray" weight="bold">
                     {t("membership-leaving-req")}
                   </Text>
-                  <Heading size="6">0</Heading>
+                  <Heading size="6">{leavingReqs.length}</Heading>
                 </div>
               </Flex>
             </CardContent>
@@ -103,7 +117,7 @@ export default async function AllMembers() {
                 <Tabs.Trigger value="leaving">
                   {t("membership-leaving-req")}
                   <Badge variant="soft" color="red" ml="2">
-                    {pendingMembers.length}
+                    {leavingReqs.length}
                   </Badge>
                 </Tabs.Trigger>
               </Tabs.List>
@@ -143,11 +157,11 @@ export default async function AllMembers() {
               </Tabs.Content>
               <Tabs.Content value="leaving">
                 <div className="divide-y divide-border">
-                  {pendingMembers.length > 0 ? (
-                    pendingMembers.map((member) => (
-                      <MembershipApplicationListElement
-                        key={member.id}
-                        content={member}
+                  {leavingReqs.length > 0 ? (
+                    leavingReqs.map((req) => (
+                      <MembershipLeavingRequestListElement
+                        key={req.id}
+                        content={req}
                       />
                     ))
                   ) : (
