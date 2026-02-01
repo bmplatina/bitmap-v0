@@ -35,6 +35,7 @@
     "bitmap-id": "Bitmap ID",
     "bitmap-id-desc": "Bitmap의 모든 서비스를 사용하려면 로그인하거나 가입하십시오.",
     "account-settings": "계정 설정",
+    "admin-menu": "관리자 메뉴",
     "settings": "설정",
     "login": "로그인",
     "login-google": "Google 계정으로 로그인",
@@ -155,7 +156,8 @@
     "satisfaction-5": "매우 만족",
     "leave-alert": "Bitmap 멤버십을 탈퇴하면 귀하가 게시한 콘텐츠를 수정하거나 삭제할 수 없습니다.\\n탈퇴를 신청하기 전 완료하지 않은 작업을 모두 마치시기 바랍니다.",
     "leave-alert-checkbox": "위 내용을 확인하였고 탈퇴를 계속 진행합니다.",
-    "submit": "제출하기"
+    "submit": "제출하기",
+    "submitted": "제출됐습니다"
   },
 
   "BitmapDeveloper": {
@@ -163,6 +165,16 @@
     "personal-info": "개인 정보",
     "agreement-checkbox": "위 내용을 확인하였고 약관에 동의합니다.",
     "submit": "전환"
+  },
+
+  "Admin": {
+    "dashboard": "대시보드",
+    "members-list": "Bitmap 팀원 목록",
+    "member-manage": "Bitmap 팀원 관리",
+    "membership-application": "멤버십 신청 관리",
+    "membership-leaving-req": "멤버십 탈퇴 신청 관리",
+    "bitmap-developer": "Bitmap Developer",
+    "pending": "승인 대기 중"
   },
 
   "GamesView": {

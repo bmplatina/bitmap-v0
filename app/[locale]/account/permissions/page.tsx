@@ -64,23 +64,28 @@ export default function AccountEdit() {
             </CardFooter>
           </Card>
         )}
-        <Separator />
-        {!!bIsDeveloper && (
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("bitmap-developer-enable")}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <MultiLineText>{t("bitmap-developer-enable-desc")}</MultiLineText>
-            </CardContent>
-            <CardFooter>
-              <Button asChild>
-                <Link href="/account/permissions/developer/apply">
-                  {t("apply")}
-                </Link>
-              </Button>
-            </CardFooter>
-          </Card>
+
+        {!!!bIsDeveloper && (
+          <>
+            <Separator />
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("bitmap-developer-enable")}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <MultiLineText>
+                  {t("bitmap-developer-enable-desc")}
+                </MultiLineText>
+              </CardContent>
+              <CardFooter>
+                <Button asChild>
+                  <Link href="/account/permissions/developer/apply">
+                    {t("apply")}
+                  </Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          </>
         )}
       </Flex>
     </div>

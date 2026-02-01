@@ -1,0 +1,166 @@
+import {
+  Button,
+  Flex,
+  Heading,
+  Text,
+  Tabs,
+  Badge,
+  Grid,
+} from "@radix-ui/themes";
+import {
+  Card,
+  CardTitle,
+  CardHeader,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { getTranslations } from "next-intl/server";
+import { getMembers } from "@/lib/general";
+import { MembershipApplicationListElement } from "@/components/admin/membership-application-list";
+import { Users, UserPlus, UserMinus } from "lucide-react";
+
+export default async function AllMembers() {
+  const t = await getTranslations("Admin");
+  const approvedMembers = await getMembers("approved");
+  const pendingMembers = await getMembers("pending");
+
+  return (
+    <div className="container mx-auto p-6 max-w-6xl min-h-[85vh]">
+      <Flex direction="column" gap="6">
+        <Flex justify="between" align="center">
+          <Flex direction="column" gap="1">
+            <Heading size="8" weight="bold">
+              {t("member-manage")}
+            </Heading>
+            <Text color="gray">{t("dashboard")}</Text>
+          </Flex>
+        </Flex>
+
+        <Grid columns={{ initial: "1", md: "3" }} gap="4">
+          <Card>
+            <CardContent className="pt-6">
+              <Flex align="center" gap="4">
+                <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full text-blue-600">
+                  <Users size={24} />
+                </div>
+                <div>
+                  <Text size="1" color="gray" weight="bold">
+                    {t("members-list")}
+                  </Text>
+                  <Heading size="6">{approvedMembers.length}</Heading>
+                </div>
+              </Flex>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6">
+              <Flex align="center" gap="4">
+                <div className="p-3 bg-amber-100 dark:bg-amber-900 rounded-full text-amber-600">
+                  <UserPlus size={24} />
+                </div>
+                <div>
+                  <Text size="1" color="gray" weight="bold">
+                    {t("membership-application")}
+                  </Text>
+                  <Heading size="6">{pendingMembers.length}</Heading>
+                </div>
+              </Flex>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6">
+              <Flex align="center" gap="4">
+                <div className="p-3 bg-red-100 dark:bg-red-900 rounded-full text-red-600">
+                  <UserMinus size={24} />
+                </div>
+                <div>
+                  <Text size="1" color="gray" weight="bold">
+                    {t("membership-leaving-req")}
+                  </Text>
+                  <Heading size="6">0</Heading>
+                </div>
+              </Flex>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Tabs.Root defaultValue="approved">
+          <Card>
+            <CardHeader className="pb-0">
+              <Tabs.List size="2">
+                <Tabs.Trigger value="approved">
+                  {t("members-list")}
+                  <Badge variant="soft" ml="2">
+                    {approvedMembers.length}
+                  </Badge>
+                </Tabs.Trigger>
+                <Tabs.Trigger value="pending">
+                  {t("pending")}
+                  <Badge variant="soft" color="amber" ml="2">
+                    {pendingMembers.length}
+                  </Badge>
+                </Tabs.Trigger>
+                <Tabs.Trigger value="leaving">
+                  {t("membership-leaving-req")}
+                  <Badge variant="soft" color="red" ml="2">
+                    {pendingMembers.length}
+                  </Badge>
+                </Tabs.Trigger>
+              </Tabs.List>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Tabs.Content value="approved">
+                <div className="divide-y divide-border">
+                  {approvedMembers.length > 0 ? (
+                    approvedMembers.map((member) => (
+                      <MembershipApplicationListElement
+                        key={member.id}
+                        content={member}
+                      />
+                    ))
+                  ) : (
+                    <Flex align="center" justify="center" p="9">
+                      <Text color="gray">{t("unknown-game")}</Text>
+                    </Flex>
+                  )}
+                </div>
+              </Tabs.Content>
+              <Tabs.Content value="pending">
+                <div className="divide-y divide-border">
+                  {pendingMembers.length > 0 ? (
+                    pendingMembers.map((member) => (
+                      <MembershipApplicationListElement
+                        key={member.id}
+                        content={member}
+                      />
+                    ))
+                  ) : (
+                    <Flex align="center" justify="center" p="9">
+                      <Text color="gray">{t("unknown-game")}</Text>
+                    </Flex>
+                  )}
+                </div>
+              </Tabs.Content>
+              <Tabs.Content value="leaving">
+                <div className="divide-y divide-border">
+                  {pendingMembers.length > 0 ? (
+                    pendingMembers.map((member) => (
+                      <MembershipApplicationListElement
+                        key={member.id}
+                        content={member}
+                      />
+                    ))
+                  ) : (
+                    <Flex align="center" justify="center" p="9">
+                      <Text color="gray">{t("unknown-game")}</Text>
+                    </Flex>
+                  )}
+                </div>
+              </Tabs.Content>
+            </CardContent>
+          </Card>
+        </Tabs.Root>
+      </Flex>
+    </div>
+  );
+}

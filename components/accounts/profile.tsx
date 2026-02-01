@@ -21,7 +21,7 @@ function ProfilePopover() {
   const t = useTranslations("Authentication");
   const [bIsVerifyClicked, setVerificationClicked] = useState<boolean>(false);
 
-  const { logout, bIsEmailVerified } = useAuth();
+  const { logout, bIsEmailVerified, bIsAdmin } = useAuth();
 
   useEffect(() => {
     // bSetLoggedInState(localStorage.getItem("token") !== "");
@@ -52,13 +52,21 @@ function ProfilePopover() {
                 {t("verify")}
               </Button>
             )}
+            {bIsAdmin && (
+              <Button size="3" asChild>
+                <Link href="/admin">{t("admin-menu")}</Link>
+              </Button>
+            )}
             <Button size="3" onClick={logout} color="red">
               {t("logout")}
             </Button>
           </Flex>
         </CardContent>
       </Card>
-      <EmailVerificationDialog open={bIsVerifyClicked} openHandle={setVerificationClicked}/>
+      <EmailVerificationDialog
+        open={bIsVerifyClicked}
+        openHandle={setVerificationClicked}
+      />
     </Flex>
   );
 }

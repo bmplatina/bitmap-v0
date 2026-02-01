@@ -1,0 +1,63 @@
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/routing";
+import { Avatar, Flex, IconButton, Text } from "@radix-ui/themes";
+import type { MembershipApplies } from "@/lib/types";
+import { Badge } from "../ui/badge";
+import { Edit, Trash2 } from "lucide-react";
+
+interface ApplicationProps {
+  content: MembershipApplies;
+}
+
+async function MembershipApplicationListElement({ content }: ApplicationProps) {
+  const t = await getTranslations("Admin");
+
+  return (
+    <Flex align="center" gap="1">
+      <Link
+        key={content.id}
+        href={
+          content.isApproved ? "#" : `/admin/members/application/${content.id}`
+        }
+        className="flex-1 min-w-0 flex items-center gap-3 px-4 py-2 hover:bg-muted transition-colors"
+      >
+        <div className="relative w-10 h-10 shrink-0 rounded overflow-hidden bg-muted">
+          <Avatar
+            src={content.avatarUri || "/placeholder.svg?height=40&width=40"}
+            alt={content.alias}
+            fallback={content.alias.charAt(0).toUpperCase()}
+            radius="full"
+          />
+        </div>
+        <div className="flex-1 min-w-0">
+          <Text as="p" size="2" weight="medium" truncate>
+            {content.alias}
+          </Text>
+          <Text as="p" size="1" color="gray" truncate>
+            {content.name}
+          </Text>
+        </div>
+      </Link>
+      <Flex align="center" gap="3" className="pr-4">
+        {content.isApproved ? (
+          <IconButton radius="full" variant="ghost" asChild>
+            <Link href={`/admin/members/application/${content.id}`}>
+              <Trash2 color="red" size={18} />
+            </Link>
+          </IconButton>
+        ) : (
+          <>
+            <IconButton radius="full" variant="ghost" asChild>
+              <Link href={`/admin/members/application/${content.id}`}>
+                <Edit size={18} />
+              </Link>
+            </IconButton>
+            <Badge>{t("pending")}</Badge>
+          </>
+        )}
+      </Flex>
+    </Flex>
+  );
+}
+
+export { MembershipApplicationListElement };

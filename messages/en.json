@@ -35,6 +35,7 @@
     "bitmap-id": "Bitmap ID",
     "bitmap-id-desc": "To use all Bitmap services, please sign in or sign up.",
     "account-settings": "Account Settings",
+    "admin-menu": "Administrator Menu",
     "settings": "Settings",
     "login": "Sign in",
     "login-google": "Login with Google",
@@ -47,8 +48,8 @@
     "email": "Email",
     "password": "Password",
     "again": "(Type again)",
-    "general-info": "기본 정보",
-    "personalization": "개인화",
+    "general-info": "General Information",
+    "personalization": "Personalization",
     "troubleshoot-auth": "Troubleshoot Login Problem",
     "email-rules": "Please enter a valid email address.",
     "username-rules": "Username must be between 3 and 15 characters.",
@@ -155,7 +156,8 @@
     "satisfaction-5": "Very Satisfied",
     "leave-alert": "Leaving Bitmap membership means you will no longer be able to edit or delete content you have posted.\\nPlease complete all unfinished tasks before applying to leave.",
     "leave-alert-checkbox": "I have read the above and wish to proceed with leaving.",
-    "submit": "Submit"
+    "submit": "Submit",
+    "submitted": "Submitted"
   },
 
   "BitmapDeveloper": {
@@ -163,6 +165,16 @@
     "personal-info": "Personal Information",
     "agreement-checkbox": "I have read the above and agree to the terms.",
     "submit": "Switch"
+  },
+
+  "Admin": {
+    "dashboard": "Dashboard",
+    "members-list": "Bitmap Teammates List",
+    "member-manage": "Manage Bitmap Teammates",
+    "membership-application": "Manage Membership Applications",
+    "membership-leaving-req": "Manage Membership Leaving Requests",
+    "bitmap-developer": "Bitmap Developer",
+    "pending": "Pending"
   },
 
   "GamesView": {

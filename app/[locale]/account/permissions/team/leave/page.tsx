@@ -11,20 +11,54 @@ import {
   RadioGroup,
   TextArea,
   Checkbox,
+  Spinner,
 } from "@radix-ui/themes";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import PreventExit from "@/components/common/prevent-exit";
 import MultiLineText from "@/components/common/multi-line-text";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { MembershipLeaveRequest } from "@/lib/types";
-
+import { leaveMembership } from "@/lib/permissions";
 
 export default function BitmapQuit() {
   const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations("BitmapTeammate");
-  const { isLoading, bIsTeammate } = useAuth();
+  const { isLoading, bIsTeammate, uid } = useAuth();
   const [bIsAlertRead, setIsAlertRead] = useState(false);
+
+  const [leaveReason, setLeaveReason] = useState("");
+  const [satisfaction, setSatisfaction] = useState<string>("");
+
+  const [bIsSubmitting, setIsSubmitting] = useState(false);
+  const [submitFailMessage, setSubmitFailMessage] = useState("0");
+
+  async function handleLeaving() {
+    try {
+      setIsSubmitting(true);
+      const form: MembershipLeaveRequest = {
+        leaveReason,
+        satisfaction,
+        uid,
+        locale,
+      };
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        const res = await leaveMembership(token, form);
+        if (res && typeof res === "object") {
+          setSubmitFailMessage(res.message);
+          // router.push("/account");
+        } else {
+          setSubmitFailMessage("unknown-error");
+        }
+      }
+    } catch (error: any) {
+      setSubmitFailMessage(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   useEffect(
     function () {
@@ -52,7 +86,12 @@ export default function BitmapQuit() {
             <CardTitle>{t("leave-reason")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <TextArea placeholder={t("leave-reason")} resize="vertical" />
+            <TextArea
+              placeholder={t("leave-reason")}
+              resize="vertical"
+              value={leaveReason}
+              onChange={(e) => setLeaveReason(e.target.value)}
+            />
           </CardContent>
         </Card>
         <Separator />
@@ -61,7 +100,12 @@ export default function BitmapQuit() {
             <CardTitle>{t("bitmap-satisfaction")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <RadioGroup.Root defaultValue="5" name="example">
+            <RadioGroup.Root
+              defaultValue="5"
+              name="example"
+              value={satisfaction}
+              onValueChange={setSatisfaction}
+            >
               <RadioGroup.Item value="1">{t("satisfaction-1")}</RadioGroup.Item>
               <RadioGroup.Item value="2">{t("satisfaction-2")}</RadioGroup.Item>
               <RadioGroup.Item value="3">{t("satisfaction-3")}</RadioGroup.Item>
@@ -82,7 +126,12 @@ export default function BitmapQuit() {
             {t("leave-alert-checkbox")}
           </Flex>
         </Text>
-        <Button disabled={!bIsAlertRead}>{t("submit")}</Button>
+        <Button disabled={!bIsAlertRead} onClick={handleLeaving}>
+          {bIsSubmitting ? <Spinner /> : t("submit")}
+        </Button>
+        <Text color="red" as="p">
+          {t(submitFailMessage)}
+        </Text>
       </Flex>
     </div>
   );

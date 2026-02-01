@@ -27,6 +27,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations, useLocale } from "next-intl";
 import MultiLineText from "@/components/common/multi-line-text";
+import { switchBitmapDeveloper } from "@/lib/permissions";
 import PreventExit from "@/components/common/prevent-exit";
 
 export default function BitmapApply() {
@@ -37,12 +38,27 @@ export default function BitmapApply() {
   const { isLoading, bIsDeveloper } = useAuth();
   const [eula, setEula] = useState<string>("");
   const [bIsAgreementRead, setIsAgreementRead] = useState<boolean>(false);
+  const [bIsSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submitFailMessage, setSubmitFailMessage] = useState<string>("");
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
+  async function handleSwitching() {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        const res = await switchBitmapDeveloper(token);
+        if (res && typeof res === "object") {
+          setSubmitFailMessage(res.message);
+          // router.push("/account");
+        } else {
+          setSubmitFailMessage("unknown-error");
+        }
+      }
+    } catch (error: any) {
+      setSubmitFailMessage(error.message);
+    } finally {
+      setIsSubmitting(false);
     }
-  };
+  }
 
   useEffect(
     function () {
@@ -94,7 +110,9 @@ export default function BitmapApply() {
 
         <Separator />
 
-        <Button disabled={!bIsAgreementRead}>{t("submit")}</Button>
+        <Button disabled={!bIsAgreementRead} onClick={handleSwitching}>
+          {t("submit")}
+        </Button>
       </Flex>
     </div>
   );

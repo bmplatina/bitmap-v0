@@ -19,7 +19,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Link as LinkIcon, User, Youtube, Building2 } from "lucide-react";
-import type { MembershipApplies } from "@/lib/types";
+import type { MembershipApplyRequest } from "@/lib/types";
 import { applyMembership } from "@/lib/permissions";
 import { useAuth } from "@/lib/AuthContext";
 import { Link, useRouter } from "@/i18n/routing";
@@ -32,7 +32,7 @@ export default function BitmapApply() {
   const router = useRouter();
   const locale = useLocale();
 
-  const { isLoading, bIsTeammate, uid } = useAuth();
+  const { isLoading, bIsTeammate, uid, avatarUri } = useAuth();
 
   const [name, setName] = useState("");
   const [alias, setAlias] = useState("");
@@ -40,29 +40,47 @@ export default function BitmapApply() {
   const [introduction, setIntroduction] = useState("");
   const [motivation, setMotivation] = useState("");
   const [affiliation, setAffiliation] = useState("");
-  const [workingField, setWorkingField] = useState<Array<number>>([0]);
+  const [workingField, setWorkingField] = useState<Array<string>>([]);
   const [prodTools, setProdTools] = useState("");
   const [workSubmission, setWorkSubmission] = useState("");
   const [ytChannelHandle, setYtChannelHandle] = useState("");
   const [position, setPosition] = useState("");
-  const [avatarUri, setAvatarUri] = useState("");
 
   const [bIsSubmitting, setIsSubmitting] = useState(false);
+  const [submitFailMessage, setSubmitFailMessage] = useState("");
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-    }
-  };
+  function getIsSubmittable(): boolean {
+    const verifyName = name.length > 0;
+    const verifyAlias = alias.length > 0;
+    const verifyAge = age >= 17;
+    const verifyIntroduction = introduction.length > 0;
+    const verifyMotivation = motivation.length > 0;
+    const verifyAffiliation = affiliation.length > 0;
+    const verifyWorkingField = workingField.length > 0;
+    const verifyProdTools = prodTools.length > 0;
+    const verifyWorkSubmission = workSubmission.length > 0;
+    const verifyYtChannelHandle = ytChannelHandle.length > 0;
+    const verifyPosition = position.length > 0;
 
-  /**
-   * @todo avatarUri uid에서 연동해오기
-   * @todo MembershipApplies Omit해서 id와 isApproved 제거
-   */
+    return (
+      verifyName &&
+      verifyAlias &&
+      verifyAge &&
+      verifyIntroduction &&
+      verifyMotivation &&
+      verifyAffiliation &&
+      verifyWorkingField &&
+      verifyProdTools &&
+      verifyWorkSubmission &&
+      verifyYtChannelHandle &&
+      verifyPosition
+    );
+  }
+
   async function handleApplication() {
     try {
-      const form: MembershipApplies = {
-        id: 10000,
+      setIsSubmitting(true);
+      const form: MembershipApplyRequest = {
         name,
         alias,
         age,
@@ -76,12 +94,22 @@ export default function BitmapApply() {
         position,
         uid,
         locale,
-        avatarUri,
-        isApproved: false,
+        avatarUri: avatarUri || "",
       };
-      await applyMembership(form);
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        const res = await applyMembership(token, form);
+        if (res && typeof res === "object") {
+          setSubmitFailMessage(res.message);
+          // router.push("/account");
+        } else {
+          setSubmitFailMessage("unknown-error");
+        }
+      }
     } catch (error: any) {
+      setSubmitFailMessage(error.message);
     } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -116,7 +144,11 @@ export default function BitmapApply() {
                 <Text as="label" weight="bold" size="5">
                   {t("name")}
                 </Text>
-                <TextField.Root placeholder={t("name")}>
+                <TextField.Root
+                  placeholder={t("name")}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                >
                   <TextField.Slot>
                     <User height="16" width="16" />
                   </TextField.Slot>
@@ -127,7 +159,11 @@ export default function BitmapApply() {
                 <Text as="label" weight="bold" size="5">
                   {t("alias")}
                 </Text>
-                <TextField.Root placeholder={t("alias")}>
+                <TextField.Root
+                  placeholder={t("alias")}
+                  value={alias}
+                  onChange={(e) => setAlias(e.target.value)}
+                >
                   <TextField.Slot>
                     <User height="16" width="16" />
                   </TextField.Slot>
@@ -138,7 +174,13 @@ export default function BitmapApply() {
                 <Text as="label" weight="bold" size="5">
                   {t("age")}
                 </Text>
-                <TextField.Root placeholder={t("age")} type="number" min="17">
+                <TextField.Root
+                  placeholder={t("age")}
+                  type="number"
+                  min="17"
+                  value={age}
+                  onChange={(e) => setAge(Number(e.target.value))}
+                >
                   <TextField.Slot>
                     <User height="16" width="16" />
                   </TextField.Slot>
@@ -160,7 +202,12 @@ export default function BitmapApply() {
                 <Text as="label" weight="bold" size="5">
                   {t("introduction")}
                 </Text>
-                <TextArea placeholder={t("introduction")} resize="vertical" />
+                <TextArea
+                  placeholder={t("introduction")}
+                  resize="vertical"
+                  value={introduction}
+                  onChange={(e) => setIntroduction(e.target.value)}
+                />
               </Flex>
 
               <Separator />
@@ -169,7 +216,12 @@ export default function BitmapApply() {
                 <Text as="label" weight="bold" size="5">
                   {t("motivation")}
                 </Text>
-                <TextArea placeholder={t("motivation")} resize="vertical" />
+                <TextArea
+                  placeholder={t("motivation")}
+                  resize="vertical"
+                  value={motivation}
+                  onChange={(e) => setMotivation(e.target.value)}
+                />
               </Flex>
 
               <Separator />
@@ -178,7 +230,11 @@ export default function BitmapApply() {
                 <Text as="label" weight="bold" size="5">
                   {t("affiliation")}
                 </Text>
-                <TextArea placeholder={t("affiliation")} />
+                <TextArea
+                  placeholder={t("affiliation")}
+                  value={affiliation}
+                  onChange={(e) => setAffiliation(e.target.value)}
+                />
               </Flex>
             </Flex>
           </CardContent>
@@ -196,17 +252,21 @@ export default function BitmapApply() {
                 <Text as="label" weight="bold" size="5">
                   {t("working-field")}
                 </Text>
-                <CheckboxGroup.Root name="Working Fields">
+                <CheckboxGroup.Root
+                  name="Working Fields"
+                  value={workingField}
+                  onValueChange={setWorkingField}
+                >
                   <CheckboxGroup.Item value="1">
                     {t("vp-post")}
                   </CheckboxGroup.Item>
                   <CheckboxGroup.Item value="2">
                     {t("vp-mograph")}
                   </CheckboxGroup.Item>
-                  <CheckboxGroup.Item value="5">
+                  <CheckboxGroup.Item value="3">
                     {t("illustration")}
                   </CheckboxGroup.Item>
-                  <CheckboxGroup.Item value="5">
+                  <CheckboxGroup.Item value="4">
                     {t("music-produce")}
                   </CheckboxGroup.Item>
                   <CheckboxGroup.Item value="5">
@@ -227,7 +287,12 @@ export default function BitmapApply() {
                 <Text as="label" weight="bold" size="5">
                   {t("prod-tools")}
                 </Text>
-                <TextArea placeholder={t("prod-tools")} resize="vertical" />
+                <TextArea
+                  placeholder={t("prod-tools")}
+                  resize="vertical"
+                  value={prodTools}
+                  onChange={(e) => setProdTools(e.target.value)}
+                />
               </Flex>
 
               <Separator />
@@ -238,8 +303,9 @@ export default function BitmapApply() {
                 </Text>
                 <TextField.Root
                   placeholder={t("work-submission")}
-                  type="number"
-                  min="17"
+                  type="text"
+                  value={workSubmission}
+                  onChange={(e) => setWorkSubmission(e.target.value)}
                 >
                   <TextField.Slot>
                     <LinkIcon height="16" width="16" />
@@ -263,7 +329,11 @@ export default function BitmapApply() {
                   {t("yt-channel-handle")}
                 </Text>
                 <Text>{t("yt-channel-handle-desc")}</Text>
-                <TextField.Root placeholder={t("yt-channel-handle")}>
+                <TextField.Root
+                  placeholder={t("yt-channel-handle")}
+                  value={ytChannelHandle}
+                  onChange={(e) => setYtChannelHandle(e.target.value)}
+                >
                   <TextField.Slot>
                     <Youtube height="16" width="16" />
                   </TextField.Slot>
@@ -276,7 +346,11 @@ export default function BitmapApply() {
                 <Text as="label" weight="bold" size="5">
                   {t("position")}
                 </Text>
-                <TextField.Root placeholder={t("position")}>
+                <TextField.Root
+                  placeholder={t("position")}
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                >
                   <TextField.Slot>
                     <Building2 height="16" width="16" />
                   </TextField.Slot>
@@ -288,7 +362,15 @@ export default function BitmapApply() {
 
         <Separator />
 
-        <Button>{t("submit")}</Button>
+        <Button
+          onClick={handleApplication}
+          disabled={bIsSubmitting || !getIsSubmittable()}
+        >
+          {bIsSubmitting ? <Spinner /> : t("submit")}
+        </Button>
+        <Text color="red" as="p">
+          {t(submitFailMessage)}
+        </Text>
       </Flex>
     </div>
   );

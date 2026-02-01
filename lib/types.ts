@@ -115,7 +115,7 @@ interface MembershipApplies {
   introduction: string; // text
   motivation: string; // text
   affiliate: string; // text
-  field: number[]; // json [number]
+  field: Array<string>; // json [number]
   prodTools: string; // text (기존 prodToold에서 변경)
   portfolio: string; // text
   youtubeHandle: string; // text
@@ -124,13 +124,20 @@ interface MembershipApplies {
   isApproved: boolean; // tinyint(1) (0 또는 1)
 }
 
-interface MembershipLeaveRequest {
+interface MembershipApplyRequest extends Omit<
+  MembershipApplies,
+  "id" | "isApproved"
+> {}
+
+interface MembershipLeaves {
   id: number;
   locale: string; // varchar(2)
   uid: string; // varchar(36) - 사용자 고유 식별자
   leaveReason: string; // text
-  satisfaction: number[]; // json [number]
+  satisfaction: string;
 }
+
+interface MembershipLeaveRequest extends Omit<MembershipLeaves, "id"> {}
 
 export type {
   stringLocalized,
@@ -147,5 +154,7 @@ export type {
   Carousel,
   searchParamsPropsSSR,
   MembershipApplies,
+  MembershipApplyRequest,
+  MembershipLeaves,
   MembershipLeaveRequest,
 };

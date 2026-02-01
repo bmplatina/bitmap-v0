@@ -1,10 +1,13 @@
 import axios from "axios";
-import type { MembershipApplies, MembershipLeaveRequest } from "@/lib/types";
+import type {
+  MembershipApplyRequest,
+  MembershipLeaveRequest,
+} from "@/lib/types";
 import { getApiLinkByPurpose } from "./utils";
 
-async function applyMembership(body: MembershipApplies) {
+async function applyMembership(token: string, body: MembershipApplyRequest) {
   try {
-    const response = await axios.post<MembershipApplies[]>(
+    const response = await axios.post(
       getApiLinkByPurpose(`permissions/members/apply`),
       body,
       {
@@ -12,22 +15,69 @@ async function applyMembership(body: MembershipApplies) {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       },
     );
 
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("멤버 데이터를 가져오는 중 오류 발생:", error);
 
-    // API 오류 시 빈 배열 반환 (또는 fallback 데이터 사용 가능)
-    return [];
+    // API 오류 시 에러 메시지 객체 반환
+    return { message: error.message || "server-error" };
   }
 }
 
-async function leaveMembership(body: MembershipLeaveRequest) {
+async function getMembershipApplications(token: string) {
   try {
-    const response = await axios.post<MembershipLeaveRequest[]>(
+    const response = await axios.get(
+      getApiLinkByPurpose(`permissions/members/apply`),
+      {
+        timeout: 10000, // 10초 타임아웃
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error: any) {
+    console.error("멤버 데이터를 가져오는 중 오류 발생:", error);
+
+    // API 오류 시 에러 메시지 객체 반환
+    return { message: error.message || "server-error" };
+  }
+}
+
+async function getMembershipApplicationById(token: string, id: string) {
+  try {
+    const response = await axios.get(
+      getApiLinkByPurpose(`permissions/members/apply/${id}`),
+      {
+        timeout: 10000, // 10초 타임아웃
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error: any) {
+    console.error("멤버 데이터를 가져오는 중 오류 발생:", error);
+
+    // API 오류 시 에러 메시지 객체 반환
+    return { message: error.message || "server-error" };
+  }
+}
+
+async function leaveMembership(token: string, body: MembershipLeaveRequest) {
+  try {
+    const response = await axios.post(
       getApiLinkByPurpose(`permissions/members/leave`),
       body,
       {
@@ -35,43 +85,87 @@ async function leaveMembership(body: MembershipLeaveRequest) {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       },
     );
 
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("멤버 데이터를 가져오는 중 오류 발생:", error);
 
-    // API 오류 시 빈 배열 반환 (또는 fallback 데이터 사용 가능)
-    return [];
+    // API 오류 시 에러 메시지 객체 반환
+    return { message: error.message || "server-error" };
   }
 }
 
-/**
- * @todo 인터페이스 안 쓰고 뭔지 알지 내일의 나?
- */
-async function switchBitmapDeveloper(body: MembershipLeaveRequest) {
+async function getMembershipLeaveReqs(token: string) {
   try {
-    const response = await axios.post<MembershipLeaveRequest[]>(
-      getApiLinkByPurpose(`permissions/developer/apply`),
-      body,
+    const response = await axios.get(
+      getApiLinkByPurpose(`permissions/members/leave`),
       {
         timeout: 10000, // 10초 타임아웃
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       },
     );
 
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("멤버 데이터를 가져오는 중 오류 발생:", error);
 
-    // API 오류 시 빈 배열 반환 (또는 fallback 데이터 사용 가능)
-    return [];
+    // API 오류 시 에러 메시지 객체 반환
+    return { message: error.message || "server-error" };
   }
 }
 
-export { applyMembership, leaveMembership, switchBitmapDeveloper };
+async function getMembershipLeaveReqById(token: string, id: string) {
+  try {
+    const response = await axios.get(
+      getApiLinkByPurpose(`permissions/members/leave/${id}`),
+      {
+        timeout: 10000, // 10초 타임아웃
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error: any) {
+    console.error("멤버 데이터를 가져오는 중 오류 발생:", error);
+
+    // API 오류 시 에러 메시지 객체 반환
+    return { message: error.message || "server-error" };
+  }
+}
+
+async function switchBitmapDeveloper(token: string) {
+  try {
+    const response = await axios.post(
+      getApiLinkByPurpose(`permissions/developer/apply`),
+      {
+        timeout: 10000, // 10초 타임아웃
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error: any) {
+    console.error("멤버 데이터를 가져오는 중 오류 발생:", error);
+
+    // API 오류 시 에러 메시지 객체 반환
+    return { message: error.message || "server-error" };
+  }
+}
+
+export { applyMembership, leaveMembership, switchBitmapDeveloper, getMembershipApplications, getMembershipApplicationById, getMembershipLeaveReqs, getMembershipLeaveReqById };
