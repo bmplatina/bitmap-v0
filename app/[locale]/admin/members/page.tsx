@@ -1,11 +1,11 @@
 import {
   Button,
   Flex,
-  Heading,
   Text,
   Tabs,
   Badge,
   Grid,
+  Heading,
 } from "@radix-ui/themes";
 import {
   Card,
@@ -43,9 +43,9 @@ export default async function AllMembers() {
       <Flex direction="column" gap="6">
         <Flex justify="between" align="center">
           <Flex direction="column" gap="1">
-            <Heading size="8" weight="bold">
+            <Text size="8" weight="bold">
               {t("member-manage")}
-            </Heading>
+            </Text>
             <Text color="gray">{t("dashboard")}</Text>
           </Flex>
         </Flex>

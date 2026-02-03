@@ -21,12 +21,14 @@ import { useAuth } from "@/lib/AuthContext";
 import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { ProfileList } from "@/components/accounts/profile";
+import ProfilePicsEditor from "@/components/accounts/profile-pics-editor";
+
 
 export default function AccountEdit() {
   const t = useTranslations("AccountEdit");
   const router = useRouter();
 
-  const { bIsLoggedIn, isLoading, bIsTeammate } = useAuth();
+  const { bIsLoggedIn, isLoading } = useAuth();
 
   const [bIsAccountEditModalOpened, setIsAccountEditModalOpened] =
     useState<boolean>(false);
@@ -82,6 +84,8 @@ function AccountInfoEditor({
   const { username } = useAuth();
 
   const [newUsername, setNewUsername] = useState(username);
+  const [newAvatarUri, setNewAvatarUri] = useState("");
+
 
   useEffect(
     function () {
@@ -115,6 +119,7 @@ function AccountInfoEditor({
             </Text>
             <TextField.Root placeholder={t("password-edit")} type="password" />
           </label>
+          <ProfilePicsEditor username={username} profileUri={setNewAvatarUri}/>
         </Flex>
 
         <Flex gap="3" mt="4" justify="end">

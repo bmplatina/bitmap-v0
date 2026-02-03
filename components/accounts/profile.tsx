@@ -53,7 +53,7 @@ function ProfilePopover() {
               </Button>
             )}
             {bIsAdmin && (
-              <Button size="3" asChild>
+              <Button size="3" asChild variant="soft">
                 <Link href="/admin">{t("admin-menu")}</Link>
               </Button>
             )}

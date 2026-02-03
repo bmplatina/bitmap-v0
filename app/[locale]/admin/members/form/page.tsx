@@ -5,13 +5,11 @@ import {
   getMembershipApplicationById,
   getMembershipLeaveReqById,
 } from "@/lib/permissions";
-import type {
-  MembershipApplies,
-  MembershipLeaves,
-  searchParamsPropsSSR,
-} from "@/lib/types";
-import { getMembershipLeaveReqs } from "@/lib/permissions";
-import MembershipApplicationViewer from "@/components/admin/membership-application-viewer";
+import type { searchParamsPropsSSR } from "@/lib/types";
+import {
+  MembershipApplicationViewer,
+  MembershipLeaveViewer,
+} from "@/components/admin/membership-application-viewer";
 
 export default async function AllMembers({
   searchParams,
@@ -25,13 +23,13 @@ export default async function AllMembers({
       undefined,
       leave as string,
     );
-    return null;
+    return <MembershipLeaveViewer leaveContent={leaveReq} />;
   } else if (apply) {
     const applicationReq = await getMembershipApplicationById(
       undefined,
       apply as string,
     );
-    return <MembershipApplicationViewer content={applicationReq} />;
+    return <MembershipApplicationViewer applyContent={applicationReq} />;
   } else if (edit) {
     return null;
   }

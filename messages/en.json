@@ -157,7 +157,12 @@
     "leave-alert": "Leaving Bitmap membership means you will no longer be able to edit or delete content you have posted.\\nPlease complete all unfinished tasks before applying to leave.",
     "leave-alert-checkbox": "I have read the above and wish to proceed with leaving.",
     "submit": "Submit",
-    "submitted": "Submitted"
+    "submitted": "Submitted",
+    "approve-application": "Approve Application",
+    "reject-application": "Reject Application",
+    "approve-leaving": "Approve Leaving",
+    "reject-leaving": "Reject Leaving",
+    "granted": "Granted"
   },
 
   "BitmapDeveloper": {

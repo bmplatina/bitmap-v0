@@ -157,7 +157,12 @@
     "leave-alert": "Bitmap 멤버십을 탈퇴하면 귀하가 게시한 콘텐츠를 수정하거나 삭제할 수 없습니다.\\n탈퇴를 신청하기 전 완료하지 않은 작업을 모두 마치시기 바랍니다.",
     "leave-alert-checkbox": "위 내용을 확인하였고 탈퇴를 계속 진행합니다.",
     "submit": "제출하기",
-    "submitted": "제출됐습니다"
+    "submitted": "제출됐습니다",
+    "approve-application": "신청 승인",
+    "reject-application": "신청 거절",
+    "approve-leaving": "탈퇴 승인",
+    "reject-leaving": "탈퇴 거절",
+    "granted": "승인됨"
   },
 
   "BitmapDeveloper": {

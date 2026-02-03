@@ -1,14 +1,10 @@
-"use client";
-
-import { useState, useEffect, type KeyboardEvent } from "react";
 import {
   CheckboxGroup,
-  Button,
   Flex,
-  Spinner,
   Text,
   TextField,
   TextArea,
+  RadioGroup,
 } from "@radix-ui/themes";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -18,24 +14,22 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Link as LinkIcon, User, Youtube, Building2 } from "lucide-react";
-import type { MembershipApplies } from "@/lib/types";
-import { applyMembership } from "@/lib/permissions";
-import { useAuth } from "@/lib/AuthContext";
-import { Link, useRouter } from "@/i18n/routing";
-import { useTranslations, useLocale } from "next-intl";
+import { User, Youtube, Building2 } from "lucide-react";
+import type { MembershipApplies, MembershipLeaves } from "@/lib/types";
+import { Link } from "@/i18n/routing";
+import { getTranslations, getLocale } from "next-intl/server";
 import MultiLineText from "@/components/common/multi-line-text";
+import GrantButton from "./membership-approve-btn";
 
 interface MembershipApplicationProps {
-  content: MembershipApplies;
+  applyContent: MembershipApplies;
 }
 
-export default function MembershipApplicationViewer({
-  content,
+async function MembershipApplicationViewer({
+  applyContent,
 }: MembershipApplicationProps) {
-  const t = useTranslations("BitmapTeammate");
-  const router = useRouter();
-  const locale = useLocale();
+  const t = await getTranslations("BitmapTeammate");
+  const locale = await getLocale();
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
@@ -59,7 +53,7 @@ export default function MembershipApplicationViewer({
                 <Text as="p">{}</Text>
                 <TextField.Root
                   placeholder={t("name")}
-                  value={content.name}
+                  value={applyContent.name}
                   disabled
                 >
                   <TextField.Slot>
@@ -74,7 +68,7 @@ export default function MembershipApplicationViewer({
                 </Text>
                 <TextField.Root
                   placeholder={t("alias")}
-                  value={content.alias}
+                  value={applyContent.alias}
                   disabled
                 >
                   <TextField.Slot>
@@ -91,7 +85,7 @@ export default function MembershipApplicationViewer({
                   placeholder={t("age")}
                   type="number"
                   min="17"
-                  value={content.age}
+                  value={applyContent.age}
                   disabled
                 >
                   <TextField.Slot>
@@ -118,7 +112,7 @@ export default function MembershipApplicationViewer({
                 <TextArea
                   placeholder={t("introduction")}
                   resize="vertical"
-                  value={content.introduction}
+                  value={applyContent.introduction}
                   disabled
                 />
               </Flex>
@@ -132,7 +126,7 @@ export default function MembershipApplicationViewer({
                 <TextArea
                   placeholder={t("motivation")}
                   resize="vertical"
-                  value={content.motivation}
+                  value={applyContent.motivation}
                   disabled
                 />
               </Flex>
@@ -145,7 +139,7 @@ export default function MembershipApplicationViewer({
                 </Text>
                 <TextArea
                   placeholder={t("affiliation")}
-                  value={content.affiliate}
+                  value={applyContent.affiliate}
                   disabled
                 />
               </Flex>
@@ -167,7 +161,7 @@ export default function MembershipApplicationViewer({
                 </Text>
                 <CheckboxGroup.Root
                   name="Working Fields"
-                  value={content.field}
+                  value={applyContent.field}
                   disabled
                 >
                   <CheckboxGroup.Item value="1">
@@ -203,7 +197,7 @@ export default function MembershipApplicationViewer({
                 <TextArea
                   placeholder={t("prod-tools")}
                   resize="vertical"
-                  value={content.prodTools}
+                  value={applyContent.prodTools}
                   disabled
                 />
               </Flex>
@@ -215,11 +209,11 @@ export default function MembershipApplicationViewer({
                   {t("work-submission")}
                 </Text>
                 <Link
-                  href={content.portfolio}
+                  href={applyContent.portfolio}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Text>{content.portfolio}</Text>
+                  <Text>{applyContent.portfolio}</Text>
                 </Link>
               </Flex>
             </Flex>
@@ -241,7 +235,7 @@ export default function MembershipApplicationViewer({
                 <Text>{t("yt-channel-handle-desc")}</Text>
                 <TextField.Root
                   placeholder={t("yt-channel-handle")}
-                  value={content.youtubeHandle}
+                  value={applyContent.youtubeHandle}
                   disabled
                 >
                   <TextField.Slot>
@@ -258,7 +252,7 @@ export default function MembershipApplicationViewer({
                 </Text>
                 <TextField.Root
                   placeholder={t("position")}
-                  value={content.position}
+                  value={applyContent.position}
                   disabled
                 >
                   <TextField.Slot>
@@ -272,11 +266,71 @@ export default function MembershipApplicationViewer({
 
         <Separator />
 
-        <Button>{t("approve")}</Button>
-        <Text color="red" as="p">
-          {/* {t(submitFailMessage)} */}
-        </Text>
+        <GrantButton
+          uid={applyContent.uid}
+          action="apply"
+          bIsApproved={applyContent.isApproved}
+        />
       </Flex>
     </div>
   );
 }
+
+interface MembershipLeavingProps {
+  leaveContent: MembershipLeaves;
+}
+
+async function MembershipLeaveViewer({ leaveContent }: MembershipLeavingProps) {
+  const t = await getTranslations("BitmapTeammate");
+  const locale = await getLocale();
+
+  return (
+    <div className="container mx-auto p-6 max-w-4xl">
+      <Flex direction="column" gap="3">
+        <MultiLineText size="7" as="p" weight="bold">
+          {t("leave-title")}
+        </MultiLineText>
+        <MultiLineText as="span" color="gray">
+          BMP_QUITREVISION_200315_v01
+        </MultiLineText>
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("leave-reason")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              placeholder={t("leave-reason")}
+              resize="vertical"
+              value={leaveContent.leaveReason}
+              disabled
+            />
+          </CardContent>
+        </Card>
+        <Separator />
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("bitmap-satisfaction")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <RadioGroup.Root
+              defaultValue="5"
+              name="example"
+              value={leaveContent.satisfaction}
+              disabled
+            >
+              <RadioGroup.Item value="1">{t("satisfaction-1")}</RadioGroup.Item>
+              <RadioGroup.Item value="2">{t("satisfaction-2")}</RadioGroup.Item>
+              <RadioGroup.Item value="3">{t("satisfaction-3")}</RadioGroup.Item>
+              <RadioGroup.Item value="4">{t("satisfaction-4")}</RadioGroup.Item>
+              <RadioGroup.Item value="5">{t("satisfaction-5")}</RadioGroup.Item>
+            </RadioGroup.Root>
+          </CardContent>
+        </Card>
+        <Separator />
+        <GrantButton uid={leaveContent.uid} action="leave" />
+      </Flex>
+    </div>
+  );
+}
+
+export { MembershipApplicationViewer, MembershipLeaveViewer };

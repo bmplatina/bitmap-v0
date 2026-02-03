@@ -47,7 +47,7 @@ async function MembershipApplicationListElement({ content }: ApplicationProps) {
       <Flex align="center" gap="3" className="pr-4">
         {content.isApproved ? (
           <IconButton radius="full" variant="ghost" asChild>
-            <Link href={`/admin/members/form?leave=${content.id}`}>
+            <Link href={`/admin/members/form?kick=${content.uid}`}>
               <Trash2 color="red" size={18} />
             </Link>
           </IconButton>
