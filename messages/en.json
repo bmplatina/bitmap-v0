@@ -9,8 +9,18 @@
   },
 
   "BitmapApp": {
-    "about": "Bitmap App은 예술과 기술을 넘나드는 창작자들과 정보를 공유하고,\\n제작된 게임을 플레이하며 소통하는 최적의 공간입니다.",
-    "download-alert": "안전한 설치를 위해 GitHub 릴리즈 페이지로 이동합니다."
+    "about": "Bitmap App is the ultimate space where creators from arts and technology share information, play games, and communicate with each other.",
+    "download-alert": "You will be redirected to the GitHub Release page for a safe installation.",
+    "intro-title": "Value Beyond Gaming, Bitmap",
+    "feature-1-title": "Easy Install & Updates",
+    "feature-1-desc": "Install the latest games with one click and let us handle automatic updates.",
+    "feature-2-title": "Creator Community",
+    "feature-2-desc": "Communicate directly with developers, give feedback, and build games together.",
+    "feature-3-title": "Cross-Platform Support",
+    "feature-3-desc": "Enjoy Bitmap games on various environments including Windows, macOS, and Linux.",
+    "system-req": "System Requirements",
+    "os": "Operating System",
+    "os-desc": "Windows 10+, macOS 11+, Linux (glibc 2.27+)"
   },
 
   "Sidebar": {

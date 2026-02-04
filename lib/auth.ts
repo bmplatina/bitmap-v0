@@ -294,11 +294,107 @@ async function editUsername(
   return { success: false, token: "" };
 }
 
+async function editPassword(
+  token: string,
+  newPassword: string,
+): Promise<AuthResponseInternal> {
+  try {
+    const response = await axios.post<AuthResponse>(
+      getApiLinkByPurpose("auth/edit/password"),
+      {
+        newPassword,
+      },
+      {
+        timeout: 30000, // 30초 타임아웃
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (response.data.token) {
+      return { success: true, token: response.data.token };
+    }
+    // bSetLoggedInState(true);
+  } catch (error) {
+    if (axios.isAxiosError<ErrorResponse>(error)) {
+      // error가 AxiosError<ErrorResponse> 타입임이 확인됨
+      // 이제 error.response?.data?.message 와 같이 안전하게 접근 가능
+
+      const payload = error.response?.data;
+      const errorMessage: string =
+        typeof payload === "string"
+          ? payload
+          : (payload?.message ?? "알 수 없는 에러가 발생했습니다.");
+      console.error("로그인 실패:", errorMessage);
+      return { success: false, token: errorMessage };
+
+      // 서버에서 보낸 구체적인 에러 메시지를 alert 등으로 사용자에게 보여줄 수 있습니다.
+      // alert(errorMessage);
+    } else {
+      // Axios 에러가 아닌 다른 종류의 에러 처리 (예: 네트워크 연결 실패 전 요청 설정 오류)
+      console.error("예상치 못한 에러가 발생했습니다:", error);
+    }
+    // bSetLoggedInState(false);
+  }
+  return { success: false, token: "" };
+}
+
+async function editAvatarUri(
+  token: string,
+  newAvatarUri: string,
+): Promise<AuthResponseInternal> {
+  try {
+    const response = await axios.post<AuthResponse>(
+      getApiLinkByPurpose("auth/edit/avatarUri"),
+      {
+        newAvatarUri,
+      },
+      {
+        timeout: 30000, // 30초 타임아웃
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (response.data.token) {
+      return { success: true, token: response.data.token };
+    }
+    // bSetLoggedInState(true);
+  } catch (error) {
+    if (axios.isAxiosError<ErrorResponse>(error)) {
+      // error가 AxiosError<ErrorResponse> 타입임이 확인됨
+      // 이제 error.response?.data?.message 와 같이 안전하게 접근 가능
+
+      const payload = error.response?.data;
+      const errorMessage: string =
+        typeof payload === "string"
+          ? payload
+          : (payload?.message ?? "알 수 없는 에러가 발생했습니다.");
+      console.error("로그인 실패:", errorMessage);
+      return { success: false, token: errorMessage };
+
+      // 서버에서 보낸 구체적인 에러 메시지를 alert 등으로 사용자에게 보여줄 수 있습니다.
+      // alert(errorMessage);
+    } else {
+      // Axios 에러가 아닌 다른 종류의 에러 처리 (예: 네트워크 연결 실패 전 요청 설정 오류)
+      console.error("예상치 못한 에러가 발생했습니다:", error);
+    }
+    // bSetLoggedInState(false);
+  }
+  return { success: false, token: "" };
+}
+
 export {
   checkIsLoggedIn,
   checkAuthor,
   getProfile,
   editUsername,
+  editPassword,
+  editAvatarUri,
   login,
   signup,
   checkIsEmailDuplicated,

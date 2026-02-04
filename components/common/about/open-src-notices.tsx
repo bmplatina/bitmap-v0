@@ -38,6 +38,9 @@ export default async function OpenSourceNotices({
                 <Text size="2">Themes: Radix UI</Text>
               </li>
               <li>
+                <Text size="2">Fonts: Pretendard, Inter, JetBrains Mono</Text>
+              </li>
+              <li>
                 <Text size="2">Icons: Lucide</Text>
               </li>
               <li>
