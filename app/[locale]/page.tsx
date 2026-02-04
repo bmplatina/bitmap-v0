@@ -6,6 +6,8 @@ import { getTranslations } from "next-intl/server";
 import GameRedirectButton from "@/components/games/game-redirect-button";
 import AutoSliderCarousel from "@/components/common/main-page-carousel";
 import { Suspense } from "react";
+import YouTubeWorksList from "@/components/common/youtube-works-list";
+import { Link } from "@/i18n/routing";
 
 export default async function Home() {
   // 서버에서 직접 데이터 페칭
@@ -21,8 +23,10 @@ export default async function Home() {
       <div className="flex flex-col items-center w-full p-6 pt-10 text-center space-y-12">
         {/* 유튜브 영상 가로 스크롤 섹션 */}
         <div className="w-full max-w-6xl">
-          <h2 className="text-2xl font-bold mb-4 text-left">{t("works")}</h2>
-          <ScrollArea type="always" scrollbars="horizontal">
+          <Link href="/about">
+            <h2 className="text-2xl font-bold mb-4 text-left">{t("works")}</h2>
+          </Link>
+          {/* <ScrollArea type="always" scrollbars="horizontal">
             <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
               {youtubeVideos.length > 0 ? (
                 youtubeVideos.slice(0, 10).map((video) => (
@@ -46,11 +50,14 @@ export default async function Home() {
                 </p>
               )}
             </div>
-          </ScrollArea>
+          </ScrollArea> */}
+          <YouTubeWorksList />
         </div>
 
         <div className="w-full max-w-6xl">
-          <h2 className="text-2xl font-bold mb-4 text-left">{t("games")}</h2>
+          <Link href="/games">
+            <h2 className="text-2xl font-bold mb-4 text-left">{t("games")}</h2>
+          </Link>
           <ScrollArea type="always" scrollbars="horizontal">
             <div className="flex gap-4 pb-4">
               {games.length > 0 ? (
