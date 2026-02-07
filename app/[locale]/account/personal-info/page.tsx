@@ -75,7 +75,7 @@ function AccountInfoEditor({
   onOpenChange,
 }: DialogOpenProp) {
   const t = useTranslations("AccountEdit");
-  const { username, avatarUri, isLoading } = useAuth();
+  const { username, avatarUri, isLoading, fetchUser } = useAuth();
 
   const [newUsername, setNewUsername] = useState(username);
   const [newAvatarUri, setNewAvatarUri] = useState(avatarUri);
@@ -87,6 +87,7 @@ function AccountInfoEditor({
     try {
       const responseAvatarUri = await editAvatarUri(token, newAvatarUri);
       const responseUsername = await editUsername(token, newUsername);
+      await fetchUser(token);
     } catch (error: any) {
     } finally {
     }

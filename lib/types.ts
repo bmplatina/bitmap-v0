@@ -22,6 +22,8 @@ interface User {
 
 interface UserQueriedByUid extends Pick<User, "username" | "email" | "avatarUri" | "id"> {}
 
+interface UserProfile extends Omit<User, "password" | "verification_code" | "code_expires_at"> {}
+
 interface Game {
   gameId: number;
   isApproved: boolean;
@@ -176,5 +178,6 @@ export type {
   MembershipApplyRequest,
   MembershipLeaves,
   MembershipLeaveRequest,
-  UserQueriedByUid
+  UserQueriedByUid,
+  UserProfile
 };

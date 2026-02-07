@@ -23,7 +23,7 @@ async function MembershipApplicationListElement({ content }: ApplicationProps) {
       <Link
         key={content.id}
         href={
-          content.isApproved ? "#" : `/admin/members/form?apply=${content.id}`
+          content.isApproved ? "#" : `/admin/members/action?apply=${content.id}`
         }
         className="flex-1 min-w-0 flex items-center gap-3 px-4 py-2 hover:bg-muted transition-colors"
       >
@@ -47,14 +47,14 @@ async function MembershipApplicationListElement({ content }: ApplicationProps) {
       <Flex align="center" gap="3" className="pr-4">
         {content.isApproved ? (
           <IconButton radius="full" variant="ghost" asChild>
-            <Link href={`/admin/members/form?kick=${content.uid}`}>
+            <Link href={`/admin/members/action?kick=${content.uid}`}>
               <Trash2 color="red" size={18} />
             </Link>
           </IconButton>
         ) : (
           <>
             <IconButton radius="full" variant="ghost" asChild>
-              <Link href={`/admin/members/form?edit=${content.id}`}>
+              <Link href={`/admin/members/action?edit=${content.id}`}>
                 <Edit size={18} />
               </Link>
             </IconButton>
@@ -79,7 +79,7 @@ async function MembershipLeavingRequestListElement({ content }: LeavingProps) {
     <Flex align="center" gap="1">
       <Link
         key={content.id}
-        href={`/admin/members/form?leave=${content.id}`}
+        href={`/admin/members/action?leave=${content.id}`}
         className="flex-1 min-w-0 flex items-center gap-3 px-4 py-2 hover:bg-muted transition-colors"
       >
         <div className="relative w-10 h-10 shrink-0 rounded overflow-hidden bg-muted">
@@ -101,7 +101,7 @@ async function MembershipLeavingRequestListElement({ content }: LeavingProps) {
       </Link>
       <Flex align="center" gap="3" className="pr-4">
         <IconButton radius="full" variant="ghost" asChild>
-          <Link href={`/admin/members/form?leave=${content.id}`}>
+          <Link href={`/admin/members/action?leave=${content.id}`}>
             <Trash2 color="red" size={18} />
           </Link>
         </IconButton>

@@ -20,6 +20,7 @@ interface AuthContextType {
   avatarUri: string;
   bIsEmailVerified: boolean;
   isLoading: boolean;
+  fetchUser: (token: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -131,6 +132,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         avatarUri,
         bIsEmailVerified,
         isLoading,
+        fetchUser
       }}
     >
       {children}

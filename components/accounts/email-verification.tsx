@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useAuth } from "@/lib/AuthContext";
-import { sendVerifyEmail, verifyEmail, login as loginPost } from "@/lib/auth";
+import { sendVerifyEmail, verifyEmail } from "@/lib/auth";
 import {
   AlertDialog,
   Button,
@@ -31,9 +31,8 @@ export default function EmailVerificationDialog({
   const router = useRouter();
 
   const locale = useLocale();
-  const { login, logout, email } = useAuth();
+  const { login, logout, email, fetchUser } = useAuth();
   const [verificationCode, setVerificationCode] = useState("");
-  const [password, setPassword] = useState("");
   const [bIsVerificationMailSending, setIsVerificationMailSending] =
     useState(false);
   const [bIsVerifying, setIsVerifying] = useState(false);
@@ -77,14 +76,8 @@ export default function EmailVerificationDialog({
 
       console.log("인증 성공:", verifyResult);
 
-      const loginResult = await loginPost(email, password, false);
-
-      if (loginResult.success) {
-        await login(loginResult.token);
-        router.push("/");
-      } else {
-        setVerificationFailMessage(t(loginResult.token));
-      }
+      await fetchUser(token);
+      router.push("/");
 
       // router.push("/");
     } catch (error: any) {
@@ -96,7 +89,7 @@ export default function EmailVerificationDialog({
   }
 
   function enableVerifyButton(): boolean {
-    return verificationCode.length === 6 && password.length >= 6;
+    return verificationCode.length === 6;
   }
 
   return (
@@ -111,13 +104,6 @@ export default function EmailVerificationDialog({
 
         <Flex direction="column" gap="3" mt="3">
           <Flex gap="3" width="100%">
-            {/* <TextField.Root
-                disabled={!bIsVerificationMailSent}
-                style={{ flex: 6 }}
-                placeholder={t("verification-code")}
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
-              /> */}
             <InputOTP
               disabled={!bIsVerificationMailSent}
               maxLength={6}
@@ -141,12 +127,6 @@ export default function EmailVerificationDialog({
               )}
             </Button>
           </Flex>
-          <TextField.Root
-            placeholder={t("password")}
-            value={password}
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
           {verificationFailMessage && (
             <Text color="red" size="2">
               {verificationFailMessage}
