@@ -20,9 +20,15 @@ interface User {
   isEmailVerified: boolean;
 }
 
-interface UserQueriedByUid extends Pick<User, "username" | "email" | "avatarUri" | "id"> {}
+interface UserQueriedByUid extends Pick<
+  User,
+  "username" | "email" | "avatarUri" | "id"
+> {}
 
-interface UserProfile extends Omit<User, "password" | "verification_code" | "code_expires_at"> {}
+interface UserProfile extends Omit<
+  User,
+  "password" | "verification_code" | "code_expires_at"
+> {}
 
 interface Game {
   gameId: number;
@@ -160,6 +166,21 @@ interface MembershipLeaves {
 
 interface MembershipLeaveRequest extends Omit<MembershipLeaves, "id"> {}
 
+// 알림 유형을 안전하게 관리하기 위한 Union Type
+type NotificationType = "GAME_UPDATE" | "SYSTEM" | "PURCHASE" | string;
+
+interface Notification {
+  id: number; // BIGINT -> number (2^53-1 이상은 string으로 처리하기도 함)
+  uid: string; // 수신 대상 사용자 ID
+  type: NotificationType; // 알림 유형 (문자열 리터럴로 상세 정의 추천)
+  title: string; // 알림 제목
+  content: string; // 알림 상세 내용
+  redirectionUri?: string; // 클릭 시 이동 경로 (NULL 허용이므로 옵셔널)
+  isRead: boolean; // 읽음 여부
+  readAt: string | null; // 읽은 시간 (ISO string 또는 null)
+  createdAt: string; // 생성 시간
+}
+
 export type {
   stringLocalized,
   Game,
@@ -178,6 +199,7 @@ export type {
   MembershipApplyRequest,
   MembershipLeaves,
   MembershipLeaveRequest,
+  Notification,
   UserQueriedByUid,
-  UserProfile
+  UserProfile,
 };

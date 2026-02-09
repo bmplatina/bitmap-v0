@@ -79,6 +79,7 @@ interface ProfileSampleProps {
   bIsTeammate?: boolean;
   bIsEmailVerified?: boolean;
   avatarUri?: string;
+  bUseSample?: boolean;
 }
 
 function ProfileList({
@@ -89,6 +90,7 @@ function ProfileList({
   bIsTeammate = false,
   bIsEmailVerified = false,
   avatarUri = "",
+  bUseSample = false,
 }: ProfileSampleProps) {
   const t = useTranslations("Authentication");
 
@@ -116,15 +118,17 @@ function ProfileList({
   useEffect(
     function () {
       if (!isLoading) {
-        setDisplayedUsername(bIsLoggedIn ? authUsername : username);
-        setDisplayedEmail(bIsLoggedIn ? authEmail : email);
-        setDisplayedIsAdmin(bIsLoggedIn ? authIsAdmin : bIsAdmin);
-        setDisplayedIsDeveloper(bIsLoggedIn ? authIsDeveloper : bIsDeveloper);
-        setDisplayedIsTeammate(bIsLoggedIn ? authIsTeammate : bIsTeammate);
-        setDisplayedIsEmailVerified(
-          bIsLoggedIn ? authIsEmailVerified : bIsEmailVerified,
-        );
-        setDisplayedAvatarUri(bIsLoggedIn ? authAvatarUri : avatarUri);
+        if (bUseSample) {
+          setDisplayedUsername(bIsLoggedIn ? authUsername : username);
+          setDisplayedEmail(bIsLoggedIn ? authEmail : email);
+          setDisplayedIsAdmin(bIsLoggedIn ? authIsAdmin : bIsAdmin);
+          setDisplayedIsDeveloper(bIsLoggedIn ? authIsDeveloper : bIsDeveloper);
+          setDisplayedIsTeammate(bIsLoggedIn ? authIsTeammate : bIsTeammate);
+          setDisplayedIsEmailVerified(
+            bIsLoggedIn ? authIsEmailVerified : bIsEmailVerified,
+          );
+          setDisplayedAvatarUri(bIsLoggedIn ? authAvatarUri : avatarUri);
+        }
       }
     },
     [isLoading, bIsLoggedIn],

@@ -7,6 +7,7 @@ import {
   AuthResponseInternal,
   ErrorResponse,
   SignupResponse,
+  UserProfile,
   UserQueriedByUid,
 } from "./types";
 
@@ -77,9 +78,9 @@ const checkAuthor = async (
 const getProfile = async (
   token: string = process.env.NEXT_PUBLIC_MASTER_TOKEN || "",
   uid: string,
-): Promise<UserQueriedByUid> => {
+): Promise<UserProfile> => {
   try {
-    const response = await axios.post<UserQueriedByUid>(
+    const response = await axios.post<UserProfile>(
       getApiLinkByPurpose("auth/profile/query/uid"), // 백엔드 라우트 주소와 일치 확인
       {
         uid: uid,
@@ -107,7 +108,19 @@ const getProfile = async (
       );
     }
   }
-  return { username: "", email: "", avatarUri: "", id: 0 };
+  return {
+    id: 0,
+    username: "",
+    email: "",
+    isAdmin: false,
+    isDeveloper: false,
+    isTeammate: false,
+    avatarUri: "",
+    createdAt: "",
+    google_id: "",
+    uid: "",
+    isEmailVerified: false,
+  };
 };
 
 /**

@@ -10,13 +10,14 @@ import {
   MembershipApplicationViewer,
   MembershipLeaveViewer,
 } from "@/components/admin/membership-application-viewer";
+import MembershipKickHandler from "@/components/admin/membership-kick-handler";
 
 export default async function AllMembers({
   searchParams,
 }: searchParamsPropsSSR) {
   const t = await getTranslations("Admin");
 
-  const { leave, apply, edit } = await searchParams;
+  const { leave, apply, edit, kick } = await searchParams;
 
   if (leave) {
     const leaveReq = await getMembershipLeaveReqById(
@@ -32,6 +33,8 @@ export default async function AllMembers({
     return <MembershipApplicationViewer applyContent={applicationReq} />;
   } else if (edit) {
     return null;
+  } else if(kick) {
+    return <MembershipKickHandler uid={kick as string} />;
   }
 
   return null;

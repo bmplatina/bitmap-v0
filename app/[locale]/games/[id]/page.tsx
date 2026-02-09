@@ -44,9 +44,5 @@ export default async function GameDetailPage({
     );
   }
 
-  return (
-    <div>
-      <GameDetail game={game} gameRates={gameRates ?? []}></GameDetail>
-    </div>
-  );
+  return <GameDetail game={game} gameRates={gameRates ?? []} />;
 }
