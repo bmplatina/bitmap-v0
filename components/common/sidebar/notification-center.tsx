@@ -5,22 +5,18 @@ import Image from "next/image";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { getNotifications } from "@/lib/notifications";
 import type { Notification } from "@/lib/types";
-import { Spinner, Popover, Flex, Text } from "@radix-ui/themes";
+import {
+  Spinner,
+  Popover,
+  Flex,
+  Text,
+  Button,
+  Separator,
+  Box,
+  Dialog,
+} from "@radix-ui/themes";
 import { Link } from "@/i18n/routing";
-
-const sampleData: Notification[] = [
-  {
-    id: 0, // BIGINT -> number (2^53-1 이상은 string으로 처리하기도 함)
-    uid: "string", // 수신 대상 사용자 ID
-    type: "GAME_UPDATE", // 알림 유형 (문자열 리터럴로 상세 정의 추천)
-    title: "제목임", // 알림 제목
-    content: "내용임", // 알림 상세 내용
-    redirectionUri: "/games/4", // 클릭 시 이동 경로 (NULL 허용이므로 옵셔널)
-    isRead: true, // 읽음 여부
-    readAt: "string", // 읽은 시간 (ISO string 또는 null)
-    createdAt: "string", // 생성 시간
-  },
-];
+import { BellOff, X } from "lucide-react";
 
 interface NotificationCenterProps {
   children?: React.ReactNode;
@@ -35,12 +31,12 @@ export default function NotificationCenter({
   return (
     <>
       {bIsMobile ? (
-        children
+        <NotificationCollectionMobile>{children}</NotificationCollectionMobile>
       ) : (
         <Popover.Root>
           <Popover.Trigger>{children}</Popover.Trigger>
           <Popover.Content minWidth="400px">
-            <NotificationListCollection />
+            <NotificationListContent />
           </Popover.Content>
         </Popover.Root>
       )}
@@ -48,8 +44,56 @@ export default function NotificationCenter({
   );
 }
 
-function NotificationListCollection() {
+function NotificationCollectionMobile({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger>{children}</Dialog.Trigger>
+      <Dialog.Content
+        style={{
+          padding: 0,
+          margin: 0,
+          maxWidth: "100vw",
+          height: "100dvh",
+          borderRadius: 0,
+        }}
+      >
+        <Flex direction="column" height="100%">
+          <Flex
+            align="center"
+            justify="between"
+            px="4"
+            py="3"
+            style={{ borderBottom: "1px solid var(--gray-5)" }}
+          >
+            <Text size="3" weight="bold">
+              알림
+            </Text>
+            <Dialog.Close>
+              <Button
+                variant="ghost"
+                color="gray"
+                style={{ cursor: "pointer" }}
+              >
+                <X size={20} />
+              </Button>
+            </Dialog.Close>
+          </Flex>
+          <Box style={{ flexGrow: 1, overflowY: "auto" }}>
+            <NotificationListContent />
+          </Box>
+        </Flex>
+      </Dialog.Content>
+    </Dialog.Root>
+  );
+}
+
+function NotificationListContent() {
   const [notifications, setNotifications] = React.useState<Notification[]>([]);
+  const [scope, setScope] = React.useState<"unread" | "read" | "all">("unread");
   const [bIsFetching, setIsFetching] = React.useState(true);
 
   React.useEffect(() => {
@@ -57,8 +101,8 @@ function NotificationListCollection() {
       const token = localStorage.getItem("accessToken") || "";
       try {
         setIsFetching(true);
-        const data = await getNotifications(token, "unread");
-        setNotifications(data || sampleData);
+        const data = await getNotifications(token, scope);
+        setNotifications(data || []);
       } catch (error) {
         console.error("Failed to fetch notifications:", error);
       } finally {
@@ -70,15 +114,48 @@ function NotificationListCollection() {
   }, []);
 
   return (
-    <Flex direction="column">
+    <Flex direction="column" minHeight="150px">
       {bIsFetching ? (
-        <Flex justify="center" py="4">
+        <Flex justify="center" align="center" flexGrow="1">
           <Spinner />
         </Flex>
       ) : (
-        notifications.map((content, index) => (
-          <NotificationListView key={index} content={content} />
-        ))
+        <>
+          <Flex direction="column" flexGrow="1">
+            {notifications.length > 0 ? (
+              notifications.map((content, index) => (
+                <NotificationListView key={index} content={content} />
+              ))
+            ) : (
+              <Flex
+                direction="column"
+                align="center"
+                justify="center"
+                py="6"
+                gap="2"
+                style={{ flexGrow: 1 }}
+              >
+                <BellOff size={32} style={{ opacity: 0.3 }} />
+                <Text size="2" color="gray" weight="medium">
+                  모든 내용 읽음
+                </Text>
+              </Flex>
+            )}
+          </Flex>
+          <Separator size="4" />
+          <Box p="2">
+            <Button
+              variant="ghost"
+              color="gray"
+              highContrast
+              size="2"
+              style={{ width: "100%", cursor: "pointer" }}
+              onClick={() => setScope("all")}
+            >
+              읽은 내용 보기
+            </Button>
+          </Box>
+        </>
       )}
     </Flex>
   );

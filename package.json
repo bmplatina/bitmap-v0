@@ -1,5 +1,5 @@
 {
-  "name": "my-v0-project",
+  "name": "bitmap-v0",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -97,7 +97,7 @@
     "glob": "^11.1.0"
   },
   "engines": {
-    "node": ">=22.12.0 <=22.16.0",
+    "node": ">=22.12.0 <=22.20.0",
     "yarn": "1.22.22"
   }
 }
