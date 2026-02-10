@@ -8,7 +8,6 @@ import {
   ErrorResponse,
   SignupResponse,
   UserProfile,
-  UserQueriedByUid,
 } from "./types";
 
 function checkIsLoggedIn() {

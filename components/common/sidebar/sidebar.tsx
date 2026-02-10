@@ -1,4 +1,5 @@
 "use client";
+
 import { Link } from "@/i18n/routing";
 import { usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
@@ -9,7 +10,7 @@ import LanguageSwitcher from "./language-changer";
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { bIsLoggedIn, bIsDeveloper, bIsTeammate } = useAuth();
+  const { bIsLoggedIn, bIsDeveloper, bIsTeammate, bIsAdmin } = useAuth();
   const t = useTranslations("Sidebar");
 
   return (
@@ -39,6 +40,9 @@ export default function Sidebar() {
                     <Link
                       key={item.title}
                       href={item.href}
+                      target={
+                        item.href.startsWith("http") ? "_blank" : undefined
+                      }
                       className={cn(
                         "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
                         pathname === item.href

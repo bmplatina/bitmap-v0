@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { Search, Menu, X } from "lucide-react";
+import { Bell, BellDot, Search, Menu, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Link, useRouter, usePathname } from "@/i18n/routing";
 import { imageUriRegExp } from "@/lib/utils";
@@ -12,11 +12,18 @@ import type { Game } from "@/lib/types";
 import { getGames } from "@/lib/games";
 import { useTranslations } from "next-intl";
 import { convertQwertyToHangul, getChoseong } from "es-hangul";
-import { Avatar, Button, IconButton, Popover, Spinner } from "@radix-ui/themes";
+import {
+  Avatar,
+  Button,
+  Flex,
+  IconButton,
+  Popover,
+  Spinner,
+} from "@radix-ui/themes";
 import { ProfilePopover } from "@/components/accounts/profile";
 import GameListView from "@/components/games/game-listview";
 import { useAuth } from "@/lib/AuthContext";
-
+import NotificationCenter from "./notification-center";
 import BitmapLogoBMP from "@/public/bitmap_bmp.png";
 
 export default function TopBar() {
@@ -272,42 +279,50 @@ export default function TopBar() {
               <span className="sr-only">{t("search-toggle")}</span>
             </IconButton>
           </div>
-          <div className="flex items-center">
+          <Flex gap="4" className="items-center">
             {isLoading ? (
               <Spinner />
             ) : (
               <>
                 {bIsLoggedIn && (
-                  <Popover.Root
-                    open={isProfileOpen}
-                    onOpenChange={setIsProfileOpen}
-                  >
-                    <Popover.Trigger>
+                  <>
+                    <NotificationCenter>
                       <IconButton variant="ghost" radius="full">
-                        <Avatar
-                          src={
-                            imageUriRegExp.test(avatarUri)
-                              ? avatarUri
-                              : undefined
-                          }
-                          radius="full"
-                          size="2"
-                          fallback={username.charAt(0).toUpperCase()}
-                        />
+                        <Bell className="h-5 w-5" />
                       </IconButton>
-                    </Popover.Trigger>
-                    <Popover.Content
-                      style={{
-                        WebkitBackdropFilter: "saturate(180%) blur(20px)",
-                        backdropFilter: "saturate(180%) blur(20px)",
-                        backgroundColor:
-                          "var(--topbar-bg, rgba(255, 255, 255, 0.72))",
-                      }}
-                      className="text-center"
+                    </NotificationCenter>
+
+                    <Popover.Root
+                      open={isProfileOpen}
+                      onOpenChange={setIsProfileOpen}
                     >
-                      <ProfilePopover />
-                    </Popover.Content>
-                  </Popover.Root>
+                      <Popover.Trigger>
+                        <IconButton variant="ghost" radius="full">
+                          <Avatar
+                            src={
+                              imageUriRegExp.test(avatarUri)
+                                ? avatarUri
+                                : undefined
+                            }
+                            radius="full"
+                            size="2"
+                            fallback={username.charAt(0).toUpperCase()}
+                          />
+                        </IconButton>
+                      </Popover.Trigger>
+                      <Popover.Content
+                        style={{
+                          WebkitBackdropFilter: "saturate(180%) blur(20px)",
+                          backdropFilter: "saturate(180%) blur(20px)",
+                          backgroundColor:
+                            "var(--topbar-bg, rgba(255, 255, 255, 0.72))",
+                        }}
+                        className="text-center"
+                      >
+                        <ProfilePopover />
+                      </Popover.Content>
+                    </Popover.Root>
+                  </>
                 )}
                 {getIsSigninButtonActive() && (
                   <Button radius="full" asChild>
@@ -316,7 +331,7 @@ export default function TopBar() {
                 )}
               </>
             )}
-          </div>
+          </Flex>
         </div>
       </div>
 
