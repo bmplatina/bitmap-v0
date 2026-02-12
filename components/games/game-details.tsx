@@ -292,9 +292,7 @@ export default async function GameDetail({ game, gameRates }: GameDetailProps) {
                 bIsEditing={false}
                 rates={gameRates}
               />
-              {gameRates.map(
-                (rate) => rate && <GameRateViewer key={rate.id} rate={rate} />,
-              )}
+              <GameRateViewer gameRates={gameRates} />
             </div>
           </div>
         </div>

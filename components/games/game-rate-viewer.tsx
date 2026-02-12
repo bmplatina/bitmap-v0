@@ -14,16 +14,33 @@ import GameRateSubmitter from "./game-rate-submitter";
 import { Flex, Text } from "@radix-ui/themes";
 import { GameRating } from "@/lib/types";
 
+interface GameRateViewerProp {
+  gameRates: GameRating[];
+}
+
+export default async function GameRateViewer({
+  gameRates,
+}: GameRateViewerProp) {
+  return (
+    <>
+      {gameRates.length > 0 ? (
+        gameRates.map(
+          (rate) => rate && <GameRateSingle key={rate.id} rate={rate} />,
+        )
+      ) : (
+        <GameRateEmpty />
+      )}
+    </>
+  );
+}
+
 interface GameRateProp {
   rate: GameRating;
 }
 
-export default async function GameRateViewer({ rate }: GameRateProp) {
+async function GameRateSingle({ rate }: GameRateProp) {
   const locale = await getLocale();
-  const author = await checkAuthor(
-    undefined,
-    rate.uid,
-  );
+  const author = await checkAuthor(undefined, rate.uid);
   return (
     <>
       <Card key={rate.id}>
@@ -52,6 +69,22 @@ export default async function GameRateViewer({ rate }: GameRateProp) {
             rates={[rate]}
           />
         </CardFooter>
+      </Card>
+    </>
+  );
+}
+
+async function GameRateEmpty() {
+  const locale = await getLocale();
+  const t = await getTranslations("GamesView");
+
+  return (
+    <>
+      <Card className="text-center">
+        <CardHeader>
+          <CardTitle>{t("rate-empty")}</CardTitle>
+        </CardHeader>
+        <CardContent>{t("rate-empty-desc")}</CardContent>
       </Card>
     </>
   );
