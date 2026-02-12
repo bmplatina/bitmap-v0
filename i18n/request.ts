@@ -13,5 +13,14 @@ export default getRequestConfig(async ({ requestLocale }) => {
   return {
     locale,
     messages: (await import(`@/messages/${locale}.json`)).default,
+    onError(error) {
+      if (error.code === "MISSING_MESSAGE") {
+        // 로그 서비스(예: Sentry)에 전송하거나 개발 콘솔에 기록
+        console.warn(`번역 키 누락 발견: ${error.message}`);
+      }
+    },
+    getMessageFallback({ key }) {
+      return key; // 원문 키 반환
+    },
   };
 });
