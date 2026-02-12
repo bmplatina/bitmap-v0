@@ -41,6 +41,14 @@
     "projects": "프로젝트 파일"
   },
 
+  "Notifications": {
+    "notifications": "알림",
+    "all-read": "모든 내용 읽음",
+    "view-read": "읽은 내용 보기",
+    "mail-verification-required": "{username}님, Bitmap ID의 메일 인증이 완료되지 않았습니다.",
+    "mail-verification-required-desc": "메일 인증을 완료하여 Bitmap의 모든 서비스를 이용하십시오."
+  },
+
   "Authentication": {
     "bitmap-id": "Bitmap ID",
     "bitmap-id-desc": "Bitmap의 모든 서비스를 사용하려면 로그인하거나 가입하십시오.",
@@ -246,7 +254,9 @@
     "rate-delete": "평가 삭제",
     "rate-delete-desc": "평가를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
     "rate-delete-btn": "삭제",
-    "rate-delete-cancel-btn": "취소"
+    "rate-delete-cancel-btn": "취소",
+    "rate-empty": "등록된 평가 없음",
+    "rate-empty-desc": "아직 등록된 평가가 없습니다. \"평가 작성\" 탭에서 이 게임에 대한 평가를 작성해주십시오."
   },
 
   "Publish": {

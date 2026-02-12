@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { getNotifications } from "@/lib/notifications";
 import type { Notification } from "@/lib/types";
@@ -15,7 +16,7 @@ import {
   Box,
   Dialog,
 } from "@radix-ui/themes";
-import { Link } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { BellOff, X } from "lucide-react";
 
 interface NotificationCenterProps {
@@ -49,6 +50,8 @@ function NotificationCollectionMobile({
 }: {
   children: React.ReactNode;
 }) {
+  const t = useTranslations("Notifications");
+
   return (
     <Dialog.Root>
       <Dialog.Trigger>{children}</Dialog.Trigger>
@@ -70,7 +73,7 @@ function NotificationCollectionMobile({
             style={{ borderBottom: "1px solid var(--gray-5)" }}
           >
             <Text size="3" weight="bold">
-              알림
+              {t("notifications")}
             </Text>
             <Dialog.Close>
               <Button
@@ -92,6 +95,7 @@ function NotificationCollectionMobile({
 }
 
 function NotificationListContent() {
+  const t = useTranslations("Notifications");
   const [notifications, setNotifications] = React.useState<Notification[]>([]);
   const [scope, setScope] = React.useState<"unread" | "read" | "all">("unread");
   const [bIsFetching, setIsFetching] = React.useState(true);
@@ -137,7 +141,7 @@ function NotificationListContent() {
               >
                 <BellOff size={32} style={{ opacity: 0.3 }} />
                 <Text size="2" color="gray" weight="medium">
-                  모든 내용 읽음
+                  {t("all-read")}
                 </Text>
               </Flex>
             )}
@@ -152,7 +156,7 @@ function NotificationListContent() {
               style={{ width: "100%", cursor: "pointer" }}
               onClick={() => setScope("all")}
             >
-              읽은 내용 보기
+              {t("view-read")}
             </Button>
           </Box>
         </>
@@ -166,6 +170,8 @@ interface NotificationListViewProp {
 }
 
 function NotificationListView({ content }: NotificationListViewProp) {
+  const t = useTranslations("Notifications");
+
   return (
     <Link
       href={content.redirectionUri || "#"}
@@ -187,10 +193,10 @@ function NotificationListView({ content }: NotificationListViewProp) {
           truncate
           color={content.isRead ? "gray" : undefined}
         >
-          {content.title}
+          {t(content.title)}
         </Text>
         <Text as="p" size="1" color="gray" truncate>
-          {content.content}
+          {t(content.content)}
         </Text>
       </div>
     </Link>

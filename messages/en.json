@@ -41,6 +41,14 @@
     "projects": "Project Files"
   },
 
+  "Notifications": {
+    "notifications": "Notifications",
+    "all-read": "All Read",
+    "view-read": "View Read",
+    "mail-verification-required": "{username}, your Bitmap ID email verification is not complete.",
+    "mail-verification-required-desc": "Please complete email verification to use all Bitmap services."
+  },
+
   "Authentication": {
     "bitmap-id": "Bitmap ID",
     "bitmap-id-desc": "To use all Bitmap services, please sign in or sign up.",
@@ -246,7 +254,9 @@
     "rate-delete": "Delete Review",
     "rate-delete-desc": "Are you sure you want to delete this review? This action cannot be undone.",
     "rate-delete-btn": "Delete",
-    "rate-delete-cancel-btn": "Cancel"
+    "rate-delete-cancel-btn": "Cancel",
+    "rate-empty": "No reviews yet",
+    "rate-empty-desc": "No reviews have been submitted yet. Please write a review for this game in the \"Write a review\" tab."
   },
 
   "Publish": {
