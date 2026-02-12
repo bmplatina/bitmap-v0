@@ -197,7 +197,8 @@
     "membership-application": "Manage Membership Applications",
     "membership-leaving-req": "Manage Membership Leaving Requests",
     "bitmap-developer": "Bitmap Developer",
-    "pending": "Pending"
+    "pending": "Pending",
+    "kick-from-team": "Kick {username} ({email}) from Team Bitmap"
   },
 
   "GamesView": {
@@ -388,7 +389,7 @@
     "legal": "Legal",
     "site-map": "Site Map",
     "about": "About Bitmap…",
-    "bitmap-about": "Bitmap Production | Platina | Mail: public@prodbybitmap.com | Hosting service provided by Bitmap Production. | This service is non-commercial and managed by an individual, not a corporation or business."
+    "bitmap-about": "Bitmap Production | Platina | Mail: <mail>{email}</mail> | Hosting service provided by Bitmap Production. | This service is non-commercial and managed by an individual, not a corporation or business."
   },
 
   "Settings": {

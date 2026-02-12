@@ -43,7 +43,7 @@ async function GameRateSingle({ rate }: GameRateProp) {
   const author = await checkAuthor(undefined, rate.uid);
   return (
     <>
-      <Card key={rate.id}>
+      <Card>
         <CardHeader>
           <CardTitle>{rate.title}</CardTitle>
           <CardDescription>

@@ -1,16 +1,31 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Flex, Text } from "@radix-ui/themes";
 import { ProfileList } from "../accounts/profile";
 import { getProfile } from "@/lib/auth";
 import { UserProfile } from "@/lib/types";
+import { useTranslations } from "next-intl";
 
 interface UidProps {
   uid: string;
 }
 
 export default function MembershipKickHandler({ uid }: UidProps) {
-  const [user, setUser] = useState<UserProfile | null>(null);
+  const t = useTranslations("Admin");
+  const [user, setUser] = useState<UserProfile>({
+    id: 0,
+    username: "",
+    email: "",
+    isAdmin: false,
+    isDeveloper: false,
+    isTeammate: false,
+    avatarUri: "",
+    createdAt: new Date().toISOString(),
+    google_id: "",
+    uid: "",
+    isEmailVerified: false,
+  });
 
   useEffect(() => {
     getProfile(undefined, uid).then((user) => {
@@ -20,17 +35,19 @@ export default function MembershipKickHandler({ uid }: UidProps) {
   }, [uid]);
 
   return (
-    <>
+    <Flex className="md:p-6" direction="column" gap="4">
+      <Text size="7" weight="bold">
+        {t("kick-from-team", { username: user.username, email: user.email })}
+      </Text>
       <ProfileList
-        username={user?.username || ""}
-        email={user?.email || ""}
-        bIsAdmin={user?.isAdmin || false}
-        bIsDeveloper={user?.isDeveloper || false}
-        bIsTeammate={user?.isTeammate || false}
-        bIsEmailVerified={user?.isEmailVerified || false}
-        avatarUri={user?.avatarUri || ""}
-        bUseSample
+        username={user.username}
+        email={user.email}
+        bIsAdmin={user.isAdmin}
+        bIsDeveloper={user.isDeveloper}
+        bIsTeammate={user.isTeammate}
+        bIsEmailVerified={user.isEmailVerified}
+        avatarUri={user.avatarUri}
       />
-    </>
+    </Flex>
   );
 }

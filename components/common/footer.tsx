@@ -82,7 +82,18 @@ export default async function Footer() {
         </Flex>
         <div className="mt-8">
           <Text size="2" as="p" color="gray">
-            {t("bitmap-about")}
+            {t.rich("bitmap-about", {
+              email: "public@prodbybitmap.com",
+              // <mail> 태그를 어떻게 렌더링할지 정의
+              mail: (chunks) => (
+                <Link
+                  href="mailto:public@prodbybitmap.com"
+                  className="text-blue-500 underline hover:text-blue-700"
+                >
+                  {chunks}
+                </Link>
+              ),
+            })}
           </Text>
         </div>
       </Container>

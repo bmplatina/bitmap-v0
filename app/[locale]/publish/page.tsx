@@ -109,8 +109,12 @@ export default function SubmitGames() {
               </CardHeader>
               <CardContent>준비 중인 기능</CardContent>
               <CardFooter>
-                <Button asChild>
-                  <Link href="/publish/projectfiles">{t("publish-new")}</Link>
+                <Button disabled asChild={false}>
+                  {true ? (
+                    t("publish-new")
+                  ) : (
+                    <Link href="/publish/projectfiles">{t("publish-new")}</Link>
+                  )}
                 </Button>
               </CardFooter>
             </Card>
@@ -121,8 +125,12 @@ export default function SubmitGames() {
               </CardHeader>
               <CardContent>준비 중인 기능</CardContent>
               <CardFooter>
-                <Button asChild>
-                  <Link href="/publish/lectures">{t("publish-new")}</Link>
+                <Button disabled asChild={false}>
+                  {true ? (
+                    t("publish-new")
+                  ) : (
+                    <Link href="/publish/lectures">{t("publish-new")}</Link>
+                  )}
                 </Button>
               </CardFooter>
             </Card>

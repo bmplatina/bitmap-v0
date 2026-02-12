@@ -197,7 +197,8 @@
     "membership-application": "멤버십 신청 관리",
     "membership-leaving-req": "멤버십 탈퇴 신청 관리",
     "bitmap-developer": "Bitmap Developer",
-    "pending": "승인 대기 중"
+    "pending": "승인 대기 중",
+    "kick-from-team": "Team Bitmap에서 {username} ({email}) 추방"
   },
 
   "GamesView": {
@@ -388,7 +389,7 @@
     "legal": "법적 고지",
     "site-map": "사이트 맵",
     "about": "Bitmap에 대하여⋯",
-    "bitmap-about": "Bitmap Production | 대표자: 이재혁 | 메일: public@prodbybitmap.com | 호스팅 서비스 제공: Bitmap Production. | 본 서비스는 영리 목적을 취하지 않으며 법인 및 사업자가 아닌 개인이 관리하고 있습니다."
+    "bitmap-about": "Bitmap Production | 대표자: 이재혁 | 메일: <mail>{email}</mail> | 호스팅 서비스 제공: Bitmap Production. | 본 서비스는 영리 목적을 취하지 않으며 법인 및 사업자가 아닌 개인이 관리하고 있습니다."
   },
 
   "Settings": {
