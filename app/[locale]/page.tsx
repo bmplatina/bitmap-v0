@@ -1,7 +1,7 @@
 import { Box, Button, ScrollArea } from "@radix-ui/themes";
-import { getYouTubeVideos } from "@/lib/utils";
+import { getCarousel, getYouTubeVideos } from "@/lib/utils";
 import { getGames } from "@/lib/games";
-import type { Game } from "@/lib/types";
+import type { Game, Carousel } from "@/lib/types";
 import { getTranslations } from "next-intl/server";
 import GameRedirectButton from "@/components/games/game-redirect-button";
 import AutoSliderCarousel from "@/components/common/main-page-carousel";
@@ -13,12 +13,13 @@ export default async function Home() {
   // 서버에서 직접 데이터 페칭
   const youtubeVideos = await getYouTubeVideos("UCL137ZWChauNFsma6ifhNdA");
   const games: Game[] = await getGames("released");
+  const carousels = await getCarousel();
   const t = await getTranslations("MainPage");
 
   return (
     <>
       <Suspense fallback={<TitleFallback />}>
-        <AutoSliderCarousel />
+        <AutoSliderCarousel carousels_Server={carousels} />
       </Suspense>
       <div className="flex flex-col items-center w-full p-6 pt-10 text-center space-y-12">
         {/* 유튜브 영상 가로 스크롤 섹션 */}

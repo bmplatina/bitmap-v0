@@ -2,27 +2,28 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { Button, Text } from "@radix-ui/themes";
 import { getCarousel, getLocalizedString, imageUriRegExp } from "@/lib/utils";
 import type { Carousel } from "@/lib/types";
 
-// const slides = [
-//   { id: 1, image: "/img1.jpg", text: "첫 번째 컬렉션" },
-//   { id: 2, image: "/img2.jpg", text: "두 번째 컬렉션" },
-//   { id: 3, image: "/img3.jpg", text: "세 번째 컬렉션" },
-// ];
-
 const swipeConfidenceThreshold = 10000;
 const swipePower = (offset: number, velocity: number) => {
   return Math.abs(offset) * velocity;
 };
 
-export default function AutoSliderCarousel() {
+interface CarouselProps {
+  carousels_Server?: Carousel[];
+  bFetchFromClient?: boolean;
+}
+
+export default function AutoSliderCarousel({
+  carousels_Server = [],
+  bFetchFromClient,
+}: CarouselProps) {
   const locale = useLocale();
-  const t = useTranslations("MainPage");
   const [[page, direction], setPage] = useState([0, 0]);
   const [carousel, setCarousel] = useState<Carousel[]>([]);
 
@@ -41,8 +42,9 @@ export default function AutoSliderCarousel() {
         console.error(err);
       }
     }
-    fetchCarousel();
-  }, []);
+    if (bFetchFromClient) fetchCarousel();
+    else setCarousel(carousels_Server);
+  }, [bFetchFromClient]);
 
   const paginate = (newDirection: number) => {
     setPage((prev) => [prev[0] + newDirection, newDirection]);
