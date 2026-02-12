@@ -140,7 +140,7 @@ export default async function BitmapAbout() {
             </Flex>
             <FadeInUp viewportMargin={0} className="min-w-0 order-1 md:order-2">
               <Box className="bg-gray-100 dark:bg-gray-900 rounded-3xl p-4 border border-gray-200 dark:border-gray-800">
-                <YouTubeWorksList />
+                <YouTubeWorksList bFetchFromClient />
               </Box>
             </FadeInUp>
           </Grid>

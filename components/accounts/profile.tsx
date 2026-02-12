@@ -79,7 +79,6 @@ interface ProfileSampleProps {
   bIsTeammate?: boolean;
   bIsEmailVerified?: boolean;
   avatarUri?: string;
-  bUseSample?: boolean;
 }
 
 function ProfileList({
@@ -90,7 +89,6 @@ function ProfileList({
   bIsTeammate = false,
   bIsEmailVerified = false,
   avatarUri = "",
-  bUseSample = false,
 }: ProfileSampleProps) {
   const t = useTranslations("Authentication");
 
@@ -102,37 +100,18 @@ function ProfileList({
     bIsTeammate: authIsTeammate,
     bIsEmailVerified: authIsEmailVerified,
     avatarUri: authAvatarUri,
-    isLoading,
     bIsLoggedIn,
   } = useAuth();
 
-  const [displayedUsername, setDisplayedUsername] = useState("");
-  const [displayedEmail, setDisplayedEmail] = useState("");
-  const [displayedIsAdmin, setDisplayedIsAdmin] = useState(false);
-  const [displayedIsDeveloper, setDisplayedIsDeveloper] = useState(false);
-  const [displayedIsTeammate, setDisplayedIsTeammate] = useState(false);
-  const [displayedIsEmailVerified, setDisplayedIsEmailVerified] =
-    useState(false);
-  const [displayedAvatarUri, setDisplayedAvatarUri] = useState("");
-
-  useEffect(
-    function () {
-      if (!isLoading) {
-        if (bUseSample) {
-          setDisplayedUsername(bIsLoggedIn ? authUsername : username);
-          setDisplayedEmail(bIsLoggedIn ? authEmail : email);
-          setDisplayedIsAdmin(bIsLoggedIn ? authIsAdmin : bIsAdmin);
-          setDisplayedIsDeveloper(bIsLoggedIn ? authIsDeveloper : bIsDeveloper);
-          setDisplayedIsTeammate(bIsLoggedIn ? authIsTeammate : bIsTeammate);
-          setDisplayedIsEmailVerified(
-            bIsLoggedIn ? authIsEmailVerified : bIsEmailVerified,
-          );
-          setDisplayedAvatarUri(bIsLoggedIn ? authAvatarUri : avatarUri);
-        }
-      }
-    },
-    [isLoading, bIsLoggedIn],
-  );
+  const displayedUsername = bIsLoggedIn ? authUsername : username;
+  const displayedEmail = bIsLoggedIn ? authEmail : email;
+  const displayedIsAdmin = bIsLoggedIn ? authIsAdmin : bIsAdmin;
+  const displayedIsDeveloper = bIsLoggedIn ? authIsDeveloper : bIsDeveloper;
+  const displayedIsTeammate = bIsLoggedIn ? authIsTeammate : bIsTeammate;
+  const displayedIsEmailVerified = bIsLoggedIn
+    ? authIsEmailVerified
+    : bIsEmailVerified;
+  const displayedAvatarUri = bIsLoggedIn ? authAvatarUri : avatarUri;
 
   return (
     <Flex direction="column" gap="6" align="center">

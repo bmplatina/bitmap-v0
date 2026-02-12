@@ -51,7 +51,7 @@ export default async function Home() {
               )}
             </div>
           </ScrollArea> */}
-          <YouTubeWorksList />
+          <YouTubeWorksList youtubeVideos_Server={youtubeVideos} />
         </div>
 
         <div className="w-full max-w-6xl">
