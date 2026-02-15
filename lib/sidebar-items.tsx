@@ -45,11 +45,11 @@ export const sidebarItems = [
         href: "https://youtube.com/@prodbybitmap",
       },
       {
-        title: "bitmap-wiki",
+        title: "bitmap-archives",
         icon: <BookOpen className="h-5 w-5" />,
         bRequire: "",
         appIcon: BookOpen,
-        href: "https://wiki.prodbybitmap.com",
+        href: "/archives",
       },
     ],
   },

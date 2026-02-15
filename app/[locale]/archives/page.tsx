@@ -20,7 +20,7 @@ export default async function ArchivedDocumentPage({
     return (
       <div className="px-4 md:px-32 pt-6 items-center justify-center">
         <Flex direction="column" gap="6">
-          <BitmapAppAnim text="SEARCH BITMAP" />
+          <BitmapAppAnim text="Archives" />
           <Search />
         </Flex>
       </div>
