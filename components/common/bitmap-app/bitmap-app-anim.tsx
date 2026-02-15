@@ -7,16 +7,15 @@ import BitmapAnim from "@/public/lottie/BitmapSquare.json";
 
 interface ShowTextProps {
   bHideText?: boolean;
-  bIsAppText?: boolean;
+  text?: string;
   logoSize?: number;
 }
 
 export default function BitmapAppAnim({
   bHideText = false,
-  bIsAppText = false,
+  text = "BITMAP",
   logoSize = 16,
 }: ShowTextProps) {
-  const bitmapAppTitle = bIsAppText ? "BITMAP APP" : "BITMAP";
 
   // Variants를 정의하면 코드가 훨씬 깔끔해집니다.
   const charVariants: Variants = {
@@ -49,7 +48,7 @@ export default function BitmapAppAnim({
       </div>
       <motion.div className="flex" initial="hidden" animate="visible">
         {!bHideText &&
-          bitmapAppTitle.split("").map((char, i) => (
+          text.split("").map((char, i) => (
             <motion.span
               key={i}
               custom={i}

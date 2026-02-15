@@ -29,6 +29,29 @@ async function getEula(eula: string): Promise<stringLocalized> {
   }
 }
 
+async function getAllArchiveDocs(): Promise<DocumentArchives[]> {
+  try {
+    const response = await axios.get<DocumentArchives[]>(
+      getApiLinkByPurpose(`general/archive`),
+      {
+        timeout: 10000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (response.data) {
+      return response.data;
+    }
+    return [];
+  } catch (error) {
+    console.error("EULA 가져오는 중 오류 발생:", error);
+    return [];
+  }
+}
+
 async function getArchiveDocument(
   documentTitle: string,
 ): Promise<DocumentArchives> {
@@ -78,4 +101,4 @@ async function getMembers(
   }
 }
 
-export { getArchiveDocument, getMembers, getEula };
+export { getAllArchiveDocs, getArchiveDocument, getMembers, getEula };

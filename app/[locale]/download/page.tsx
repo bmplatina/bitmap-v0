@@ -39,7 +39,7 @@ export default async function BitmapAppPage({
               className="text-center"
             >
               <FadeInUp>
-                <BitmapAppAnim bIsAppText />
+                <BitmapAppAnim text="BITMAP APP" />
               </FadeInUp>
 
               <FadeInUp>
@@ -84,7 +84,9 @@ export default async function BitmapAppPage({
               <Grid columns={{ initial: "1", sm: "3" }} gap="6">
                 <Card variant="surface" size="3">
                   <Flex direction="column" gap="3">
-                    <Text size="4" weight="bold">{t("feature-1-title")}</Text>
+                    <Text size="4" weight="bold">
+                      {t("feature-1-title")}
+                    </Text>
                     <Text size="2" color="gray">
                       {t("feature-1-desc")}
                     </Text>
@@ -92,7 +94,9 @@ export default async function BitmapAppPage({
                 </Card>
                 <Card variant="surface" size="3">
                   <Flex direction="column" gap="3">
-                    <Text size="4" weight="bold">{t("feature-2-title")}</Text>
+                    <Text size="4" weight="bold">
+                      {t("feature-2-title")}
+                    </Text>
                     <Text size="2" color="gray">
                       {t("feature-2-desc")}
                     </Text>
@@ -100,7 +104,9 @@ export default async function BitmapAppPage({
                 </Card>
                 <Card variant="surface" size="3">
                   <Flex direction="column" gap="3">
-                    <Text size="4" weight="bold">{t("feature-3-title")}</Text>
+                    <Text size="4" weight="bold">
+                      {t("feature-3-title")}
+                    </Text>
                     <Text size="2" color="gray">
                       {t("feature-3-desc")}
                     </Text>
@@ -118,7 +124,9 @@ export default async function BitmapAppPage({
                 className="bg-gray-100/50 dark:bg-gray-800/20"
               >
                 <Flex direction="column" gap="4" p="4">
-                  <Text size="5" weight="bold">{t("system-req")}</Text>
+                  <Text size="5" weight="bold">
+                    {t("system-req")}
+                  </Text>
                   <Flex direction="column" gap="1">
                     <Text weight="bold" size="2">
                       {t("os")}

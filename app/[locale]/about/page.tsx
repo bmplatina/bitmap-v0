@@ -32,7 +32,7 @@ export default async function BitmapAbout() {
   return (
     <div className="w-full">
       <div className="min-h-[60vh] flex flex-col items-center justify-center">
-        <BitmapAppAnim bIsAppText={false} />
+        <BitmapAppAnim />
         <FadeIn>
           <Text size="2" color="gray" className="mt-8 opacity-60">
             Scroll down to explore

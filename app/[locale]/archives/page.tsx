@@ -5,6 +5,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import SmartMarkdown from "@/components/common/markdown/markdown-renderer";
 import { Flex, Text } from "@radix-ui/themes";
 import { Separator } from "@/components/ui/separator";
+import Search from "@/components/common/search/search";
+import BitmapAppAnim from "@/components/common/bitmap-app/bitmap-app-anim";
 
 export default async function ArchivedDocumentPage({
   searchParams,
@@ -17,7 +19,10 @@ export default async function ArchivedDocumentPage({
   if (!title) {
     return (
       <div className="px-4 md:px-32 pt-6 items-center justify-center">
-        <Text className="text-center">{t("data-not-processable")}</Text>
+        <Flex direction="column" gap="6">
+          <BitmapAppAnim text="SEARCH BITMAP" />
+          <Search />
+        </Flex>
       </div>
     );
   }
@@ -25,6 +30,11 @@ export default async function ArchivedDocumentPage({
   return (
     <div className="px-4 md:px-32 pt-6">
       <Flex direction="column" gap="4">
+        {document ? (
+          <></>
+        ) : (
+          <Text className="text-center">{t("data-not-processable")}</Text>
+        )}
         <Text size="8" weight="bold">
           {document.title}
         </Text>
