@@ -3,19 +3,39 @@
 import { Flex, Text } from "@radix-ui/themes";
 import { motion, Variants } from "framer-motion";
 import Lottie from "lottie-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import BitmapAnim from "@/public/lottie/BitmapSquare.json";
 
 interface ShowTextProps {
   bHideText?: boolean;
   text?: string;
-  logoSize?: number;
+  size?: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
 }
 
 export default function BitmapAppAnim({
   bHideText = false,
   text = "BITMAP",
-  logoSize = 16,
+  size = "8",
 }: ShowTextProps) {
+  const bIsMobile = useIsMobile();
+
+  function getLiteralSize():
+    | "1"
+    | "2"
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9" {
+    if (bIsMobile) {
+      const sz = Number(size) - 2;
+      if (Number(size) >= 1 && Number(size) <= 3) return size;
+      else return sz.toString() as "4" | "5" | "6" | "7" | "8" | "9";
+    }
+    return size;
+  }
 
   // Variants를 정의하면 코드가 훨씬 깔끔해집니다.
   const charVariants: Variants = {
@@ -36,7 +56,10 @@ export default function BitmapAppAnim({
   return (
     <Flex align="center" justify="center" gap="3" mb="2">
       <div
-        style={{ width: logoSize * 4, height: logoSize * 4 }}
+        style={{
+          width: Number(getLiteralSize()) * 8,
+          height: Number(getLiteralSize()) * 8,
+        }}
         className="shrink-0"
       >
         <Lottie
@@ -57,9 +80,9 @@ export default function BitmapAppAnim({
             >
               <Text
                 as="span"
-                size="9"
                 weight="bold"
                 className="whitespace-nowrap tracking-tighter"
+                style={{ fontSize: `${Number(getLiteralSize()) * 7}px` }} // style로 직접 주입
               >
                 {char === " " ? "\u00A0" : char}
               </Text>

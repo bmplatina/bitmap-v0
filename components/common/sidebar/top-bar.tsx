@@ -2,16 +2,12 @@
 
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { Bell, BellDot, Search, Menu, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Bell, BellDot, Search as SearchIcon, Menu, X } from "lucide-react";
 import { Link, useRouter, usePathname } from "@/i18n/routing";
 import { imageUriRegExp } from "@/lib/utils";
 import Image from "next/image";
 import { MobileSidebar } from "./mobile-sidebar";
-import type { Game } from "@/lib/types";
-import { getGames } from "@/lib/games";
 import { useTranslations } from "next-intl";
-import { convertQwertyToHangul, getChoseong } from "es-hangul";
 import {
   Avatar,
   Button,
@@ -21,10 +17,10 @@ import {
   Spinner,
 } from "@radix-ui/themes";
 import { ProfilePopover } from "@/components/accounts/profile";
-import GameListView from "@/components/games/game-listview";
 import { useAuth } from "@/lib/AuthContext";
 import NotificationCenter from "./notification-center";
 import BitmapLogoBMP from "@/public/bitmap_bmp.png";
+import Search from "@/components/common/search/search";
 
 export default function TopBar() {
   const router = useRouter();
@@ -35,12 +31,6 @@ export default function TopBar() {
   const bIsElectron: boolean = false; // 예시 값, 실제로는 Electron 감지 로직 필요
   const bIsMacOS: boolean = false; // 예시 값, 실제로는 MacOS 감지 로직 필요
 
-  // 검색어 상태 관리
-  const [searchQuery, setSearchQuery] = useState("");
-  // 검색 대상 게임 캐시
-  const [games, setGames] = useState<Game[]>([]);
-  const [searchResults, setSearchResults] = useState<Game[]>([]);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   // 모바일 사이드바 상태 관리
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   // 모바일 검색창 상태 관리
@@ -64,88 +54,8 @@ export default function TopBar() {
   useEffect(() => {
     setIsProfileOpen(false);
     setIsMobileSidebarOpen(false);
-    setIsSearchOpen(false);
     setIsMobileSearchOpen(false);
   }, [pathName]);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    getGames("released")
-      .then((data) => {
-        if (!isMounted) return;
-        setGames(data);
-        setSearchResults(data);
-      })
-      .catch((error) => {
-        console.error("게임 데이터를 불러오지 못했습니다.", error);
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      setSearchResults(games);
-      return;
-    }
-
-    const normalizedQuery = searchQuery.trim().toLowerCase();
-    const hangulCandidate = convertQwertyToHangul(normalizedQuery);
-    const chosungCandidate = getChoseong(hangulCandidate || normalizedQuery);
-
-    const filtered = games.filter((game) => {
-      const targets = [game.gameTitle, game.gameDeveloper, game.gamePublisher];
-
-      return targets.some((target) => {
-        if (!target) return false;
-        const normalizedTarget = target.toLowerCase();
-        const targetChoseong = getChoseong(normalizedTarget);
-
-        return (
-          normalizedTarget.includes(normalizedQuery) ||
-          (hangulCandidate && normalizedTarget.includes(hangulCandidate)) ||
-          (chosungCandidate && targetChoseong.includes(chosungCandidate))
-        );
-      });
-    });
-
-    setSearchResults(filtered);
-    setIsSearchOpen(true);
-  }, [searchQuery, games]);
-
-  const searchSummary = useMemo(() => {
-    if (!searchQuery.trim()) return "";
-    return `${searchResults.length}건의 결과`;
-  }, [searchQuery, searchResults]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest(".max-w-md")) {
-        setIsSearchOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  // 검색 핸들러
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchResults.length > 0) {
-      const firstResult = searchResults[0];
-      router.push(`/games/${firstResult.gameId}`);
-      setIsSearchOpen(false);
-      setSearchQuery("");
-      setIsMobileSearchOpen(false);
-    }
-  };
 
   // 모바일 사이드바 토글
   const toggleMobileSidebar = () => {
@@ -209,52 +119,13 @@ export default function TopBar() {
         </Link>
 
         {/* 검색 폼 */}
-        <div
-          className={`max-w-md mx-auto ${
+        <Search
+          className={
             isMobileSearchOpen
               ? "flex-1 relative block"
               : "hidden md:block md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full"
-          }`}
-        >
-          <form onSubmit={handleSearch}>
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder={t("store-filter")}
-                className="pl-9 h-9 w-full bg-muted"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => searchQuery.trim() && setIsSearchOpen(true)}
-              />
-            </div>
-          </form>
-
-          {/* 검색 결과 드롭다운 */}
-          {isSearchOpen && searchQuery.trim() && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-background border rounded-md shadow-lg max-h-96 overflow-y-auto z-50">
-              {/* 검색 결과 건수 */}
-              <div className="hidden md:flex w-[160px] justify-end text-xs text-muted-foreground">
-                {searchSummary}
-              </div>
-              {searchResults.length > 0 ? (
-                <div className="py-2">
-                  {searchResults.map((game) => (
-                    <GameListView
-                      key={game.gameId}
-                      game={game}
-                      bIsPublishingMode={false}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="p-4 text-center text-sm text-muted-foreground">
-                  {t("search-no-results")}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+          }
+        />
 
         <div className="ml-auto pl-2 flex items-center gap-2">
           {/* 모바일 검색 토글 버튼 */}
@@ -264,17 +135,13 @@ export default function TopBar() {
               radius="full"
               className="h-8 w-8"
               onClick={() => {
-                if (isMobileSearchOpen) {
-                  setSearchQuery("");
-                  setIsSearchOpen(false);
-                }
                 setIsMobileSearchOpen(!isMobileSearchOpen);
               }}
             >
               {isMobileSearchOpen ? (
                 <X className="h-5 w-5" />
               ) : (
-                <Search className="h-5 w-5" />
+                <SearchIcon className="h-5 w-5" />
               )}
               <span className="sr-only">{t("search-toggle")}</span>
             </IconButton>

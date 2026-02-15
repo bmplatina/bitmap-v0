@@ -11,8 +11,14 @@ import { useTranslations } from "next-intl";
 import { convertQwertyToHangul, getChoseong } from "es-hangul";
 import { getGames } from "@/lib/games";
 import { getAllArchiveDocs } from "@/lib/general";
+import { cn } from "@/lib/utils";
 
-export default function Search() {
+interface SearchProps {
+  className?: string;
+  placeholder?: string;
+}
+
+export default function Search({ className, placeholder }: SearchProps) {
   const t = useTranslations("Common");
   const router = useRouter();
   const pathName = usePathname();
@@ -25,6 +31,29 @@ export default function Search() {
     (Game | DocumentArchives)[]
   >([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // 검색 핸들러
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchResults.length > 0) {
+      const firstResult = searchResults[0];
+      if ("title" in firstResult) {
+        // DocumentArchives 인가?
+        router.push(`/archives?title=${firstResult.title}`);
+      } else {
+        // Game 인가?
+        router.push(`/games/${firstResult.gameId}`);
+      }
+
+      setIsSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
+
+  const searchSummary = useMemo(() => {
+    if (!searchQuery.trim()) return "";
+    return `${searchResults.length}건의 결과`;
+  }, [searchQuery, searchResults]);
 
   useEffect(() => {
     setIsSearchOpen(false);
@@ -113,39 +142,18 @@ export default function Search() {
     setIsSearchOpen(true);
   }, [searchQuery, allData]);
 
-  // 검색 핸들러
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchResults.length > 0) {
-      const firstResult = searchResults[0];
-      if ("title" in firstResult) {
-        // DocumentArchives 인가?
-        router.push(`/archives?title=${firstResult.title}`);
-      } else {
-        // Game 인가?
-        router.push(`/games/${firstResult.gameId}`);
-      }
-
-      setIsSearchOpen(false);
-      setSearchQuery("");
-    }
-  };
-
-  const searchSummary = useMemo(() => {
-    if (!searchQuery.trim()) return "";
-    return `${searchResults.length}건의 결과`;
-  }, [searchQuery, searchResults]);
-
   return (
     <>
       {/* 검색 폼 */}
-      <div className={"max-w-md mx-auto relative search-container"}>
+      <div
+        className={cn("max-w-md mx-auto relative search-container", className)}
+      >
         <form onSubmit={handleSearch}>
           <div className="relative">
             <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder={t("store-filter")}
+              placeholder={placeholder || t("store-filter")}
               className="pl-9 h-9 w-full bg-muted"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
