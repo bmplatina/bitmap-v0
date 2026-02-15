@@ -181,6 +181,13 @@ interface Notification {
   createdAt: string; // 생성 시간
 }
 
+interface DocumentArchives {
+  id: number;
+  title: string;
+  content: string;
+  lastUpdatedAt: string;
+}
+
 export type {
   stringLocalized,
   Game,
@@ -202,4 +209,5 @@ export type {
   Notification,
   UserQueriedByUid,
   UserProfile,
+  DocumentArchives,
 };

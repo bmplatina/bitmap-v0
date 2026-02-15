@@ -1,6 +1,58 @@
 import axios from "axios";
-import type { MembershipApplies, stringLocalized } from "@/lib/types";
+import type {
+  MembershipApplies,
+  stringLocalized,
+  DocumentArchives,
+} from "@/lib/types";
 import { getApiLinkByPurpose } from "./utils";
+
+async function getEula(eula: string): Promise<stringLocalized> {
+  try {
+    const response = await axios.get<stringLocalized>(
+      getApiLinkByPurpose(`general/eula/${eula}`),
+      {
+        timeout: 10000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (response.data?.ko) {
+      return response.data;
+    }
+    return { ko: "", en: "" };
+  } catch (error) {
+    console.error("EULA 가져오는 중 오류 발생:", error);
+    return { ko: "", en: "" };
+  }
+}
+
+async function getArchiveDocument(
+  documentTitle: string,
+): Promise<DocumentArchives> {
+  try {
+    const response = await axios.get<DocumentArchives>(
+      getApiLinkByPurpose(`general/archive/${documentTitle}`),
+      {
+        timeout: 10000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (response.data) {
+      return response.data;
+    }
+    return { id: 0, title: "", content: "", lastUpdatedAt: "" };
+  } catch (error) {
+    console.error("EULA 가져오는 중 오류 발생:", error);
+    return { id: 0, title: "", content: "", lastUpdatedAt: "" };
+  }
+}
 
 async function getMembers(
   scope: "approved" | "all" | "pending",
@@ -26,29 +78,4 @@ async function getMembers(
   }
 }
 
-async function getEula(eula: string): Promise<stringLocalized> {
-  try {
-    const response = await axios.get<stringLocalized>(
-      getApiLinkByPurpose(`general/eula/${eula}`),
-      {
-        timeout: 10000,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      },
-    );
-
-    if (response.data?.ko) {
-      return response.data;
-    }
-    return { ko: "", en: "" };
-  } catch (error) {
-    console.error("EULA 가져오는 중 오류 발생:", error);
-    return { ko: "", en: "" };
-  }
-}
-
-
-
-export { getMembers, getEula };
+export { getArchiveDocument, getMembers, getEula };
