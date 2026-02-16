@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Input } from "@/components/ui/input";
 import { useRouter, usePathname } from "@/i18n/routing";
 import { Search as SearchIcon } from "lucide-react";
+import { TextField, ScrollArea } from "@radix-ui/themes";
 import type { Game, DocumentArchives } from "@/lib/types";
 import GameListView from "@/components/games/game-listview";
 import ArchiveListView from "../archive-search-listview";
@@ -23,6 +23,8 @@ export default function Search({ className, placeholder }: SearchProps) {
   const router = useRouter();
   const pathName = usePathname();
 
+  // 스크롤 상태 관리
+  const [isScrolled, setIsScrolled] = useState(false);
   // 검색어 상태 관리
   const [searchQuery, setSearchQuery] = useState("");
   // 검색 대상 게임 캐시
@@ -31,6 +33,16 @@ export default function Search({ className, placeholder }: SearchProps) {
     (Game | DocumentArchives)[]
   >([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // 스크롤 감지
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // 검색 핸들러
   const handleSearch = (e: React.FormEvent) => {
@@ -138,6 +150,32 @@ export default function Search({ className, placeholder }: SearchProps) {
       });
     });
 
+    // 연관성 순 정렬: 정확 일치 > 시작 일치 > 가나다순
+    filtered.sort((a, b) => {
+      const titleA = "gameTitle" in a ? a.gameTitle : a.title;
+      const titleB = "gameTitle" in b ? b.gameTitle : b.title;
+
+      const lowerA = titleA.toLowerCase();
+      const lowerB = titleB.toLowerCase();
+
+      const queries = [normalizedQuery];
+      if (hangulCandidate) queries.push(hangulCandidate);
+
+      // 1. 정확 일치
+      const exactA = queries.some((q) => lowerA === q);
+      const exactB = queries.some((q) => lowerB === q);
+      if (exactA && !exactB) return -1;
+      if (!exactA && exactB) return 1;
+
+      // 2. 시작 일치
+      const startA = queries.some((q) => lowerA.startsWith(q));
+      const startB = queries.some((q) => lowerB.startsWith(q));
+      if (startA && !startB) return -1;
+      if (!startA && startB) return 1;
+
+      return lowerA.localeCompare(lowerB);
+    });
+
     setSearchResults(filtered);
     setIsSearchOpen(true);
   }, [searchQuery, allData]);
@@ -150,44 +188,61 @@ export default function Search({ className, placeholder }: SearchProps) {
       >
         <form onSubmit={handleSearch}>
           <div className="relative">
-            <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
+            {/* <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" /> */}
+            <TextField.Root
               placeholder={placeholder || t("store-filter")}
               className="pl-9 h-9 w-full bg-muted"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => searchQuery.trim() && setIsSearchOpen(true)}
-            />
+            >
+              <TextField.Slot>
+                <SearchIcon height="16" width="16" />
+              </TextField.Slot>
+            </TextField.Root>
           </div>
         </form>
 
         {/* 검색 결과 드롭다운 */}
         {isSearchOpen && searchQuery.trim() && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-background border rounded-md shadow-lg max-h-96 overflow-y-auto z-50">
-            {/* 검색 결과 건수 */}
-            <div className="hidden md:flex w-[160px] justify-end text-xs text-muted-foreground">
-              {searchSummary}
-            </div>
-            {searchResults.length > 0 ? (
-              <div className="py-2">
-                {searchResults.map((result, idx) =>
-                  "title" in result ? (
-                    <ArchiveListView key={idx} doc={result} />
-                  ) : (
-                    <GameListView
-                      key={idx}
-                      game={result}
-                      bIsPublishingMode={false}
-                    />
-                  ),
-                )}
+          <div
+            className={`absolute top-full left-0 right-0 mt-2 bg-background border rounded-md shadow-lg z-50 transition-all duration-300 ${isScrolled ? "bg-background border-border" : "border-border/50"}`}
+            style={
+              isScrolled
+                ? {}
+                : {
+                    WebkitBackdropFilter: "saturate(180%) blur(20px)",
+                    backdropFilter: "saturate(180%) blur(20px)",
+                    backgroundColor:
+                      "var(--topbar-bg, rgba(255, 255, 255, 0.72))",
+                  }
+            }
+          >
+            <ScrollArea scrollbars="vertical" style={{ maxHeight: 384 }}>
+              {/* 검색 결과 건수 */}
+              <div className="hidden md:flex w-[160px] justify-end text-xs text-muted-foreground">
+                {searchSummary}
               </div>
-            ) : (
-              <div className="p-4 text-center text-sm text-muted-foreground">
-                {t("search-no-results")}
-              </div>
-            )}
+              {searchResults.length > 0 ? (
+                <div className="py-2">
+                  {searchResults.map((result, idx) =>
+                    "title" in result ? (
+                      <ArchiveListView key={idx} doc={result} />
+                    ) : (
+                      <GameListView
+                        key={idx}
+                        game={result}
+                        bIsPublishingMode={false}
+                      />
+                    ),
+                  )}
+                </div>
+              ) : (
+                <div className="p-4 text-center text-sm text-muted-foreground">
+                  {t("search-no-results")}
+                </div>
+              )}
+            </ScrollArea>
           </div>
         )}
       </div>
