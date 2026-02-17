@@ -56,13 +56,18 @@ function FadeInWithScale({
 }
 
 // Fade In Up
-function getFadeInUpVariants(opacity = 0, y = 50, duration = 0.8): Variants {
+function getFadeInUpVariants(
+  opacity = 0,
+  y = 50,
+  duration = 0.8,
+  delay = 0,
+): Variants {
   return {
     hidden: { opacity, y },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration, ease: "easeOut" },
+      transition: { duration, delay, ease: "easeOut" },
     },
   };
 }
@@ -72,6 +77,7 @@ interface FadeInUpProps {
   opacity?: number;
   y?: number;
   duration?: number;
+  delay?: number;
   viewportMargin?: number;
   className?: string;
 }
@@ -81,10 +87,11 @@ function FadeInUp({
   opacity = 0,
   y = 50,
   duration = 0.8,
+  delay = 0,
   viewportMargin = -100,
   className = "",
 }: FadeInUpProps) {
-  const fadeInUp: Variants = getFadeInUpVariants(opacity, y, duration);
+  const fadeInUp: Variants = getFadeInUpVariants(opacity, y, duration, delay);
 
   return (
     <motion.div

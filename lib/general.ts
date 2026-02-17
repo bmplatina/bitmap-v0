@@ -3,6 +3,7 @@ import type {
   MembershipApplies,
   stringLocalized,
   DocumentArchives,
+  Portfolio,
 } from "@/lib/types";
 import { getApiLinkByPurpose } from "./utils";
 
@@ -101,4 +102,31 @@ async function getMembers(
   }
 }
 
-export { getAllArchiveDocs, getArchiveDocument, getMembers, getEula };
+async function getPortfolio(uid: string): Promise<Portfolio | undefined> {
+  try {
+    const response = await axios.get<Portfolio>(
+      getApiLinkByPurpose(`general/portfolio/${uid}`),
+      {
+        timeout: 10000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (response.data) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error("Portfolio 가져오는 중 오류 발생:", error);
+  }
+}
+
+export {
+  getAllArchiveDocs,
+  getArchiveDocument,
+  getMembers,
+  getEula,
+  getPortfolio,
+};

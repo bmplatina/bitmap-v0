@@ -1,5 +1,6 @@
 import { Box, Button, Dialog, Flex, Link, Text } from "@radix-ui/themes";
 import { ReactNode } from "react";
+import { pretendard } from "@/lib/utils";
 
 export default async function OpenSourceNotices({
   children,
@@ -10,17 +11,21 @@ export default async function OpenSourceNotices({
     <Dialog.Root>
       <Dialog.Trigger>
         <Link href="#">
-          <Text size="2" color="blue">
+          <Text size="2" color="blue" className={pretendard.className}>
             {children}
           </Text>
         </Link>
       </Dialog.Trigger>
 
-      <Dialog.Content maxWidth="450px">
-        <Dialog.Title>{children}</Dialog.Title>
+      <Dialog.Content maxWidth="450px" className={pretendard.className}>
+        <Dialog.Title>
+          <Text className={pretendard.className} weight="bold">
+            {children}
+          </Text>
+        </Dialog.Title>
 
         <Flex direction="column" gap="3">
-          <Text size="3" mb="1" weight="bold">
+          <Text size="3" mb="1" weight="bold" className={pretendard.className}>
             Bitmap Production™ Website
           </Text>
           <Box asChild px="4">
@@ -66,7 +71,7 @@ export default async function OpenSourceNotices({
         <Flex gap="3" mt="4" justify="end">
           <Dialog.Close>
             <Button variant="soft" color="gray">
-              Close
+              <div className={pretendard.className}>Close</div>
             </Button>
           </Dialog.Close>
         </Flex>

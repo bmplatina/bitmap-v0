@@ -188,6 +188,26 @@ interface DocumentArchives {
   lastUpdatedAt: string;
 }
 
+interface Project {
+  id: number;
+  category: "dev" | "video";
+  title: string;
+  description: string;
+  tags: string[];
+  link: string;
+  icon: React.ReactNode;
+}
+
+interface Portfolio {
+  uid: string; // varchar(36)
+  position: string; // varchar(36)
+  headline: string; // text
+  stack: string; // text
+  skills: string[]; // json (배열 형태일 경우)
+  portfolioIntroduction: string; // text
+  project: Project[]; // json (객체 배열 형태일 경우)
+}
+
 export type {
   stringLocalized,
   Game,
@@ -210,4 +230,6 @@ export type {
   UserQueriedByUid,
   UserProfile,
   DocumentArchives,
+  Portfolio,
+  Project,
 };

@@ -118,7 +118,14 @@ const projects: Project[] = [
   },
 ];
 
-export default async function PlatinaPortfolio() {
+export default async function PlatinaPortfolio({
+  params,
+}: {
+  params: Promise<{ uid: string }>;
+}) {
+  const { uid } = await params;
+  const portfolio = await getPortfolio(uid);
+
   return (
     <div className="min-h-screen bg-background text-foreground pb-20">
       {/* --- Hero Section --- */}

@@ -121,6 +121,7 @@
   "AccountEdit": {
     "edit": "Edit",
     "account-edit": "Edit Account Info",
+    "personal-info-edit": "Edit your profile's personal information.",
     "username-edit": "Edit Username",
     "password-edit": "Edit Password",
     "id": "Username",

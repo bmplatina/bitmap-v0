@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, type KeyboardEvent } from "react";
-import { Button, Flex, Spinner, Text, Dialog } from "@radix-ui/themes";
+import { Button, Flex, Text, Dialog, Spinner } from "@radix-ui/themes";
 import {
   Card,
   CardTitle,
@@ -9,36 +9,19 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import Image from "next/image";
+import { pretendard } from "@/lib/utils";
 import { TextField } from "@radix-ui/themes";
 import { useAuth } from "@/lib/AuthContext";
-import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { editUsername, editAvatarUri } from "@/lib/auth";
+import { editProfileElement } from "@/lib/auth";
 import { ProfileList } from "@/components/accounts/profile";
 import ProfilePicsEditor from "@/components/accounts/profile-pics-editor";
 
 export default function AccountEdit() {
   const t = useTranslations("AccountEdit");
-  const router = useRouter();
-
-  const { bIsLoggedIn, isLoading } = useAuth();
 
   const [bIsAccountEditModalOpened, setIsAccountEditModalOpened] =
     useState<boolean>(false);
-
-  useEffect(
-    function () {
-      if (!isLoading) {
-        if (!bIsLoggedIn) {
-          router.push("/auth");
-        }
-      }
-    },
-    [isLoading, bIsLoggedIn],
-  );
-
-  if (isLoading) return <Spinner />;
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
@@ -80,16 +63,33 @@ function AccountInfoEditor({
   const [newUsername, setNewUsername] = useState(username);
   const [newAvatarUri, setNewAvatarUri] = useState(avatarUri);
 
+  const [message, setMessage] = useState("");
+  const [postStatus, setPostStatus] = useState<
+    "success" | "error" | "waiting" | "posting"
+  >("waiting");
+
   async function postChanges() {
     const token = localStorage.getItem("accessToken");
     if (!token) return;
 
     try {
-      const responseAvatarUri = await editAvatarUri(token, newAvatarUri);
-      const responseUsername = await editUsername(token, newUsername);
+      setPostStatus("posting");
+      const responseAvatarUri = await editProfileElement(
+        "avatarUri",
+        token,
+        newAvatarUri,
+      );
+      const responseUsername = await editProfileElement(
+        "username",
+        token,
+        newUsername,
+      );
       await fetchUser(token);
+      setPostStatus("success");
+      onOpenChange(false);
     } catch (error: any) {
-    } finally {
+      setMessage(error.message || "Failed to update profile");
+      setPostStatus("error");
     }
   }
 
@@ -102,16 +102,16 @@ function AccountInfoEditor({
 
   return (
     <Dialog.Root open={bIsOpened}>
-      <Dialog.Content maxWidth="450px">
+      <Dialog.Content maxWidth="450px" className={pretendard.className}>
         <Dialog.Title>{t("account-edit")}</Dialog.Title>
         <Dialog.Description size="2" mb="4">
-          Make changes to your profile.
+          {t("personal-info-edit")}
         </Dialog.Description>
 
         <Flex direction="column" gap="3">
           <label>
             <Text as="div" size="2" mb="1" weight="bold">
-              Username
+              {t("id")}
             </Text>
             <TextField.Root
               value={newUsername}
@@ -120,6 +120,9 @@ function AccountInfoEditor({
             />
           </label>
           <ProfilePicsEditor username={username} profileUri={setNewAvatarUri} />
+          <Text color={postStatus === "error" ? "red" : undefined}>
+            {message}
+          </Text>
         </Flex>
 
         <Flex gap="3" mt="4" justify="end">
@@ -129,11 +132,17 @@ function AccountInfoEditor({
               color="gray"
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              <div className={pretendard.className}>Cancel</div>
             </Button>
           </Dialog.Close>
           <Dialog.Close>
-            <Button onClick={postChanges}>Save</Button>
+            <Button onClick={postChanges}>
+              {postStatus === "posting" ? (
+                <Spinner />
+              ) : (
+                <div className={pretendard.className}>Save</div>
+              )}
+            </Button>
           </Dialog.Close>
         </Flex>
       </Dialog.Content>
