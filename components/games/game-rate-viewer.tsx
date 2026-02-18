@@ -1,6 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { formatDate } from "@/lib/utils";
-import { checkAuthor } from "@/lib/auth";
+import { getProfile } from "@/lib/auth";
 import {
   Card,
   CardContent,
@@ -40,7 +40,7 @@ interface GameRateProp {
 
 async function GameRateSingle({ rate }: GameRateProp) {
   const locale = await getLocale();
-  const author = await checkAuthor(undefined, rate.uid);
+  const author = await getProfile(undefined, rate.uid);
   return (
     <>
       <Card>

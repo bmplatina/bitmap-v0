@@ -14,7 +14,7 @@ import {
   Star,
 } from "lucide-react";
 import { formatDate, imageUriRegExp } from "@/lib/utils";
-import { checkAuthor } from "@/lib/auth";
+import { getProfile } from "@/lib/auth";
 import { getTranslations, getLocale } from "next-intl/server";
 import { getLocalizedString } from "@/lib/utils";
 import SmartMarkdown from "@/components/common/markdown/markdown-renderer";
@@ -57,7 +57,7 @@ export default async function GameDetail({ game, gameRates }: GameDetailProps) {
     );
   }
 
-  const author = await checkAuthor(undefined, game.uid);
+  const author = await getProfile(undefined, game.uid);
 
   return (
     <div className="container mx-auto p-6 w-full">

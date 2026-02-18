@@ -7,7 +7,7 @@ import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { Calendar, User, Tag, Globe, Monitor, Code } from "lucide-react";
 import { formatDate, getLocalizedString, imageUriRegExp } from "@/lib/utils";
-import { checkAuthor } from "@/lib/auth";
+import { getProfile } from "@/lib/auth";
 import { useTranslations, useLocale } from "next-intl";
 import ClientMarkdown from "@/components/common/markdown/client-markdown";
 import { Box, ScrollArea, Tabs, Text } from "@radix-ui/themes";
@@ -46,7 +46,7 @@ export default function GameDetail({
   }
 
   useEffect(() => {
-    checkAuthor(undefined, uid).then((payload: AuthorInfo | null) => {
+    getProfile(undefined, uid).then((payload: AuthorInfo | null) => {
       setAuthor(payload);
     });
   }, [author]);

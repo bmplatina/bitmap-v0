@@ -45,7 +45,7 @@ export default async function PortfolioPage({
             </div> */}
             <Avatar
               src={profile.avatarUri}
-              fallback="P"
+              fallback={profile.username.charAt(0).toUpperCase()}
               radius="full"
               size="8"
             />
@@ -53,7 +53,11 @@ export default async function PortfolioPage({
 
           <FadeInUp delay={0.3}>
             <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500">
-              {portfolio.position}
+              {portfolio.position.split("&").map((line, i, arr) => (
+                <Text key={i}>
+                  {line} {i < arr.length - 1 && <br />}
+                </Text>
+              ))}
             </h1>
           </FadeInUp>
 

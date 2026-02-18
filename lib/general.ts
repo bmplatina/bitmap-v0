@@ -129,6 +129,7 @@ async function getPortfolio(uid: string): Promise<Portfolio> {
     skills: [], // json (배열 형태일 경우)
     portfolioIntroduction: "", // text
     project: [], // json (객체 배열 형태일 경우)
+    portfolioPdfUri: "", // text
   };
 }
 
