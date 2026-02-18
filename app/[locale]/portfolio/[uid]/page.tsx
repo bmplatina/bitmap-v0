@@ -1,17 +1,7 @@
-import {
-  ArrowUpRight,
-  Github,
-  Youtube,
-  Mail,
-  Film,
-  Code,
-  Smartphone,
-  Layers,
-  MonitorPlay,
-  Share2,
-} from "lucide-react";
+import { ArrowUpRight, Github, Youtube, Mail } from "lucide-react";
 import { Link } from "@/i18n/routing";
-import { Avatar } from "@radix-ui/themes";
+import { AspectRatio, Avatar, Flex, Spinner, Text } from "@radix-ui/themes";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,101 +20,17 @@ import {
 } from "@/components/framer-motion/motions";
 import { Project, Portfolio } from "@/lib/types";
 import { getPortfolio } from "@/lib/general";
+import { getProfile } from "@/lib/auth";
+import { imageUriRegExp } from "@/lib/utils";
 
-// --- Mock Data ---
-
-const skills = [
-  "Node.js",
-  "Next.js (React)",
-  "TypeScript",
-  "C/C++",
-  "C#",
-  "SwiftUI",
-  "Unreal Engine",
-  "Premiere Pro",
-  "After Effects",
-  "Blender",
-];
-
-const projects: Project[] = [
-  {
-    id: 1,
-    category: "dev",
-    title: "Bitmap/Bitmap App",
-    description:
-      "실시간 환경 데이터 모니터링을 위한 반응형 대시보드. Next.js와 Recharts를 활용한 데이터 시각화 프로젝트입니다.",
-    tags: ["Next.js", "TypeScript", "Express", "MySQL", "Docker"],
-    link: "/",
-    icon: <Code className="w-8 h-8" />,
-  },
-  {
-    id: 2,
-    category: "dev",
-    title: "OX",
-    description:
-      "2022년 서울예술대학교 디지털아트창작실습 전시에 출품한 몰입형 VR 퍼즐 게임 작품.",
-    tags: ["Unreal Engine", "Blueprints", "SteamVR"],
-    link: "/games/1",
-    icon: <Film className="w-8 h-8" />,
-  },
-  {
-    id: 3,
-    category: "dev",
-    title: "Souvenir",
-    description:
-      "2023년 서울예술대학교 디지털아트창작실습 전시에 출품한 몰입형 어드벤처 퍼즐 플랫폼 게임 작품.",
-    tags: ["Unreal Engine", "Blueprints", "C++", "After Effects"],
-    link: "/games/3",
-    icon: <Smartphone className="w-8 h-8" />,
-  },
-  {
-    id: 4,
-    category: "dev",
-    title: "낙원여관 근무수칙",
-    description:
-      "2024년 서울예술대학교 학사학위 전공심화과정 독립창작프로젝트에 선정된 공포 게임 작품.",
-    tags: ["Unreal Engine", "Blueprints", "C++"],
-    link: "/games/4",
-    icon: <MonitorPlay className="w-8 h-8" />,
-  },
-  {
-    id: 5,
-    category: "video",
-    title: "TRAPPED IN THE PAST",
-    description:
-      "푸티지 기반의 게임 에디팅에 대한 한계를 느껴 게임의 애셋을 언리얼 엔진 4로 이식해 제작한 게임 에디팅 작품",
-    tags: ["React", "Strapi", "GraphQL"],
-    link: "https://www.youtube.com/watch?v=TlBWkI2eKpM",
-    icon: <Layers className="w-8 h-8" />,
-  },
-  {
-    id: 6,
-    category: "video",
-    title: "OPERATOR",
-    description: "2020년 팀 RYU에서 본인이 주최한 발로란트 영상 (5인 합작)",
-    tags: ["After Effects", "Unreal Engine"],
-    link: "https://www.youtube.com/watch?v=kblDVS52Swg",
-    icon: <Share2 className="w-8 h-8" />,
-  },
-  {
-    id: 7,
-    category: "video",
-    title: "서울예술대학교 전공친선 E-SPORTS 2023 PV",
-    description:
-      "2023년 서울예술대학교 디아-문창-광창-방영 4개 전공의 전공친선 E-SPORTS 대회 홍보 영상 (3인 합작)",
-    tags: ["After Effects", "Unreal Engine"],
-    link: "https://www.youtube.com/watch?v=UK2MLTyMurQ",
-    icon: <Share2 className="w-8 h-8" />,
-  },
-];
-
-export default async function PlatinaPortfolio({
+export default async function PortfolioPage({
   params,
 }: {
   params: Promise<{ uid: string }>;
 }) {
   const { uid } = await params;
-  const portfolio = await getPortfolio(uid);
+  const portfolio: Portfolio = await getPortfolio(uid);
+  const profile = await getProfile(undefined, uid);
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-20">
@@ -138,7 +44,7 @@ export default async function PlatinaPortfolio({
               </span>
             </div> */}
             <Avatar
-              src="https://avatars.githubusercontent.com/u/72776625?v=4"
+              src={profile.avatarUri}
               fallback="P"
               radius="full"
               size="8"
@@ -147,26 +53,24 @@ export default async function PlatinaPortfolio({
 
           <FadeInUp delay={0.3}>
             <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500">
-              Creative Developer <br className="hidden md:block" /> & Video
-              Editor
+              {portfolio.position}
             </h1>
           </FadeInUp>
 
           <FadeInUp delay={0.5}>
             <p className="max-w-2xl text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed mx-auto">
-              안녕하세요,{" "}
-              <span className="text-foreground font-semibold">Platina</span>
-              입니다.
-              <br />
-              코드와 영상을 통해 이야기를 전달하고 사용자에게 감동을 주는 디지털
-              경험을 만듭니다.
+              {portfolio.headline.split("\\n").map((line, i, arr) => (
+                <Text key={i}>
+                  {line} {i < arr.length - 1 && <br />}
+                </Text>
+              ))}
             </p>
           </FadeInUp>
 
           <FadeInUp delay={0.7}>
             <div className="flex flex-wrap gap-4 justify-center">
               <Button asChild size="lg" className="rounded-full">
-                <Link href="mailto:platina@prodbybitmap.com">
+                <Link href={`mailto:${profile.email}`} target="_blank">
                   <Mail className="w-4 h-4 mr-2" />
                   Contact Me
                 </Link>
@@ -206,7 +110,7 @@ export default async function PlatinaPortfolio({
         <div className="container px-4 mx-auto">
           <FadeInUp className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">
-              Tech & Creative Stack
+              {portfolio.stack}
             </h2>
             <p className="text-muted-foreground">
               프로젝트에 활용하는 주요 기술과 도구들입니다.
@@ -215,7 +119,7 @@ export default async function PlatinaPortfolio({
 
           <StaggerContainer staggerChildren={0.05}>
             <div className="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto">
-              {skills.map((skill, index) => (
+              {portfolio.skills.map((skill, index) => (
                 <FadeInUp
                   key={index}
                   duration={0.5}
@@ -241,8 +145,8 @@ export default async function PlatinaPortfolio({
         <div className="container px-4 mx-auto">
           <FadeInUp className="mb-12 text-center">
             <h2 className="text-3xl font-bold mb-4">Featured Works</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              개발 프로젝트와 영상 제작물 등 다양한 작업물을 확인해보세요.
+            <p className="text-muted-foreground max-w-2xl mx-auto whitespace-pre-wrap">
+              {portfolio.portfolioIntroduction}
             </p>
           </FadeInUp>
 
@@ -258,8 +162,8 @@ export default async function PlatinaPortfolio({
             {/* All Projects */}
             <TabsContent value="all" className="mt-0">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {projects.map((project, i) => (
-                  <ProjectCard key={project.id} project={project} index={i} />
+                {portfolio.project.map((proj, i) => (
+                  <ProjectCard key={proj.id} project={proj} index={i} />
                 ))}
               </div>
             </TabsContent>
@@ -267,7 +171,7 @@ export default async function PlatinaPortfolio({
             {/* Dev Projects */}
             <TabsContent value="dev" className="mt-0">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {projects
+                {portfolio.project
                   .filter((p) => p.category === "dev")
                   .map((project, i) => (
                     <ProjectCard key={project.id} project={project} index={i} />
@@ -278,7 +182,7 @@ export default async function PlatinaPortfolio({
             {/* Video Projects */}
             <TabsContent value="video" className="mt-0">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {projects
+                {portfolio.project
                   .filter((p) => p.category === "video")
                   .map((project, i) => (
                     <ProjectCard key={project.id} project={project} index={i} />
@@ -298,9 +202,22 @@ export default async function PlatinaPortfolio({
               새로운 프로젝트 아이디어가 있거나 협업을 원하신다면 언제든
               연락주세요.
             </p>
-            <Button size="lg" className="rounded-full px-8 h-12 text-lg">
-              <Link href="mailto:platina@prodbybitmap.com">Get in Touch</Link>
-            </Button>
+            <Flex gap="4" justify="center">
+              <Button size="lg" className="rounded-full px-8 h-12 text-lg">
+                <Link href={`mailto:${profile.email}`}>Get in Touch</Link>
+              </Button>
+              {portfolio.portfolioPdfUri && (
+                <Button
+                  size="lg"
+                  className="rounded-full px-8 h-12 text-lg"
+                  variant="secondary"
+                >
+                  <Link href={portfolio.portfolioPdfUri} target="_blank">
+                    View in PDF
+                  </Link>
+                </Button>
+              )}
+            </Flex>
           </FadeInUp>
         </div>
       </section>
@@ -309,7 +226,7 @@ export default async function PlatinaPortfolio({
 }
 
 // Helper Component for Project Card
-function ProjectCard({ project, index }: { project: any; index: number }) {
+function ProjectCard({ project, index }: { project: Project; index: number }) {
   // Stagger effect based on index using delay
   const delay = index * 0.1;
 
@@ -317,9 +234,16 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
     <FadeInUp duration={0.5} delay={delay} viewportMargin={-50}>
       <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-all duration-300 border-muted group hover:-translate-y-1">
         <div className="relative h-48 bg-muted overflow-hidden flex items-center justify-center bg-gray-100 dark:bg-gray-800">
-          <div className="text-primary/40 group-hover:scale-110 transition-transform duration-500">
-            {project.icon}
-          </div>
+          <AspectRatio
+            ratio={16 / 9}
+            className="text-primary/40 group-hover:scale-110 transition-transform duration-500"
+          >
+            {imageUriRegExp.test(project.preview) ? (
+              <Image src={project.preview} alt="Preview" fill />
+            ) : (
+              <Spinner className="w-12 h-12" />
+            )}
+          </AspectRatio>
           <div className="absolute top-4 right-4">
             <Badge
               variant={project.category === "dev" ? "default" : "secondary"}
@@ -342,12 +266,13 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
         <CardContent className="flex-grow">
           <div className="flex flex-wrap gap-2 mt-2">
             {project.tags.map((tag: string, i: number) => (
-              <span
+              <Text
+                as="span"
                 key={i}
                 className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-md"
               >
                 # {tag}
-              </span>
+              </Text>
             ))}
           </div>
         </CardContent>
@@ -358,7 +283,10 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
             className="w-full justify-between hover:bg-primary/5 group/btn"
             asChild
           >
-            <Link href={project.link}>
+            <Link
+              href={project.link}
+              target={project.link.startsWith("http") ? "_blank" : undefined}
+            >
               View Details
               <ArrowUpRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
             </Link>

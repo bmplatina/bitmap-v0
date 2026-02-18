@@ -102,7 +102,7 @@ async function getMembers(
   }
 }
 
-async function getPortfolio(uid: string): Promise<Portfolio | undefined> {
+async function getPortfolio(uid: string): Promise<Portfolio> {
   try {
     const response = await axios.get<Portfolio>(
       getApiLinkByPurpose(`general/portfolio/${uid}`),
@@ -121,6 +121,15 @@ async function getPortfolio(uid: string): Promise<Portfolio | undefined> {
   } catch (error) {
     console.error("Portfolio 가져오는 중 오류 발생:", error);
   }
+  return {
+    uid: "", // varchar(36)
+    position: "", // varchar(36)
+    headline: "", // text
+    stack: "", // text
+    skills: [], // json (배열 형태일 경우)
+    portfolioIntroduction: "", // text
+    project: [], // json (객체 배열 형태일 경우)
+  };
 }
 
 export {

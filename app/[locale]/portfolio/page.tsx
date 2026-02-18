@@ -46,7 +46,7 @@ const skills = [
   "Blender",
 ];
 
-const projects: Project[] = [
+const projects = [
   {
     id: 1,
     category: "dev",

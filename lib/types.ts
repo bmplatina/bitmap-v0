@@ -195,7 +195,7 @@ interface Project {
   description: string;
   tags: string[];
   link: string;
-  icon: React.ReactNode;
+  preview: string;
 }
 
 interface Portfolio {
@@ -206,6 +206,7 @@ interface Portfolio {
   skills: string[]; // json (배열 형태일 경우)
   portfolioIntroduction: string; // text
   project: Project[]; // json (객체 배열 형태일 경우)
+  portfolioPdfUri: string; // text
 }
 
 export type {
