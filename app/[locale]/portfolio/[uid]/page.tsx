@@ -55,7 +55,13 @@ export default async function PortfolioPage({
             <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500">
               {portfolio.position.split("&").map((line, i, arr) => (
                 <Text key={i}>
-                  {line} {i < arr.length - 1 && <br />}
+                  {line}{" "}
+                  {i < arr.length - 1 && (
+                    <>
+                      <br />
+                      {"& "}
+                    </>
+                  )}
                 </Text>
               ))}
             </h1>
