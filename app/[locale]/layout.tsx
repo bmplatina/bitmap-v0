@@ -19,14 +19,18 @@ export const metadata: Metadata = {
   icons: {
     icon: "/Bitmap/AppIcon.ico",
     apple: [
-      { url: "/Bitmap/AppIcon_1024.png" }, // public/apple-touch-icon.png
       {
-        url: "/Bitmap/AppIcon_128.png",
+        url: "/Bitmap/Bitmap_1024x1024@1x.png",
+        sizes: "1024x1024",
+        type: "image/png",
+      }, // public/apple-touch-icon.png
+      {
+        url: "/Bitmap/Bitmap_128x128@2x.png",
         sizes: "128x128",
         type: "image/png",
       },
       {
-        url: "/Bitmap/AppIcon_64.png",
+        url: "/Bitmap/Bitmap_64x64@3x.png",
         sizes: "64x64",
         type: "image/png",
       },
