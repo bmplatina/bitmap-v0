@@ -7,7 +7,8 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import { UAParser } from "ua-parser-js";
-
+import { getBitmapLatestApp } from "@/lib/general";
+import type { BitmapApp } from "@/lib/types";
 import WindowsLogo from "@/public/platforms/platformWindows10.png";
 import MacLogo from "@/public/platforms/platformMac.png";
 
@@ -15,8 +16,18 @@ export default function BitmapAppDownloadButton() {
   const t = useTranslations("Sidebar");
 
   const [osName, setOsName] = useState("");
+  const [bitmapApp, setBitmapApp] = useState<BitmapApp>({
+    id: 0,
+    version: "",
+    windows: "",
+    mac: "",
+  });
 
   useEffect(() => {
+    async function fetchBitmapApp() {
+      const payload = await getBitmapLatestApp();
+      setBitmapApp(payload);
+    }
     const parser = new UAParser();
     const result = parser.getOS();
     const name = result.name || "Unknown OS";
@@ -25,6 +36,7 @@ export default function BitmapAppDownloadButton() {
 
     setOsName(name);
     console.log("OS Detection Result:", result);
+    fetchBitmapApp();
   }, []);
 
   useEffect(() => {
@@ -42,11 +54,7 @@ export default function BitmapAppDownloadButton() {
         asChild
       >
         <Link
-          href={
-            osName === "Windows"
-              ? "https://github.com/bmplatina/bitmap/releases/download/v0.1.4-alpha/Bitmap.Setup.0.1.4.exe"
-              : "https://github.com/bmplatina/bitmap/releases/download/v0.1.4-alpha/Bitmap-0.1.4-universal.dmg"
-          }
+          href={osName === "Windows" ? bitmapApp.windows : bitmapApp.mac}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -74,6 +82,9 @@ export default function BitmapAppDownloadButton() {
           또는 {osName === "Windows" ? "macOS" : "Windows"} 앱 다운로드하기
         </Link>
       </Button>
+      <Text color="gray" size="1">
+        Version {bitmapApp?.version}
+      </Text>
     </Flex>
   );
 }

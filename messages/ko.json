@@ -20,7 +20,7 @@
     "feature-3-desc": "Windows, macOS, Linux 등 다양한 환경에서 비트맵의 게임들을 즐길 수 있습니다.",
     "system-req": "시스템 요구 사양",
     "os": "운영체제",
-    "os-desc": "Windows 10 이상, macOS 11 이상, Linux (glibc 2.27+)"
+    "os-desc": "Windows 10 이상, macOS 15 이상, Linux (glibc 2.27+)"
   },
 
   "Sidebar": {

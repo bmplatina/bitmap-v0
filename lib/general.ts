@@ -4,6 +4,7 @@ import type {
   stringLocalized,
   DocumentArchives,
   Portfolio,
+  BitmapApp,
 } from "@/lib/types";
 import { getApiLinkByPurpose } from "./utils";
 
@@ -133,10 +134,98 @@ async function getPortfolio(uid: string): Promise<Portfolio> {
   };
 }
 
+async function getAllBitmapApps(): Promise<BitmapApp[]> {
+  try {
+    const response = await axios.get<BitmapApp[]>(
+      getApiLinkByPurpose(`general/app`),
+      {
+        timeout: 10000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (response.data) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error("Bitmap App 가져오는 중 오류 발생:", error);
+  }
+  return [
+    {
+      id: 0,
+      version: "",
+      mac: "",
+      windows: "",
+    },
+  ];
+}
+
+async function getBitmapLatestApp(): Promise<BitmapApp> {
+  try {
+    const response = await axios.get<BitmapApp>(
+      getApiLinkByPurpose(`general/app/latest`),
+      {
+        timeout: 10000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (response.data) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error("Bitmap App 가져오는 중 오류 발생:", error);
+  }
+  return {
+    id: 0,
+    version: "",
+    mac: "",
+    windows: "",
+  };
+}
+
+async function getBitmapAppBySpecifiedVersion(
+  version: string,
+): Promise<BitmapApp> {
+  try {
+    const response = await axios.get<BitmapApp>(
+      getApiLinkByPurpose(`general/app/${version}`),
+      {
+        timeout: 10000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (response.data) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error("Bitmap App 가져오는 중 오류 발생:", error);
+  }
+  return {
+    id: 0,
+    version: "",
+    mac: "",
+    windows: "",
+  };
+}
+
 export {
   getAllArchiveDocs,
   getArchiveDocument,
   getMembers,
   getEula,
   getPortfolio,
+  getAllBitmapApps,
+  getBitmapLatestApp,
+  getBitmapAppBySpecifiedVersion,
 };

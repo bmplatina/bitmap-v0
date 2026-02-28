@@ -209,6 +209,13 @@ interface Portfolio {
   portfolioPdfUri: string; // text
 }
 
+interface BitmapApp {
+  id: number;
+  version: string;
+  mac: string;
+  windows: string;
+}
+
 export type {
   stringLocalized,
   Game,
@@ -233,4 +240,5 @@ export type {
   DocumentArchives,
   Portfolio,
   Project,
+  BitmapApp,
 };

@@ -20,7 +20,7 @@
     "feature-3-desc": "Enjoy Bitmap games on various environments including Windows, macOS, and Linux.",
     "system-req": "System Requirements",
     "os": "Operating System",
-    "os-desc": "Windows 10+, macOS 11+, Linux (glibc 2.27+)"
+    "os-desc": "Windows 10+, macOS 15+, Linux (glibc 2.27+)"
   },
 
   "Sidebar": {
