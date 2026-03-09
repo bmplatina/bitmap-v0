@@ -5,6 +5,7 @@ import type {
   DocumentArchives,
   Portfolio,
   BitmapApp,
+  GitHubRelease,
 } from "@/lib/types";
 import { getApiLinkByPurpose } from "./utils";
 
@@ -219,6 +220,18 @@ async function getBitmapAppBySpecifiedVersion(
   };
 }
 
+async function getBitmapAppFromGitHub() {
+  try {
+    const response = await axios.get<GitHubRelease[]>(
+      "https://api.github.com/repos/bmplatina/bitmap-v0-nextron/releases",
+    );
+
+    if (response.data) return response.data;
+  } catch (error) {
+    console.error("Bitmap App 가져오는 중 오류 발생:", error);
+  }
+}
+
 export {
   getAllArchiveDocs,
   getArchiveDocument,
@@ -228,4 +241,5 @@ export {
   getAllBitmapApps,
   getBitmapLatestApp,
   getBitmapAppBySpecifiedVersion,
+  getBitmapAppFromGitHub,
 };
