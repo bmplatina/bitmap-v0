@@ -18,9 +18,14 @@
     "feature-2-desc": "Communicate directly with developers, give feedback, and build games together.",
     "feature-3-title": "Cross-Platform Support",
     "feature-3-desc": "Enjoy Bitmap games on various environments including Windows, macOS, and Linux.",
+    "unsupported": "Please install the Bitmap app on your desktop or download it from a supported operating system.",
     "system-req": "System Requirements",
     "os": "Operating System",
-    "os-desc": "Windows 10+, macOS 15+, Linux (glibc 2.27+)"
+    "os-desc": "Windows 10+, macOS 15+",
+    "all-releases": "All Releases",
+    "all-releases-view": "View All Releases",
+    "all-releases-desc": "You can check and download all releases of the Bitmap app below.",
+    "dismiss": "Dismiss"
   },
 
   "Sidebar": {

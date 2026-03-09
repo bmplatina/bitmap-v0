@@ -8,9 +8,9 @@ import Image, { StaticImageData } from "next/image";
 import { UAParser } from "ua-parser-js";
 import { getBitmapAppFromGitHub } from "@/lib/general";
 import type { GitHubRelease } from "@/lib/types";
+import { pretendard } from "@/lib/utils";
 import WindowsLogo from "@/public/platforms/platformWindows10.png";
 import MacLogo from "@/public/platforms/platformMac.png";
-import { release } from "os";
 
 enum OS {
   Windows = "Windows",
@@ -21,7 +21,7 @@ enum OS {
 }
 
 export default function BitmapAppDownloadButton() {
-  const t = useTranslations("Sidebar");
+  const t = useTranslations("BitmapApp");
 
   const [gitHubReleases, setGitHubReleases] = useState<GitHubRelease[]>([]);
   const [os, setOS] = useState<OS>(OS.Windows);
@@ -85,18 +85,20 @@ export default function BitmapAppDownloadButton() {
       {os === OS.Windows ? (
         <DownloadButton uri={latestReleaseDownloadURI} os={os} />
       ) : (
-        <p>현재 기기에서는 다운로드를 지원하지 않습니다.</p>
+        <Text color="gray" size="2">
+          {t("unsupported")}
+        </Text>
       )}
       <Dialog.Root>
-        <Dialog.Trigger>
+        <Dialog.Trigger className={pretendard.className}>
           <Button size="1" variant="ghost" color="gray">
-            모든 릴리스 보기
+            {t("all-releases-view")}
           </Button>
         </Dialog.Trigger>
-        <Dialog.Content maxWidth="450px">
-          <Dialog.Title>모든 릴리스</Dialog.Title>
+        <Dialog.Content maxWidth="450px" className={pretendard.className}>
+          <Dialog.Title>{t("all-releases")}</Dialog.Title>
           <Dialog.Description size="2" mb="4">
-            Bitmap 앱의 모든 릴리스를 아래에서 확인하고 다운로드할 수 있습니다.
+            {t("all-releases-desc")}
           </Dialog.Description>
 
           <Flex direction="column" gap="3">
@@ -159,7 +161,9 @@ export default function BitmapAppDownloadButton() {
 
           <Flex gap="3" mt="4" justify="end">
             <Dialog.Close>
-              <Button>Dismiss</Button>
+              <Button>
+                <Text className={pretendard.className}>{t("dismiss")}</Text>
+              </Button>
             </Dialog.Close>
           </Flex>
         </Dialog.Content>
