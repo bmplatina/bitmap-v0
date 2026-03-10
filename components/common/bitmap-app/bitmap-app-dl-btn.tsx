@@ -11,6 +11,7 @@ import type { GitHubRelease } from "@/lib/types";
 import { pretendard } from "@/lib/utils";
 import WindowsLogo from "@/public/platforms/platformWindows10.png";
 import MacLogo from "@/public/platforms/platformMac.png";
+import ClientMarkdown from "../markdown/client-markdown";
 
 enum OS {
   Windows = "Windows",
@@ -112,8 +113,8 @@ export default function BitmapAppDownloadButton() {
               </Table.Header>
 
               <Table.Body>
-                {gitHubReleases.map((release) => (
-                  <Table.Row>
+                {gitHubReleases.map((release, index) => (
+                  <Table.Row key={index}>
                     <Table.RowHeaderCell>
                       {release.tag_name}
                     </Table.RowHeaderCell>
@@ -169,9 +170,37 @@ export default function BitmapAppDownloadButton() {
         </Dialog.Content>
       </Dialog.Root>
 
-      <Text color="gray" size="1">
-        Version {latestReleaseVersion}
-      </Text>
+      <Dialog.Root>
+        <Dialog.Trigger className={pretendard.className}>
+          <Button size="1" variant="ghost" color="gray">
+            Version {latestReleaseVersion}
+          </Button>
+        </Dialog.Trigger>
+        <Dialog.Content maxWidth="450px" className={pretendard.className}>
+          <Dialog.Title>
+            <Text className={pretendard.className}>
+              Version {latestReleaseVersion}
+            </Text>
+          </Dialog.Title>
+          <Dialog.Description size="2" mb="4">
+            {t("latest-release-note-desc")}
+          </Dialog.Description>
+
+          <Flex direction="column" gap="3">
+            {gitHubReleases[0]?.body && (
+              <ClientMarkdown content={gitHubReleases[0].body} />
+            )}
+          </Flex>
+
+          <Flex gap="3" mt="4" justify="end">
+            <Dialog.Close>
+              <Button>
+                <Text className={pretendard.className}>{t("dismiss")}</Text>
+              </Button>
+            </Dialog.Close>
+          </Flex>
+        </Dialog.Content>
+      </Dialog.Root>
     </Flex>
   );
 }

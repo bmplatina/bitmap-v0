@@ -10,7 +10,7 @@
 
   "BitmapApp": {
     "about": "Bitmap App is the ultimate space where creators from arts and technology share information, play games, and communicate with each other.",
-    "download-alert": "You will be redirected to the GitHub Release page for a safe installation.",
+    "download-alert": "You will be redirected to the GitHub Release for a safe installation.",
     "intro-title": "Value Beyond Gaming, Bitmap",
     "feature-1-title": "Easy Install & Updates",
     "feature-1-desc": "Install the latest games with one click and let us handle automatic updates.",
@@ -25,6 +25,7 @@
     "all-releases": "All Releases",
     "all-releases-view": "View All Releases",
     "all-releases-desc": "You can check and download all releases of the Bitmap app below.",
+    "latest-release-note-desc": "Check the changelog for the latest Bitmap app release.",
     "dismiss": "Dismiss"
   },
 
