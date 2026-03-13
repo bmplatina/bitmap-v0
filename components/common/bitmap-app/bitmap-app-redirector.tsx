@@ -30,7 +30,7 @@ export default function BitmapAppRedirector({ gameId }: GameProps) {
     }
 
     fetchGame();
-    if (gameId) window.location.href = `bitmap://games/${gameId}`;
+    if (gameId) window.location.href = `bitmap://games/detail?id=${gameId}`;
   }, [gameId]);
 
   if (!gameId) return null;
@@ -43,7 +43,7 @@ export default function BitmapAppRedirector({ gameId }: GameProps) {
       disabled={bIsFetching}
     >
       <Link
-        href={`bitmap://games/${gameId}`}
+        href={`bitmap://games/detail?id=${gameId}`}
         target="_blank"
         rel="noopener noreferrer"
       >
