@@ -58,12 +58,7 @@ export default async function RootLayout({
         <NextToploader showSpinner={false} />
         <NextIntlClientProvider>
           <AuthProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               <Theme>
                 <div
                   className={`${pretendard.variable} font-pretendard font-sans antialiased`}
