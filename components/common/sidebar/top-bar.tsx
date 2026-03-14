@@ -76,17 +76,10 @@ export default function TopBar() {
     <>
       <div
         className={`h-12 border-b flex items-center px-4 w-full relative z-50 transition-all duration-300 ${
-          isScrolled ? "border-border/50" : "bg-background border-border"
-        }`}
-        style={
           isScrolled
-            ? {
-                WebkitBackdropFilter: "saturate(180%) blur(20px)",
-                backdropFilter: "saturate(180%) blur(20px)",
-                backgroundColor: "var(--topbar-bg, rgba(255, 255, 255, 0.72))",
-              }
-            : {}
-        }
+            ? "border-border/50"
+            : "bg-background border-border apple-blur"
+        }`}
       >
         {/* 모바일 메뉴 버튼 */}
         <div className={`md:hidden mr-3 ${isMobileSearchOpen ? "hidden" : ""}`}>
@@ -177,15 +170,7 @@ export default function TopBar() {
                           />
                         </IconButton>
                       </Popover.Trigger>
-                      <Popover.Content
-                        style={{
-                          WebkitBackdropFilter: "saturate(180%) blur(20px)",
-                          backdropFilter: "saturate(180%) blur(20px)",
-                          backgroundColor:
-                            "var(--topbar-bg, rgba(255, 255, 255, 0.72))",
-                        }}
-                        className="text-center"
-                      >
+                      <Popover.Content className="text-center apple-blur">
                         <ProfilePopover />
                       </Popover.Content>
                     </Popover.Root>
@@ -213,14 +198,9 @@ export default function TopBar() {
 
           {/* 사이드바 */}
           <div
-            className={`fixed left-0 top-0 h-full w-64 border-r shadow-lg transform transition-transform duration-300 ease-in-out ${
+            className={`fixed left-0 top-0 h-full w-64 border-r shadow-lg transform transition-transform duration-300 ease-in-out apple-blur ${
               isScrolled ? "border-border/50" : "bg-background border-border"
             } flex flex-col`}
-            style={{
-              WebkitBackdropFilter: "saturate(180%) blur(20px)",
-              backdropFilter: "saturate(180%) blur(20px)",
-              backgroundColor: "var(--topbar-bg, rgba(255, 255, 255, 0.72))",
-            }}
           >
             {/* 사이드바 헤더 */}
             <div className="flex items-center justify-between p-4 border-b">
