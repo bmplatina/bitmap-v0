@@ -77,8 +77,8 @@ export default function TopBar() {
       <div
         className={`h-12 border-b flex items-center px-4 w-full relative z-50 transition-all duration-300 ${
           isScrolled
-            ? "border-border/50"
-            : "bg-background border-border apple-blur"
+            ? "border-border/50 apple-blur"
+            : "bg-background border-border "
         }`}
       >
         {/* 모바일 메뉴 버튼 */}

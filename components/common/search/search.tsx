@@ -206,7 +206,7 @@ export default function Search({ className, placeholder }: SearchProps) {
         {/* 검색 결과 드롭다운 */}
         {isSearchOpen && searchQuery.trim() && (
           <div
-            className={`absolute top-full left-0 right-0 mt-2 bg-background border rounded-md shadow-lg z-50 transition-all duration-300 ${isScrolled ? "bg-background border-border" : "border-border/50 apple-blur"}`}
+            className={`absolute top-full left-0 right-0 mt-2 bg-background border rounded-md shadow-lg z-50 transition-all duration-300 ${isScrolled ? "bg-background border-border apple-blur" : "border-border/50"}`}
           >
             <ScrollArea scrollbars="vertical" style={{ maxHeight: 384 }}>
               {/* 검색 결과 건수 */}
