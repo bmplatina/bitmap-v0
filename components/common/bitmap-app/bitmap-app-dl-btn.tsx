@@ -15,7 +15,7 @@ import ClientMarkdown from "../markdown/client-markdown";
 
 enum OS {
   Windows = "Windows",
-  Mac = "Mac",
+  Mac = "Macintosh",
   Android = "Android",
   iOS = "iOS",
   Linux = "Linux",
@@ -40,7 +40,6 @@ export default function BitmapAppDownloadButton() {
     const version = result.version || "";
     const fullOs = `${name} ${version}`.trim();
 
-    console.log("OS Detection Result:", os);
     fetchBitmapApp();
 
     switch (name) {
@@ -83,7 +82,7 @@ export default function BitmapAppDownloadButton() {
 
   return (
     <Flex direction="column" gap="3" className="w-full">
-      {os === OS.Windows ? (
+      {os === OS.Windows || os === OS.Mac ? (
         <DownloadButton uri={latestReleaseDownloadURI} os={os} />
       ) : (
         <Text color="gray" size="2">
