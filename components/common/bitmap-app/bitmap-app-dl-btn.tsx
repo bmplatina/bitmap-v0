@@ -15,7 +15,7 @@ import ClientMarkdown from "../markdown/client-markdown";
 
 enum OS {
   Windows = "Windows",
-  Mac = "Macintosh",
+  Mac = "macOS",
   Android = "Android",
   iOS = "iOS",
   Linux = "Linux",
@@ -86,7 +86,7 @@ export default function BitmapAppDownloadButton() {
         <DownloadButton uri={latestReleaseDownloadURI} os={os} />
       ) : (
         <Text color="gray" size="2">
-          {t("unsupported")}
+          {t("unsupported", { osName: os })}
         </Text>
       )}
       <Dialog.Root>
