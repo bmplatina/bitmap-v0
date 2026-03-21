@@ -67,7 +67,9 @@ export default async function BitmapAppPage({
                   <Suspense fallback={<RedirectorSkeleton />}>
                     <BitmapAppRedirector gameId={gameId as string} />
                   </Suspense>
-                  <BitmapAppDownloadButton />
+                  <Suspense fallback={<RedirectorSkeleton />}>
+                    <BitmapAppDownloadButton />
+                  </Suspense>
                   <Text size="1" color="gray" className="opacity-60">
                     {t("download-alert")}
                   </Text>

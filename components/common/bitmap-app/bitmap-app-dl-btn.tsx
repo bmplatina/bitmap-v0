@@ -7,8 +7,8 @@ import { Link } from "@/i18n/routing";
 import Image, { StaticImageData } from "next/image";
 import { UAParser } from "ua-parser-js";
 import { getBitmapAppFromGitHub } from "@/lib/general";
-import type { GitHubRelease } from "@/lib/types";
-import { pretendard } from "@/lib/utils";
+import { GitHubRelease } from "@/lib/types";
+import { pretendard, cn } from "@/lib/utils";
 import WindowsLogo from "@/public/platforms/platformWindows10.png";
 import MacLogo from "@/public/platforms/platformMac.png";
 import ClientMarkdown from "../markdown/client-markdown";
@@ -95,7 +95,10 @@ export default function BitmapAppDownloadButton() {
             {t("all-releases-view")}
           </Button>
         </Dialog.Trigger>
-        <Dialog.Content maxWidth="450px" className={pretendard.className}>
+        <Dialog.Content
+          maxWidth="450px"
+          className={cn(pretendard.className, "md:!max-w-[800px]")}
+        >
           <Dialog.Title>{t("all-releases")}</Dialog.Title>
           <Dialog.Description size="2" mb="4">
             {t("all-releases-desc")}
@@ -175,7 +178,10 @@ export default function BitmapAppDownloadButton() {
             Version {latestReleaseVersion}
           </Button>
         </Dialog.Trigger>
-        <Dialog.Content maxWidth="450px" className={pretendard.className}>
+        <Dialog.Content
+          maxWidth="450px"
+          className={cn(pretendard.className, "md:!max-w-[800px]")}
+        >
           <Dialog.Title>
             <Text className={pretendard.className}>
               Version {latestReleaseVersion}
