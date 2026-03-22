@@ -16,6 +16,7 @@ import { pretendard } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Bitmap",
   description: "Team Bitmap Official Website",
+  manifest: "/manifest.json",
   icons: {
     icon: "/Bitmap/AppIcon.ico",
     apple: [
