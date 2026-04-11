@@ -227,7 +227,7 @@
     "current-version": "현재 버전: ",
     "early-access": "얼리 액세스",
     "official-website": "공식 홈페이지 보기⋯",
-    "information-of": "게임 정보: ",
+    "information-of": "{gameTitle} 정보",
     "installation-path": "설치 경로",
     "installation-path-hint": "클릭하여 설치할 경로를 지정하십시오.",
     "download": "다운로드",
@@ -264,7 +264,8 @@
     "rate-delete-btn": "삭제",
     "rate-delete-cancel-btn": "취소",
     "rate-empty": "등록된 평가 없음",
-    "rate-empty-desc": "아직 등록된 평가가 없습니다. \"평가 작성\" 탭에서 이 게임에 대한 평가를 작성해주십시오."
+    "rate-empty-desc": "아직 등록된 평가가 없습니다. \"평가 작성\" 탭에서 이 게임에 대한 평가를 작성해주십시오.",
+    "agerating": "연령 등급 이미지 출처: GRAC 게임물관리위원회"
   },
 
   "Publish": {
@@ -359,7 +360,14 @@
     "upload": "업로드",
     "upload-append": "업로드 (추가)",
     "select-file": "파일 선택",
-    "select-file-placeholder": "파일을 선택하십시오⋯"
+    "select-file-placeholder": "파일을 선택하십시오⋯",
+    "crime": "범죄",
+    "drugs": "약물",
+    "gamble": "사행성",
+    "horror": "공포",
+    "sex": "선정성",
+    "swear": "언어의 부적절성",
+    "violence": "폭력성"
   },
 
   "Common": {

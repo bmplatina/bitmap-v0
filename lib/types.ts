@@ -55,6 +55,8 @@ interface Game {
   gameBinaryName: string;
   gameHeadline: stringLocalized;
   gameDescription: stringLocalized;
+  ageRating: number;
+  customEula: string;
 }
 
 interface AuthorInfo {
@@ -256,6 +258,15 @@ interface GitHubUser {
   type: string;
 }
 
+type RatingDetails =
+  | "crime"
+  | "drugs"
+  | "gamble"
+  | "horror"
+  | "sex"
+  | "swear"
+  | "violence";
+
 export type {
   stringLocalized,
   Game,
@@ -282,4 +293,5 @@ export type {
   Project,
   BitmapApp,
   GitHubRelease,
+  RatingDetails,
 };

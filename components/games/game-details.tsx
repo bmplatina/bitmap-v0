@@ -30,6 +30,7 @@ import {
 import GameRateSubmitter from "./game-rate-submitter";
 import GameRateViewer from "./game-rate-viewer";
 import { Link } from "@/i18n/routing";
+import AgeRatingImage from "./game-age-rating";
 
 type GameDetailProps = {
   game: Game;
@@ -125,19 +126,7 @@ export default async function GameDetail({ game, gameRates }: GameDetailProps) {
               </Link>
             </Button>
 
-            {/*game.gameDownloadWinURL && (
-                  <Button className="w-full">
-                    <Monitor className="mr-2 h-4 w-4" />
-                    Windows 다운로드
-                  </Button>
-              )*/}
-
-            {/*game.gameDownloadMacURL && (
-                  <Button className="w-full" variant="secondary">
-                    <Apple className="mr-2 h-4 w-4" />
-                    Mac 다운로드
-                  </Button>
-              )*/}
+            <AgeRatingImage ageRating={game.ageRating} />
           </div>
         </div>
 
@@ -232,9 +221,9 @@ export default async function GameDetail({ game, gameRates }: GameDetailProps) {
           )}
 
           <div className="my-8">
-            <Text as="label" size="7" weight="bold" className="mb-4">{`${t(
-              "information-of",
-            )} ${game.gameTitle}`}</Text>
+            <Text as="label" size="7" weight="bold" className="mb-4">
+              {t("information-of", { gameTitle: game.gameTitle })}{" "}
+            </Text>
             <SmartMarkdown
               content={getLocalizedString(locale, game.gameDescription)}
             />

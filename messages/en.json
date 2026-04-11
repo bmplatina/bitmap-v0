@@ -227,7 +227,7 @@
     "current-version": "Current Version: ",
     "early-access": "EARLY ACCESS",
     "official-website": "Visit official website…",
-    "information-of": "Information of ",
+    "information-of": "Information of {gameTitle}",
     "installation-path": "Installation path",
     "installation-path-hint": "Click to select installation path.",
     "download": "Download",
@@ -264,7 +264,8 @@
     "rate-delete-btn": "Delete",
     "rate-delete-cancel-btn": "Cancel",
     "rate-empty": "No reviews yet",
-    "rate-empty-desc": "No reviews have been submitted yet. Please write a review for this game in the \"Write a review\" tab."
+    "rate-empty-desc": "No reviews have been submitted yet. Please write a review for this game in the \"Write a review\" tab.",
+    "agerating": "Age Rating Image Source: PEGI (Pan European Game Information)"
   },
 
   "Publish": {
@@ -359,7 +360,14 @@
     "upload": "Upload",
     "upload-append": "Upload (Add)",
     "select-file": "Select File",
-    "select-file-placeholder": "Please select a file…"
+    "select-file-placeholder": "Please select a file…",
+    "crime": null,
+    "drugs": "Drugs",
+    "gamble": "Gambling",
+    "horror": "Fear",
+    "sex": "Sex",
+    "swear": "Bad Language",
+    "violence": "Violence"
   },
 
   "Common": {
