@@ -56,6 +56,7 @@ interface Game {
   gameHeadline: stringLocalized;
   gameDescription: stringLocalized;
   ageRating: number;
+  ratingContentDescriptors: RatingDetails[];
   customEula: string;
 }
 
