@@ -1,27 +1,38 @@
-import { Flex, Text } from "@radix-ui/themes";
-import { Card, CardContent, CardHeader } from "../ui/card";
+"use client";
+
+import { CheckboxCards, Flex, RadioCards, Text } from "@radix-ui/themes";
+import { Card, CardContent } from "../ui/card";
 import { useTranslations, useLocale } from "next-intl";
 import Image from "next/image";
 import type { RatingDetails } from "@/lib/types";
 
+type AgeRating = 0 | 12 | 15 | 19;
+
 interface AgeRatingImageProps {
   ageRating: number;
   ratingContentDescriptors?: RatingDetails[];
+  bEditorMode?: boolean;
+  setAgeRatingCallback?: (newRating: number) => null;
+  setRatingContentDescriptorsCallback?: (newDescriptors: string[]) => null;
 }
 
 export default function AgeRatingImage({
   ageRating,
   ratingContentDescriptors,
+  bEditorMode,
+  setAgeRatingCallback,
+  setRatingContentDescriptorsCallback,
 }: AgeRatingImageProps) {
   const t = useTranslations("GamesView");
+  const t_GameSubmit = useTranslations("GameSubmit")
   const locale = useLocale();
   const gameInformationComitee: string = locale === "en" ? "pegi" : "grac";
 
-  function getAgeRatingImageUri() {
+  function getAgeRatingImageUri(age: number) {
     let svgName: string = "";
 
-    if (ageRating == 0) svgName = "all.svg";
-    else svgName = `${ageRating}.svg`;
+    if (age == 0) svgName = "all.svg";
+    else svgName = `${age}.svg`;
 
     return `/${gameInformationComitee}/${svgName}`;
   }
@@ -31,35 +42,90 @@ export default function AgeRatingImage({
     return `/${gameInformationComitee}/${contentDescriptors}.${extension}`;
   }
 
-  const svgPath = getAgeRatingImageUri();
-
   return (
-    // <Flex gap="2" justify="center" align="center">
-    //   <Text>심의 등급: </Text>
-    //   <Image src={svgPath} alt="GRAC game rating" width="50" height="50" />
-    // </Flex>
     <Card className="mt-6 space-y-4">
       <CardContent className="mt-6">
         <Flex direction="column" gap="2">
-          <Image src={svgPath} alt="GRAC game rating" width="50" height="50" />
+          {bEditorMode ? (
+            <RadioCards.Root
+              value={ageRating.toString()}
+              onValueChange={
+                setAgeRatingCallback
+                  ? (value) => setAgeRatingCallback(Number(value))
+                  : undefined
+              }
+              columns={{ initial: "1", sm: "4" }}
+            >
+              {[0, 12, 15, 19].map((tempAgeRating, index) => (
+                <RadioCards.Item value={tempAgeRating.toString()} key={index}>
+                  <Image
+                    src={getAgeRatingImageUri(tempAgeRating)}
+                    alt="GRAC game rating"
+                    width="50"
+                    height="50"
+                  />
+                </RadioCards.Item>
+              ))}
+            </RadioCards.Root>
+          ) : (
+            <Image
+              src={getAgeRatingImageUri(ageRating)}
+              alt="GRAC game rating"
+              width="50"
+              height="50"
+            />
+          )}
 
-          {ratingContentDescriptors && (
-            <Flex gap="2" align="start">
-              {ratingContentDescriptors.map((contentDescriptor, index) => {
-                if (locale === "en" && contentDescriptor === "crime")
-                  return null;
-
-                return (
+          {bEditorMode ? (
+            <CheckboxCards.Root
+              value={ratingContentDescriptors}
+              columns={{ initial: "1", sm: "4" }}
+              onValueChange={
+                setRatingContentDescriptorsCallback
+                  ? (value) => setRatingContentDescriptorsCallback(value)
+                  : undefined
+              }
+            >
+              {[
+                "crime",
+                "drugs",
+                "gamble",
+                "horror",
+                "sex",
+                "swear",
+                "violence",
+              ].map((elem, index) => (
+                <CheckboxCards.Item value={elem} key={index}>
                   <Image
                     key={index}
-                    src={getRatingDetailsImageUri(contentDescriptor)}
-                    alt={contentDescriptor}
+                    src={getRatingDetailsImageUri(elem as RatingDetails)}
+                    alt={elem}
                     width="35"
                     height="35"
                   />
-                );
-              })}
-            </Flex>
+                  <Text key={elem}>{t_GameSubmit(elem)}</Text>
+                </CheckboxCards.Item>
+              ))}
+            </CheckboxCards.Root>
+          ) : (
+            ratingContentDescriptors && (
+              <Flex gap="2" align="start">
+                {ratingContentDescriptors.map((contentDescriptor, index) => {
+                  if (locale === "en" && contentDescriptor === "crime")
+                    return null;
+
+                  return (
+                    <Image
+                      key={index}
+                      src={getRatingDetailsImageUri(contentDescriptor)}
+                      alt={contentDescriptor}
+                      width="35"
+                      height="35"
+                    />
+                  );
+                })}
+              </Flex>
+            )
           )}
           <Text>{t("agerating")}</Text>
         </Flex>

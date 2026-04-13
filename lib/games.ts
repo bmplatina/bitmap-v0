@@ -41,8 +41,8 @@ async function getGames(
 // API에서 특정 게임 데이터를 가져오는 함수
 async function getGameById(id: string): Promise<Game | null> {
   try {
-    const response = await axios.get<Game[]>(
-      getApiLinkByPurpose("games/list"),
+    const response = await axios.get<Game>(
+      getApiLinkByPurpose(`games/pick/${id}`),
       {
         timeout: 10000,
         headers: {
@@ -52,8 +52,7 @@ async function getGameById(id: string): Promise<Game | null> {
       },
     );
 
-    const game = response.data.find((g) => g.gameId.toString() === id);
-    return game || null;
+    return response.data || null;
   } catch (error) {
     console.error("게임 데이터를 가져오는 중 오류 발생:", error);
     return null;

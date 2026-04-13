@@ -126,7 +126,10 @@ export default async function GameDetail({ game, gameRates }: GameDetailProps) {
               </Link>
             </Button>
 
-            <AgeRatingImage ageRating={game.ageRating} />
+            <AgeRatingImage
+              ageRating={game.ageRating}
+              ratingContentDescriptors={game.ratingContentDescriptors}
+            />
           </div>
         </div>
 

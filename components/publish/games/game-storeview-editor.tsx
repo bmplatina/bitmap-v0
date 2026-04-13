@@ -55,6 +55,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import AgeRatingImage from "@/components/games/game-age-rating";
 
 export default function GameStoreViewEditor() {
   const locale = useLocale();
@@ -263,6 +264,12 @@ export default function GameStoreViewEditor() {
                 {t("view-in-bitmap-app")}
               </a>
             </Button>
+
+            <AgeRatingImage
+              ageRating={game.ageRating}
+              ratingContentDescriptors={game.ratingContentDescriptors}
+              bEditorMode
+            />
           </div>
         </div>
 
@@ -653,11 +660,13 @@ export default function GameStoreViewEditor() {
           )}
 
           <div className="mb-8">
-            <Text as="label" size="7" weight="bold" className="mb-4">{`${t(
-              "information-of",
-            )} ${
-              getIsTitleWritten() ? game.gameTitle : t_gameSubmit("gameTitle")
-            }`}</Text>
+            <Text as="label" size="7" weight="bold" className="mb-4">
+              {t("information-of", {
+                gameTitle: getIsTitleWritten()
+                  ? game.gameTitle
+                  : t_gameSubmit("gameTitle"),
+              })}
+            </Text>
             <Tabs.Root defaultValue={locale}>
               <Tabs.List>
                 <Tabs.Trigger value="ko">한국어</Tabs.Trigger>
