@@ -1,14 +1,21 @@
 import axios from "axios";
-import { Game, GameList, GameRating, GameRatingRequest } from "@/lib/types";
+import {
+  Game,
+  GameList,
+  GameRating,
+  GameRatingRequest,
+  GameReleaseState,
+} from "@/lib/types";
 import { getApiLinkByPurpose } from "@/lib/utils";
 
 // API에서 게임 데이터를 가져오는 함수 - 서버 컴포넌트에서만 호출
 async function getGames(
-  getPendingOnly: "released" | "pending" | "all",
+  getPendingOnly: GameReleaseState,
   listPage?: number,
 ): Promise<GameList[]> {
   try {
-    const API_LINK = listPage ? `games/list?page=${listPage}` : "games/list";
+    const API_LINK =
+      typeof listPage === "number" ? `games/list?page=${listPage}` : "games/list";
 
     const response = await axios.get<GameList[]>(
       getApiLinkByPurpose(API_LINK),
@@ -25,14 +32,11 @@ async function getGames(
       return response.data;
     }
 
-    let games: GameList[] = [];
-    for (const game of response.data) {
-      if (game.isApproved && !(getPendingOnly === "pending")) {
-        games.push(game);
-      }
-    }
-
-    return games;
+    return response.data.filter((game) => {
+      if (getPendingOnly === "released") return game.isApproved;
+      if (getPendingOnly === "pending") return !game.isApproved;
+      return true;
+    });
   } catch (error) {
     console.error("게임 데이터를 가져오는 중 오류 발생:", error);
 

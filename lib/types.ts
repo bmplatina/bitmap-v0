@@ -73,6 +73,8 @@ interface GameList extends Pick<
   | "isEarlyAccess"
 > {}
 
+type GameReleaseState = "released" | "pending" | "all";
+
 interface AuthorInfo {
   username: string;
   email: string;
@@ -285,6 +287,7 @@ export type {
   stringLocalized,
   Game,
   GameList,
+  GameReleaseState,
   AuthorInfo,
   Metadata,
   GameRating,
