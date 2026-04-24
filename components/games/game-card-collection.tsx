@@ -1,11 +1,11 @@
-import { Game } from "@/lib/types";
+import { GameList } from "@/lib/types";
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import GameCard from "./game-card";
 import { Skeleton } from "@radix-ui/themes";
 
 interface GameCardProps {
-  games: Game[];
+  games: GameList[];
 }
 
 export default async function GameCardCollection({ games }: GameCardProps) {

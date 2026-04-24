@@ -1,4 +1,4 @@
-import type { Game } from "@/lib/types";
+import type { GameList } from "@/lib/types";
 import { getLocalizedString, formatDate } from "@/lib/utils";
 import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
@@ -8,7 +8,7 @@ import { Calendar, Code, Tag, User } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 interface GameCardProps {
-  game: Game;
+  game: GameList;
   linkPrefix?: string; // 링크 프리픽스 (기본값: "/games")
 }
 

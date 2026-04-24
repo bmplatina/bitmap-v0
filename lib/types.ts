@@ -60,6 +60,19 @@ interface Game {
   customEula: string;
 }
 
+interface GameList extends Pick<
+  Game,
+  | "gameId"
+  | "gameTitle"
+  | "gameImageURL"
+  | "gameDeveloper"
+  | "gamePublisher"
+  | "gameGenre"
+  | "gameReleasedDate"
+  | "isApproved"
+  | "isEarlyAccess"
+> {}
+
 interface AuthorInfo {
   username: string;
   email: string;
@@ -271,6 +284,7 @@ type RatingDetails =
 export type {
   stringLocalized,
   Game,
+  GameList,
   AuthorInfo,
   Metadata,
   GameRating,
