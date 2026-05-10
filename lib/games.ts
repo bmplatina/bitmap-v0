@@ -15,7 +15,9 @@ async function getGames(
 ): Promise<GameList[]> {
   try {
     const API_LINK =
-      typeof listPage === "number" ? `games/list?page=${listPage}` : "games/list";
+      typeof listPage === "number"
+        ? `games/list?page=${listPage}`
+        : "games/list";
 
     const response = await axios.get<GameList[]>(
       getApiLinkByPurpose(API_LINK),
