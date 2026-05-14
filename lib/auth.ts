@@ -34,7 +34,7 @@ const getProfile = async (
 ): Promise<UserProfile> => {
   try {
     const response = await axios.post<UserProfile>(
-      getApiLinkByPurpose("auth/profile/query/uid"), // 백엔드 라우트 주소와 일치 확인
+      getApiLinkByPurpose("auth/profile/uid"), // 백엔드 라우트 주소와 일치 확인
       {
         uid,
       },
@@ -220,8 +220,8 @@ async function editProfileElement(
 ): Promise<string> {
   const formattedKey = `new${method.charAt(0).toUpperCase()}${method.slice(1)}`; // 예: { username: "newName" } 또는 { password: "newPass" } 또는 { avatarUri: "newUri" }
   try {
-    const response = await axios.post<{ message: string }>(
-      getApiLinkByPurpose(`auth/edit/${method}`),
+    const response = await axios.put<{ message: string }>(
+      getApiLinkByPurpose(`auth/profile/${method}`),
       { [formattedKey]: newValue },
       {
         timeout: 30000, // 30초 타임아웃
