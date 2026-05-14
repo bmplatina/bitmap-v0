@@ -97,11 +97,11 @@ async function submitGame(
   newGame: Game,
   bIsEditingExisting: boolean,
 ): Promise<any> {
-  const apiRoutesLink = bIsEditingExisting ? "games/edit" : "games/submit";
+  const axiosMethod = bIsEditingExisting ? axios.put : axios.post;
   try {
     // API 호출
-    const response = await axios.post(
-      getApiLinkByPurpose(apiRoutesLink),
+    const response = await axiosMethod(
+      getApiLinkByPurpose("games/publish"),
       newGame,
       {
         timeout: 30000, // 30초 타임아웃
@@ -195,11 +195,11 @@ async function submitGameRate(
   newGame: GameRatingRequest,
   bIsUpdating: boolean,
 ): Promise<any> {
-  const apiRoutesLink = bIsUpdating ? "games/rate/edit" : "games/rate/add";
+  const axiosMethod = bIsUpdating ? axios.put : axios.post;
   try {
     // API 호출
-    const response = await axios.post(
-      getApiLinkByPurpose(apiRoutesLink),
+    const response = await axiosMethod(
+      getApiLinkByPurpose(`games/rate/${newGame.gameId}`),
       newGame,
       {
         timeout: 30000, // 30초 타임아웃
@@ -227,9 +227,8 @@ async function submitGameRate(
 async function deleteGameRate(token: string, gameId: number): Promise<any> {
   try {
     // API 호출
-    const response = await axios.post(
-      getApiLinkByPurpose("games/rate/delete"),
-      { gameId },
+    const response = await axios.delete(
+      getApiLinkByPurpose(`games/rate/${gameId}`),
       {
         timeout: 30000, // 30초 타임아웃
         headers: {
