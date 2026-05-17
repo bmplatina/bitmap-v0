@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter, usePathname } from "@/i18n/routing";
 import { Search as SearchIcon } from "lucide-react";
 import { TextField, ScrollArea } from "@radix-ui/themes";
-import type { Game, DocumentArchives } from "@/lib/types";
+import type { Game, DocumentArchives, GameList } from "@/lib/types";
 import GameListView from "@/components/games/game-listview";
 import ArchiveListView from "../archive-search-listview";
 import { useTranslations } from "next-intl";
@@ -28,9 +28,9 @@ export default function Search({ className, placeholder }: SearchProps) {
   // 검색어 상태 관리
   const [searchQuery, setSearchQuery] = useState("");
   // 검색 대상 게임 캐시
-  const [allData, setAllData] = useState<(Game | DocumentArchives)[]>([]);
+  const [allData, setAllData] = useState<(GameList | DocumentArchives)[]>([]);
   const [searchResults, setSearchResults] = useState<
-    (Game | DocumentArchives)[]
+    (GameList | DocumentArchives)[]
   >([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -91,9 +91,9 @@ export default function Search({ className, placeholder }: SearchProps) {
 
     async function getSearchSubjects() {
       try {
-        const subjects: (Game | DocumentArchives)[] = [];
+        const subjects: (GameList | DocumentArchives)[] = [];
 
-        const games: Game[] = await getGames("released");
+        const games: GameList[] = await getGames("released");
         if (!isMounted) return;
         subjects.push(...games);
 

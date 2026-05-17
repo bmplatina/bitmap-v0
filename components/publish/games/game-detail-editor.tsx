@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Clock } from "lucide-react";
-import type { Game } from "@/lib/types";
+import type { Game, GameList } from "@/lib/types";
 import { toast } from "@/hooks/use-toast";
 import { getGames } from "@/lib/games";
 import { useTranslations } from "next-intl";
@@ -35,7 +35,7 @@ export default function GameDetailEditor() {
     updateField("gameId", value);
   }
 
-  function setGameLatestVersion(value: number) {
+  function setGameLatestVersion(value: string) {
     updateField("gameLatestRevision", value);
   }
 
@@ -81,7 +81,7 @@ export default function GameDetailEditor() {
       try {
         setIsLoadingGameId(true);
 
-        const fetchedGames: Game[] = await getGames("all");
+        const fetchedGames: GameList[] = await getGames("all");
 
         setGameId(fetchedGames.length);
       } catch (error) {
@@ -153,9 +153,9 @@ export default function GameDetailEditor() {
           </CardHeader>
           <CardContent>
             <Input
-              type="number"
+              // type="number"
               value={game.gameLatestRevision}
-              onChange={(e) => setGameLatestVersion(Number(e.target.value))}
+              onChange={(e) => setGameLatestVersion(e.target.value)}
               placeholder="1"
               min="1"
             />

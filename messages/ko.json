@@ -293,7 +293,7 @@
     "gameTitle": "게임 제목",
     "gameTitleDesc": "스토어의 메인에 표시될 게임 제목입니다.",
     "gameLatestRevision": "게임의 최신 버전",
-    "gameLatestRevisionDesc": "현재 게임의 최신 버전을 숫자만으로 입력하십시오. 이 값으로 업데이트를 관리합니다.",
+    "gameLatestRevisionDesc": "현재 게임의 최신 버전을 입력하십시오. 이 값으로 업데이트를 관리합니다.",
     "gamePlatform": "지원하는 플랫폼",
     "gamePlatformDesc": "이 게임이 지원하는 플랫폼을 선택하십시오. 이 값으로 플랫폼별 설치 가능 여부를 판단합니다.",
     "gamePlatformWindows": "Windows 지원",

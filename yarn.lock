@@ -4104,6 +4104,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/semver@npm:^7":
+  version: 7.7.1
+  resolution: "@types/semver@npm:7.7.1"
+  checksum: 10c0/c938aef3bf79a73f0f3f6037c16e2e759ff40c54122ddf0b2583703393d8d3127130823facb880e694caa324eb6845628186aac1997ee8b31dc2d18fafe26268
+  languageName: node
+  linkType: hard
+
 "@types/trusted-types@npm:^2.0.2, @types/trusted-types@npm:^2.0.7":
   version: 2.0.7
   resolution: "@types/trusted-types@npm:2.0.7"
@@ -4407,6 +4414,7 @@ __metadata:
     "@types/react": "npm:^19.2.10"
     "@types/react-dom": "npm:^19.2.3"
     "@types/sanitize-html": "npm:^2.16.0"
+    "@types/semver": "npm:^7"
     "@types/ua-parser-js": "npm:^0.7.39"
     autoprefixer: "npm:^10.4.24"
     axios: "npm:^1.13.4"
@@ -4443,6 +4451,7 @@ __metadata:
     rehype-pretty-code: "npm:^0.14.1"
     remark-gfm: "npm:^4.0.1"
     sanitize-html: "npm:^2.17.0"
+    semver: "npm:^7.8.0"
     shiki: "npm:^3.22.0"
     sonner: "npm:^2.0.7"
     tailwind-merge: "npm:^3.4.0"
@@ -8607,7 +8616,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.3.5":
+"semver@npm:^7.3.5, semver@npm:^7.8.0":
   version: 7.8.0
   resolution: "semver@npm:7.8.0"
   bin:

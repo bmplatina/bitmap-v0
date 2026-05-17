@@ -293,7 +293,7 @@
     "gameTitle": "Game Title",
     "gameTitleDesc": "This is the title that will be displayed on the store's main page.",
     "gameLatestRevision": "Latest Game Version",
-    "gameLatestRevisionDesc": "Please enter the latest version of the game. This value is used to manage updates. This field ONLY allows number",
+    "gameLatestRevisionDesc": "Please enter the latest version of the game. This value is used to manage updates.",
     "gamePlatform": "Supported Platforms",
     "gamePlatformDesc": "Please select the platforms that this game supports. This value determines the installability for each platform.",
     "gamePlatformWindows": "Windows Support",

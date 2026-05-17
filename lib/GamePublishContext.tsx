@@ -1,12 +1,13 @@
 "use client";
 
-import React, {
+import {
   createContext,
   useContext,
   useState,
   ReactNode,
   useCallback,
 } from "react";
+import semver from "semver";
 import type { Game, stringLocalized } from "@/lib/types";
 
 interface GameFormContextType {
@@ -36,7 +37,7 @@ const initialGameData: Game = {
   uid: "",
   isApproved: false,
   gameTitle: "",
-  gameLatestRevision: 1,
+  gameLatestRevision: "0.0",
   gamePlatformWindows: false,
   gamePlatformMac: false,
   gameEngine: "",
@@ -151,7 +152,7 @@ export function GamePublishProvider({ children }: { children: ReactNode }) {
 
     return (
       gameData.gameId >= 0 &&
-      gameData.gameLatestRevision >= 0 &&
+      gameData.gameLatestRevision !== "" &&
       gameData.gameEngine.length > 0 &&
       gameData.gameWebsite.length > 0 &&
       bIsWindowsDownloadURIValid &&

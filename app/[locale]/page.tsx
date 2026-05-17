@@ -1,7 +1,7 @@
 import { Box, Button, ScrollArea } from "@radix-ui/themes";
 import { getCarousel, getYouTubeVideos } from "@/lib/utils";
 import { getGames } from "@/lib/games";
-import type { Game, Carousel } from "@/lib/types";
+import type { Game, Carousel, GameList } from "@/lib/types";
 import { getTranslations } from "next-intl/server";
 import GameRedirectButton from "@/components/games/game-redirect-button";
 import AutoSliderCarousel from "@/components/common/main-page-carousel";
@@ -12,7 +12,7 @@ import { Link } from "@/i18n/routing";
 export default async function Home() {
   // 서버에서 직접 데이터 페칭
   const youtubeVideos = await getYouTubeVideos("UCL137ZWChauNFsma6ifhNdA");
-  const games: Game[] = await getGames("released");
+  const games: GameList[] = await getGames("released");
   const carousels = await getCarousel();
   const t = await getTranslations("MainPage");
 
