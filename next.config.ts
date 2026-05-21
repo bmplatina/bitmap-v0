@@ -1,3 +1,4 @@
+import { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 import withPWAInit from "@ducanh2912/next-pwa";
 
@@ -8,8 +9,7 @@ const withPWA = withPWAInit({
   disable: process.env.NODE_ENV === "development",
 });
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -18,13 +18,11 @@ const nextConfig = {
   },
 
   // Uncomment below if using code-server development environment
-  // basePath: "/absproxy/3000",
+  basePath: "/absproxy/3000",
 
   output: "standalone", // 이 한 줄이 서버 리소스를 획기적으로 줄여줍니다.
 
-  experimental: {
-    allowedDevOrigins: ["playgrounds.prodbybitmap.com"],
-  },
+  allowedDevOrigins: ["playgrounds.prodbybitmap.com"],
 
   async rewrites() {
     return [
