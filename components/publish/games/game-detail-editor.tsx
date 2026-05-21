@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Callout, Checkbox, Spinner, Text } from "@radix-ui/themes";
+import { Callout, Checkbox, Spinner, Text, TextField } from "@radix-ui/themes";
 import {
   Card,
   CardContent,
@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Clock } from "lucide-react";
@@ -135,7 +134,7 @@ export default function GameDetailEditor() {
                 </Text>
               </div>
             ) : (
-              <Input value={game.gameId} disabled />
+              <TextField.Root value={game.gameId} disabled />
             )}
           </CardContent>
         </Card>
@@ -152,7 +151,7 @@ export default function GameDetailEditor() {
             <CardDescription>{t("gameLatestRevisionDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Input
+            <TextField.Root
               // type="number"
               value={game.gameLatestRevision}
               onChange={(e) => setGameLatestVersion(e.target.value)}
@@ -209,7 +208,7 @@ export default function GameDetailEditor() {
             <CardDescription>{t("gameEngineDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Input
+            <TextField.Root
               value={game.gameEngine}
               onChange={(e) => setGameEngine(e.target.value)}
               placeholder="Unity, Unreal Engine 등"
@@ -277,7 +276,7 @@ export default function GameDetailEditor() {
             <CardDescription>{t("gameWebsiteDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Input
+            <TextField.Root
               value={game.gameWebsite}
               onChange={(e) => setGameWebsite(e.target.value)}
               placeholder="https://example.com"
@@ -299,8 +298,9 @@ export default function GameDetailEditor() {
             {game.gamePlatformMac && (
               <div>
                 <Label htmlFor="macDownload">{t("gameDownloadMacURL")}</Label>
-                <Input
+                <TextField.Root
                   id="macDownload"
+                  disabled
                   value={game.gameDownloadMacURL || ""}
                   onChange={(e) => setGameDownloadMacURL(e.target.value)}
                   placeholder="https://example.com/download/mac"
@@ -311,8 +311,9 @@ export default function GameDetailEditor() {
             {game.gamePlatformWindows && (
               <div>
                 <Label htmlFor="winDownload">{t("gameDownloadWinURL")}</Label>
-                <Input
+                <TextField.Root
                   id="winDownload"
+                  disabled
                   value={game.gameDownloadWinURL || ""}
                   onChange={(e) => setGameDownloadWinURL(e.target.value)}
                   placeholder="https://example.com/download/windows"
@@ -335,7 +336,7 @@ export default function GameDetailEditor() {
             <CardDescription>{t("gameBinaryNameDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Input
+            <TextField.Root
               value={game.gameBinaryName}
               onChange={(e) => setGameBinaryName(e.target.value)}
               placeholder="Game.exe, Game.app, Game"
