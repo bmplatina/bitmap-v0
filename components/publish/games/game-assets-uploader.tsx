@@ -2,8 +2,15 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import Image from "next/image";
-import { ScrollArea, Skeleton, Text } from "@radix-ui/themes"; // @radix-ui/themes 사용
+import {
+  Button,
+  ScrollArea,
+  Skeleton,
+  Text,
+  TextField,
+} from "@radix-ui/themes"; // @radix-ui/themes 사용
 import {
   Card,
   CardHeader,
@@ -12,11 +19,10 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { useTranslations } from "next-intl";
 import { useGameForm } from "@/lib/GamePublishContext";
 import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { extractYoutubeId, imageUriRegExp } from "@/lib/utils";
 import { uploadGameImage } from "@/lib/games";
 
@@ -25,7 +31,7 @@ const GameRedirectButton = dynamic(
   {
     ssr: false,
     loading: () => <Skeleton />,
-  }
+  },
 );
 
 export default function GameAssetsUploader() {
@@ -80,7 +86,7 @@ export default function GameAssetsUploader() {
     ];
     types.forEach((type) => {
       const cached = localStorage.getItem(
-        `${type}Preview_${game.gameBinaryName}`
+        `${type}Preview_${game.gameBinaryName}`,
       );
       // gameListBanner의 경우, 기존 로직상 배너 미리보기가 없으면 포스터나 기존 이미지를 보여주지 않도록 null 체크를 신중히 함
       if (cached) {
@@ -95,7 +101,7 @@ export default function GameAssetsUploader() {
 
   function handleFileChange(
     e: React.ChangeEvent<HTMLInputElement>,
-    imageType: ImageType
+    imageType: ImageType,
   ) {
     const file = e.target.files?.[0];
     if (file) {
@@ -110,7 +116,7 @@ export default function GameAssetsUploader() {
         const base64String = reader.result as string;
         localStorage.setItem(
           `${imageType}Preview_${game.gameBinaryName}`,
-          base64String
+          base64String,
         );
       };
       reader.readAsDataURL(file);
@@ -126,7 +132,7 @@ export default function GameAssetsUploader() {
         selectedFile,
         token,
         game.gameBinaryName,
-        (percent) => {}
+        (percent) => {},
       );
       if (result.includes("dl")) {
         switch (imageType) {
@@ -183,6 +189,49 @@ export default function GameAssetsUploader() {
           {/* 유튜브 트레일러 섹션 (기존 유지) */}
           <Card>
             <CardHeader>
+              <CardTitle>{t("gameCaidx")}</CardTitle>
+              <CardDescription>
+                게임을 업로드하고 버전 식별자를 얻는 방법은{" "}
+                <Text color="blue">
+                  <Link
+                    href="https://developer.prodbybitmap.com/ko/bitmap-api/upload-game"
+                    target="_blank"
+                  >
+                    이 링크
+                  </Link>
+                </Text>
+                를 참조하십시오.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex gap-2">
+                <TextField.Root
+                  readOnly
+                  placeholder={t("select-file-placeholder")}
+                  value={selectedFiles.gameListBanner?.name || ""}
+                  onClick={() => fileInputRefs.gameListBanner.current?.click()}
+                  className="cursor-pointer"
+                />
+                <Input
+                  type="file"
+                  name="caidx"
+                  ref={fileInputRefs.gameListBanner}
+                  onChange={(e) => handleFileChange(e, "gameListBanner")}
+                  className="hidden"
+                  accept="image/*"
+                />
+                <Button
+                  variant="outline"
+                  onClick={() => fileInputRefs.gameListBanner.current?.click()}
+                >
+                  {t("select-file")}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle>
                 {t("gameVideoURL")}
                 <Text color="red"> *</Text>
@@ -192,7 +241,7 @@ export default function GameAssetsUploader() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Input
+              <TextField.Root
                 value={tempYouTubeVideoId}
                 onChange={(e) => setTempYouTubeVideoId(e.target.value)}
                 placeholder="https://youtu.be/..."
@@ -223,14 +272,14 @@ export default function GameAssetsUploader() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
-                <Input
+                <TextField.Root
                   readOnly
                   placeholder={t("select-file-placeholder")}
                   value={selectedFiles.poster?.name || ""}
                   onClick={() => fileInputRefs.poster.current?.click()}
                   className="cursor-pointer"
                 />
-                <input
+                <Input
                   type="file"
                   ref={fileInputRefs.poster}
                   onChange={(e) => handleFileChange(e, "poster")}
@@ -286,14 +335,14 @@ export default function GameAssetsUploader() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
-                <Input
+                <TextField.Root
                   readOnly
                   placeholder={t("select-file-placeholder")}
                   value={selectedFiles.gameListBanner?.name || ""}
                   onClick={() => fileInputRefs.gameListBanner.current?.click()}
                   className="cursor-pointer"
                 />
-                <input
+                <Input
                   type="file"
                   ref={fileInputRefs.gameListBanner}
                   onChange={(e) => handleFileChange(e, "gameListBanner")}
@@ -308,19 +357,6 @@ export default function GameAssetsUploader() {
                 </Button>
               </div>
 
-              {/*(previewUrl || game.gameImageURL[0]) && (
-                <div className="relative w-48 aspect-[1/1.414] rounded-lg overflow-hidden border bg-muted">
-                  <Image
-                    src={previewUrl || game.gameImageURL[0]}
-                    alt="Poster Preview"
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                    {previewUrl ? " {t("local-preview")}" : "서버 이미지"}
-                  </div>
-                </div>
-              )*/}
               {/* 미리보기 영역: 업로드 전/후 상태를 시각적으로 보여줌 */}
               <div className="flex gap-4 pb-4">
                 <GameRedirectButton
@@ -359,14 +395,14 @@ export default function GameAssetsUploader() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
-                <Input
+                <TextField.Root
                   readOnly
                   placeholder={t("select-file-placeholder")}
                   value={selectedFiles.gameImage?.name || ""}
                   onClick={() => fileInputRefs.gameImage.current?.click()}
                   className="cursor-pointer"
                 />
-                <input
+                <Input
                   type="file"
                   ref={fileInputRefs.gameImage}
                   onChange={(e) => handleFileChange(e, "gameImage")}
@@ -454,7 +490,7 @@ export default function GameAssetsUploader() {
                               className="object-cover"
                             />
                           </div>
-                        )
+                        ),
                     )}
                   </div>
                 </ScrollArea>

@@ -316,6 +316,8 @@
     "gameReleasedDateDesc": "스토어에 표시될 게임의 얼리 액세스 또는 정식 발매일입니다.",
     "gameWebsite": "게임 공식 웹사이트",
     "gameWebsiteDesc": "스토어에서 리다이렉트할 수 있는 게임의 공식 웹사이트입니다.",
+    "gameCaidx": "게임 버전 식별자",
+    "gameCaidxDesc": "게임을 업로드하고 버전 식별자를 얻는 방법은 이 링크를 참조하십시오.",
     "gameVideoURL": "게임 트레일러 영상 (YouTube)",
     "gameVideoURLDesc": "스토어에 표시될 게임의 공식 YouTube 트레일러 영상입니다.\nhttps://youtu.be/abcedfg 또는 https://youtube.com/watch?v=abcdefg일 때 abcdefg를 입력하십시오.",
     "gameDownloadURL": "게임 다운로드 링크",
