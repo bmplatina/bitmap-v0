@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Callout, Checkbox, Spinner, Text, TextField } from "@radix-ui/themes";
+import {
+  Callout,
+  Checkbox,
+  Flex,
+  Spinner,
+  Text,
+  TextField,
+} from "@radix-ui/themes";
 import {
   Card,
   CardContent,
@@ -17,6 +24,8 @@ import { toast } from "@/hooks/use-toast";
 import { getGames } from "@/lib/games";
 import { useTranslations } from "next-intl";
 import { useGameForm } from "@/lib/GamePublishContext";
+import semver from "semver";
+import { Link } from "@/i18n/routing";
 
 export default function GameDetailEditor() {
   const t = useTranslations("GameSubmit");
@@ -28,7 +37,13 @@ export default function GameDetailEditor() {
   } = useGameForm();
 
   // 로딩 상태
-  const [isLoadingGameId, setIsLoadingGameId] = useState(false);
+  const [bIsLoadingGameId, setIsLoadingGameId] = useState(false);
+  const [bIsSemverValid, setIsSemverValid] = useState(false);
+
+  // gameLatestRevision이 변경되거나 컴포넌트가 마운트될 때 SemVer 유효성 자동 검사
+  useEffect(() => {
+    setIsSemverValid(semver.valid(game.gameLatestRevision) !== null);
+  }, [game.gameLatestRevision]);
 
   function setGameId(value: number) {
     updateField("gameId", value);
@@ -112,7 +127,11 @@ export default function GameDetailEditor() {
           <Callout.Icon>
             <Clock />
           </Callout.Icon>
-          <Callout.Text>{t("stored-view-required-context-alert")}</Callout.Text>
+          <Callout.Text>
+            {t.rich("stored-view-required-context-alert", {
+              red: (chunks) => <Text color="red">{chunks}</Text>,
+            })}
+          </Callout.Text>
         </Callout.Root>
       )}
       <div className="space-y-6">
@@ -126,7 +145,7 @@ export default function GameDetailEditor() {
             <CardDescription>{t("gameIdDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
-            {isLoadingGameId ? (
+            {bIsLoadingGameId ? (
               <div className="flex items-center space-x-2">
                 <Spinner className="h-4 w-4" />
                 <Text as="span" className="text-muted-foreground">
@@ -148,16 +167,30 @@ export default function GameDetailEditor() {
               {t("gameLatestRevision")}
               <Text color="red"> *</Text>
             </CardTitle>
-            <CardDescription>{t("gameLatestRevisionDesc")}</CardDescription>
+            <CardDescription>
+              {t.rich("gameLatestRevisionDesc", {
+                semverdoc: (chunks) => (
+                  <Text color="blue">
+                    <Link href="https://semver.org/" target="_blank">
+                      {chunks}
+                    </Link>
+                  </Text>
+                ),
+              })}
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <TextField.Root
-              // type="number"
-              value={game.gameLatestRevision}
-              onChange={(e) => setGameLatestVersion(e.target.value)}
-              placeholder="1"
-              min="1"
-            />
+            <Flex direction="column" gap="2">
+              <TextField.Root
+                color={bIsSemverValid ? undefined : "red"}
+                value={game.gameLatestRevision}
+                onChange={(e) => setGameLatestVersion(e.target.value)}
+                placeholder="1.0.0"
+              />
+              {!bIsSemverValid && (
+                <Text color="red">{t("bIsVersionInvalid")}</Text>
+              )}
+            </Flex>
           </CardContent>
         </Card>
 
@@ -173,7 +206,7 @@ export default function GameDetailEditor() {
             <CardDescription>{t("gamePlatformDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center space-x-2">
+            <Flex gap="2">
               <Checkbox
                 id="windows"
                 checked={game.gamePlatformWindows}
@@ -182,8 +215,8 @@ export default function GameDetailEditor() {
                 }
               />
               <Label htmlFor="windows">{t("gamePlatformWindows")}</Label>
-            </div>
-            <div className="flex items-center space-x-2">
+            </Flex>
+            <Flex gap="2">
               <Checkbox
                 id="mac"
                 checked={game.gamePlatformMac}
@@ -192,7 +225,7 @@ export default function GameDetailEditor() {
                 }
               />
               <Label htmlFor="mac">{t("gamePlatformMac")}</Label>
-            </div>
+            </Flex>
           </CardContent>
         </Card>
 
@@ -228,7 +261,7 @@ export default function GameDetailEditor() {
             <CardDescription>{t("isEarlyAccessDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center space-x-2">
+            <Flex gap="2">
               <Checkbox
                 id="earlyAccess"
                 checked={game.isEarlyAccess}
@@ -237,7 +270,7 @@ export default function GameDetailEditor() {
                 }
               />
               <Label htmlFor="earlyAccess">{t("isEarlyAccess")}</Label>
-            </div>
+            </Flex>
           </CardContent>
         </Card>
 
@@ -253,14 +286,14 @@ export default function GameDetailEditor() {
             <CardDescription>{t("isReleasedDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center space-x-2">
+            <Flex gap="2">
               <Checkbox
                 id="released"
                 checked={game.isReleased}
                 onCheckedChange={(checked) => setIsReleased(checked as boolean)}
               />
-              <Label htmlFor="released">정식 출시됨</Label>
-            </div>
+              <Label htmlFor="released">{t("bIsReleased")}</Label>
+            </Flex>
           </CardContent>
         </Card>
 

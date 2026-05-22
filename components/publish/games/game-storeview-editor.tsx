@@ -214,7 +214,9 @@ export default function GameStoreViewEditor() {
             <Clock />
           </Callout.Icon>
           <Callout.Text>
-            {t_gameSubmit("stored-view-required-context-alert")}
+            {t_gameSubmit.rich("stored-view-required-context-alert", {
+              red: (chunks) => <Text color="red">{chunks}</Text>,
+            })}
           </Callout.Text>
         </Callout.Root>
       )}

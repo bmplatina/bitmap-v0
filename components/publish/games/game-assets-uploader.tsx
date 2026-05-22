@@ -24,7 +24,7 @@ import { useTranslations } from "next-intl";
 import { useGameForm } from "@/lib/GamePublishContext";
 import { Separator } from "@/components/ui/separator";
 import { extractYoutubeId, imageUriRegExp } from "@/lib/utils";
-import { uploadGameImage } from "@/lib/games";
+import { uploadGameImage, uploadDesync } from "@/lib/games";
 
 const GameRedirectButton = dynamic(
   () => import("@/components/games/game-redirect-button"),
@@ -68,6 +68,20 @@ export default function GameAssetsUploader() {
     gameImage: null,
   });
 
+  // Desync 파일 상태 관리
+  type DesyncFileType = "catar" | "caidx" | "caibx";
+
+  const [desyncFiles, setDesyncFiles] = useState<
+    Record<DesyncFileType, File | null>
+  >({
+    catar: null,
+    caidx: null,
+    caibx: null,
+  });
+
+  const [desyncUploadProgress, setDesyncUploadProgress] = useState<number>(0);
+  const [isDesyncUploading, setIsDesyncUploading] = useState<boolean>(false);
+
   // 개별 Ref 생성 (버그 수정: 하나의 Ref 공유 문제 해결)
   const fileInputRefs = {
     poster: useRef<HTMLInputElement>(null),
@@ -75,6 +89,9 @@ export default function GameAssetsUploader() {
     gameIcon: useRef<HTMLInputElement>(null),
     gameImage: useRef<HTMLInputElement>(null),
   };
+
+  // 통합된 Desync 파일 Input Ref
+  const desyncFileInputRef = useRef<HTMLInputElement>(null);
 
   // 컴포넌트 마운트 시 로컬 스토리지에서 캐시된 미리보기(Base64)가 있는지 확인
   useEffect(() => {
@@ -123,7 +140,7 @@ export default function GameAssetsUploader() {
     }
   }
 
-  async function handleUpload(imageType: ImageType) {
+  async function handleUploadImage(imageType: ImageType) {
     const token = localStorage.getItem("accessToken");
     const selectedFile = selectedFiles[imageType];
 
@@ -178,6 +195,82 @@ export default function GameAssetsUploader() {
     }
   }
 
+  function handleDesyncFilesChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (files) {
+      setDesyncFiles((prev) => {
+        const next = { ...prev };
+        Array.from(files).forEach((file) => {
+          const ext = file.name.split(".").pop()?.toLowerCase();
+          if (ext === "catar") next.catar = file;
+          else if (ext === "caidx") next.caidx = file;
+          else if (ext === "caibx") next.caibx = file;
+        });
+        return next;
+      });
+    }
+  }
+
+  async function handleUploadDesync() {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    if (!desyncFiles.catar && !desyncFiles.caidx && !desyncFiles.caibx) {
+      alert("업로드할 파일을 하나 이상 선택해주세요.");
+      return;
+    }
+
+    if (game.gameId === 0) {
+      alert("게임 ID가 유효하지 않습니다.");
+      return;
+    }
+
+    setIsDesyncUploading(true);
+    setDesyncUploadProgress(0);
+
+    try {
+      const fileEntries = Object.entries(desyncFiles).filter(
+        ([, file]) => file !== null,
+      ) as [DesyncFileType, File][];
+
+      for (let i = 0; i < fileEntries.length; i++) {
+        const [fileType, file] = fileEntries[i];
+        const platform = game.gamePlatformWindows ? "windows" : "mac";
+
+        const result = await uploadDesync(
+          file,
+          token,
+          game.gameId,
+          platform,
+          game.gameLatestRevision || "1.0.0",
+          (percent) => {
+            // 전체 진행률 계산: 각 파일의 진행률을 전체에 반영
+            const overallProgress = Math.round(
+              ((i * 100 + percent) / (fileEntries.length * 100)) * 100,
+            );
+            setDesyncUploadProgress(overallProgress);
+          },
+        );
+
+        if (result === "file-not-found" || result.includes("Error")) {
+          alert(`${fileType} 업로드 실패: ${result}`);
+        }
+      }
+
+      setDesyncUploadProgress(100);
+      // 업로드 완료 후 파일 선택 초기화
+      setDesyncFiles({ catar: null, caidx: null, caibx: null });
+    } catch (error: any) {
+      alert(`업로드 중 오류가 발생했습니다: ${error.message}`);
+    } finally {
+      setIsDesyncUploading(false);
+    }
+  }
+
   function setYouTubeTrailerId(id: string) {
     updateField("gameVideoURL", extractYoutubeId(id));
   }
@@ -191,43 +284,85 @@ export default function GameAssetsUploader() {
             <CardHeader>
               <CardTitle>{t("gameCaidx")}</CardTitle>
               <CardDescription>
-                게임을 업로드하고 버전 식별자를 얻는 방법은{" "}
-                <Text color="blue">
-                  <Link
-                    href="https://developer.prodbybitmap.com/ko/bitmap-api/upload-game"
-                    target="_blank"
-                  >
-                    이 링크
-                  </Link>
-                </Text>
-                를 참조하십시오.
+                {t.rich("gameCaidxDesc", {
+                  link: (chunks) => (
+                    <Text color="blue">
+                      <Link
+                        href="https://developer.prodbybitmap.com/ko/bitmap-api/upload-game"
+                        target="_blank"
+                      >
+                        {chunks}
+                      </Link>
+                    </Text>
+                  ),
+                })}
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="flex gap-2">
-                <TextField.Root
-                  readOnly
-                  placeholder={t("select-file-placeholder")}
-                  value={selectedFiles.gameListBanner?.name || ""}
-                  onClick={() => fileInputRefs.gameListBanner.current?.click()}
-                  className="cursor-pointer"
-                />
-                <Input
-                  type="file"
-                  name="caidx"
-                  ref={fileInputRefs.gameListBanner}
-                  onChange={(e) => handleFileChange(e, "gameListBanner")}
-                  className="hidden"
-                  accept="image/*"
-                />
-                <Button
-                  variant="outline"
-                  onClick={() => fileInputRefs.gameListBanner.current?.click()}
-                >
-                  {t("select-file")}
-                </Button>
+            <CardContent className="space-y-4">
+              {/* 통합 파일 선택 */}
+              <div className="space-y-1">
+                <div className="flex gap-2">
+                  <TextField.Root
+                    readOnly
+                    placeholder={t("select-file-placeholder")}
+                    value={[
+                      desyncFiles.catar?.name,
+                      desyncFiles.caidx?.name,
+                      desyncFiles.caibx?.name,
+                    ]
+                      .filter(Boolean)
+                      .join(", ")}
+                    onClick={() => desyncFileInputRef.current?.click()}
+                    className="cursor-pointer flex-1"
+                  />
+                  <Input
+                    type="file"
+                    multiple
+                    ref={desyncFileInputRef}
+                    onChange={handleDesyncFilesChange}
+                    className="hidden"
+                    accept=".catar,.caidx,.caibx"
+                  />
+                  <Button
+                    variant="outline"
+                    onClick={() => desyncFileInputRef.current?.click()}
+                    disabled={isDesyncUploading}
+                  >
+                    {t("select-file")}
+                  </Button>
+                </div>
               </div>
+
+              {/* 업로드 진행률 표시 */}
+              {isDesyncUploading && (
+                <div className="space-y-2">
+                  <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+                    <div
+                      className="bg-primary h-full transition-all duration-300 ease-in-out rounded-full"
+                      style={{ width: `${desyncUploadProgress}%` }}
+                    />
+                  </div>
+                  <Text size="1" color="gray">
+                    {desyncUploadProgress}% 업로드 중...
+                  </Text>
+                </div>
+              )}
             </CardContent>
+            <CardFooter>
+              <Button
+                onClick={() => handleUploadDesync()}
+                disabled={
+                  isDesyncUploading ||
+                  (!desyncFiles.catar &&
+                    !desyncFiles.caidx &&
+                    !desyncFiles.caibx)
+                }
+              >
+                {isDesyncUploading
+                  ? `${desyncUploadProgress}%...`
+                  : t("upload")}
+              </Button>
+            </CardFooter>
           </Card>
 
           <Card>
@@ -312,7 +447,7 @@ export default function GameAssetsUploader() {
             </CardContent>
             <CardFooter>
               <Button
-                onClick={() => handleUpload("poster")}
+                onClick={() => handleUploadImage("poster")}
                 disabled={!selectedFiles.poster}
               >
                 {t("upload")}
@@ -375,7 +510,7 @@ export default function GameAssetsUploader() {
             </CardContent>
             <CardFooter>
               <Button
-                onClick={() => handleUpload("gameListBanner")}
+                onClick={() => handleUploadImage("gameListBanner")}
                 disabled={!selectedFiles.gameListBanner}
               >
                 {t("upload")}
@@ -433,7 +568,7 @@ export default function GameAssetsUploader() {
             </CardContent>
             <CardFooter>
               <Button
-                onClick={() => handleUpload("gameImage")}
+                onClick={() => handleUploadImage("gameImage")}
                 disabled={!selectedFiles.gameImage}
               >
                 {t("upload-append")}

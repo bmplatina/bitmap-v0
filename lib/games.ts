@@ -168,6 +168,52 @@ async function uploadGameImage(
   }
 }
 
+async function uploadDesync(
+  file: File | null,
+  token: string,
+  gameId: number,
+  platform: string,
+  version: string,
+  onProgress?: (progress: number) => void,
+): Promise<string> {
+  if (!file) return "file-not-found";
+
+  const formData = new FormData();
+  // Multer에서 req.body를 파일 처리 시점에 읽으려면 텍스트 필드를 파일보다 먼저 append 해야 합니다.
+  formData.append("gameId", gameId.toString());
+  formData.append("platform", platform);
+  formData.append("version", version);
+  formData.append("desync", file); // Express의 upload.single('image')와 일치해야 함
+
+  try {
+    const response = await axios.post(
+      getApiLinkByPurpose("upload/game/caidx"),
+      formData, // 별도의 Header 설정 없이 body에 바로 전달
+      {
+        timeout: 30000, // 30초 타임아웃
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        onUploadProgress: (progressEvent) => {
+          if (onProgress && progressEvent.total) {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total,
+            );
+            onProgress(percentCompleted);
+          }
+        },
+      },
+    );
+
+    const data = response.data;
+    alert("업로드 성공: " + data.uri);
+    return data.uri as string;
+  } catch (error: any) {
+    console.error("업로드 실패:", error);
+    return error.message;
+  }
+}
+
 // API에서 특정 게임 데이터를 가져오는 함수
 async function getGameRatesById(id: string): Promise<GameRating[] | null> {
   try {
@@ -257,6 +303,7 @@ export {
   getGamesByUid,
   submitGame,
   uploadGameImage,
+  uploadDesync,
   getGameRatesById,
   submitGameRate,
   deleteGameRate,
