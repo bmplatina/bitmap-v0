@@ -98,20 +98,6 @@ export default function GameDetail({
                 {t("view-in-bitmap-app")}
               </a>
             </Button>
-
-            {/*game.gameDownloadWinURL && (
-                  <Button className="w-full">
-                    <Monitor className="mr-2 h-4 w-4" />
-                    Windows 다운로드
-                  </Button>
-              )*/}
-
-            {/*game.gameDownloadMacURL && (
-                  <Button className="w-full" variant="secondary">
-                    <Apple className="mr-2 h-4 w-4" />
-                    Mac 다운로드
-                  </Button>
-              )*/}
           </div>
         </div>
 
@@ -209,9 +195,9 @@ export default function GameDetail({
           )}
 
           <div className="my-8">
-            <Text as="label" size="7" weight="bold" className="mb-4">{`${t(
-              "information-of",
-            )} ${game.gameTitle}`}</Text>
+            <Text as="label" size="7" weight="bold" className="mb-4">
+              {t("information-of", { gameTitle: game.gameTitle })}
+            </Text>
             <ClientMarkdown
               content={getLocalizedString(locale, game.gameDescription)}
             />

@@ -24,7 +24,6 @@ import { toast } from "@/hooks/use-toast";
 import { getGames } from "@/lib/games";
 import { useTranslations } from "next-intl";
 import { useGameForm } from "@/lib/GamePublishContext";
-import semver from "semver";
 import { Link } from "@/i18n/routing";
 
 export default function GameDetailEditor() {
@@ -33,17 +32,12 @@ export default function GameDetailEditor() {
     gameData: game,
     updateField,
     bIsEditingExisting,
+    bIsSemverValid,
     getIsDetailEditorFieldAllValid,
   } = useGameForm();
 
   // 로딩 상태
   const [bIsLoadingGameId, setIsLoadingGameId] = useState(false);
-  const [bIsSemverValid, setIsSemverValid] = useState(false);
-
-  // gameLatestRevision이 변경되거나 컴포넌트가 마운트될 때 SemVer 유효성 자동 검사
-  useEffect(() => {
-    setIsSemverValid(semver.valid(game.gameLatestRevision) !== null);
-  }, [game.gameLatestRevision]);
 
   function setGameId(value: number) {
     updateField("gameId", value);

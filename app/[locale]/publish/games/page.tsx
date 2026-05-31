@@ -108,9 +108,7 @@ export default function SubmitGames() {
             {t("detailed-info")}
           </Tabs.Trigger>
           <Tabs.Trigger value="assets">{t("assets")}</Tabs.Trigger>
-          <Tabs.Trigger value="submit">
-            {bIsEditingExisting ? t("edit") : t("submit")}
-          </Tabs.Trigger>
+          <Tabs.Trigger value="submit">{t("review")}</Tabs.Trigger>
         </Tabs.List>
 
         <Box pt="3">

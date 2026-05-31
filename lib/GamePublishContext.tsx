@@ -4,8 +4,10 @@ import {
   createContext,
   useContext,
   useState,
+  useRef,
   ReactNode,
   useCallback,
+  useMemo,
 } from "react";
 import semver from "semver";
 import type { Game, stringLocalized } from "@/lib/types";
@@ -28,6 +30,8 @@ interface GameFormContextType {
   setGame: (game: Game) => void;
   setIsEditingExisting: (bIsEditing: boolean) => void;
   bIsEditingExisting: boolean;
+  bIsGameDataDirty: boolean;
+  bIsSemverValid: boolean;
   getIsStoreviewEditorFieldAllValid: () => boolean;
   getIsDetailEditorFieldAllValid: () => boolean;
 }
@@ -70,6 +74,7 @@ export function GamePublishProvider({ children }: { children: ReactNode }) {
   const [gameData, setGameData] = useState<Game>(initialGameData);
   const [bIsEditingExisting, setIsEditingExistingEffect] =
     useState<boolean>(false);
+  const originalGameDataRef = useRef<Game | null>(null);
 
   // 1. 일반 필드 업데이트
   const updateField = useCallback(
@@ -115,6 +120,7 @@ export function GamePublishProvider({ children }: { children: ReactNode }) {
 
   const setGame = useCallback((game: Game) => {
     setGameData(game);
+    originalGameDataRef.current = structuredClone(game);
   }, []);
 
   const resetForm = useCallback(() => setGameData(initialGameData), []);
@@ -161,6 +167,17 @@ export function GamePublishProvider({ children }: { children: ReactNode }) {
     );
   }, [gameData]);
 
+  // 원본 데이터 대비 변경 여부 감지
+  const bIsGameDataDirty = useMemo(() => {
+    if (!originalGameDataRef.current) return true; // 새 게임이면 항상 dirty
+    return JSON.stringify(gameData) !== JSON.stringify(originalGameDataRef.current);
+  }, [gameData]);
+
+  // SemVer 유효성 검사
+  const bIsSemverValid = useMemo(() => {
+    return semver.valid(gameData.gameLatestRevision) !== null;
+  }, [gameData.gameLatestRevision]);
+
   return (
     <GameFormContext.Provider
       value={{
@@ -173,6 +190,8 @@ export function GamePublishProvider({ children }: { children: ReactNode }) {
         setGame,
         setIsEditingExisting,
         bIsEditingExisting,
+        bIsGameDataDirty,
+        bIsSemverValid,
         getIsStoreviewEditorFieldAllValid,
         getIsDetailEditorFieldAllValid,
       }}

@@ -2,7 +2,7 @@
 
 import GameDetail from "@/components/games/game-details-pending";
 import { useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { useGameForm } from "@/lib/GamePublishContext";
 import { useAuth } from "@/lib/AuthContext";
 import { Button, Text, Spinner } from "@radix-ui/themes";
@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 
 export default function gamePublishSubmitter() {
   const t = useTranslations("GameSubmit");
-  const { gameData: game, bIsEditingExisting, updateField } = useGameForm();
+  const { gameData: game, bIsEditingExisting, bIsGameDataDirty, bIsSemverValid, updateField } = useGameForm();
   const { uid } = useAuth();
   const router = useRouter();
   const [token, setToken] = useState<string>("");
@@ -53,7 +53,7 @@ export default function gamePublishSubmitter() {
     if (game.gameReleasedDate) {
       updateField(
         "gameReleasedDate",
-        formatDateToMySQL(new Date(game.gameReleasedDate))
+        formatDateToMySQL(new Date(game.gameReleasedDate)),
       );
     }
   }, [bIsEditingExisting, uid, game.gameReleasedDate]);
@@ -66,8 +66,9 @@ export default function gamePublishSubmitter() {
             <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
               <Clock className="h-5 w-5" />
               <Text className="font-medium" as="span">
-                {bIsEditingExisting ? t("editing") : t("submitting")}{" "}
-                {game.gameTitle}
+                {bIsEditingExisting
+                  ? t("editing", { gameTitle: game.gameTitle })
+                  : t("submitting", { gameTitle: game.gameTitle })}
               </Text>
             </div>
             <Text
@@ -87,18 +88,13 @@ export default function gamePublishSubmitter() {
             )}
           </div>
           {bIsPostSucceed ? (
-            <Button
-              onClick={() => router.push(`/games/${game.gameId}`)}
-              size="3"
-              variant="solid"
-              color="amber"
-            >
-              {t("view-gamepage")}
+            <Button size="3" variant="solid" color="amber" asChild>
+              <Link href={`/games/${game.gameId}`}>{t("view-gamepage")}</Link>
             </Button>
           ) : (
             <Button
               onClick={submitHandler}
-              disabled={bIsPosting}
+              disabled={bIsPosting || !bIsSemverValid || (bIsEditingExisting && !bIsGameDataDirty)}
               size="3"
               variant="solid"
               color="amber"
