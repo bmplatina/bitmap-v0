@@ -40,11 +40,11 @@ export default function MarkdownEditor({
   };
 
   return (
-    <div className="h-[500px] flex flex-col">
+    <div className="h-[500px] flex flex-col overflow-hidden">
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
-        className="flex-1 flex flex-col"
+        className="flex-1 flex flex-col min-h-0"
       >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="edit" className="flex items-center gap-2">
@@ -57,23 +57,10 @@ export default function MarkdownEditor({
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="edit" className="flex-1 mt-4">
-          {/* <Textarea
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder="마크다운 문법을 사용하여 게임 설명을 작성하세요...
-
-# 제목 1
-## 제목 2
-### 제목 3
-
-**굵은 글씨**
-*기울임 글씨*
-`코드`
-
-일반 텍스트..."
-            className="h-full resize-none font-mono text-sm"
-          /> */}
+        <TabsContent
+          value="edit"
+          className="flex-1 mt-4 min-h-0 overflow-hidden data-[state=active]:flex data-[state=active]:flex-col"
+        >
           <Editor
             height="100%"
             defaultLanguage="markdown" // 언어 마크다운 고정
@@ -93,8 +80,11 @@ export default function MarkdownEditor({
           />
         </TabsContent>
 
-        <TabsContent value="preview" className="flex-1 mt-4">
-          <div className="h-full border rounded-md p-4 overflow-y-auto bg-muted/30">
+        <TabsContent
+          value="preview"
+          className="flex-1 mt-4 min-h-0 overflow-hidden data-[state=active]:flex data-[state=active]:flex-col"
+        >
+          <div className="flex-1 border rounded-md p-4 overflow-y-auto bg-muted/30">
             {value ? (
               <div
                 className="prose prose-sm max-w-none"
