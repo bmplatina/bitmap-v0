@@ -24,7 +24,7 @@ export default function AgeRatingImage({
   setRatingContentDescriptorsCallback,
 }: AgeRatingImageProps) {
   const t = useTranslations("GamesView");
-  const t_GameSubmit = useTranslations("GameSubmit")
+  const t_GameSubmit = useTranslations("GameSubmit");
   const locale = useLocale();
   const gameInformationComitee: string = locale === "en" ? "pegi" : "grac";
 
@@ -58,12 +58,14 @@ export default function AgeRatingImage({
             >
               {[0, 12, 15, 19].map((tempAgeRating, index) => (
                 <RadioCards.Item value={tempAgeRating.toString()} key={index}>
-                  <Image
-                    src={getAgeRatingImageUri(tempAgeRating)}
-                    alt="GRAC game rating"
-                    width="50"
-                    height="50"
-                  />
+                  <Flex justify="center" align="center" width="100%">
+                    <Image
+                      src={getAgeRatingImageUri(tempAgeRating)}
+                      alt="GRAC game rating"
+                      width="50"
+                      height="50"
+                    />
+                  </Flex>
                 </RadioCards.Item>
               ))}
             </RadioCards.Root>
@@ -79,7 +81,7 @@ export default function AgeRatingImage({
           {bEditorMode ? (
             <CheckboxCards.Root
               value={ratingContentDescriptors}
-              columns={{ initial: "1", sm: "4" }}
+              columns="1"
               onValueChange={
                 setRatingContentDescriptorsCallback
                   ? (value) => setRatingContentDescriptorsCallback(value)
@@ -94,18 +96,23 @@ export default function AgeRatingImage({
                 "sex",
                 "swear",
                 "violence",
-              ].map((elem, index) => (
-                <CheckboxCards.Item value={elem} key={index}>
-                  <Image
-                    key={index}
-                    src={getRatingDetailsImageUri(elem as RatingDetails)}
-                    alt={elem}
-                    width="35"
-                    height="35"
-                  />
-                  <Text key={elem}>{t_GameSubmit(elem)}</Text>
-                </CheckboxCards.Item>
-              ))}
+              ].map((elem, index) => {
+                if (locale === "en" && elem === "crime") return null;
+
+                return (
+                  <CheckboxCards.Item value={elem} key={index}>
+                    <Flex direction="row" align="center" gap="3" width="100%">
+                      <Image
+                        src={getRatingDetailsImageUri(elem as RatingDetails)}
+                        alt={elem}
+                        width="35"
+                        height="35"
+                      />
+                      <Text size="2">{t_GameSubmit(elem)}</Text>
+                    </Flex>
+                  </CheckboxCards.Item>
+                );
+              })}
             </CheckboxCards.Root>
           ) : (
             ratingContentDescriptors && (
