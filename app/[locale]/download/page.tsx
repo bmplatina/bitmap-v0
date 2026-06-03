@@ -24,7 +24,7 @@ export default async function BitmapAppPage({
   const t = await getTranslations("BitmapApp");
 
   // 1. Promise를 resolve 합니다.
-  const { gameId, projectId, lectureId } = await searchParams;
+  const { appToken, gameId, projectId, lectureId } = await searchParams;
 
   return (
     <div className="w-full py-12 px-4">
@@ -65,7 +65,7 @@ export default async function BitmapAppPage({
                   className="w-full max-w-[320px] items-center"
                 >
                   <Suspense fallback={<RedirectorSkeleton />}>
-                    <BitmapAppRedirector gameId={gameId as string} />
+                    <BitmapAppRedirector gameId={gameId as string} appAuth={appToken as string} />
                   </Suspense>
                   <Suspense fallback={<RedirectorSkeleton />}>
                     <BitmapAppDownloadButton />

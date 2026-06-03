@@ -8,12 +8,16 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Download } from "lucide-react";
 
-interface GameProps {
+interface RedirectorProps {
   gameId: string;
+  appAuth: string;
 }
 
-export default function BitmapAppRedirector({ gameId }: GameProps) {
-  const t = useTranslations("Sidebar");
+export default function BitmapAppRedirector({
+  gameId,
+  appAuth,
+}: RedirectorProps) {
+  const t = useTranslations("BitmapApp");
   const [game, setGame] = useState<Game | null>(null);
   const [bIsFetching, setIsFetching] = useState<boolean>(true);
 
@@ -29,8 +33,12 @@ export default function BitmapAppRedirector({ gameId }: GameProps) {
       }
     }
 
-    fetchGame();
-    if (gameId) window.location.href = `bitmap://games/detail?id=${gameId}`;
+    if (appAuth) {
+      window.location.href = `bitmap://auth?token=${appAuth}`;
+    } else if (gameId) {
+      fetchGame();
+      window.location.href = `bitmap://games/detail?id=${gameId}`;
+    }
   }, [gameId]);
 
   if (!gameId) return null;
