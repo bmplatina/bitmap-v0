@@ -283,6 +283,13 @@ type RatingDetails =
   | "swear"
   | "violence";
 
+interface CaidxLists {
+  folders: string[];
+  symlinks: string[];
+  files: string[];
+  others: string[];
+}
+
 export type {
   stringLocalized,
   Game,
@@ -298,6 +305,7 @@ export type {
   ErrorResponse,
   YouTubeQuery,
   Carousel,
+  CaidxLists,
   searchParamsPropsSSR,
   MembershipApplies,
   MembershipApplyRequest,

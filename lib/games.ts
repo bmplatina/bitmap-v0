@@ -5,6 +5,7 @@ import {
   GameRating,
   GameRatingRequest,
   GameReleaseState,
+  CaidxLists,
 } from "@/lib/types";
 import { getApiLinkByPurpose } from "@/lib/utils";
 
@@ -214,6 +215,26 @@ async function uploadDesync(
   }
 }
 
+async function getAllCaidxById(gameId: string, token: string) {
+  try {
+    const response = await axios.get<CaidxLists>(
+      getApiLinkByPurpose(`games/caidx/${gameId}/list`),
+      {
+        timeout: 10000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("게임 데이터를 가져오는 중 오류 발생:", error);
+  }
+}
+
 // API에서 특정 게임 데이터를 가져오는 함수
 async function getGameRatesById(id: string): Promise<GameRating[] | null> {
   try {
@@ -304,6 +325,7 @@ export {
   submitGame,
   uploadGameImage,
   uploadDesync,
+  getAllCaidxById,
   getGameRatesById,
   submitGameRate,
   deleteGameRate,

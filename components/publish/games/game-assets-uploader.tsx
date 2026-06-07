@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   Button,
+  Flex,
   ScrollArea,
   Skeleton,
   Text,
@@ -23,8 +24,11 @@ import { Input } from "@/components/ui/input";
 import { useTranslations } from "next-intl";
 import { useGameForm } from "@/lib/GamePublishContext";
 import { Separator } from "@/components/ui/separator";
-import { extractYoutubeId, imageUriRegExp } from "@/lib/utils";
-import { uploadGameImage, uploadDesync } from "@/lib/games";
+import { extractYoutubeId, imageUriRegExp, cn } from "@/lib/utils";
+import { CaidxLists } from "@/lib/types";
+import { uploadGameImage, uploadDesync, getAllCaidxById } from "@/lib/games";
+import WindowsLogo from "@/public/platforms/platformWindows10.png";
+import MacLogo from "@/public/platforms/platformMac.png";
 
 const GameRedirectButton = dynamic(
   () => import("@/components/games/game-redirect-button"),
@@ -46,6 +50,8 @@ export default function GameAssetsUploader() {
   } = useGameForm();
 
   const [tempYouTubeVideoId, setTempYouTubeVideoId] = useState<string>("");
+  const [existingCaidxList, setExistingCaidxList] = useState<CaidxLists>();
+  const caidxParse: RegExp = /^([a-zA-Z]+)_(v[\d.]+)\.caidx$/;
 
   // 통합된 파일 및 미리보기 상태 관리 타입 정의
   type ImageType = "poster" | "gameListBanner" | "gameIcon" | "gameImage";
@@ -275,11 +281,23 @@ export default function GameAssetsUploader() {
     updateField("gameVideoURL", extractYoutubeId(id));
   }
 
+  async function getCaidxList() {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const caidxList = await getAllCaidxById(game.gameId.toString(), token);
+      setExistingCaidxList(caidxList);
+    }
+  }
+
+  useEffect(function () {
+    getCaidxList();
+  }, []);
+
   return (
     <>
       <div className="container mx-auto p-6 max-w-4xl">
         <div className="space-y-6">
-          {/* 유튜브 트레일러 섹션 (기존 유지) */}
+          {/* caidx 업로더 */}
           <Card>
             <CardHeader>
               <CardTitle>{t("gameCaidx")}</CardTitle>
@@ -343,9 +361,55 @@ export default function GameAssetsUploader() {
                     />
                   </div>
                   <Text size="1" color="gray">
-                    {desyncUploadProgress}% 업로드 중...
+                    {t("uploading", { progress: desyncUploadProgress })}
                   </Text>
                 </div>
+              )}
+
+              {/* 업로드된 caidx 리스트 */}
+              {existingCaidxList && (
+                <Flex direction="column" gap="2">
+                  {existingCaidxList.files.map((fileName, index) => (
+                    <Link
+                      key={index}
+                      href={`//api.prodbybitmap.com/games/caidx/${game.gameId}`}
+                      target="_blank"
+                      className={cn(
+                        "flex-1 min-w-0 flex items-center gap-3 px-4 py-2 hover:bg-muted transition-colors",
+                        "bg-accent text-accent-foreground",
+                      )}
+                    >
+                      <div className="relative w-10 h-10 flex-shrink-0 rounded overflow-hidden bg-muted flex items-center justify-center">
+                        <Image
+                          src={
+                            fileName.includes("Windows") ? WindowsLogo : MacLogo
+                          }
+                          alt={game.gameTitle}
+                          width={32}
+                          height={32}
+                          className="object-contain"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <Text as="p" size="2" weight="medium" truncate>
+                          {fileName}
+                        </Text>
+                        <Text as="p" size="1" color="gray" truncate>
+                          {(() => {
+                            const match = fileName.match(caidxParse);
+                            if (match) {
+                              return t("gameCaidxLists", {
+                                gameTitle: game.gameTitle,
+                                version: match[2],
+                                platform: match[1],
+                              });
+                            }
+                          })()}
+                        </Text>
+                      </div>
+                    </Link>
+                  ))}
+                </Flex>
               )}
             </CardContent>
             <CardFooter>
