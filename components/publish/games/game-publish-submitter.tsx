@@ -30,6 +30,10 @@ export default function gamePublishSubmitter() {
       const result = await submitGame(token, game, bIsEditingExisting);
       setPostMessage(result.message as string);
       setIsPostSucceed(true);
+      // 새 게임 등록 시 서버가 AUTO_INCREMENT로 할당한 실제 gameId를 반영
+      if (!bIsEditingExisting && result.id !== undefined) {
+        updateField("gameId", result.id);
+      }
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.message || error.message || error.code;
