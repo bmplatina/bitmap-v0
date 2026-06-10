@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Box, AlertDialog, Tabs, Flex } from "@radix-ui/themes";
 import { useSearchParams } from "next/navigation";
-import { getGameById, getGames } from "@/lib/games";
+import { getGameById } from "@/lib/games";
 import { useAuth } from "@/lib/AuthContext";
 import { useGameForm } from "@/lib/GamePublishContext";
 import GameStoreViewEditor from "@/components/publish/games/game-storeview-editor";
@@ -53,11 +53,6 @@ export default function SubmitGames() {
   );
 
   useEffect(() => {
-    async function getGameAmount() {
-      const games = await getGames("all");
-      return games.length;
-    }
-
     const gameId = searchParams.get("edit");
     if (gameId) {
       getGameById(gameId).then((game) => {
@@ -66,11 +61,8 @@ export default function SubmitGames() {
           setIsEditingExisting(true);
         }
       });
-    } else {
-      getGameAmount().then((amount) => {
-        updateField("gameId", amount);
-      });
     }
+    // 새 게임의 gameId는 서버의 AUTO_INCREMENT에 의해 자동 할당됨
   }, [searchParams]);
 
   return (
