@@ -68,7 +68,7 @@ export const sidebarItems = [
   },
   {
     title: "publish",
-    bRequire: "login",
+    bRequire: "developer",
     items: [
       {
         title: "publish-dashboard",

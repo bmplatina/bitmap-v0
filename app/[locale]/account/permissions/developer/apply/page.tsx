@@ -43,14 +43,14 @@ export default function BitmapApply() {
 
   async function handleSwitching() {
     try {
+      setIsSubmitting(true);
       const token = localStorage.getItem("accessToken");
       if (token) {
         const res = await switchBitmapDeveloper(token);
-        if (res && typeof res === "object") {
-          setSubmitFailMessage(res.message);
-          // router.push("/account");
+        if (res.message == "switched-to-developer") {
+          router.push("/account");
         } else {
-          setSubmitFailMessage("unknown-error");
+          setSubmitFailMessage(res.message);
         }
       }
     } catch (error: any) {
@@ -63,8 +63,7 @@ export default function BitmapApply() {
   useEffect(
     function () {
       if (!isLoading) {
-        if (!bIsDeveloper) {
-          // ! 떼셈
+        if (bIsDeveloper) {
           router.push("/account/permissions");
         } else {
           getEula("BitmapGameDistributionAgreement").then((payload) => {
@@ -111,7 +110,7 @@ export default function BitmapApply() {
         <Separator />
 
         <Button disabled={!bIsAgreementRead} onClick={handleSwitching}>
-          {t("submit")}
+          {bIsSubmitting ? <Spinner /> : t("submit")}
         </Button>
       </Flex>
     </div>

@@ -256,7 +256,7 @@ async function grantMembershipLeavingByUid(
 
 async function switchBitmapDeveloper(token: string) {
   try {
-    const response = await axios.post(
+    const response = await axios.post<{ message: string }>(
       getApiLinkByPurpose(`permissions/developer/apply`),
       {},
       {
