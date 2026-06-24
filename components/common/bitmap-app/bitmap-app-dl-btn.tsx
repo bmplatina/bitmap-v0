@@ -85,9 +85,16 @@ export default function BitmapAppDownloadButton() {
       {os === OS.Windows || os === OS.Mac ? (
         <DownloadButton uri={latestReleaseDownloadURI} os={os} />
       ) : (
-        <Text color="gray" size="2">
-          {t("unsupported", { osName: os })}
-        </Text>
+        <Button
+          size="3"
+          variant="solid"
+          className="w-full cursor-pointer"
+          disabled
+        >
+          <Text color="gray" size="2">
+            {t("unsupported")}
+          </Text>
+        </Button>
       )}
       <Dialog.Root>
         <Dialog.Trigger className={pretendard.className}>
