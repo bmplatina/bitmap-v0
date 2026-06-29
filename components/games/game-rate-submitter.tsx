@@ -247,7 +247,7 @@ function GameRateCard({ gameId, bIsEditing, rates }: GameIdProps) {
             className={cn(pretendard.className)}
           ></TextArea>
           {postFailMessage && (
-            <Text color="red" as="p">
+            <Text color="red" as="p" className={cn(pretendard.className)}>
               {t(postFailMessage)}
             </Text>
           )}
