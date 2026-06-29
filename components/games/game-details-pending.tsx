@@ -58,7 +58,7 @@ export default function GameDetail({
         <div className="lg:col-span-1 lg:sticky lg:top-6 self-start">
           <Suspense
             fallback={
-              <div className="aspect-[1/1.414] w-full rounded-lg bg-muted"></div>
+              <div className="aspect-[1/1.414] w-full rounded-lg bg-black"></div>
             }
           >
             <div className="relative aspect-[1/1.414] w-full rounded-lg overflow-hidden">
@@ -69,7 +69,7 @@ export default function GameDetail({
                 }
                 alt={game.gameTitle}
                 fill
-                className="object-cover"
+                className="object-contain"
                 priority
               />
             </div>
